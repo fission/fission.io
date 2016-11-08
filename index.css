@@ -1,0 +1,56 @@
+.header {
+    //background-color:#320042;
+    //color: #DDD;
+    padding: 100px 0;
+    text-align:center;
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
+}
+.header iframe {
+    margin-top:2rem;
+    margin-left:1rem;
+}
+h1 {
+    font-weight: 600;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
+}
+
+body p {
+    font-family: 'Source Serif Pro', Helvetica, serif;
+}
+
+.feature {
+    font-size:2rem;
+    margin-bottom: 6rem;
+}
+p {
+    margin-bottom: 2.5rem;
+}
+
+.cyan {
+    color: #57dada;
+}
+.prompt{
+    color: #ff0000;
+}
+
+.demo {
+    font-size: 1.5rem;
+    font-family: 'Source Code Pro', monospace;
+    color: #fff;
+    background-color: #222;
+    padding:30px;
+    border-radius:3px;
+}
+
+.segment {
+    text-align:center;
+    padding: 0 4rem;
+}
+
+.learnmore {
+    margin-top: 8rem;
+    text-align: center;
+}
