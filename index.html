@@ -36,9 +36,9 @@
              data-count-aria-label="# stargazers on GitHub"
              aria-label="Star platform9/fission on GitHub">Star</a>
 
-          <a href="https://twitter.com/share" class="twitter-share-button" data-size="large"
-             data-text="Fission: Serverless functions for Kubernetes" data-url="http://fission.io"
-             data-show-count="false">Tweet</a>
+          <a class="twitter-follow-button"
+             href="https://twitter.com/fissionio" data-show-count="false"
+             data-size="large">Follow @fissionio</a>
           <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
         </div>
@@ -58,16 +58,16 @@
         </div>
 
         <div class="col-md-5 col-md-offset-1 demo">
-<span class="prompt">$</span> cat hello.js<br>
-module.exports = function(context, callback) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;callback(200, "Hello, world!\n");<br>
-}<br><br>
-<span class="prompt">$</span> fission function create --name hello --env nodejs --code hello.js<br><br>
+          <span class="prompt">$</span> cat hello.js<br>
+          module.exports = function(context, callback) {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;callback(200, "Hello, world!\n");<br>
+          }<br><br>
+          <span class="prompt">$</span> fission function create --name hello --env nodejs --code hello.js<br><br>
 
-<span class="prompt">$</span> fission route add --function hello --url /hello<br><br>
+          <span class="prompt">$</span> fission route add --function hello --url /hello<br><br>
 
-<span class="prompt">$</span> curl http://router.fission/hello<br>
-Hello, world!<br>
+          <span class="prompt">$</span> curl http://router.fission/hello<br>
+          Hello, world!<br>
         </div>
       </div>
 
@@ -100,6 +100,9 @@ Hello, world!<br>
         </div>
       </div>
     </div>
+
+
+
     
     <div class="container-fluid">
       <div class="row feature learnmore">

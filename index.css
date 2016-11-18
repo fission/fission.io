@@ -5,14 +5,23 @@
     margin-bottom: 7rem;
     box-shadow: 0px 0px 10px #000;
 
-    padding: 70px 0;
+    padding: 70px 0 0 0;
     text-align:center;
     font-family: 'Source Sans Pro', Helvetica, sans-serif;
 }
 .header iframe {
-    margin-top:2rem;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
     margin-left:1rem;
 }
+.header h1 {
+    font-size: 43.2px;
+}
+.header h3 {
+    font-size: 28.px;
+}
+
+
 h1 {
     font-weight: 600;
 }
@@ -62,4 +71,9 @@ p {
 .three {
     background-color: #e0e0e0;
     padding-top: 50px;
+}
+
+.whyfission h2 {
+    text-align:center;
+    margin:5rem;
 }
