@@ -26,7 +26,7 @@
 
       <div class="row header">
         <div class="col-md-4 col-md-offset-4">
-          <h1>fission</h1>
+          <h1>Fission</h1>
           <h3>Serverless Functions for Kubernetes</h3>
 
           <a class="github-button" href="https://github.com/platform9/fission"
@@ -44,16 +44,17 @@
         </div>
       </div>
 
-      <div class="row feature">
+      <div class="row feature intro">
         <div class="col-md-4 col-md-offset-1">
-          <p>Fission is a serverless ("functions-as-a-service", a.k.a. Lambda) framework for
-            Kubernetes.</p>
+          <p>Fission is a framework for serverless functions on
+          Kubernetes.</p>
           
-          <p>With Fission, you write short lived functions and map them to HTTP requests (or other
-            event triggers).</p>
+          <p>Write short lived functions in any language, and map them
+            to HTTP requests (or other event triggers).</p>
 
-          <p>Deploy functions instantly with one command.  There are no containers to build, and no
-            Docker registries to manage.</p>
+          <p>Deploy functions instantly with one command.  There are
+            no containers to build, and no Docker registries to
+            manage.</p>
 
         </div>
 
@@ -79,21 +80,28 @@
           
           <div class="container-fluid">
             <div class="col-md-4 segment">
-              <h2>Fast</h2>
-              <p>Fission maintains a pool of containers so your functions have very low cold-start
-                latencies, typically ~100msec.  </p>
-            </div>
-            
-            <div class="col-md-4 segment">
-              <h2>Open</h2>
-              <p>Avoid vendor lock-in: Fission is open source under the Apache License.  It's also
-                extensible to any language and environment.</p>
+              <h2>Extensible</h2>
+              <p>Fission is extensible to any programming language
+                (out of the box, it comes with Python and NodeJS
+                support for now).
+
+                </p><p>It abstracts away containers by default, but
+                you can build your own containers if you need to.</p>
             </div>
 
             <div class="col-md-4 segment">
-              <h2>Runs anywhere</h2>
-              <p>Since it runs on Kubernetes, you can run Fission in your private datacenter, in a
-                public cloud, or on your laptop.</p>
+              <h2>Fast</h2>
+              <p>Fission maintains a pool of containers so your
+                functions have very low cold-start latencies,
+                typically ~100msec.</p>
+            </div>
+            
+            <div class="col-md-4 segment">
+              <h2>Everywhere</h2>
+              <p>Fission is open source under the Apache License.  It
+                works on a Kubernetes cluster anywhere: in your
+                private datacenter, in a public cloud, or on your
+                laptop.</p>
             </div>
           </div>
 
@@ -102,14 +110,79 @@
     </div>
 
 
+    <div class="container-fluid">
+      <div class="row feature">
+        <div class="col-md-12 usecase">
+          <h1>Build Serverless API Backends</h1>
+          <img style="margin-top:-45px;" src="img/fission-rest-api.png"/>
+        </div>
+      </div>
+      <div class="row feature">
+        <div class="col-md-6 col-md-offset-3">
+          <p>Create API backends for web and mobile apps without
+            managing servers.  Just write functions, and map them to
+            HTTP routes.  Fission takes care of the rest: deployment,
+            routing, scalability, availability.  Use Kubernetes'
+            service discovery and networking to interoperate with
+            other services, like memcached, Redis, Postgres, etc.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container-fluid">
+      <div class="row feature">
+        <div class="col-md-12 usecase">
+          <h1>Easily implement Webhooks</h1>
+          <img src="img/fission-slack-webhook.png"/>
+        </div>
+      </div>
+      <div class="row feature">
+        <div class="col-md-6 col-md-offset-3">
+          <p>Webhooks are a popular way to integrate with third-party
+          services.  Slack provides webhooks that are triggered by
+          certain words or messages; Github provides webhooks
+          triggered by events in Git repositories.  Fission is a great
+          place to implement webhooks: just write the code, map it
+          to a URL, and point the webhook at that URL.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row feature">
+        <div class="col-md-12 usecase">
+          <h1>Write Kubernetes Event Handlers</h1>
+          <img src="img/fission-kube-events.png"/>
+        </div>
+      </div>
+      <div class="row feature">
+        <div class="col-md-6 col-md-offset-3">
+          <p>With an upcoming feature to subscribe to Kubernetes
+            events, you can write custom automation for your
+            Kubernetes infrastructure.  Functions can subscribe to
+            Kubernetes events; they'll be called with the event and a
+            handle to the Kubernetes API.</p>
+        </div>
+      </div>
+    </div>
 
     
     <div class="container-fluid">
-      <div class="row feature learnmore">
-        <div class="col-md-10 col-md-offset-1">
-          <h2>Learn More</h2>
-          <p>Fission is in early alpha!  See the <a href="http://github.com/platform9/fission">Github
-              project page</a> to learn how to try it out.</p>
+      <div class="row learnmore">
+        <div class="col-md-4 col-md-offset-4">
+          <h1>Learn More</h1>
+
+          <p>Fission is an open source project in early alpha
+          by <a href="http://platform9.com">Platform9 Systems</a>.
+          Learn more about Fission on our Github project page:</p>
+          
+          <a role="button" href="https://github.com/platform9/fission"
+             class="btn btn-primary btn-lg">Github Project Page</a>
+
+          <a role="button" href="https://twitter.com/fissionio"
+             class="btn btn-primary btn-lg">@fissionio on Twitter</a>
+          
         </div>
       </div>
     </div>

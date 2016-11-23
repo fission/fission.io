@@ -20,7 +20,9 @@
 .header h3 {
     font-size: 28.px;
 }
-
+.intro p {
+    font-size: 2.3rem;
+}
 
 h1 {
     font-weight: 600;
@@ -62,10 +64,16 @@ p {
     text-align:center;
     padding: 0 4rem;
 }
+.segment h2 {
+    margin-bottom:2rem;
+}
 
 .learnmore {
-    margin-top: 8rem;
     text-align: center;
+    background-color: #eee;
+}
+ul {
+   list-style: none 
 }
 
 .three {
@@ -76,4 +84,27 @@ p {
 .whyfission h2 {
     text-align:center;
     margin:5rem;
+}
+
+.usecase {
+    text-align:center;
+    padding-top: 3rem;
+    border-top:1px solid #ddd;
+}
+.usecase h1 {
+    color: #555;
+    margin-bottom: 50px;
+}
+
+.learnmore h1 {
+    padding-top: 2rem;
+}
+.learnmore .btn {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom:8rem;
+}
+.learnmore p{
+    font-size: 2rem;
+    margin-top:5rem;
 }
