@@ -82,4 +82,4 @@ We'll talk about:
 
 * How to turn watches into webhook requests with the `kubewatcher`
   service [currently part of fission but we'll spin it out into a
-  separate service before the event]
+  separate service before Kubecon]
