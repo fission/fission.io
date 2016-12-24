@@ -78,8 +78,8 @@ We'll talk about:
 * How to process watches in Go with the client-go library
 
 * Using the NATS.io lightweight message queue to make watches more
-  reliable
+  reliable; pros and cons of this approach.
 
 * How to turn watches into webhook requests with the `kubewatcher`
-  service [currently part of fission but we're spinning it out into a
-  separate service]
+  service [currently part of fission but we'll spin it out into a
+  separate service before the event]
