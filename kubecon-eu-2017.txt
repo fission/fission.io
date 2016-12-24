@@ -1,0 +1,85 @@
+(A)
+
+Implementing a Serverless Framework on Kubernetes
+-------------------------------------------------
+
+"Serverless" functions allow users to easily create REST API backends
+or webhook handlers without dealing with container image building,
+registries, or even learning Kubernetes in much detail.
+
+Fission is a serverless function framework built on Kubernetes.  Users
+write short lived functions and add them to Fission.  They associate a
+function with a "trigger", such as an HTTP route, an event, or a
+timer.  Functions must consume CPU/memory resources only when running
+-- so they need to be started on-demand.
+
+To make this on-demand execution fast, Fission keeps a pool of
+"generic" pods.  These pods, which are language-specific, contain a
+dynamic loader and an HTTP server.  When there's a request to run a
+new function, a pod is chosen from this pool, the function is loaded
+into it and run.
+
+In effect, this is like a distributed threadpool on Kubernetes.  In
+the talk we'll go over the details of how we use Deployments, Pods,
+and Services to implement this in a language-agnostic and scalable
+way.
+
+We'll also talk about how we integrate Kubernetes features like
+ConfigMaps, Secrets and Volumes with functions created through
+fission.
+
+Finally, we'll show how tying together Kubernetes Watches and Fission
+functions make it very easy to write custom behaviour triggered by
+changes to arbitrary resources on Kubernetes.
+
+
+
+(B)
+
+Serverless Operators with Kubernetes Watches and Fission
+--------------------------------------------------------
+
+"Operators" are a pattern in which one uses a custom controller that
+has workload-specific knowledge; for example, the Etcd Operator uses
+Third Party Resources and a custom controller to automate
+adminstration of Etcd clusters.  To do this, one has to write a custom
+controller, which has a learning curve and can be cumbersome.
+
+We can use the Fission serverless framework to write event handlers
+for Kubernetes watch events.  Kubernetes watches let us listen for any
+addition, modification or deletion to a collection of resources;
+Fission provides a way for connecting these watches to custom
+functions in NodeJS, Python, [or Go].
+
+In this talk, we'll use a Postgres [or Mysql or Redis or...] high
+availability deployment on Kubernetes as an example, and show a proof
+of concept of how Kubernetes and Serverless Operators can make it easy
+to create and administer such a system with a minimal amount of code.
+
+
+
+(C)
+
+A deep dive into Kubernetes Watches
+-----------------------------------
+
+[This one is unrelated to Fission]
+
+How does 'kubectl --watch' work?  What order do watch updates arrive
+in?  Do watch events ever get "lost"?  How should I process watches?
+
+Understanding how watches work is essential to extending Kubernetes.
+In this talk we'll examine the behaviour of watches, their
+implementation in Kubernetes, and review what information is available
+to consumers of a watch.
+
+We'll talk about:
+
+* How to process watches in Go with the client-go library
+
+* Using the NATS.io lightweight message queue to make watches more
+  reliable
+
+* How to turn watches into webhook requests with the `kubewatcher`
+  service [currently part of fission but we're spinning it out into a
+  separate service]
