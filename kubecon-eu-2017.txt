@@ -64,8 +64,9 @@ workload.
 
 In this talk, we'll use a MySQL high availability deployment on
 Kubernetes as an example, and show a proof of concept of how
-Kubernetes and Serverless Controllers can make it easy to create and
-operate such a system with a minimal amount of code.
+Kubernetes and Serverless Controllers can make it easy to deploy,
+upgrade, scale, and monitor such a system with a minimal amount of
+code.
 
 
 
