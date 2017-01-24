@@ -64,8 +64,8 @@ p {
     text-align:center;
     padding: 0 4rem;
 }
-.segment h2 {
-    margin-bottom:2rem;
+.segment h1 {
+    margin-bottom:3rem;
 }
 
 .learnmore {
@@ -97,7 +97,8 @@ ul {
 }
 
 .learnmore h1 {
-    padding-top: 2rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 }
 .learnmore .btn {
     margin-left: 2rem;
@@ -107,4 +108,24 @@ ul {
 .learnmore p{
     font-size: 2rem;
     margin-top:5rem;
+}
+
+.navbar {
+    margin-bottom: 0 !important;
+    border-radius: 0;
+    background-image: none;
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
+    background-color: #1E022D;
+    font-size: 1.8rem;
+}
+.navbar-brand {
+    font-size: 2rem;
+}
+.navbar-fixed-top {
+    border-width: 0;
+}
+.learnmore .btn-outline {
+    border: 1px solid #C5C5C5;
+    background-color: #fff;
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
 }

@@ -8,6 +8,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="/fonts/fontello-59bb1fb0/css/fontello.css">
 
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,600|Source+Serif+Pro" rel="stylesheet">
     
@@ -22,11 +23,43 @@
     <title>Fission: Serverless functions for Kubernetes</title></head>
   <body>
 
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Fission</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="https://github.com/fission/fission/blob/master/INSTALL.md">Install</a></li>
+            <li><a href="https://github.com/fission/fission/tree/master/examples">Examples</a></li>
+          </ul>
+          
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://github.com/fission/fission"><i class="icon-github-circle"></i>Github</a></li>
+            <li><a href="http://slack.fission.io"><i class="icon-slack"></i>Slack</a></li>
+            <li><a href="https://twitter.com/fissionio"><i class="icon-twitter"></i>Twitter</a></li>
+          </ul>
+          
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    
     <div class="container-fluid">
 
       <div class="row header">
         <div class="col-md-4 col-md-offset-4">
           <h1>Fission</h1>
+          <!--<img src="file:///Users/soam/Downloads/Fission-logo-white.png">-->
           <h3>Serverless Functions for Kubernetes</h3>
 
           <a class="github-button" href="https://github.com/fission/fission"
@@ -49,7 +82,7 @@
           <p>Fission is a framework for serverless functions on
           Kubernetes.</p>
           
-          <p>Write short lived functions in any language, and map them
+          <p>Write short-lived functions in any language, and map them
             to HTTP requests (or other event triggers).</p>
 
           <p>Deploy functions instantly with one command.  There are
@@ -74,30 +107,30 @@
 
     </div>
 
+      
     <div class="container-fluid three">
       <div class="row feature">
         <div class="col-md-10 col-md-offset-1">
           
           <div class="container-fluid">
             <div class="col-md-4 segment">
-              <h2>Extensible</h2>
+              <h1>Extensible</h1>
               <p>Fission is extensible to any programming language
-                (out of the box, it comes with Python and NodeJS
-                support for now).
+                (Python and NodeJS are supported for now).
 
                 </p><p>It abstracts away containers by default, but
                 you can build your own containers if you need to.</p>
             </div>
 
             <div class="col-md-4 segment">
-              <h2>Fast</h2>
+              <h1>Fast</h1>
               <p>Fission maintains a pool of containers so your
                 functions have very low cold-start latencies,
                 typically ~100msec.</p>
             </div>
             
             <div class="col-md-4 segment">
-              <h2>Everywhere</h2>
+              <h1>Everywhere</h1>
               <p>Fission is open source under the Apache License.  It
                 works on a Kubernetes cluster anywhere: in your
                 private datacenter, in a public cloud, or on your
@@ -158,11 +191,12 @@
       </div>
       <div class="row feature">
         <div class="col-md-6 col-md-offset-3">
-          <p>With an upcoming feature to subscribe to Kubernetes
-            events, you can write custom automation for your
-            Kubernetes infrastructure.  Functions can subscribe to
-            Kubernetes events; they'll be called with the event and a
-            handle to the Kubernetes API.</p>
+          <p>By subscribing to Kubernetes watches, you can write
+            custom automation for your Kubernetes infrastructure.
+            Fission's integration with Kubernetes watches allows you
+            to monitor resources such as Pods and Services, and
+            execute arbitrary functions when the watched set of
+            resources change.</p>
         </div>
       </div>
     </div>
@@ -170,20 +204,29 @@
     
     <div class="container-fluid">
       <div class="row learnmore">
-        <div class="col-md-4 col-md-offset-4">
+
+        <div class="col-md-8 col-md-offset-2">
           <h1>Learn More</h1>
 
-          <p>Fission is an open source project in early alpha
-          by <a href="http://platform9.com">Platform9 Systems</a>.
-          Learn more about Fission on our Github project page:</p>
+          <p>Fission is an open source project by <a href="https://platform9.com">Platform9 Systems</a>.</p>
           
-          <a role="button" href="https://github.com/fission/fission"
-             class="btn btn-primary btn-lg">Github Project Page</a>
+          <div class="col-md-4">          
+            <a role="button" href="https://github.com/fission/fission"
+               class="btn btn-outline btn-lg">Github Project Page</a>
+          </div>
 
-          <a role="button" href="https://twitter.com/fissionio"
-             class="btn btn-primary btn-lg">@fissionio on Twitter</a>
+          <div class="col-md-4">
+            <a role="button" href="https://twitter.com/fissionio"
+               class="btn btn-outline btn-lg">Follow @fissionio on Twitter</a>
+          </div>
+
+          <div class="col-md-4">
+            <a role="button" href="http://slack.fission.io"
+               class="btn btn-outline btn-lg">Join us on Slack</a>
+          </div>
+
+        </div>          
           
-        </div>
       </div>
     </div>
     
