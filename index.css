@@ -70,7 +70,7 @@ p {
 
 .learnmore {
     text-align: center;
-    background-color: #eee;
+    background-color: #ddd;
 }
 ul {
    list-style: none 
@@ -96,6 +96,9 @@ ul {
     margin-bottom: 50px;
 }
 
+.learnmore {
+    padding-bottom:4rem;
+}
 .learnmore h1 {
     padding-top: 3rem;
     padding-bottom: 3rem;
@@ -103,7 +106,6 @@ ul {
 .learnmore .btn {
     margin-left: 2rem;
     margin-right: 2rem;
-    margin-bottom:8rem;
 }
 .learnmore p{
     font-size: 2rem;
@@ -128,4 +130,5 @@ ul {
     border: 1px solid #C5C5C5;
     background-color: #fff;
     font-family: 'Source Sans Pro', Helvetica, sans-serif;
+    font-size: 16pt;
 }
