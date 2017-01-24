@@ -36,6 +36,19 @@ functions make it very easy to write custom behaviour triggered by
 changes to arbitrary resources on Kubernetes.
 
 
+Ecosystem benefits
+--
+
+Fission eases the learning curve for Kubernetes -- users can be up and
+running with a service on Kubernetes without knowing much about the
+details of Deployments, Pods, Services.  It also makes the workflow from
+coding to deployment easier, since it abstracts away images.
+
+Developers interested in a serverless framework can use Fission within
+their Kubernetes cluster, and don't have to set up a separate system.
+
+
+
 
 (B)
 
@@ -69,14 +82,27 @@ upgrade, scale, and monitor such a system with a minimal amount of
 code.
 
 
+Ecosystem Benefits
+--
+
+The proposed pattern of serverless controllers makes Kubernetes
+extensibility easier and more widely accessible.  This is especially
+interesting to users running stateful workloads, where there is often
+some sort of domain-specific logic needed for deployment, upgrades,
+scaling etc.
+
+
+
+
 
 (C)
 
 A deep dive into Kubernetes Watches
 -----------------------------------
 
-How does 'kubectl --watch' work?  What order do watch updates arrive
-in?  Do watch events ever get "lost"?  How should I process watches?
+How does 'kubectl --watch' work?  Do watch updates ever get "lost"?
+What order do watch updates arrive in?  How should I process watches in
+my programs?
 
 Understanding how watches work is essential to extending Kubernetes.
 In this talk we'll examine the behaviour of watches, their
