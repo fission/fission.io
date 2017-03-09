@@ -78,7 +78,7 @@ p {
 }
 .learnmore p {
     font-weight: 100;
-    font-family: Sans-Serif;
+    font-family: 'Source Sans Pro', Sans-Serif;
 }
 ul {
    list-style: none 
@@ -112,8 +112,7 @@ ul {
     padding-bottom: 3rem;
 }
 .learnmore .btn {
-    margin-left: 2rem;
-    margin-right: 2rem;
+    margin:3rem 4rem;
 }
 .learnmore p{
     font-size: 2rem;
@@ -135,8 +134,9 @@ ul {
     border-width: 0;
 }
 .learnmore .btn-outline {
-    border: 1px solid #1E022D;
-    background-color: #fff;
+    border: 1px solid #777;
     font-family: 'Source Sans Pro', Helvetica, sans-serif;
-    font-size: 16pt;
+    font-size: 20pt;
+    color: #fff;
+    font-weight: 100;
 }
