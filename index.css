@@ -17,8 +17,11 @@
 .header h1 {
     font-size: 43.2px;
 }
+.logoimg {
+    width: 66%;
+}
 .header h3 {
-    font-size: 28.px;
+
 }
 .intro p {
     font-size: 2.3rem;
@@ -70,7 +73,12 @@ p {
 
 .learnmore {
     text-align: center;
-    background-color: #ddd;
+    background-color: #222;
+    color:#fff;
+}
+.learnmore p {
+    font-weight: 100;
+    font-family: Sans-Serif;
 }
 ul {
    list-style: none 
