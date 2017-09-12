@@ -131,7 +131,7 @@
 </ul></li>
 <li><a href="#install-the-fission-cli">Install the Fission CLI</a>
 <ul>
-<li><a href="#mac-os">Mac OS</a></li>
+<li><a href="#os-x">OS X</a></li>
 <li><a href="#linux">Linux</a></li>
 <li><a href="#windows">Windows</a></li>
 </ul></li>
@@ -238,7 +238,7 @@ role-based access control.)</p>
 
 <h4 id="minikube">Minikube</h4>
 
-<pre><code>$ helm install --namespace fission --set serviceType=NodePort https://github.com/fission/fission/releases/download/v0.2.1-rc2/fission-all-v0.2.1-rc2.tgz
+<pre><code>$ helm install --namespace fission --set serviceType=NodePort https://github.com/fission/fission/releases/download/v0.2.1/fission-all-v0.2.1.tgz
 </code></pre>
 
 <p>The serviceType variable allows configuring the type of Kubernetes
@@ -247,7 +247,7 @@ want to expose anything outside the cluster.</p>
 
 <h4 id="cloud-hosted-clusters-gke-aws-azure-etc">Cloud hosted clusters (GKE, AWS, Azure etc.)</h4>
 
-<pre><code>$ helm install --namespace fission https://github.com/fission/fission/releases/download/v0.2.1-rc2/fission-all-v0.2.1-rc2.tgz
+<pre><code>$ helm install --namespace fission https://github.com/fission/fission/releases/download/v0.2.1/fission-all-v0.2.1.tgz
 </code></pre>
 
 <h4 id="minimal-version">Minimal version</h4>
@@ -256,27 +256,27 @@ want to expose anything outside the cluster.</p>
 the NATS message queue, influxDB for logs, etc. If you want a more
 minimal setup, you can install the fission-core chart instead:</p>
 
-<pre><code>$ helm install --namespace fission https://github.com/fission/fission/releases/download/v0.2.1-rc2/fission-core-v0.2.1-rc2.tgz
+<pre><code>$ helm install --namespace fission https://github.com/fission/fission/releases/download/v0.2.1/fission-core-v0.2.1.tgz
 </code></pre>
 
 <h3 id="install-the-fission-cli">Install the Fission CLI</h3>
 
-<h4 id="mac-os">Mac OS</h4>
+<h4 id="os-x">OS X</h4>
 
 <p>Get the CLI binary for Mac:</p>
 
-<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/v0.2.1-rc2/fission-cli-osx &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
+<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/v0.2.1/fission-cli-osx &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
 </code></pre>
 
 <h4 id="linux">Linux</h4>
 
-<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/v0.2.1-rc2/fission-cli-linux &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
+<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/v0.2.1/fission-cli-linux &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
 </code></pre>
 
 <h4 id="windows">Windows</h4>
 
 <p>For Windows, you can use the linux binary on WSL. Or you can download
-this windows executable: <a href="https://github.com/fission/fission/releases/download/v0.2.1-rc2/fission-cli-windows.exe">fission.exe</a></p>
+this windows executable: <a href="https://github.com/fission/fission/releases/download/v0.2.1/fission-cli-windows.exe">fission.exe</a></p>
 
 <h3 id="set-environment-vars">Set environment vars</h3>
 
@@ -307,7 +307,7 @@ svc</code>).  Then:</p>
 
 <p>Finally, you&rsquo;re ready to use Fission!</p>
 
-<pre><code>$ fission env create --name nodejs --image fission/node-env:v0.2.1-rc2
+<pre><code>$ fission env create --name nodejs --image fission/node-env:v0.2.1
 
 $ curl -LO https://raw.githubusercontent.com/fission/fission/master/examples/nodejs/hello.js
 

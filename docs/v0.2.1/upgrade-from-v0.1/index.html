@@ -120,7 +120,12 @@
 <li><a href="#why-is-this-so-complicated">Why is this so complicated?</a></li>
 <li><a href="#how-to-upgrade">How to Upgrade</a>
 <ul>
-<li><a href="#get-the-new-cli">Get the new CLI</a></li>
+<li><a href="#get-the-new-cli">Get the new CLI</a>
+<ul>
+<li><a href="#os-x">OS X</a></li>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+</ul></li>
 <li><a href="#get-fission-state-from-v0-1-install">Get Fission state from v0.1 install</a></li>
 <li><a href="#install-the-new-version">Install the new version</a></li>
 <li><a href="#restore-your-fission-state-into-fission-v0-2-1">Restore your Fission state into Fission v0.2.1</a></li>
@@ -178,44 +183,69 @@ rigorous about it from the beta release onwards.</p>
 <h2 id="how-to-upgrade">How to Upgrade</h2>
 
 <ol>
-<li>Get the v0.2 CLI</li>
-<li>Get your Fission state from your old install</li>
-<li>Install v0.2.1</li>
-<li>Restore your Fission state</li>
+<li>Get the v0.2.1 CLI</li>
+<li>Get the Fission state from your old install</li>
+<li>Install Fission v0.2.1</li>
+<li>Restore Fission state into your new install</li>
 <li>Destroy your old install</li>
 </ol>
 
 <h3 id="get-the-new-cli">Get the new CLI</h3>
 
-<pre><code>curl -Lo fission https://...
+<h4 id="os-x">OS X</h4>
+
+<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/v0.2.1-rc/fission-cli-osx &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
 </code></pre>
+
+<h4 id="linux">Linux</h4>
+
+<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/v0.2.1-rc/fission-cli-linux &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
+</code></pre>
+
+<h4 id="windows">Windows</h4>
+
+<p>For Windows, you can use the linux binary on WSL. Or you can download
+this windows executable: <a href="https://github.com/fission/fission/releases/download/v0.2.1-rc/fission-cli-windows.exe">fission.exe</a></p>
 
 <h3 id="get-fission-state-from-v0-1-install">Get Fission state from v0.1 install</h3>
 
-<pre><code>fission upgrade dump
+<pre><code>fission --server &lt;your V1 server&gt; upgrade dump --file state.json
 </code></pre>
 
-<p>This will create a JSON file with all your fission state in the current directory.</p>
+<p>You can skip the &ndash;server argument if you have the environment
+variable <code>$FISSION_URL</code> set to point at a v0.1 Fission server.</p>
+
+<p>This will create a JSON file with all your fission state in the
+current directory.</p>
 
 <h3 id="install-the-new-version">Install the new version</h3>
 
-<p>Follow the <a href="../install">install guide</a>, but you will need to ensure your two installs don&rsquo;t
-conflict. To do that, use separate namespaces and ensure nodeports don&rsquo;t conflict.  Install with a
-command similar to this:</p>
+<p>Read the <a href="../install">install guide</a>.  You can follow all of it, except that you will need to
+ensure your two installs don&rsquo;t conflict.  To do that, use separate namespaces and ensure nodeports
+don&rsquo;t conflict.  Install with a command similar to this:</p>
 
 <pre><code>helm install fission-all --namespace fission2 --set controllerPort=31303,routerPort=31304,natsStreamingPort=31305,functionNamespace=fission2-function
 </code></pre>
 
+<p>This installs fission in the <code>fission2</code> namespace and runs functions
+in the <code>fission2-function</code> namespace.</p>
+
 <h3 id="restore-your-fission-state-into-fission-v0-2-1">Restore your Fission state into Fission v0.2.1</h3>
 
-<pre><code>fission upgrade restore
+<pre><code>fission upgrade restore --file state.json
 </code></pre>
 
-<p>This uses the file created in the first step.</p>
+<p>This commands needs $FISSION_URL set to point to new fission installation.</p>
+
+<p>It uses the file created in the first step.  It doesn&rsquo;t modify state.json.</p>
+
+<p>(Note that you can run this restore on any cluster; it doesn&rsquo;t have the be the same kubernetes
+cluster as your old install.)</p>
 
 <h3 id="verify">Verify</h3>
 
-<p>How exactly you do this is up to you! But, verify that your new install is working.</p>
+<p>How exactly you do this is up to you! But, at a minimum, run <code>fission
+fn list</code> to check that all the functions you expect are there.</p>
 
 <h3 id="switch-over">Switch over</h3>
 
@@ -223,7 +253,8 @@ command similar to this:</p>
 
 <h3 id="destroy-your-old-install">Destroy your old install</h3>
 
-<p>Once you&rsquo;re no longer using the old install, you can destroy it with:</p>
+<p>Once you&rsquo;re no longer using the old install, you can destroy it by
+deleting the namespaces that was installed in.</p>
 
 <pre><code>kubectl delete namespace fission fission-function
 </code></pre>
