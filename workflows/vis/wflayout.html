@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <title>Network | Hierarchical layout</title>
+
+    <style type="text/css">
+        body {
+            font: 10pt sans-serif;
+            font-family: "Open Sans",sans-serif;
+        }
+        h2 {
+            font-family: "Open Sans",sans-serif;
+        }
+
+        #mynetwork {
+            width: 600px;
+            height: 600px;
+            border: 1px solid lightgray;
+            position: absolute;
+            left: 625px;
+            top: 61px;
+        }
+        #wfyaml {
+            width: 600px;
+            height: 600px;
+        }
+        #wf {
+            width: 598px;
+            height: 598px;        
+            border: 1px solid lightgray;
+        font-family: "Monaco", "Courier New", fixed;
+        font-size: 13px;
+        }
+    </style>
+
+    <script type="text/javascript" src="vis.js"></script>
+    <link href="vis-network.min.css" rel="stylesheet" type="text/css"/>
+    <script src="js-yaml.min.js"></script>
+
+    <script type="text/javascript" src="wf.js"></script>
+
+    
+</head>
+
+<body onload="draw();">
+<h2>Fission Workflows</h2>
+
+<div id="wfyaml">
+  <textarea id="wf">
+  </textarea>
+</div>
+<div id="mynetwork"></div>
+
+<button onclick="draw();">Update</button>
+
+</body>
+</html>
