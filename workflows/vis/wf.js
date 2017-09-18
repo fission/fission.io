@@ -12,6 +12,7 @@ function destroy() {
 function getParsedWorkflow() {
     var wfyaml = document.getElementById('wf').value;
     var doc = jsyaml.load(wfyaml);
+    // TODO deal with errors
     return doc;
 }
 
@@ -43,58 +44,8 @@ function makeGraph() {
 function draw() {
     destroy();
 
-    nodes = [
-        {
-            id: 0,
-            label: "FetchWeather"
-        },
-        {
-            id: 1,
-            label: "ToCelsius"
-        },
-        {
-            id: 2,
-            label: "CheckTemperatureThreshold"
-        },
-        {
-            id: 3,
-            label: "SendSlackMessage"
-        },
-        {
-            id: 4,
-            label: "SomethingElse"
-        }
-    ];
-    dependencyEdges = [
-        {
-            from: 1,
-            to: 0,
-            id: "10"
-        },
-        {
-            from: 2,
-            to: 1,
-            id: "21"
-        },
-        {
-            from: 3,
-            to: 2,
-            id: "32"
-        },
-        {
-            from: 4,
-            to: 1,
-            id: "41"
-        },
-        {
-            from: 3,
-            to: 4,
-            id: "34"
-        },
-    ];
-    //data = {nodes: nodes, edges: dependencyEdges};
+    // get graph from yaml file
     data = makeGraph();
-    console.log(data);
     
     // create a network
     var container = document.getElementById('mynetwork');
@@ -131,8 +82,21 @@ function draw() {
         },
         edges: {
             arrows: 'from',
-            color: "#555"
+            color: "#555",
+        },
+        physics: {
+            hierarchicalRepulsion: {
+                centralGravity: 0,
+                nodeDistance: 200
+            },
+            minVelocity: 0.75,
+            solver: "hierarchicalRepulsion"
         }
+// configure lets us interactively mess with all these options
+//        configure: { 
+//            enabled: true,
+//            showButton: true
+//        }
     };
     network = new vis.Network(container, data, options);
 
