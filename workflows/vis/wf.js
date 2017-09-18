@@ -26,7 +26,7 @@ function getParsedWorkflow() {
     // set url
     setUrl(wfyaml);
     
-    var doc = jsyaml.load(wfyaml);
+    var doc = jsyaml.safeLoad(wfyaml);
     // TODO deal with errors
     return doc;
 }
