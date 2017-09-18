@@ -9,11 +9,34 @@ function destroy() {
     }
 }
 
+function setUrl(wfyaml) {
+    currentLoc = window.location.href.split("#")[0];
+    newData = btoa(wfyaml);
+    window.location.href = currentLoc + "#" + newData;
+}
+
+function getFromUrl() {
+    newData = window.location.href.split("#")[1];
+    return atob(newData);
+}
+
 function getParsedWorkflow() {
     var wfyaml = document.getElementById('wf').value;
+
+    // set url
+    setUrl(wfyaml);
+    
     var doc = jsyaml.load(wfyaml);
     // TODO deal with errors
     return doc;
+}
+
+function onload() {
+    if (document.getElementById('wf').value.length == 0) {
+        newYaml = getFromUrl();
+        document.getElementById('wf').value = newYaml;
+    }
+    draw();
 }
 
 function makeGraph() {
