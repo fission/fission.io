@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>Fission Workflows</title>
+
+<link rel="stylesheet" href="hljs/styles/default.css">
+<script src="hljs/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+  
+<link rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<!--https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js-->
+
+
+<style type="text/css">
+        body {
+            font: 10pt sans-serif;
+            font-family: "Open Sans",sans-serif;
+        }
+        #flowchart-xxx {
+            width: 400px;
+            height: 700px;
+            border: 1px solid lightgray;
+            position: absolute;
+            left: 725px;
+            top: 61px;
+        }
+        #wfyaml {
+        //width: 700px;
+        //height: 700px;        
+            font-family: "Monaco", "Courier New", fixed;
+            font-size: 13px;
+        }
+    </style>
+
+    <script src="js-yaml.min.js"></script>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.0/raphael-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://flowchart.js.org/flowchart-latest.js"></script>
+    
+    <script type="text/javascript" src="wf-flow.js"></script>
+
+
+    
+</head>
+
+<body>
+  <div class="container-fluid">
+
+  <h3>Fission Workflows</h3>
+
+    <div class="row">
+      
+      <div class="col-md-4">
+        <div id="flowchart"></div>
+      </div>
+      
+      <div class="col-md-6">
+  
+        <pre><code class="yaml" id="wfyaml">apiVersion: 1
+description: Notify
+output: CreateResult
+tasks:
+  # Fetch the current weather from a remote api
+  FetchWeather:
+    run: noop
+    inputs: $.Invocation.Inputs.Default
+
+  # Convert the temperature from Fahrenheit to Celsius
+  ToCelsius:
+    run: noop
+    inputs: $.Tasks.FetchWeather.Output.temperature
+    requires:
+    - FetchWeather
+
+  # Send a slack message if the temperature threshold has been exceeded
+  CheckTemperature:
+    run: if
+    inputs:
+      if: "$.Tasks.FetchWeather.Output.temperature > 30"
+      then:
+        run: post-slack-message
+        inputs: "$.Tasks.FetchWeather.Output.temperature Celsius"
+        output: true
+      else: false
+    requires:
+    - ToCelsius
+
+  # Compose the response of this workflow {location, celsius, fahrenheit}
+  CreateResult:
+    run: noop
+    inputs:
+      location: $.Invocation.Inputs.Default
+      celsius: $.Tasks.ToCelsius.Output
+      fahrenheit: $.Tasks.FetchWeather.Output.temperature
+      sentSlackMsg: $.Tasks.CheckTemperature.Output.temperature
+    requires:
+    - CheckTemperature</code>
+</pre>
+      </div> 
+    </div> <!-- row -->
+  </div> <!-- container -->
+
+</body>
+</html>
