@@ -1,9 +1,12 @@
 
 function getParsedWorkflow() {
-    var wfyaml = document.getElementById('wfyaml').innerHTML;
+    if (!window.workflowYaml) {
+        window.workflowYaml = document.getElementById('wfyaml').innerHTML;
+    }
+    var wfyaml = window.workflowYaml;
     var doc = jsyaml.safeLoad(wfyaml);
     // TODO deal with errors
-    console.log(doc);
+    //console.log(doc);
     return doc;
 }
 
@@ -35,20 +38,23 @@ function makeGraph() {
                 to: newNodeId,
             });
         }
-        
+
         nodes.push({
             id: taskName,
             label: taskName,
             task: tasks[taskName],
             type: type
         });
-        
+
         if (tasks[taskName].requires) {
             for (var dep of tasks[taskName].requires) {
                 if (tasks[dep].run == "if") {
                     // if the task we depend on is an if-then
                     // statement, add two edges instead of one (for
                     // the then-branch and else branch).
+                    //
+                    // this edge assumes no else-task in the if; we'll
+                    // have to handle that case separately.
                     edges.push({
                         id: `${dep}--${taskName}--no`,
                         type: "condition",
@@ -73,22 +79,29 @@ function makeGraph() {
                 }
             }
         }
-    }    
+    }
     return {nodes: nodes, edges: edges}
 }
 
 function getFlowchartTxt() {
-    g = makeGraph();
-   
+    if (!window.graph) {
+        console.log("Parsing YAML to generate graph");
+        window.graph = makeGraph();
+    }
+
     txt = [];
     txt.push("start=>start: Start");
     txt.push("end=>end: End");
-    
-    for (var node of g.nodes) {
-        txt.push(`${node.id}=>${node.type}: ${node.label}`);
+
+    for (var node of window.graph.nodes) {
+        var nodeStr = `${node.id}=>${node.type}: ${node.label}`;
+        if (node.flowstate == 'current') {
+            nodeStr = `${nodeStr}|current`;
+        }
+        txt.push(nodeStr);
     }
-    txt.push(`start->${g.nodes[0].id}`);
-    for (var edge of g.edges) {
+    txt.push(`start->${window.graph.nodes[0].id}`);
+    for (var edge of window.graph.edges) {
         if (edge.type == 'condition') {
             txt.push(`${edge.from}(${edge.which})->${edge.to}`);
         } else {
@@ -96,8 +109,8 @@ function getFlowchartTxt() {
             txt.push(`${edge.to}->${edge.from}`);
         }
     }
-    txt.push(`${g.nodes[g.nodes.length-1].id}->end`);
-    console.log(txt);
+    txt.push(`${window.graph.nodes[window.graph.nodes.length-1].id}->end`);
+    //console.log(txt);
     return txt.join("\n");
 }
 
@@ -109,8 +122,8 @@ function getCanvasCenterX() {
 }
 
 function draw() {
+    $("#flowchart").empty();
     var txt = getFlowchartTxt();
-    console.log(txt);
     var diagram = flowchart.parse(txt);
     var scale=1.2;
     diagram.drawSVG('flowchart', {
@@ -138,6 +151,13 @@ function draw() {
             'end':{
                 'class': 'end-element'
             }
+        },
+        'flowstate' : {
+            'current' : {
+                'fill' : window.currentTaskColor,
+                'font-color' : '#444',
+                'font-weight' : 'bold'
+            },
         }
     });
 }
@@ -148,12 +168,60 @@ function highlight() {
   });
 }
 
+function toggleFlowState(node) {
+    if (node.flowstate == 'current') {
+        node.flowstate = '';
+    } else {
+        node.flowstate = 'current';
+    }
+}
+
+function attachClicks() {
+    // find each task elem in the highlighted yaml, and attach a click
+    // handler that toggles that task's current state in window.graph.
+
+    $("span.hljs-attr").click(function () {
+        var t = $(this).text();
+        var mr = t.match("  ([^:]*):");
+        if (mr && mr.length == 2) {
+            var name = mr[1];
+            var isTask = false;
+            for (var node of window.graph.nodes) {
+                if (node.id === name) {
+                    console.log(`toggle flow state for ${name}`);
+                    toggleFlowState(node);
+                    draw();
+                    $(this).toggleClass("current-task");
+                    // don't propagate click event
+                    return false;
+                }
+            }
+        }
+    });
+
+    $("span.hljs-string").click(function () {
+        var t = $(this).text();
+        console.log(`str text = |${t}|`);
+        for (var node of window.graph.nodes) {
+            if (node.id === t) {
+                console.log(`toggle flow state for ${t}`);
+                toggleFlowState(node);
+                draw();
+                $(this).toggleClass("current-task");
+                // don't propagate click event
+                return false;
+            }
+        }
+    });
+}
+
 function onload() {
+    window.currentTaskColor = '#b3feae';//'#c5a7ff';
     draw();
     highlight();
+    setTimeout(attachClicks, 100);
 }
 
 $(document).ready(function() {
     onload();
 });
-
