@@ -9,8 +9,23 @@
     text-align:center;
     font-family: 'Source Sans Pro', Helvetica, sans-serif;
 }
+.wfheader {
+    background-color: #eee;
+
+    color: #333;
+    margin-bottom: 7rem;
+
+    padding: 90px 0 0 0;
+    text-align: center;
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
+}
 .header iframe {
     margin-top: 5rem;
+    margin-bottom: 3rem;
+    margin-left:1rem;
+}
+.wfheader iframe {
+    margin-top: 3rem;
     margin-bottom: 3rem;
     margin-left:1rem;
 }
