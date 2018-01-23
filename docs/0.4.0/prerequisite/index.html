@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href=/docs/0.4.0/images/favicon.png type="image/x-icon" />
 <link rel="icon" href=/docs/0.4.0/images/favicon.png type="image/x-icon" />
 
-    <title> :: Serverless Functions for Kubernetes</title>
+    <title>Kubernetes Quick Install :: Serverless Functions for Kubernetes</title>
     
     
     <link href="/docs/0.4.0/css/nucleus.css?1516685077" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/0.4.0/_header/">
+  <body class="" data-url="/docs/0.4.0/prerequisite/">
     <nav id="sidebar" class="showVisitedLinks">
 
 
@@ -102,8 +102,8 @@
   
     
     <li data-nav-id="/docs/0.4.0/prerequisite/" title="Kubernetes Quick Install" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/docs/0.4.0/prerequisite/">
@@ -270,7 +270,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/_header.en.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/prerequisite/_index.en.md" target="blank">
                       <i class="fa fa-code-fork"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -295,7 +295,7 @@
             
           
           
-            <a href='/docs/0.4.0/'>Fission</a> > 
+            <a href='/docs/0.4.0/'>Fission</a> > Kubernetes Quick Install
           
          
           
@@ -305,7 +305,19 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#minikube">Minikube</a>
+<ul>
+<li><a href="#install-and-start-kubernetes-on-osx">Install and start Kubernetes on OSX:</a></li>
+<li><a href="#or-install-and-start-kubernetes-on-linux">Or, install and start Kubernetes on Linux:</a></li>
+</ul></li>
+<li><a href="#google-container-engine">Google Container Engine</a></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -317,19 +329,51 @@
         
         <div id="body-inner">
           
-            <h1></h1>
+            <h1>Kubernetes Quick Install</h1>
           
 
         
 
 
-<p><img src="http://fission.io/img/fission-logo-whitebg.png" alt="fission" /></p>
+
+
+<p>This is a quick guide to help you get started running Kubernetes on
+your laptop (or on the cloud).</p>
+
+<p>(This isn&rsquo;t meant as a production Kuberenetes guide; it&rsquo;s merely
+intended to give you something quickly so you can try Fission on it.)</p>
+
+<h2 id="minikube">Minikube</h2>
+
+<p>Minikube is the usual way to run Kubernetes on your laptop:</p>
+
+<h3 id="install-and-start-kubernetes-on-osx">Install and start Kubernetes on OSX:</h3>
+
+<pre><code>$ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl &amp;&amp; chmod +x kubectl &amp;&amp; sudo mv kubectl /usr/local/bin
+
+$ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.16.0/minikube-darwin-amd64 &amp;&amp; chmod +x minikube &amp;&amp; sudo mv minikube /usr/local/bin/
+
+$ minikube start
+</code></pre>
+
+<h3 id="or-install-and-start-kubernetes-on-linux">Or, install and start Kubernetes on Linux:</h3>
+
+<pre><code>$ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl &amp;&amp; chmod +x kubectl &amp;&amp; sudo mv kubectl /usr/local/bin
+
+$ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.16.0/minikube-linux-amd64 &amp;&amp; chmod +x minikube &amp;&amp; sudo mv minikube /usr/local/bin/
+
+$ minikube start
+</code></pre>
+
+<h2 id="google-container-engine">Google Container Engine</h2>
+
+<p>Alternatively, you can use <a href="https://cloud.google.com/container-engine/">Google Container Engine&rsquo;s</a> free trial to
+get a 3-node cluster.  Hop over to <a href="https://cloud.google.com/container-engine/">Google Cloud</a> to set that up.</p>
 
 
 <footer class=" footline" >
 	
 </footer>
-
 
         
         </div> 
@@ -381,6 +425,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -391,6 +436,38 @@
                     
             
         
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
                     
                         
             
@@ -421,35 +498,6 @@
                     
 
                     
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
             
         
                     
@@ -463,8 +511,10 @@
 
 
         
+            <a class="nav nav-prev" href="/docs/0.4.0/compilation/" title="Compiling Fission"> <i class="fa fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/docs/0.4.0/compilation/" title="Compiling Fission" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/docs/0.4.0/installation/" title="Installation Guide" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
         
     </div>
 
@@ -494,4 +544,3 @@
 
   </body>
 </html>
-

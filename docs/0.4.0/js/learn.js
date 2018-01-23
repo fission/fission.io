@@ -25,6 +25,11 @@ function getScrollBarWidth() {
     return (w1 - w2);
 };
 
+function setMenuHeight() {
+    $('#sidebar .highlightable').height($('#sidebar').innerHeight() - $('#header-wrapper').height() - 40);
+    $('#sidebar .highlightable').perfectScrollbar('update');
+}
+
 function fallbackMessage(action) {
     var actionMsg = '';
     var actionKey = (action === 'cut' ? 'X' : 'C');
@@ -44,6 +49,7 @@ function fallbackMessage(action) {
 
 // for the window resize
 $(window).resize(function() {
+    setMenuHeight();
 });
 
 // debouncing function from John Hann
@@ -84,6 +90,8 @@ jQuery(document).ready(function() {
     });
 
     var sidebarStatus = searchStatus = 'open';
+    $('#sidebar .highlightable').perfectScrollbar();
+    setMenuHeight();
 
     jQuery('#overlay').on('click', function() {
         jQuery(document.body).toggleClass('sidebar-hidden');
@@ -156,7 +164,13 @@ jQuery(document).ready(function() {
         $('[data-search-input]').val(searchValue);
         $('[data-search-input]').trigger('input');
         var searchedElem = $('#body-inner').find(':contains(' + searchValue + ')').get(0);
-        searchedElem && searchedElem.scrollIntoView();
+        if (searchedElem) {
+            searchedElem.scrollIntoView(true);
+            var scrolledY = window.scrollY;
+            if(scrolledY){
+                window.scroll(0, scrolledY - 125);
+            }
+        }
     }
 
     // clipboard
@@ -222,7 +236,7 @@ jQuery(document).ready(function() {
     });
 
     $('#top-bar a:not(:has(img)):not(.btn)').addClass('highlight');
-    $('#body-inner a:not(:has(img)):not(.btn)').addClass('highlight');
+    $('#body-inner a:not(:has(img)):not(.btn):not(a[rel="footnote"])').addClass('highlight');
 
     var touchsupport = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)
     if (!touchsupport){ // browser doesn't support touch
@@ -243,6 +257,89 @@ jQuery(document).ready(function() {
         });
     }
 
+    /** 
+    * Fix anchor scrolling that hides behind top nav bar
+    * Courtesy of https://stackoverflow.com/a/13067009/28106
+    *
+    * We could use pure css for this if only heading anchors were
+    * involved, but this works for any anchor, including footnotes
+    **/
+    (function (document, history, location) {
+        var HISTORY_SUPPORT = !!(history && history.pushState);
+
+        var anchorScrolls = {
+            ANCHOR_REGEX: /^#[^ ]+$/,
+            OFFSET_HEIGHT_PX: 50,
+
+            /**
+             * Establish events, and fix initial scroll position if a hash is provided.
+             */
+            init: function () {
+                this.scrollToCurrent();
+                $(window).on('hashchange', $.proxy(this, 'scrollToCurrent'));
+                $('body').on('click', 'a', $.proxy(this, 'delegateAnchors'));
+            },
+
+            /**
+             * Return the offset amount to deduct from the normal scroll position.
+             * Modify as appropriate to allow for dynamic calculations
+             */
+            getFixedOffset: function () {
+                return this.OFFSET_HEIGHT_PX;
+            },
+
+            /**
+             * If the provided href is an anchor which resolves to an element on the
+             * page, scroll to it.
+             * @param  {String} href
+             * @return {Boolean} - Was the href an anchor.
+             */
+            scrollIfAnchor: function (href, pushToHistory) {
+                var match, anchorOffset;
+
+                if (!this.ANCHOR_REGEX.test(href)) {
+                    return false;
+                }
+
+                match = document.getElementById(href.slice(1));
+
+                if (match) {
+                    anchorOffset = $(match).offset().top - this.getFixedOffset();
+                    $('html, body').animate({ scrollTop: anchorOffset });
+
+                    // Add the state to history as-per normal anchor links
+                    if (HISTORY_SUPPORT && pushToHistory) {
+                        history.pushState({}, document.title, location.pathname + href);
+                    }
+                }
+
+                return !!match;
+            },
+
+            /**
+             * Attempt to scroll to the current location's hash.
+             */
+            scrollToCurrent: function (e) {
+                if (this.scrollIfAnchor(window.location.hash) && e) {
+                    e.preventDefault();
+                }
+            },
+
+            /**
+             * If the click event's target was an anchor, fix the scroll position.
+             */
+            delegateAnchors: function (e) {
+                var elem = e.target;
+
+                if (this.scrollIfAnchor(elem.getAttribute('href'), true)) {
+                    e.preventDefault();
+                }
+            }
+        };
+
+        $(document).ready($.proxy(anchorScrolls, 'init'));
+    })(window.document, window.history, window.location);
+    
 });
 
 jQuery(window).on('load', function() {

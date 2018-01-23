@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href=/docs/0.4.0/images/favicon.png type="image/x-icon" />
 <link rel="icon" href=/docs/0.4.0/images/favicon.png type="image/x-icon" />
 
-    <title> :: Serverless Functions for Kubernetes</title>
+    <title>Upgrading from v0.3 to v0.4.x :: Serverless Functions for Kubernetes</title>
     
     
     <link href="/docs/0.4.0/css/nucleus.css?1516685077" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/0.4.0/_header/">
+  <body class="" data-url="/docs/0.4.0/upgrade/upgrade-from-v0.3/">
     <nav id="sidebar" class="showVisitedLinks">
 
 
@@ -150,7 +150,7 @@
   
     
     <li data-nav-id="/docs/0.4.0/upgrade/" title="Upgrade" class="dd-item 
-        
+        parent
         
         
         ">
@@ -195,7 +195,7 @@
  
   
     
-      <li data-nav-id="/docs/0.4.0/upgrade/upgrade-from-v0.3/" title="Upgrading from v0.3 to v0.4.x" class="dd-item ">
+      <li data-nav-id="/docs/0.4.0/upgrade/upgrade-from-v0.3/" title="Upgrading from v0.3 to v0.4.x" class="dd-item active">
         <a href="/docs/0.4.0/upgrade/upgrade-from-v0.3/">
         Upgrading from v0.3 to v0.4.x
         <i class="fa fa-check read-icon"></i>
@@ -270,7 +270,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/_header.en.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/upgrade/upgrade-from-v0.3.md" target="blank">
                       <i class="fa fa-code-fork"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -295,7 +295,13 @@
             
           
           
-            <a href='/docs/0.4.0/'>Fission</a> > 
+            
+            
+          
+          
+            <a href='/docs/0.4.0/'>Fission</a> > <a href='/docs/0.4.0/upgrade/'>Upgrade</a> > Upgrading from v0.3 to v0.4.x
+          
+         
           
          
           
@@ -305,7 +311,29 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#how-to-upgrade">How to Upgrade</a>
+<ul>
+<li><a href="#get-the-new-cli">Get the new CLI</a>
+<ul>
+<li><a href="#os-x">OS X</a></li>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+</ul></li>
+<li><a href="#get-fission-state-from-v0-3-install">Get Fission state from v0.3 install</a></li>
+<li><a href="#upgrade-to-fission-0-4-0">Upgrade to Fission 0.4.0</a></li>
+<li><a href="#upgrade-kubernetes-cluster-version">Upgrade Kubernetes cluster version</a></li>
+<li><a href="#remove-all-tpr-definition-for-kubernetes-1-7-x">Remove all TPR definition (for Kubernetes 1.7.x)</a></li>
+<li><a href="#restore-your-fission-state-into-fission-0-4-0">Restore your Fission state into Fission 0.4.0</a></li>
+<li><a href="#verify">Verify</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -317,13 +345,132 @@
         
         <div id="body-inner">
           
-            <h1></h1>
+            <h1>Upgrading from v0.3 to v0.4.x</h1>
           
 
         
 
 
-<p><img src="http://fission.io/img/fission-logo-whitebg.png" alt="fission" /></p>
+
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Kubernetes ThirdPartyResources (&ldquo;TPR&rdquo;) are replaced by
+CustomResourceDefinitions (&ldquo;CRD&rdquo;). TPRs have been deprecated and are
+removed in Kubernetes 1.8.</p>
+
+<p>Since Fission stores state in TPRs, we need to migrate this state from
+TPRs to CRDs while upgrading.</p>
+
+<p>Follow the instructions below if you&rsquo;re upgrading a Fission 0.2.1 or
+0.3.0 cluster to 0.4. If you&rsquo;re using a pre-0.2 Fission cluster, use
+the [upgrade guide from 0.1 to 0.2]() and then upgrade to 0.4.0.</p>
+
+<h2 id="how-to-upgrade">How to Upgrade</h2>
+
+<ol>
+<li>Get the 0.4.0 CLI</li>
+<li>Get the Fission state from v0.3 install</li>
+<li>Upgrade to Fission 0.4.0</li>
+<li>Upgrade Kubernetes cluster version to 1.7.x or higher</li>
+<li>Remove all TPR definition (for Kubernetes 1.7.x)</li>
+<li>Restore Fission state into CRDs</li>
+</ol>
+
+<h3 id="get-the-new-cli">Get the new CLI</h3>
+
+<h4 id="os-x">OS X</h4>
+
+<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/0.4.0/fission-cli-osx &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
+</code></pre>
+
+<h4 id="linux">Linux</h4>
+
+<pre><code>$ curl -Lo fission https://github.com/fission/fission/releases/download/0.4.0/fission-cli-linux &amp;&amp; chmod +x fission &amp;&amp; sudo mv fission /usr/local/bin/
+</code></pre>
+
+<h4 id="windows">Windows</h4>
+
+<p>For Windows, you can use the linux binary on WSL. Or you can download
+this windows executable: <a href="https://github.com/fission/fission/releases/download/0.4.0/fission-cli-windows.exe">fission.exe</a></p>
+
+<h3 id="get-fission-state-from-v0-3-install">Get Fission state from v0.3 install</h3>
+
+<pre><code>fission --server &lt;your v0.3 server&gt; tpr2crd dump --file state.json
+</code></pre>
+
+<p>You can skip the &ndash;server argument if you have the environment
+variable <code>$FISSION_URL</code> set to point at a v0.3 Fission server.</p>
+
+<p>This will create a JSON file with all your fission state in the
+current directory.</p>
+
+<h3 id="upgrade-to-fission-0-4-0">Upgrade to Fission 0.4.0</h3>
+
+<p>Upgrade fission with a command similar to this:</p>
+
+<pre><code>helm upgrade fission-all --namespace fission
+</code></pre>
+
+<h3 id="upgrade-kubernetes-cluster-version">Upgrade Kubernetes cluster version</h3>
+
+<p>Since CustomResource is only supported on Kubernetes v1.7+ and higher, please make sure
+that you upgrade to the right version that supports CustomResource.</p>
+
+<h3 id="remove-all-tpr-definition-for-kubernetes-1-7-x">Remove all TPR definition (for Kubernetes 1.7.x)</h3>
+
+<p>** NOTICE **: This step will remove TPR definition from your kubernetes cluster. Please make sure that you dump all TPRs at the second step!</p>
+
+<p>Though Kubernetes will migrate TPRs to CRDs automatically when TPR definition is deleted if the same name CRD exists. We still need to make sure that there is no resource gets lost during the migration. Also, since we changed the capitalization of some CRDs to CamelCase (e.g. Httptrigger -&gt; HTTPTrigger), we need to recreate those resources by ourselves.</p>
+
+<pre><code>fission tpr2crd delete
+</code></pre>
+
+<h3 id="restore-your-fission-state-into-fission-0-4-0">Restore your Fission state into Fission 0.4.0</h3>
+
+<pre><code>fission tpr2crd restore --file state.json
+</code></pre>
+
+<p>This commands needs <code>$FISSION_URL</code> set to point to new fission installation.</p>
+
+<p>It uses the file created in the first step.  It doesn&rsquo;t modify state.json.</p>
+
+<p>(Note that you can run this restore on any cluster; it doesn&rsquo;t have the be the same kubernetes
+cluster as your old install.)</p>
+
+<h3 id="verify">Verify</h3>
+
+<p>Let&rsquo;s check the migration result, first run following command to check CRD established state.</p>
+
+<pre><code>kubectl get crd -o 'custom-columns=NAME:{.metadata.name},ESTABLISHED:{.status.conditions[?(@.type==&quot;Established&quot;)].status}'
+</code></pre>
+
+<p>The output should be like this</p>
+
+<pre><code>NAME                                 ESTABLISHED
+environments.fission.io              True
+functions.fission.io                 True
+httptriggers.fission.io              True
+kuberneteswatchtriggers.fission.io   True
+messagequeuetriggers.fission.io      True
+packages.fission.io                  True
+timetriggers.fission.io              True
+</code></pre>
+
+<p>And check that CRD resources you expect are there.</p>
+
+<pre><code>COMMAND:
+   fission [resource] list
+
+RESOURCES:
+    environments
+    functions
+    httptriggers
+    kuberneteswatchtriggers
+    messagequeuetriggers
+    packages
+    timetriggers
+</code></pre>
 
 
 <footer class=" footline" >
@@ -413,6 +560,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -426,6 +574,9 @@
             
                 
                     
+                        
+                        
+                    
                 
                 
 
@@ -442,6 +593,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -463,8 +615,10 @@
 
 
         
+            <a class="nav nav-prev" href="/docs/0.4.0/upgrade/upgrade-from-v0.1/" title="Upgrading from v0.1 to v0.2.x"> <i class="fa fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/docs/0.4.0/compilation/" title="Compiling Fission" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/docs/0.4.0/upgrade/upgrade-from-v0.1/" title="Upgrading from v0.1 to v0.2.x" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
         
     </div>
 

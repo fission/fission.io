@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href=/docs/0.4.0/images/favicon.png type="image/x-icon" />
 <link rel="icon" href=/docs/0.4.0/images/favicon.png type="image/x-icon" />
 
-    <title> :: Serverless Functions for Kubernetes</title>
+    <title>Compiling Fission :: Serverless Functions for Kubernetes</title>
     
     
     <link href="/docs/0.4.0/css/nucleus.css?1516685077" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/0.4.0/_header/">
+  <body class="" data-url="/docs/0.4.0/compilation/">
     <nav id="sidebar" class="showVisitedLinks">
 
 
@@ -78,8 +78,8 @@
   
     
     <li data-nav-id="/docs/0.4.0/compilation/" title="Compiling Fission" class="dd-item 
-        
-        
+        parent
+        active
         
         ">
       <a href="/docs/0.4.0/compilation/">
@@ -270,7 +270,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/_header.en.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/compilation/_index.en.md" target="blank">
                       <i class="fa fa-code-fork"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -295,7 +295,7 @@
             
           
           
-            <a href='/docs/0.4.0/'>Fission</a> > 
+            <a href='/docs/0.4.0/'>Fission</a> > Compiling Fission
           
          
           
@@ -317,19 +317,62 @@
         
         <div id="body-inner">
           
-            <h1></h1>
+            <h1>Compiling Fission</h1>
           
 
         
 
 
-<p><img src="http://fission.io/img/fission-logo-whitebg.png" alt="fission" /></p>
+<p>[You only need to do this if you&rsquo;re making Fission changes; if you&rsquo;re
+just deploying Fission, use fission.yaml which points to prebuilt
+images.]</p>
+
+<p>You&rsquo;ll need the <code>go</code> compiler and tools installed, along with the
+<a href="https://github.com/Masterminds/glide#install">glide dependency management
+tool</a>.  You&rsquo;ll also need
+docker for building images.</p>
+
+<p>The server side is compiled as one binary (&ldquo;fission-bundle&rdquo;) which
+contains controller, poolmgr and router; it invokes the right one
+based on command-line arguments.</p>
+
+<p>To build fission-bundle: clone this repo to
+<code>$GOPATH/src/github.com/fission/fission</code>, then from the top level
+directory (if you want to build the image with the docker inside
+minikube, you&rsquo;ll need to set the proper environment variables with
+<code>eval $(minikube docker-env)</code>):</p>
+
+<pre><code>  # Get dependencies
+  $ glide install
+
+  # Build fission server and an image
+  $ pushd fission-bundle
+  $ ./build.sh
+</code></pre>
+
+<p>You now need to build the docker image for fission. You can use
+<code>push.sh</code> and push it to a docker hub account. But it&rsquo;s easiest to use
+minikube and its built-in docker daemon:</p>
+
+<pre><code>  $ eval $(minikube docker-env)
+  $ docker build -t minikube/fission-bundle .
+</code></pre>
+
+<p>Next, install fission with this image on your kubernetes cluster using the helm chart:</p>
+
+<pre><code>  $ helm install --set &quot;image=minikube/fission-bundle,pullPolicy=IfNotPresent,analytics=false&quot; charts/fission-all
+</code></pre>
+
+<p>And if you&rsquo;re changing the CLI too, you can build it with:</p>
+
+<pre><code>  # Build Fission CLI
+  $ cd fission &amp;&amp; go install
+</code></pre>
 
 
 <footer class=" footline" >
 	
 </footer>
-
 
         
         </div> 
@@ -362,6 +405,23 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                         
                         
                     
@@ -405,22 +465,6 @@
                     
 
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
                         
             
             
@@ -463,8 +507,10 @@
 
 
         
+            <a class="nav nav-prev" href="/docs/0.4.0/" title="Fission"> <i class="fa fa-chevron-left"></i></a>
         
-            <a class="nav nav-next" href="/docs/0.4.0/compilation/" title="Compiling Fission" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+        
+            <a class="nav nav-next" href="/docs/0.4.0/prerequisite/" title="Kubernetes Quick Install" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
         
     </div>
 
@@ -494,4 +540,3 @@
 
   </body>
 </html>
-
