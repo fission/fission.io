@@ -34,6 +34,27 @@ Follow the instructions below if you&amp;rsquo;re upgrading a Fission 0.2.1 or 0
     </item>
     
     <item>
+      <title>Upgrading from v0.4.x to v0.5.0</title>
+      <link>http://fission.io/docs/0.5.0/upgrade/upgrade-from-v0.4/</link>
+      <pubDate>Thu, 08 Feb 2018 04:40:29 +0800</pubDate>
+      
+      <guid>http://fission.io/docs/0.5.0/upgrade/upgrade-from-v0.4/</guid>
+      <description>How to Upgrade  Get the 0.5.0 CLI Upgrade to Fission 0.5.0  Get the new CLI OS X $ curl -Lo fission https://github.com/fission/fission/releases/download/0.5.0/fission-cli-osx &amp;amp;&amp;amp; chmod +x fission &amp;amp;&amp;amp; sudo mv fission /usr/local/bin/  Linux $ curl -Lo fission https://github.com/fission/fission/releases/download/0.5.0/fission-cli-linux &amp;amp;&amp;amp; chmod +x fission &amp;amp;&amp;amp; sudo mv fission /usr/local/bin/  Windows For Windows, you can use the linux binary on WSL. Or you can download this windows executable: fission.exe</description>
+    </item>
+    
+    <item>
+      <title>Access secret/configmap in function</title>
+      <link>http://fission.io/docs/0.5.0/tutorial/access-secret-cfgmap-in-function/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://fission.io/docs/0.5.0/tutorial/access-secret-cfgmap-in-function/</guid>
+      <description>From fission v0.5.0 and later, functions are able to access Secrets and ConfigMaps specified by users.
+Create Secret and ConfigMap You can create Secret and ConfigMap with CLI.
+$ kubectl -n default create secret generic foo --from-literal=TEST_KEY=&amp;quot;TESTVALUE&amp;quot; $ kubectl -n default create configmap bar --from-literal=TEST_KEY=TESTVALUE  Or use kubectl create -f &amp;lt;filename.yaml&amp;gt; to create these from a YAML file.
+apiVersion: v1 kind: Secret metadata: namespace: default name: foo data: TEST_KEY: VEVTVFZBTFVF # value after base64 encode type: Opaque --- apiVersion: v1 kind: ConfigMap metadata: namespace: default name: bar data: TEST_KEY: TESTVALUE  Access Secret and ConfigMap Since content of Secret and ConfigMap are key-value pairs, functions can access them with following paths:</description>
+    </item>
+    
+    <item>
       <title></title>
       <link>http://fission.io/docs/0.5.0/_header/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

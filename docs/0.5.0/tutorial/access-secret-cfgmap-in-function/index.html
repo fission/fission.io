@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href=/docs/0.5.0/images/favicon.png type="image/x-icon" />
 <link rel="icon" href=/docs/0.5.0/images/favicon.png type="image/x-icon" />
 
-    <title>Compiling Fission :: Serverless Functions for Kubernetes</title>
+    <title>Access secret/configmap in function :: Serverless Functions for Kubernetes</title>
     
     
     <link href="/docs/0.5.0/css/nucleus.css?1518066554" rel="stylesheet">
@@ -35,7 +35,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/docs/0.5.0/compilation/">
+  <body class="" data-url="/docs/0.5.0/tutorial/access-secret-cfgmap-in-function/">
     <nav id="sidebar" class="showVisitedLinks">
 
 
@@ -78,8 +78,8 @@
   
     
     <li data-nav-id="/docs/0.5.0/compilation/" title="Compiling Fission" class="dd-item 
-        parent
-        active
+        
+        
         
         ">
       <a href="/docs/0.5.0/compilation/">
@@ -241,7 +241,7 @@
   
     
     <li data-nav-id="/docs/0.5.0/tutorial/" title="Tutorials" class="dd-item 
-        
+        parent
         
         
         ">
@@ -267,7 +267,7 @@
  
   
     
-      <li data-nav-id="/docs/0.5.0/tutorial/access-secret-cfgmap-in-function/" title="Access secret/configmap in function" class="dd-item ">
+      <li data-nav-id="/docs/0.5.0/tutorial/access-secret-cfgmap-in-function/" title="Access secret/configmap in function" class="dd-item active">
         <a href="/docs/0.5.0/tutorial/access-secret-cfgmap-in-function/">
         Access secret/configmap in function
         <i class="fa fa-check read-icon"></i>
@@ -366,7 +366,7 @@
                   
                   
                   <div id="top-github-link">
-                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/compilation/_index.en.md" target="blank">
+                    <a class="github-link" title='Edit this page' href="https://github.com/fission/fission/edit/master/Documentation/docs-site/content/tutorial/access-secret-cfgmap-in-function.md" target="blank">
                       <i class="fa fa-code-fork"></i>
                       <span id="top-github-link-text">Edit this page</span>
                     </a>
@@ -391,7 +391,13 @@
             
           
           
-            <a href='/docs/0.5.0/'>Fission</a> > Compiling Fission
+            
+            
+          
+          
+            <a href='/docs/0.5.0/'>Fission</a> > <a href='/docs/0.5.0/tutorial/'>Tutorials</a> > Access secret/configmap in function
+          
+         
           
          
           
@@ -401,7 +407,18 @@
                 
                     <div class="progress">
     <div class="wrapper">
-
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#create-secret-and-configmap">Create Secret and ConfigMap</a></li>
+<li><a href="#access-secret-and-configmap">Access Secret and ConfigMap</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
     </div>
 </div>
 
@@ -413,62 +430,109 @@
         
         <div id="body-inner">
           
-            <h1>Compiling Fission</h1>
+            <h1>Access secret/configmap in function</h1>
           
 
         
 
 
-<p>[You only need to do this if you&rsquo;re making Fission changes; if you&rsquo;re
-just deploying Fission, use fission.yaml which points to prebuilt
-images.]</p>
 
-<p>You&rsquo;ll need the <code>go</code> compiler and tools installed, along with the
-<a href="https://github.com/Masterminds/glide#install">glide dependency management
-tool</a>.  You&rsquo;ll also need
-docker for building images.</p>
 
-<p>The server side is compiled as one binary (&ldquo;fission-bundle&rdquo;) which
-contains controller, poolmgr and router; it invokes the right one
-based on command-line arguments.</p>
+<p>From fission v0.5.0 and later, functions are able to access <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Secrets</a> and <a href="https://kubernetes.io/docs/concepts/storage/volumes/#configmap">ConfigMaps</a> specified by users.</p>
 
-<p>To build fission-bundle: clone this repo to
-<code>$GOPATH/src/github.com/fission/fission</code>, then from the top level
-directory (if you want to build the image with the docker inside
-minikube, you&rsquo;ll need to set the proper environment variables with
-<code>eval $(minikube docker-env)</code>):</p>
+<h3 id="create-secret-and-configmap">Create Secret and ConfigMap</h3>
 
-<pre><code>  # Get dependencies
-  $ glide install
+<p>You can create Secret and ConfigMap with CLI.</p>
 
-  # Build fission server and an image
-  $ pushd fission-bundle
-  $ ./build.sh
+<pre><code class="language-bash">$ kubectl -n default create secret generic foo --from-literal=TEST_KEY=&quot;TESTVALUE&quot;
+$ kubectl -n default create configmap bar --from-literal=TEST_KEY=TESTVALUE
 </code></pre>
 
-<p>You now need to build the docker image for fission. You can use
-<code>push.sh</code> and push it to a docker hub account. But it&rsquo;s easiest to use
-minikube and its built-in docker daemon:</p>
+<p>Or use <code>kubectl create -f &lt;filename.yaml&gt;</code> to create these from a YAML file.</p>
 
-<pre><code>  $ eval $(minikube docker-env)
-  $ docker build -t minikube/fission-bundle .
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  namespace: default
+  name: foo
+data:
+  TEST_KEY: VEVTVFZBTFVF # value after base64 encode
+type: Opaque
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: default
+  name: bar
+data:
+  TEST_KEY: TESTVALUE
 </code></pre>
 
-<p>Next, install fission with this image on your kubernetes cluster using the helm chart:</p>
+<h3 id="access-secret-and-configmap">Access Secret and ConfigMap</h3>
 
-<pre><code>  $ helm install --set &quot;image=minikube/fission-bundle,pullPolicy=IfNotPresent,analytics=false&quot; charts/fission-all
+<p>Since content of Secret and ConfigMap are key-value pairs, functions can access them with following paths:</p>
+
+<pre><code class="language-bash"># Secret path
+/secrets/&lt;namespace&gt;/&lt;name&gt;/&lt;key&gt;
+
+# ConfigMap path
+/configs/&lt;namespace&gt;/&lt;name&gt;/&lt;key&gt;
 </code></pre>
 
-<p>And if you&rsquo;re changing the CLI too, you can build it with:</p>
+<p>From the previous example, the paths are:</p>
 
-<pre><code>  # Build Fission CLI
-  $ cd fission &amp;&amp; go install
+<pre><code class="language-bash"># secret foo
+/secrets/default/foo/TEST_KEY
+
+# confimap bar
+/configs/default/bar/TEST_KEY
 </code></pre>
+
+<p>Now, let&rsquo;s create a simple python function (leaker.py) that return value of Secret <code>foo</code> and ConfigMap <code>bar</code>.</p>
+
+<pre><code class="language-python"># leaker.py
+
+def main():
+    path = &quot;/configs/default/bar/TEST_KEY&quot;
+    f = open(path, &quot;r&quot;)
+    config = f.read()
+
+    path = &quot;/secrets/default/foo/TEST_KEY&quot;
+    f = open(path, &quot;r&quot;)
+    secret = f.read()
+
+    msg = &quot;ConfigMap: %s\nSecret: %s&quot; % (config, secret)
+
+    return msg, 200
+</code></pre>
+
+<p>Create environment, function and http trigger.</p>
+
+<pre><code class="language-bash"># create python env
+$ fission env create --name python --image fission/python-env
+
+# create function named &quot;leaker&quot;
+$ fission fn create --name leaker --env python --code leaker.py --secret foo --configmap bar
+
+# create route(http trigger)
+$ fission route create --function leaker --url /leaker --method GET
+</code></pre>
+
+<p>Try to access the function, the output should look like following.</p>
+
+<pre><code class="language-bash">$ curl http://$FISSION_ROUTER/leaker
+ConfigMap: TESTVALUE
+Secret: TESTVALUE
+</code></pre>
+
+<p>Note: If the Secret or ConfigMap value is updated, the function may not get the updated value for some time; it may get a cached older value.</p>
 
 
 <footer class=" footline" >
 	
 </footer>
+
 
         
         </div> 
@@ -501,23 +565,6 @@ minikube and its built-in docker daemon:</p>
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                         
                         
                     
@@ -531,35 +578,6 @@ minikube and its built-in docker daemon:</p>
                     
             
         
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
                     
                         
             
@@ -606,12 +624,6 @@ minikube and its built-in docker daemon:</p>
                     
 
                     
-            
-        
-                    
-            
-        
-                    
                         
             
             
@@ -624,22 +636,6 @@ minikube and its built-in docker daemon:</p>
                     
                     
 
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
                     
             
         
@@ -660,6 +656,78 @@ minikube and its built-in docker daemon:</p>
             
         
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
         
@@ -667,10 +735,10 @@ minikube and its built-in docker daemon:</p>
 
 
         
-            <a class="nav nav-prev" href="/docs/0.5.0/" title="Fission"> <i class="fa fa-chevron-left"></i></a>
+            <a class="nav nav-prev" href="/docs/0.5.0/tutorial/" title="Tutorials"> <i class="fa fa-chevron-left"></i></a>
         
         
-            <a class="nav nav-next" href="/docs/0.5.0/prerequisite/" title="Kubernetes Quick Install" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+            <a class="nav nav-next" href="/docs/0.5.0/workflows/" title="Workflows Installation Guide" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
         
     </div>
 
@@ -700,3 +768,4 @@ minikube and its built-in docker daemon:</p>
 
   </body>
 </html>
+
