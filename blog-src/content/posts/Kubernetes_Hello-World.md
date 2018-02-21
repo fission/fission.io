@@ -229,7 +229,7 @@ Now let’s take a look at this via the **Kubernetes dashboard**. Open the dashb
 
 You should see something similar to this…
 
-![dashboard](Kubernetes_Examples/HelloWorld/assets/dashboard-ui.png)
+![dashboard](../../images/dashboard-ui.png)
 
 
 It’s your cluster in the flesh! The top centered section displays the statuses of your workloads within the cluster. Workloads are objects used to manage and run your containers in your cluster -- so for example, you should see circles that represent your Pods, Deployments, and Replica Sets. Each of those objects fall in the workload category. The circles are pass/fail pie charts, with green indicating the percentage of success and red indicating the percentage of failures. For example, let’s say we have 3 Pods in our cluster, and 1 of our Pods has died for whatever reason. The Pod chart would be shown as mostly green representing 67% and partially red representing 33%.
@@ -260,7 +260,7 @@ Now let’s test to see if our Service is accessible:
 _This uses a local IP address that serves our app and opens up a browser displaying our “Hello World” message._
 
 
-![service image](Kubernetes_Examples/HelloWorld/assets/K8s_Diagrams1-4-1.jpg)
+![service image](../../images/Service_Diagram_1-4-2.png)
 
 _Check out this diagram of our service._
 
@@ -295,7 +295,7 @@ Let’s check to see if the number of replicas have been updated:
 
 And now our Service will automatically begin distributing traffic amongst these three Pods.
 
-![service-image-update](Kubernetes_Examples/HelloWorld/assets/Service_Diagrams1-3.jpg)
+![service-image-update](../../images/Service_Diagrams1-3.jpg)
 
 
 ----
