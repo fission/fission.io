@@ -1,5 +1,6 @@
 ---
 title: "Hello World in Go for Kubernetes Newbies"
+author: "Timirah James, Developer Advocate"
 date: 2018-02-20T13:52:34-08:00
 draft: false
 ---
