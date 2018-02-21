@@ -1,7 +1,7 @@
 ---
 title: "Hello World in Go for Kubernetes Newbies"
 date: 2018-02-20T13:52:34-08:00
-draft: true
+draft: false
 ---
 
 
