@@ -356,5 +356,5 @@ Stop Minikube, then delete it:
 
 *[Services](https://kubernetes.io/docs/concepts/services-networking/service/)
 
-***Bonus -- also, be sure check out [this awesome (and FREE) course on Microservices and Kubernetes by Udacity]**(https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB)!
+**Bonus -- also, be sure check out [this awesome (and FREE) course on Microservices and Kubernetes by Udacity]**(https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB)
 
