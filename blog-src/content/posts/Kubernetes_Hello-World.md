@@ -130,7 +130,7 @@ Go ahead and enter your credentials when prompted.
 _If you’ve installed Docker for Mac, you can log into your Docker account by clicking the Docker whale icon at the top of your screen as shown below._
 
 
-![docker-image](../../images/Docker-screenshot.png)
+![docker-image](../../images/docker-image-3.png)
 
 
 _The green light indicates that Docker is currently running. ([Click here for these instructions using other operating systems](https://docs.docker.com/docker-for-windows/install/).)_
