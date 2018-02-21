@@ -3,13 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://fission.io/blog/posts/kubernetes_hello-world/</loc>
+    <lastmod>2018-02-20T13:52:34-08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://fission.io/blog/</loc>
+    <lastmod>2018-02-20T13:52:34-08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://fission.io/blog/categories/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://fission.io/blog/posts/</loc>
+    <lastmod>2018-02-20T13:52:34-08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0</priority>
   </url>
