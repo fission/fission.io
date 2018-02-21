@@ -260,7 +260,7 @@ Now let’s test to see if our Service is accessible:
 _This uses a local IP address that serves our app and opens up a browser displaying our “Hello World” message._
 
 
-![service image](../../images/K8s_Diagrams1-4-2.jpg)
+![service image](../../images/Service_Diagram_1-4-2.png)
 
 _Check out this diagram of our service._
 
