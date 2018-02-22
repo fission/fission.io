@@ -9,7 +9,7 @@ SectionPagesMenu = "main"
 Paginate = 10 # this is set low for demonstrating with dummy content. Set to a higher number
 
 # TODO
-googleAnalytics = ""
+googleAnalytics = "UA-86980724-1"
 
 enableRobotsTXT = true
 
