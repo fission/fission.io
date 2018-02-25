@@ -15,9 +15,11 @@
     <div class="pa3 pa4-ns w-100 w-70-ns center">
       {{/* Use $section_name to get the section title. Use "with" to only show it if it exists */}}
        {{ with .Site.GetPage "section" $section_name }}
+
           <h1 class="flex-none">
-            Recent {{ .Title }}
+            Recent {{ .Title }} 
           </h1>
+
         {{ end }}
 
       {{ $n_posts := $.Param "recent_posts_number" | default 3 }}
@@ -26,7 +28,9 @@
         {{/* Range through the first $n_posts items of the section */}}
         {{ range (first $n_posts $section) }}
           <div class="relative w-100 mb4">
+            {{ .Date.Format "Jan 2 2006" }}
             {{ partial "summary-with-image.html" . }}
+        
           </div>
         {{ end }}
       </section>

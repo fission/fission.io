@@ -9,6 +9,9 @@
         <h1 class="f1">
           {{ .Title }}
         </h1>
+        <h3 class="header">
+          {{ .Date.Format "January 2, 2006" }}
+        </h3>
       </header>
       <div class="nested-copy-line-height lh-copy f4 nested-links nested-img mid-gray">
         {{ .Content }}

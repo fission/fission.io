@@ -4,11 +4,15 @@
         {{ .Date.Format "January 2, 2006" }}
       </div>
     {{ end }}
-    <h1 class="f3 near-black">
+    <h1 class="f3 near-black"> 
+      This is
       <a href="{{ .URL }}" class="link black dim">
         {{ .Title }}
       </a>
     </h1>
+    <h5 class="Date">
+      {{ .Date.Format "Jan 2 2006" }}
+    </h5>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
       {{ .Summary  }}
     </div>
