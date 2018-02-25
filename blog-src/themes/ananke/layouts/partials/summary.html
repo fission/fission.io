@@ -6,6 +6,9 @@
         {{ .Title }}
       </a>
     </h1>
+    <h5 class="Date">
+      {{ .Date.Format "Jan 2 2006" }}
+    </h5>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
       {{ .Summary  }}
     </div>
