@@ -8,9 +8,6 @@ DefaultContentLanguage = "en"
 SectionPagesMenu = "main"
 Paginate = 10 # this is set low for demonstrating with dummy content. Set to a higher number
 
-# TODO
-googleAnalytics = "UA-86980724-1"
-
 enableRobotsTXT = true
 
 [sitemap]
@@ -27,3 +24,4 @@ enableRobotsTXT = true
   background_color_class = "bg-navy"
   featured_image = "/images/blog-bg.png"
   recent_posts_number = 10
+  googleAnalytics = "UA-86980724-1"
