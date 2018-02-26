@@ -17,9 +17,8 @@ serve -D` from the blog-src directory.
 To publish:
  1. Set "draft" to "false" on top the new content file (or just delete
     the line that says "draft: true").
- 2. Be sure to add in the "author" tag to the top of the new content file to add your name as an author.
- 3. Run `hugo` (no arguments) from this dir.
- 4. `git add`, `git commit` and `git push` the new content. A few
+ 2. Run `hugo` (no arguments) from this dir.
+ 3. `git add`, `git commit` and `git push` the new content. A few
     minutes after the git push, the new content will show up at
     [fission.io/blog](http://fission.io/blog).
 
