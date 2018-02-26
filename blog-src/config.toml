@@ -24,4 +24,4 @@ enableRobotsTXT = true
   background_color_class = "bg-navy"
   featured_image = "/images/blog-bg.png"
   recent_posts_number = 10
-  googleAnalytics = "UA-86980724-1"
+  env = "production"
