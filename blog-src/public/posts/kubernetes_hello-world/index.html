@@ -9,10 +9,10 @@
     <meta name="MobileOptimized" content="320">
 
     <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="generator" content="Hugo 0.36.1" />
+    <meta name="generator" content="Hugo 0.37" />
     
     
-      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+      <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
     
 
     <link href='http://fission.io/blog/dist/main.css' rel='stylesheet' type="text/css" />
@@ -58,6 +58,8 @@
 <meta name="twitter:title" content="Hello World in Go for Kubernetes Newbies"/>
 <meta name="twitter:description" content="Over the past 3 or so years, it seems the term “containerization” and the name “Kubernetes” have been amplified throughout the tech community non-stop. Even with that being so, as a developer, it can be easy to shy away from Kubernetes as its learning curve is notorious for being a steep one. But everyone’s gotta start somewhere, right? This tutorial will give you a basic overview of some of main features of Kubernetes, while walking you through the process of running a simple HelloWorld Golang application locally on your machine to running it on Kubernetes."/>
 
+      
+    
   </head>
 
   <body class="ma0 avenir bg-near-white">
@@ -109,6 +111,7 @@
 </nav>
 
     </div>
+    
   </header>
 
 
@@ -182,7 +185,7 @@ sudo chmod u+s $(brew --prefix)/opt/docker-machine-driver-xhyve/bin/docker-machi
 <pre><code>kubectl cluster-info
 </code></pre>
 
-<h3 id="what-just-happened">What just happened?..</h3>
+<h3 id="what-just-happened">What just happened?</h3>
 
 <p>So the first thing we did was create a Kubernetes cluster via a VM called Minikube. MiniKube is a popular tool used to run Kubernetes locally. Then we installed a hypervisor (xhyve) for Docker to run on Minikube.</p>
 
@@ -285,7 +288,7 @@ steph/train            latest    9857j776f554      8 days ago       1.443 GB
 
 <p>Lo and behold, there’s our <em><strong>‘Hello World’</strong></em> message.</p>
 
-<h3 id="what-just-happened-1">What just happened?..</h3>
+<h3 id="what-just-happened-1">What just happened?</h3>
 
 <p>So after we downloaded the application, we then created a container image for our application to and its dependencies to live in. We then pushed that image to Docker Hub, Docker’s official container registry. Pushing our container to the cloud gives us the abilty to access that container any given time, even if we tear down our local cluster, or if we want to pull that container to live in separate cluster. After that, we ran the container, binding our local port to the port of the container (<em>8080:8080</em>).</p>
 
@@ -321,7 +324,7 @@ NAME                                         READY     STATUS    RESTARTS   AGE
 helloworld-7447bd7d5d-lwnxh                   1/1      Running      0        1m
 </code></pre>
 
-<h3 id="what-just-happened-2">What just happened?..</h3>
+<h3 id="what-just-happened-2">What just happened?</h3>
 
 <p>Woah! So now our container lives inside a Pod, and Kubernetes has given us a manager, a Deployment, to keep tabs on our Pods health, scaling and load-balancing, and versioning.</p>
 
@@ -445,19 +448,21 @@ minikube delete
 
 <h2 id="keep-learning-further-reading">Keep Learning!! (Further Reading)</h2>
 
-<p>*<a href="https://docs.docker.com/">Docker</a></p>
+<ul>
+<li><p><a href="https://docs.docker.com/">Docker</a></p></li>
 
-<p>*<a href="http://kubernetesbyexample.com/">Kubernetes By Example</a></p>
+<li><p><a href="http://kubernetesbyexample.com/">Kubernetes By Example</a></p></li>
 
-<p>*<a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">Deployments</a></p>
+<li><p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">Deployments</a></p></li>
 
-<p>*<a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">Replicasets</a></p>
+<li><p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">Replicasets</a></p></li>
 
-<p>*<a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">Pods</a></p>
+<li><p><a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">Pods</a></p></li>
 
-<p>*<a href="https://kubernetes.io/docs/concepts/services-networking/service/">Services</a></p>
+<li><p><a href="https://kubernetes.io/docs/concepts/services-networking/service/">Services</a></p></li>
+</ul>
 
-<p><strong>Bonus &ndash; also, be sure check out [this awesome (and FREE) course on Microservices and Kubernetes by Udacity]</strong>(<a href="https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB">https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB</a>)</p>
+<p><strong>Bonus &ndash; also, be sure check out <a href="https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB">this awesome (and FREE) course on Microservices and Kubernetes by Udacity</a></strong></p>
 
       </div>
     </article>
@@ -473,6 +478,7 @@ minikube delete
 
     </aside>
   </div>
+
 
     </main>
     <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
@@ -505,6 +511,18 @@ minikube delete
   </div>
   </div>
 </footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-86980724-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0059/9755.js" async="async"></script>
 
     <script src="http://fission.io/blog/dist/app.bundle.js" async></script>
 
