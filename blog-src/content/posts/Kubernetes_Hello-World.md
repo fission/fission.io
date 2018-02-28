@@ -63,7 +63,7 @@ Now let’s check to see if kubectl is all configured to interact with our clust
 
 
 
-### What just happened?..
+### What just happened?
 
 So the first thing we did was create a Kubernetes cluster via a VM called Minikube. MiniKube is a popular tool used to run Kubernetes locally. Then we installed a hypervisor (xhyve) for Docker to run on Minikube.
 
@@ -178,7 +178,7 @@ Lo and behold, there’s our _**‘Hello World’**_ message.
 
 
 
-### What just happened?..
+### What just happened?
 
 So after we downloaded the application, we then created a container image for our application to and its dependencies to live in. We then pushed that image to Docker Hub, Docker’s official container registry. Pushing our container to the cloud gives us the abilty to access that container any given time, even if we tear down our local cluster, or if we want to pull that container to live in separate cluster. After that, we ran the container, binding our local port to the port of the container (_8080:8080_).
 
@@ -218,7 +218,7 @@ Now let’s take a look at our Pod:
 
 
 
-### What just happened?..
+### What just happened?
 
 Woah! So now our container lives inside a Pod, and Kubernetes has given us a manager, a Deployment, to keep tabs on our Pods health, scaling and load-balancing, and versioning.
 
@@ -344,17 +344,18 @@ Stop Minikube, then delete it:
 
 
 ## Keep Learning!! (Further Reading)
-*[Docker](https://docs.docker.com/)
 
-*[Kubernetes By Example](http://kubernetesbyexample.com/)
+* [Docker](https://docs.docker.com/)
 
-*[Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+* [Kubernetes By Example](http://kubernetesbyexample.com/)
 
-*[Replicasets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
+* [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 
-*[Pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/)
+* [Replicasets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
 
-*[Services](https://kubernetes.io/docs/concepts/services-networking/service/)
+* [Pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/)
 
-**Bonus -- also, be sure check out [this awesome (and FREE) course on Microservices and Kubernetes by Udacity]**(https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB)
+* [Services](https://kubernetes.io/docs/concepts/services-networking/service/)
+
+**Bonus -- also, be sure check out [this awesome (and FREE) course on Microservices and Kubernetes by Udacity](https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB)**
 
