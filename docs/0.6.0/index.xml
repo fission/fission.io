@@ -6,40 +6,10 @@
     <description>Recent content in Fission on Serverless Functions for Kubernetes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Thu, 08 Feb 2018 20:19:09 -0800</lastBuildDate>
+    <lastBuildDate>Thu, 07 Sep 2017 20:10:05 -0700</lastBuildDate>
     
 	<atom:link href="http://fission.io/docs/0.6.0/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Nodejs</title>
-      <link>http://fission.io/docs/0.6.0/languages/nodejs/</link>
-      <pubDate>Thu, 08 Feb 2018 20:19:09 -0800</pubDate>
-      
-      <guid>http://fission.io/docs/0.6.0/languages/nodejs/</guid>
-      <description>Lorem Ipsum.</description>
-    </item>
-    
-    <item>
-      <title>Go</title>
-      <link>http://fission.io/docs/0.6.0/languages/go/</link>
-      <pubDate>Thu, 08 Feb 2018 20:18:47 -0800</pubDate>
-      
-      <guid>http://fission.io/docs/0.6.0/languages/go/</guid>
-      <description>Lorem Ipsum.</description>
-    </item>
-    
-    <item>
-      <title>Using Python in Fission</title>
-      <link>http://fission.io/docs/0.6.0/languages/python/</link>
-      <pubDate>Thu, 08 Feb 2018 15:11:05 -0800</pubDate>
-      
-      <guid>http://fission.io/docs/0.6.0/languages/python/</guid>
-      <description>Python in Fission Fission supports functions in Python (both Python 2.7 and Python 3).
-Setup After installing fission, run this command to add the fission environment to your cluster:
-fission env create --name python --image fission/python-env:0.6.0 --builder fission/python-build-env:0.6.0 --version 2  Functions Fission Python functions are Flask HTTP request handlers. Flask is a lightweight web framework for Python.
-an example function  Running &amp;ldquo;initialization&amp;rdquo; code db connection example  Logging xxx sample logging  To test this, try:</description>
-    </item>
     
     <item>
       <title>Installation Guide</title>

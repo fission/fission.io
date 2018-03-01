@@ -7,27 +7,6 @@
 	"content": " Fission: Serverless Functions for Kubernetes fission.io @fissionio\nFission is a fast serverless framework for Kubernetes with a focus on developer productivity and high performance.\nFission operates on just the code: Docker and Kubernetes are abstracted away under normal operation, though you can use both to extend Fission if you want to.\nFission is extensible to any language; the core is written in Go, and language-specific parts are isolated in something called environments (more below). Fission currently supports NodeJS, Python, Ruby, Go, PHP, Bash, and any Linux executable, with more languages coming soon.\nPerformance: 100msec cold start Fission maintains a pool of \u0026ldquo;warm\u0026rdquo; containers that each contain a small dynamic loader. When a function is first called, i.e. \u0026ldquo;cold-started\u0026rdquo;, a running container is chosen and the function is loaded. This pool is what makes Fission fast: cold-start latencies are typically about 100msec.\nKubernetes is the right place for Serverless We\u0026rsquo;re built on Kubernetes because we think any non-trivial app will use a combination of serverless functions and more conventional microservices, and Kubernetes is a great framework to bring these together seamlessly.\nBuilding on Kubernetes also means that anything you do for operations on your Kubernetes cluster \u0026mdash; such as monitoring or log aggregation \u0026mdash; also helps with ops on your Fission deployment.\nFission Concepts A function is a piece of code that follows the fission function interface.\nAn environment contains the language- and runtime-specific parts of running a function.\nThe following environments are currently available:\n   Environment Image     Binary (for executables or scripts) fission/binary-env   Go fission/go-env   .NET fission/dotnet-env   .NET 2.0 fission/dotnet20-env   NodeJS (Alpine) fission/node-env   NodeJS (Debian) fission/node-env-debian   Perl fission/perl-env   PHP 7 fission/php-env   Python 3 fission/python-env   Ruby fission/ruby-env    You can also extend environments or create entirely new ones if you want. (An environment is essentially just a container with a webserver and dynamic loader.)\nA trigger is something that maps an event to a function; Fission supports HTTP routes as triggers today, with upcoming support for other types of event triggers, such as timers and Kubernetes events.\nUsage # Add the stock NodeJS env to your Fission deployment $ fission env create --name nodejs --image fission/node-env # A javascript one-liner that prints \u0026quot;hello world\u0026quot; $ curl https://raw.githubusercontent.com/fission/fission/master/examples/nodejs/hello.js \u0026gt; hello.js # Upload your function code to fission $ fission function create --name hello --env nodejs --code hello.js # Map GET /hello to your new function $ fission route create --method GET --url /hello --function hello # Run the function. This takes about 100msec the first time. $ curl http://$FISSION_ROUTER/hello Hello, world!  See the examples directory for more.\n"
 },
 {
-	"uri": "http://fission.io/docs/0.6.0/languages/nodejs/",
-	"title": "Nodejs",
-	"tags": [],
-	"description": "",
-	"content": "Lorem Ipsum.\n"
-},
-{
-	"uri": "http://fission.io/docs/0.6.0/languages/go/",
-	"title": "Go",
-	"tags": [],
-	"description": "",
-	"content": "Lorem Ipsum.\n"
-},
-{
-	"uri": "http://fission.io/docs/0.6.0/languages/python/",
-	"title": "Using Python in Fission",
-	"tags": [],
-	"description": "",
-	"content": " Python in Fission Fission supports functions in Python (both Python 2.7 and Python 3).\nSetup After installing fission, run this command to add the fission environment to your cluster:\nfission env create --name python --image fission/python-env:0.6.0 --builder fission/python-build-env:0.6.0 --version 2  Functions Fission Python functions are Flask HTTP request handlers. Flask is a lightweight web framework for Python.\nan example function  Running \u0026ldquo;initialization\u0026rdquo; code db connection example  Logging xxx sample logging  To test this, try:\nfission function create --name sample-logging --source xxx.py fission function test --name sample-logging  HTTP details The request body xxx sample  To test this, try:\nfission function create --name sample-logging --source xxx.py fission function test --name sample-logging  URL parameters xxx sample  To test this, try:\nfission function create --name sample-logging --source xxx.py fission function test --name sample-logging  Sending HTTP response codes xxx sample  To test this, try:\nfission function create --name sample-logging --source xxx.py fission function test --name sample-logging  Working with dependencies Libraries Passwords and other secrets Configuration variables Rebuilding the Docker image "
-},
-{
 	"uri": "http://fission.io/docs/0.6.0/installation/",
 	"title": "Installation Guide",
 	"tags": [],
@@ -205,13 +184,6 @@
 {
 	"uri": "http://fission.io/docs/0.6.0/categories/",
 	"title": "Categories",
-	"tags": [],
-	"description": "",
-	"content": ""
-},
-{
-	"uri": "http://fission.io/docs/0.6.0/languages/",
-	"title": "Languages",
 	"tags": [],
 	"description": "",
 	"content": ""
