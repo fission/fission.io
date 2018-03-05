@@ -1,8 +1,8 @@
 ---
 title: "Hello World: Creating Functions using Fission"
 author: "Timirah James, Developer Advocate"
-date: 2018-03-07T13:52:34-08:00
-draft: false
+date: 2018-03-05T11:13:45-08:00
+draft: true
 ---
 
 
