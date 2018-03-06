@@ -349,13 +349,13 @@ Stop Minikube, then delete it:
 
 * [Kubernetes By Example](http://kubernetesbyexample.com/)
 
-* [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+- [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 
-* [Replicasets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
+- [Replicasets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
 
-* [Pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/)
+- [Pods](https://kubernetes.io/docs/concepts/workloads/pods/pod/)
 
-* [Services](https://kubernetes.io/docs/concepts/services-networking/service/)
+- [Services](https://kubernetes.io/docs/concepts/services-networking/service/)
 
 **Bonus -- also, be sure check out [this awesome (and FREE) course on Microservices and Kubernetes by Udacity](https://www.youtube.com/playlist?list=PLAwxTw4SYaPm9bdmazR1s2NBLh3C4qzHB)**
 
