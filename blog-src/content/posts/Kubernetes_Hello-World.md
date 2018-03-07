@@ -362,4 +362,4 @@ Stop Minikube, then delete it:
 
 ----
 
-_**Author:** Timirah James [Fission Developer Advocate, Platform9 Systems]  **|**  [Tweet the Author](https://www.twitter.com/timirahj)_
+_**Author:**_ Timirah James **|** Fission Developer Advocate, Platform9 Systems  **|**  [Tweet the Author](https://www.twitter.com/timirahj)
