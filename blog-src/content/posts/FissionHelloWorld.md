@@ -2,7 +2,7 @@
 title: "Hello World: Creating Functions using Fission (in Golang)"
 author: "Timirah James, Developer Advocate"
 date: 2018-03-05T11:13:45-08:00
-draft: true
+draft: false
 ---
 
 
@@ -12,34 +12,59 @@ In the last blog post [Kubernetes for Newbies](https://fission.io/blog/posts/kub
 
 Turns out, serverless is a developer’s saving grace when it comes to managing servers. Instead of managing a bunch of servers, Serverless solutions allow developers to … well … not manage servers at all! Serverless completely takes away the burden of managing servers. One could say that Serverless separates the “ops” from devs. Functions as a Service (FaaS) enable developers to deploy parts of an application on an "as needed" basis using short-lived functions in just about any programming language. 
 
-Benefits of using FaaS range from simplified scaling, to easier deployment, lowered costs (you only pay for the resources you use, as opposed to otherise paying on a per-second basis).
+Benefits of using FaaS range from simplified scaling, to easier deployment, lowered costs (you only pay for the resources you use, as opposed to otherwise paying on a per-second basis).
 
 
 
-Let’s do a quick walk thru of how to deploy "Hello World" using Fission Functions!
+Let’s do a quick walk through of how to deploy "Hello World" using Fission Functions!
 
 
 ---- 
 
 # Installations
 
-Before we begin, we’ll need to make sure we’ve done the following:
 
-- Install the [Kubernetes CLI (kubectl)](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- Install [Minikube](https://github.com/kubernetes/minikube)
-- Install and initialize [Helm](https://github.com/kubernetes/helm)
+We'll be using Minikube to run Kubernetes locally (just as we did in the [previous blog post](http://fission.io/blog/posts/kubernetes_hello-world/)).
 
 
-**_Now we can install Fission._**
+### Install Minikube
+ **Go ahead and follow the instructions to install Minikube [here](https://github.com/kubernetes/minikube).**
 
-Let’s do so using this command:
+After you have Minikube installed, launch your cluster by running the following command:			
+					
+	$ minikube start
+
+
+### Install the Kubernetes CLI (kubectl)
+
+**Once your cluster is ready, you'll need to install the Kubernetes CLI kubectl [as instructed here](https://kubernetes.io/docs/tasks/tools/install-kubectl/).**
+
+
+>Check if the installation was successful by running:
+
+	$ kubectl get nodes
+
+
+### Install Helm
+
+Install Helm using the instructions found here: 
+https://github.com/kubernetes/helm
+
+Make sure Helm is initialized by running:
+
+	$ helm init
+
+
+### Install Fission.
+
+Now let's install Fission using the following command:
 
 	$ helm install --namespace fission https://github.com/fission/fission/releases/download/0.6.0/fission-all-0.6.0.tgz
 
 
 ### Install the Fission CLI
 
-Let’s install the command-line tool for Fission.
+Next we'll need to install the command-line tool for Fission.
 
 If you’re running **OS X**, you can install the Fission CLI by running the following command:				
 					
@@ -67,18 +92,9 @@ If you’re running **OS X**, you can install the Fission CLI by running the fol
 
 # Deploy "Hello World!"
 
-### Run Fission (Locally)
 
 Now that we have all the proper tooling installed, we’re now ready to create our first function with Fission! 
 
-*(Just as we did in the [previous blog post](http://fission.io/blog/posts/kubernetes_hello-world/), we'll be using Minikube to run Kubernetes locally.)*
-
-Go ahead and launch your cluster by running the following commands:			
-					
-	$ minikube start
-	$ kubectl get nodes
-
-----
 
 ### Creating Our Function
 
@@ -88,8 +104,15 @@ Let’s create a **Go** environment using the following command:
 
 	fission env create --name go --image fission/go-env --builder fission/go-builder
 
+>**_NOTE: Since you are creating a new environment, it may take a few extra seconds before the Go environment pods are up and running in the fission-fuction namespace._**
 
-We’ll be using the Golang Hello World example from the fission github repo (which can be found [here](https://github.com/fission/fission/blob/master/examples/go/hello.go)), so we’ll need to download the code using the following command:
+To verify if the pods are up and running, be sure to run this command:
+
+	$ kubectl get pods -n fission-function | grep go
+
+>_(The status of the pods should be "Running")_
+
+We’ll be using the Golang Hello World example from the fission github repo (which can be found here: https://github.com/fission/fission/blob/master/examples/go/hello.go), so we’ll need to download the code using the following command:
 									
 	$ curl https://raw.githubusercontent.com/fission/fission/master/examples/go/hello.go > /tmp/hello.go
 
@@ -98,7 +121,6 @@ Now let’s deploy our function using this command:
 
 	$ fission function create --name hello --env go --code /tmp/hello.go --entrypoint Handler
 
->
 
 Finally, we can invoke our function, using this command:
 
