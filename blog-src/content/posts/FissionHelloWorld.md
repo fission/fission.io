@@ -28,7 +28,8 @@ We'll be using Minikube to run Kubernetes locally (just as we did in the [previo
 
 
 ### Install Minikube
- **Go ahead and follow the instructions to install Minikube [here](https://github.com/kubernetes/minikube).**
+
+ Go ahead and follow the instructions to install Minikube [here](https://github.com/kubernetes/minikube).
 
 After you have Minikube installed, launch your cluster by running the following command:			
 					
@@ -37,18 +38,17 @@ After you have Minikube installed, launch your cluster by running the following 
 
 ### Install the Kubernetes CLI (kubectl)
 
-**Once your cluster is ready, you'll need to install the Kubernetes CLI kubectl [as instructed here](https://kubernetes.io/docs/tasks/tools/install-kubectl/).**
+Once your cluster is ready, you'll need to install the Kubernetes CLI kubectl [as instructed here](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
 
->Check if the installation was successful by running:
+You can verify if the installation was successful by running:
 
 	$ kubectl get nodes
 
 
 ### Install Helm
 
-Install Helm using the instructions found here: 
-https://github.com/kubernetes/helm
+Install Helm using the instructions found [here](https://github.com/kubernetes/helm).
 
 Make sure Helm is initialized by running:
 
@@ -104,7 +104,7 @@ Let’s create a **Go** environment using the following command:
 
 	fission env create --name go --image fission/go-env --builder fission/go-builder
 
->**_NOTE: Since you are creating a new environment, it may take a few extra seconds before the Go environment pods are up and running in the fission-fuction namespace._**
+>**NOTE**: _Since you are creating a new environment, it may take a few extra seconds before the Go environment pods are up and running in the fission-fuction namespace._
 
 To verify if the pods are up and running, be sure to run this command:
 
