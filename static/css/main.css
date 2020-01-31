@@ -1,0 +1,10 @@
+.trusted-by-logo {
+    filter: grayscale(100%);
+    opacity: 50%
+}
+
+.trusted-by-logo:hover {
+    transition: all 0.3s ease 0s;
+    filter: grayscale(0%);
+    opacity: 100%
+}
