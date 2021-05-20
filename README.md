@@ -27,7 +27,7 @@ $ hugo new how-to-use-ShinyNewThing.md
 ### Modifying an existing page
 
 Find the doc under `content`, edit it, make a pull request.  You
-can use Github's handy UI for editing pages.
+can use GitHub's handy UI for editing pages.
 
 ## Previewing your changes
 
