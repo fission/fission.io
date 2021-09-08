@@ -1,33 +1,33 @@
-baseURL = 'http://example.org/'
+baseURL = 'https://fission.io/'
 languageCode = 'en-us'
 title = 'Fission | Open source Kubernetes-native Serverless Framework'
 theme = 'fission'
 
 [params]
-  installurl = ''
-  learnmoreurl = ''
+  installurl = 'https://docs.fission.io/docs/installation/'
+  learnmoreurl = 'https://docs.fission.io/docs/installation/'
 
   [params.social]
     twitter = 'fissionio'
-	slackurl = '/'
-	github = 'geekboysupreme'
+	  slackurl = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+	  github = 'fission'
 
   [[params.whatsnew]]
     badge = 'FISSION DZONE REFCARD'
-	heading = 'New! Download the Fission.io Refcard'
-	body = 'Get started with Serverless on Kubernetes in 5 minutes! Learn how to set up Fission, its key concepts, how to create and invoke a function, monitor its performance, and more.'
+	  heading = 'New! Download the Fission.io Refcard'
+	  body = 'Get started with Serverless on Kubernetes in 5 minutes! Learn how to set up Fission, its key concepts, how to create and invoke a function, monitor its performance, and more.'
 	[params.whatsnew.button]
 	  text = 'Download Now!'
-	  url = ''
+	  url = 'https://platform9.com/wp-content/uploads/2019/03/dzone-refcard-fissionio.pdf'
 	  hero_class = 'mid'
 
   [[params.whatsnew]]
     badge = 'BLOG'
-	heading = 'Monitor Fission serverless functions with OpenTracing'
-	body = 'This post walks you through setting up OpenTracking, with a Jaeger backend, for tracing each request across multiple functions and invocations.'
+	  heading = 'Fission WebSocket Sample'
+	  body = 'In this post we will look into how we can develop a simple a web socket based chat application using Fission functions.'
 	[params.whatsnew.button]
 	  text = 'Read More!'
-	  url = ''
+	  url = 'https://blog.fission.io/posts/websocket-sample/'
 	  hero_class = 'mid-2'
 
   [[params.whatsnew]]
@@ -36,33 +36,35 @@ theme = 'fission'
 	body = 'Soam Vasani – the creator of Fission – sat down with Jeffrey Meyerson from Software Engineering Daily podcast to talk all-things serverless and Kubernetes.'
 	[params.whatsnew.button]
 	  text = 'Listen Now!'
-	  url = ''
+	  url = 'https://platform9.com/blog/talking-serverless-on-kubernetes-with-software-engineering-daily'
 	  hero_class = 'mid-2'
 
-
-
 [menu]
-  [[menu.main]]
-    name = "Overview"
-    url = "/features.html"
-	weight = 1
+  # [[menu.main]]
+  #   name = "Overview"
+  #   url = "/features.html"
+	#   weight = 1
   [[menu.main]]
     name = "Docs"
-    url = "/features.html"
-	weight = 2
-  [[menu.main]]
-    name = "Community"
-    url = "/features.html"
-	weight = 3
+    url = "https://docs.fission.io/docs/"
+	  weight = 2
+  # [[menu.main]]
+  #   name = "Community"
+  #   url = "/features.html"
+	#   weight = 3
   [[menu.main]]
     name = "Blog"
-    url = "/features.html"
-	weight = 4
+    url = "https://blog.fission.io/"
+	  weight = 3
+  # [[menu.main]]
+  #   name = "Install"
+  #   url = "/features.html"
+	#   weight = 5
   [[menu.main]]
-    name = "Install"
-    url = "/features.html"
-	weight = 5
+    name = "Environments"
+    url = "https://environments.fission.io/"
+	  weight = 5
   [[menu.main]]
     name = "GitHub"
-    url = "/features.html"
-	weight = 6
+    url = "https://github.com/fission"
+	  weight = 6
