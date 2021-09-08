@@ -1,0 +1,18 @@
+{{ range .Site.Params.whatsnew }}
+<div class="col-lg-4">
+	<div class="card-shadow">
+		<span class="card-badge">{{ .badge }}</span>
+		<p class="section-text-bold">
+			{{ .heading }}
+		</p>
+		<div class="card-shadow-content">
+			<p class="section-text">
+				{{ .body }}
+			</p>
+			{{ with .button }}
+			<a href="{{ .url }}"><button class="hero-{{ .hero_class }} align-self-end">{{ .text }}</button></a>
+			{{ end }}
+		</div>
+	</div>
+</div>
+{{ end }}

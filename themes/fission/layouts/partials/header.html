@@ -1,0 +1,52 @@
+<div class="header">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+				<img src="/img/Logo.svg" class="header-logo" alt-text="Fission Logo">
+			</div>
+			<div class="col-lg-6 navbar-big no-show-hamburger">
+				<ul class="navbar-nav m-auto">
+					{{ range .Site.Menus.main }}
+					<li class="nav-item">
+						<a href="{{ .URL }}" class="nav-link">
+							<span>{{ .Name }}</span>
+						</a>
+					</li>
+					{{ end }}
+				</ul>
+			</div>
+			<div class="col-lg-3 no-show-hamburger" style="margin-left: auto;">
+				<div class="button-container">
+					{{ with .Site.Params.social }}
+					<a href="{{ .slackurl }}"><button class="header-button"><img src="/img/slack.svg" width="14px" style="margin-right: 6px"/> Get Help</button></a>
+					<a href="https://twitter.com/{{ .twitter }}"><button class="header-button"><img src="/img/twitter.svg" width="14px" style="margin-right: 6px"/> @{{ .twitter }}</button></a>
+					{{ end }}
+				</div>
+			</div>
+
+			<div class="col-lg-9 col-md-9 col-sm-8 col-xs-8 show-hamburger">
+				<div class="hamburger-menu">
+					<img src="/img/hamburger-white.svg" alt-text="hamburger menu">
+			   
+					<div class="menu-container">
+						<ul>
+							{{ range .Site.Menus.main }}
+							<li class="nav-item">
+								<a href="{{ .URL }}" class="nav-link">
+									<span>{{ .Name }}</span>
+								</a>
+							</li>
+							{{ end }}
+						</ul>
+						<div class="button-container">
+							{{ with .Site.Params.social }}
+							<a href="{{ .slackurl }}"><button class="header-button"><img src="/img/slack.svg" width="14px" style="margin-right: 6px"/> Get Help</button></a>
+							<a href="https://twitter.com/{{ .twitter }}"><button class="header-button"><img src="/img/twitter.svg" width="14px" style="margin-right: 6px"/> @{{ .twitter }}</button></a>
+							{{ end }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
