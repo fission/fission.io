@@ -1,0 +1,40 @@
+{{ define "main" }}
+<div class="hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-6 hero-section-mobile" style="text-align:center; font-size:35px">
+				<h1 class="hero-title">
+					{{ .Title }}
+				</h1>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="body-container">
+	<div class="container">
+		<br/>
+		{{ range .Pages.ByPublishDate.Reverse }}
+		<div class="row">
+			<div class="col-lg-10" style="margin: 0 auto">
+				<h2 class="section-title">
+					<a class="title" href="{{ .RelPermalink }}"> {{ .Title }} </a>
+				</h2>
+				{{ partial "metadata.html" . }}
+				<p class="section-text-bold">
+					{{ .Description }}
+				</p>
+				<a class="summary" href="{{ .RelPermalink }}">
+					<p class="section-text" style="font-size: 16px">
+						{{ .Summary }}
+					</p>
+				</a>
+				<p class="section-text-bold">
+					<a class="title" href="{{ .RelPermalink }}">Read more</a>
+				</p>
+			</div>
+		</div>
+		{{ end }}
+	</div>
+</div>
+{{ end }}

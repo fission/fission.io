@@ -1,0 +1,29 @@
+{{ define "main" }}
+<div class="hero">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9 hero-section-mobile" style="margin:0 auto">
+				<h1 class="hero-title">
+					{{ .Title }}
+				</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-9" style="margin:0 auto">
+				{{ partial "metadata.html" . }}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="body-container">
+	<div class="container">
+		<br/>
+		<div class="row">
+			<div class="col-lg-9" style="margin: 10px auto">
+				{{ .Content }}
+			</div>
+		</div>
+	</div>
+</div>
+{{ end }}

@@ -1,0 +1,14 @@
+{{ with .Params.categories }}
+<i data-feather="category"></i>
+{{ range . }}
+{{ $href := print (absURL "categories/") (urlize .) }}
+<a class="btn btn-sm btn-light btn-outline-dark post-tag" href="{{ $href }}">{{ . }}</a>
+{{ end }}
+{{ end }}
+{{ $dateTime := .PublishDate.Format "2006-01-02" }}
+{{ $dateFormat := .Site.Params.dateFormat | default "Jan 2, 2006" }}
+<i data-feather="calendar"></i>
+<time datetime="{{ $dateTime }}">{{ .PublishDate.Format $dateFormat }}</time>
+{{ with .Params.author }}
+- <address class="author" style="display: inline"> {{ . }}</address>
+{{end}}
