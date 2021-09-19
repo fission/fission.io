@@ -54,7 +54,7 @@ theme = 'fission'
 	#   weight = 3
   [[menu.main]]
     name = "Blog"
-    url = "https://blog.fission.io/"
+    url = "/posts/"
 	  weight = 3
   # [[menu.main]]
   #   name = "Install"
@@ -68,7 +68,7 @@ theme = 'fission'
     name = "GitHub"
     url = "https://github.com/fission"
 	  weight = 6
-  [[menu.main]]
-    name = "Posts"
-    url = "/posts/"
-	  weight = 7
+  # [[menu.main]]
+  #   name = "Posts"
+  #   url = "/posts/"
+	#   weight = 7

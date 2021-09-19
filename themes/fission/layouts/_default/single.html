@@ -20,8 +20,20 @@
 	<div class="container">
 		<br/>
 		<div class="row">
+			{{ if .Params.Image }}
+			<img src="{{ .Params.Image | relURL }}" class="img-fluid mx-auto w-50 mb-5" alt="{{ .Title | markdownify }}">
+			{{ end }}
 			<div class="col-lg-9" style="margin: 10px auto">
 				{{ .Content }}
+			</div>
+			<div class="col-lg-9" style="margin: 10px auto">
+				{{ with .Params.categories }}
+				<i data-feather="category"></i>
+				{{ range . }}
+				{{ $href := print (absURL "categories/") (urlize .) }}
+				<a class="btn btn-sm btn-light btn-outline-dark post-tag" href="{{ $href }}">{{ . }}</a>
+				{{ end }}
+				{{ end }}
 			</div>
 		</div>
 	</div>

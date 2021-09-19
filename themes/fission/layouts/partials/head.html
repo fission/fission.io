@@ -4,12 +4,20 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="theme-color" content="#ffffff"/>
 
+	{{ "<!-- mobile responsive meta -->" | safeHTML }}
+	<meta name="description"
+	  content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}">
+	  {{ with .Site.Params.keywords }}
+	  <meta name="keywords" content="{{ . }}">{{ end }}
+	  {{ with .Site.Params.author }}
+	<meta name="author" content="{{ . }}">{{ end }}
+	{{ hugo.Generator }}
 
 	<!-- Favicons -->
 	<link rel="apple-touch-icon" href="/img/favicon.png">
 	<link rel="icon" href="/img/favicon.png">
 	<title>
-		{{ .Title }}
+		{{ .Title | markdownify }}
 	</title>
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">

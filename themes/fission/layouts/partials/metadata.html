@@ -5,10 +5,13 @@
 <a class="btn btn-sm btn-light btn-outline-dark post-tag" href="{{ $href }}">{{ . }}</a>
 {{ end }}
 {{ end }}
+{{ if .Params.date }}
 {{ $dateTime := .PublishDate.Format "2006-01-02" }}
 {{ $dateFormat := .Site.Params.dateFormat | default "Jan 2, 2006" }}
 <i data-feather="calendar"></i>
 <time datetime="{{ $dateTime }}">{{ .PublishDate.Format $dateFormat }}</time>
+{{ end }}
 {{ with .Params.author }}
-- <address class="author" style="display: inline"> {{ . }}</address>
+{{ $href := print (absURL "author/") (urlize .) }}
+- <a class="nav-item" href="{{ `author/` | relLangURL }}{{ . | urlize | lower }}">{{ . | title }}</a>
 {{end}}

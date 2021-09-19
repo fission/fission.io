@@ -1,0 +1,76 @@
+{{ define "main" }}
+<div class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 hero-section-mobile" style="margin:0 auto">
+                <h1 class="hero-title">
+                    {{ .Title }}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9" style="margin:0 auto">
+                {{ partial "metadata.html" . }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="body-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center shadow">
+                {{ if .Params.Image }}
+                <!-- <img src="{{ .Params.Image | relURL }}" class="img-fluid mx-auto w-50 mb-5" alt="{{ .Title | markdownify }}"> -->
+                <img src="{{ .Params.Image | relURL }}" alt=""
+                    class="img-fluid d-block mx-auto rounded-circle mb-4 author-thumb">
+                {{ end }}
+                <div class="col-lg-9" style="margin: 10px auto">
+                    {{ .Content }}
+                </div>
+                <div class="col-lg-9" style="margin: 10px auto">
+                    {{ with .Params.categories }}
+                    <i data-feather="category"></i>
+                    {{ range . }}
+                    {{ $href := print (absURL "categories/") (urlize .) }}
+                    <a class="btn btn-sm btn-light btn-outline-dark post-tag" href="{{ $href }}">{{ . }}</a>
+                    {{ end }}
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto px-0">
+                        <h2 class="mb-4">Posts by {{ .Title }}</h2>
+                        {{ $name:= .Title }}
+                        {{ range where .Site.RegularPages "Params.author" $name }}
+                        <!-- {{ .Render "article" }} -->
+                        <div class="row">
+                            <div class="col-lg-10" style="margin: 0 auto">
+                                <h2 class="section-title">
+                                    <a class="title" href="{{ .RelPermalink }}"> {{ .Title }} </a>
+                                </h2>
+                                {{ partial "metadata.html" . }}
+                                <p class="section-text-bold">
+                                    {{ .Description }}
+                                </p>
+                                <a class="summary" href="{{ .RelPermalink }}">
+                                    <p class="section-text" style="font-size: 16px">
+                                        {{ .Summary }}
+                                    </p>
+                                </a>
+                                <p class="section-text-bold">
+                                    <a class="title" href="{{ .RelPermalink }}">Read more</a>
+                                </p>
+                            </div>
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
