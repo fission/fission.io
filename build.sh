@@ -3,6 +3,7 @@
 set -euo pipefail
 
 echo "Check submodule status"
+git submodule update --init --recursive
 git submodule status --recursive
 git submodule foreach --recursive 'git status'
 
