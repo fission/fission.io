@@ -13,7 +13,7 @@ In this post, we'll take a look at how it can provide metrics for the functions 
 You need to install Fission and Linkerd in the cluster. 
 
 - Install [Linkerd](https://linkerd.io/2/getting-started/)
-- Install [Fisson](https://docs.fission.io/docs/installation/)
+- Install [Fisson](/docs/installation/)
 
 ### Deploy a function in Fission
 

@@ -16,7 +16,7 @@ There are many Actions available on the [Github marketplace](https://github.com/
 
 # Prerequisites
 
-You will need a Kubernetes cluster with Fission installed. Please follow the [instructions here](https://docs.fission.io/installation/) for installing Fission in your Kubernetes cluster. Then, verify that the fission cli is working by using the `fission --version` command.
+You will need a Kubernetes cluster with Fission installed. Please follow the [instructions here](/docs/installation/) for installing Fission in your Kubernetes cluster. Then, verify that the fission cli is working by using the `fission --version` command.
 
 # Local Development
 

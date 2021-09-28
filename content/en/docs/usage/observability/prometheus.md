@@ -29,7 +29,7 @@ Since Fission itself runs in Kubernetes, we'll use the [Prometheus Operator](htt
 ### Prerequisite
 
 - Kubernetes cluster
-- Fission [installed in the cluster](https://docs.fission.io/docs/installation/)
+- Fission [installed in the cluster](/docs/installation/)
 - [Helm](https://helm.sh/) (This post assumes helm 3 in use)
 - kubectl and kubeconfig configured
 

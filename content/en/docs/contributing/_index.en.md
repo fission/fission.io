@@ -37,7 +37,7 @@ Please check following repositories for your areas of interest,
 
 - For contributing a new Fission environment, please check the [environments repo](https://github.com/fission/environments)
 - For contributing a new Keda Connector, please check the [Keda Connectors repo](https://github.com/fission/keda-connectors)
-- You can contribute to the Fission Docs by adding content to the [docs repo](https://github.com/fission/docs.fission.io)
+- You can contribute to the Fission Docs by adding content to the [docs repo](https://github.com/fission/fission.io)
 
 ## Get Help.
 
