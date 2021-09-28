@@ -1,11 +1,10 @@
-{{ $cover := .HasShortcode "blocks/cover" }}
-<nav class="js-navbar-scroll navbar navbar-expand navbar-light {{ if not $cover }} nav-shadow {{ end }}flex-column flex-md-row td-navbar">
-	<a id="docsy-top" {{ if $cover }} style="display: none;" {{end}} class="navbar-brand" href="{{ .Site.Home.RelPermalink }}docs">
-		<img class="navbar-logo" src="{{ "images/logo.png" | relURL }}"/>
+{{ $cover := and (.HasShortcode "blocks/cover") (not .Site.Params.ui.navbar_translucent_over_cover_disable) }}
+<nav class="js-navbar-scroll navbar navbar-expand navbar-dark {{ if $cover}} td-navbar-cover {{ end }}flex-column flex-md-row td-navbar">
+        <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
+		<img src="/images/fission-white-logo.png" height="40" class="d-inline-block align-top" alt="">
+		<!-- <span class="navbar-logo">{{ if .Site.Params.ui.navbar_logo }}{{ with resources.Get "icons/logo-white.png" }}{{ ( . | minify).Content | safeHTML }}{{ end }}{{ end }}</span> -->
+		<!-- <span class="text-uppercase font-weight-bold">{{ .Site.Title }}</span> -->
 	</a>
-	<div style="margin-bottom: -0.2em;">
-		<a style="font-size: 1.3em;font-weight: 500;color: gray;" href="https://github.com/fission/fission/releases/tag/{{ .Site.Params.release_version }}" >v{{ .Site.Params.release_version }}</a>
-	</div>
 	<div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
 		<ul class="navbar-nav mt-2 mt-lg-0">
 			{{ $p := . }}
@@ -15,18 +14,24 @@
 				{{ with .Page }}
 				{{ $active = or $active ( $.IsDescendant .)  }}
 				{{ end }}
-				<a class="nav-link{{if $active }} active{{end}}" href="{{ with .Page }}{{ .RelPermalink }}{{ else }}{{ .URL | relLangURL }}{{ end }}"><span{{if $active }} class="active"{{end}}>{{ .Name }}</span></a>
+				{{ $pre := .Pre }}
+				{{ $post := .Post }}
+				{{ $url := urls.Parse .URL }}
+				{{ $baseurl := urls.Parse $.Site.Params.Baseurl }}
+				<a class="nav-link{{if $active }} active{{end}}" href="{{ with .Page }}{{ .RelPermalink }}{{ else }}{{ .URL | relLangURL }}{{ end }}" {{ if ne $url.Host $baseurl.Host }}target="_blank" {{ end }}>{{ with .Pre}}{{ $pre }}{{ end }}<span{{if $active }} class="active"{{end}}>{{ .Name }}</span>{{ with .Post}}{{ $post }}{{ end }}</a>
 			</li>
 			{{ end }}
-			<li class="nav-item mr-4 mb-2 mb-lg-0">
-				<a class="nav-link" href="{{ .Site.Params.github_repo }}">GitHub</a>
+			{{ if  .Site.Params.versions }}
+			<li class="nav-item dropdown mr-4 d-none d-lg-block">
+				{{ partial "navbar-version-selector.html" . }}
 			</li>
+			{{ end }}
 			{{ if  (gt (len .Site.Home.Translations) 0) }}
-			<li class="nav-item dropdown d-none d-lg-block">
+			<li class="nav-item dropdown mr-4 d-none d-lg-block">
 				{{ partial "navbar-lang-selector.html" . }}
 			</li>
 			{{ end }}
 		</ul>
 	</div>
-	<div class="navbar-nav mx-lg-2 d-none d-lg-block">{{ partial "search-input.html" . }}</div>
+	<div class="navbar-nav d-none d-lg-block">{{ partial "search-input.html" . }}</div>
 </nav>

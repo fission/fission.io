@@ -13,8 +13,8 @@
 # limitations under the License.
 
 baseURL = "/"
-title = "Fission"
 enableRobotsTXT = true
+title = "Fission"
 
 # Hugo allows theme composition (and inheritance). The precedence is from left to right.
 theme = ["docsy"]
@@ -29,7 +29,24 @@ defaultContentLanguageInSubdir = false
 # Useful when translating.
 enableMissingTranslationPlaceholders = true
 
-disableKinds = ["taxonomy", "taxonomyTerm"]
+# Comment out to disable taxonomies in Docsy
+# disableKinds = ["taxonomy", "taxonomyTerm"]
+
+# You can add your own taxonomies
+[taxonomies]
+author = "author"
+category = "categories"
+tag = "tags"
+
+[params.taxonomy]
+# set taxonomyCloud = [] to hide taxonomy clouds
+taxonomyCloud = []
+
+# If used, must have same lang as taxonomyCloud
+taxonomyCloudTitle = ["Tag Cloud", "Categories", "Authors"]
+
+# set taxonomyPageHeader = [] to hide taxonomies on the page headers
+taxonomyPageHeader = ["tags", "categories", "authors"]
 
 # Highlighting config
 pygmentsCodeFences = true
@@ -40,25 +57,28 @@ pygmentsUseClassic = false
 # See https://help.farbox.com/pygments.html
 pygmentsStyle = "tango"
 
- # First one is picked as the Twitter card image if not set on page.
- #images = ["images/project-illustration.png"]
+# First one is picked as the Twitter card image if not set on page.
+#images = ["images/project-illustration.png"]
 
 # Configure how URLs look like per section.
 [permalinks]
-blog = "/:section/:year/:month/:day/:slug/"
+blog = "/posts/:slug/"
+
+[markup.goldmark.renderer]
+unsafe = true
 
 ## Configuration for BlackFriday markdown parser: https://github.com/russross/blackfriday
 [blackfriday]
-plainIDAnchors = true
-hrefTargetBlank = false
 angledQuotes = false
+hrefTargetBlank = false
 latexDashes = true
+plainIDAnchors = true
 
 # Image processing configuration.
 [imaging]
-resampleFilter = "CatmullRom"
-quality = 75
 anchor = "smart"
+quality = 75
+resampleFilter = "CatmullRom"
 
 [services]
 [services.googleAnalytics]
@@ -69,20 +89,20 @@ id = ""
 
 [languages]
 [languages.en]
-title = "Fission"
 description = "Fast Serverless Functions for Kubernetes"
-languageName ="English"
+languageName = "English"
+title = "Fission"
 # Weight used for sorting.
 weight = 1
 
 # Everything below this are Site Params
 
 [params]
-copyright = "Copyright © 2019 Fission Project"
-privacy_policy = ""
-github_repo = "https://github.com/fission/fission"
+copyright = "Copyright © 2020 Fission Project"
 github_doc_repo = "https://github.com/fission/docs.fission.io"
+github_repo = "https://github.com/fission/fission"
 github_subdir = "docs"
+privacy_policy = ""
 
 # Google Custom Search Engine ID. Remove or comment out to disable search.
 gcs_engine_id = "013477323950444988730:is1ujykktrh"
@@ -90,14 +110,62 @@ gcs_engine_id = "013477323950444988730:is1ujykktrh"
 # current release branch - could be rc
 release_branch = "master"
 # the main version. Never is rc.
-release_version = "1.7.1"
+release_version = "1.14.1"
+
+slackurl = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+
+installurl = '/docs/installation/'
+learnmoreurl = '/docs/installation/'
+twitterurl = 'https://twitter.com/fissionio'
+
+notoc = true
+
+[params.social]
+github = 'fission'
+slackurl = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+twitter = 'fissionio'
+
+[[params.whatsnew]]
+badge = 'FISSION DZONE REFCARD'
+body = 'Get started with Serverless on Kubernetes in 5 minutes! Learn how to set up Fission, its key concepts, how to create and invoke a function, monitor its performance, and more.'
+heading = 'New! Download the Fission.io Refcard'
+[params.whatsnew.button]
+hero_class = 'mid'
+text = 'Download Now!'
+url = 'https://platform9.com/wp-content/uploads/2019/03/dzone-refcard-fissionio.pdf'
+
+[[params.whatsnew]]
+badge = 'BLOG'
+body = 'In this post we will look into how we can develop a simple a web socket based chat application using Fission functions.'
+heading = 'Fission WebSocket Sample'
+[params.whatsnew.button]
+hero_class = 'mid-2'
+text = 'Read More!'
+url = 'https://blog.fission.io/posts/websocket-sample/'
+
+[[params.whatsnew]]
+badge = 'PODCAST'
+body = 'Soam Vasani – the creator of Fission – sat down with Jeffrey Meyerson from Software Engineering Daily podcast to talk all-things serverless and Kubernetes.'
+heading = 'Talking Serverless on Kubernetes with Software Engineering Dail'
+[params.whatsnew.button]
+hero_class = 'mid-2'
+text = 'Listen Now!'
+url = 'https://platform9.com/blog/talking-serverless-on-kubernetes-with-software-engineering-daily'
 
 # User interface configuration
 [params.ui]
-# Enable to show the side bar menu in its compact state.
-sidebar_menu_compact = false
 #  Set to true to disable breadcrumb navigation.
 breadcrumb_disable = false
+# Set to true to disable the About link in the site footer
+footer_about_disable = false
+# Set to false if you don't want to display a logo (/assets/icons/logo.svg) in the top navbar
+navbar_logo = true
+# Set to true if you don't want the top navbar to be translucent when over a `block/cover`, like on the homepage.
+navbar_translucent_over_cover_disable = false
+# Enable to show the side bar menu in its compact state.
+sidebar_menu_compact = false
+# Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
+sidebar_search_disable = false
 
 # Adds a H2 section titled "Feedback" to the bottom of each doc. The responses are sent to Google Analytics as events.
 # This feature depends on [services.googleAnalytics] and will be disabled if "services.googleAnalytics.id" is not set.
@@ -106,18 +174,61 @@ breadcrumb_disable = false
 [params.ui.feedback]
 enable = false
 # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
-yes = 'Glad to hear it! Please <a href="https://github.com/fission/fission/issues/new">tell us how we can improve</a>.'
 no = 'Sorry to hear that. Please <a href="https://github.com/fission/fission/issues/new">tell us how we can improve</a>.'
+yes = 'Glad to hear it! Please <a href="https://github.com/fission/fission/issues/new">tell us how we can improve</a>.'
+
+# Adds a reading time to the top of each doc.
+# If you want this feature, but occasionally need to remove the Reading time from a single page, 
+# add "hide_readingtime: true" to the page's front matter
+[params.ui.readingtime]
+enable = false
 
 [params.links]
 # End user relevant links. These will show up on left side of footer and in the community page if you have one.
 [[params.links.user]]
-	name = "Slack"
-	url = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
-	icon = "fab fa-slack"
-        desc = "Chat with other project users in #users"
+desc = "Follow us on Twitter to get the latest news!"
+icon = "fab fa-twitter"
+name = "Twitter"
+url = "https://twitter.com/fissionio"
 [[params.links.user]]
-	name = "GitHub"
-	url = "https://github.com/fission/fission"
-	icon = "fab fa-github"
-        desc = "Development takes place here!"
+desc = "Chat with other project users in #users"
+icon = "fab fa-slack"
+name = "Slack"
+url = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+[[params.links.user]]
+desc = "Development takes place here!"
+icon = "fab fa-github"
+name = "GitHub"
+url = "https://github.com/fission/fission"
+
+[sitemap]
+changefreq = "monthly"
+filename = "sitemap.xml"
+priority = 0.5
+
+[menu]
+[[menu.main]]
+name = "Docs"
+url = "/docs/"
+pre = "<i class='fas fa-book'></i>"
+weight = 10
+[[menu.main]]
+name = "Blog"
+url = "/blog/"
+pre = "<i class='fas fa-blog'></i>"
+weight = 11
+[[menu.main]]
+name = "Environments"
+pre = "<i class='fas fa-store'></i>"
+url = "https://environments.fission.io/"
+weight = 12
+[[menu.main]]
+name = "GitHub"
+pre = "<i class='fab fa-github'></i>"
+url = "https://github.com/fission"
+weight = 13
+[[menu.main]]
+name = "Slack"
+pre = "<i class='fab fa-slack'></i>"
+url = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+weight = 14
