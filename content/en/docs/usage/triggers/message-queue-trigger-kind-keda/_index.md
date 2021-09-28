@@ -15,7 +15,7 @@ Now, there are two kinds of message queue triggers:
 2. keda
 
 Message queue trigger kind can be specified using "mqtkind" flag.
-By default, "mqtkind" is set to "fission" which creates regular [message queue trigger](https://docs.fission.io/docs/triggers/message-queue-trigger/).
+By default, "mqtkind" is set to "fission" which creates regular [message queue trigger](/docs/usage/triggers/message-queue-trigger/).
 To create message queue trigger of kind keda one must specify "mqtkind=keda".
 
 ## Architecture
@@ -65,4 +65,4 @@ $ fission mqt create --name mqttest --function consumer --mqtype kafka \
 --metadata lagThreshold=50 --pollinginterval=30
 ```
 
-For complete tutorial refer [this blog post](https://blog.fission.io/posts/event-driven-scaling-fission-function-using-keda/).
+For complete tutorial refer [this blog post](/posts/event-driven-scaling-fission-function-using-keda/).

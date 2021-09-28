@@ -213,7 +213,7 @@ $ fission function test --name calc-form
 ```
 
 Open the URL of the Fission router service suffixed by the name of route at which form function is exposed.
-For more details on getting the address of Fission router please check [the link](https://docs.fission.io/latest/installation/env_vars/#fission-router-address).
+For more details on getting the address of Fission router please check [the link](/docs/installation/env_vars/#fission-router-address).
 
 ```text
 http://$FISSION_ROUTER/form

@@ -22,11 +22,13 @@ content/en
 
 ## Contributing
 
-1. Create a new branch
-2. Make your changes
-3. Install npm dependencies `npm install`
-4. Run hugo server `hugo server`
-5. Verify your changes locally with server
-6. Commit and push your changes to the branch
-7. Once you verify changes with Netlify preview URL, raise a PR to default branch
-8. Once PR is merged, push to master your changes would be live on the site
+1. Clone and repo checkout all submodules
+`git submodule update --init --recursive`
+2. Create a new branch
+3. Make your changes
+4. Install npm dependencies `npm install`
+5. Run hugo server `hugo server`
+6. Verify your changes locally with server
+7. Commit and push your changes to the branch
+8. Once you verify changes with Netlify preview URL, raise a PR to default branch
+9. Once PR is merged, push to master your changes would be live on the site

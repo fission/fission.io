@@ -39,7 +39,7 @@ in Fission.
 
 Automated Canaries are supported from Fission version 0.11.  For the
 next section we'll assume you're already set up with this version; if
-not, checkout the [install guide](https://docs.fission.io/latest/installation/).
+not, checkout the [install guide](/docs/installation/).
 
 For this tutorial, we'll start with two versions of a function
 deployed on a cluster, and show how automated canary deployments
@@ -131,6 +131,6 @@ zero, and declares the canary status to have failed.
 Automated Canary Deployments in Fission give you the ability to move
 changes into production with lower risk and increased confidence.
 
-Check out the [Fission installation guide](https://docs.fission.io/installation/) to get started with
+Check out the [Fission installation guide](/docs/installation/) to get started with
 Fission.  Join us on the [Fission Slack](http://slack.fission.io) to
 chat, or follow us on Twitter at @fissionio.

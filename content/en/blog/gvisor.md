@@ -45,7 +45,7 @@ Ta-da! Your functions are now utilsing gVisor.
 # Conclusion
 Micro-vm technologies are on the rise as the use for running untrusted code has risen. Fission provides the flexibility to utilise such features out of the box as it is Kubernetes friendly.  We would love to hear how you utilise Fission. 
 
-Here is the guide to [Contributing to Fission](https://docs.fission.io/docs/contributing/)
+Here is the guide to [Contributing to Fission](/docs/contributing/)
 
 
 --- 

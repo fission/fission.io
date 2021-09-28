@@ -228,7 +228,7 @@ If you run into any issues, please feel free to reach out at Fission [slack][13]
 [2]: https://hub.docker.com/r/fission/node-env/tags?page=1&ordering=last_updated
 [3]: https://github.com/fission/examples/blob/master/samples/websocket/broadcast.js
 [4]: https://docs.fission.io/docs/triggers/http-trigger/
-[5]: https://docs.fission.io/installation/
+[5]: https://docs.fission.io/docs/installation/
 [6]: https://github.com/fission/examples
 [7]: https://docs.fission.io/docs/languages/
 [8]: https://docs.fission.io/docs/concepts/#functions
