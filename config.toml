@@ -208,21 +208,27 @@ priority = 0.5
 
 [menu]
 [[menu.main]]
+name = "Docs"
+url = "/docs/"
+pre = "<i class='fas fa-book'></i>"
+weight = 10
+[[menu.main]]
 name = "Blog"
 url = "/blog/"
-weight = 101
+pre = "<i class='fas fa-blog'></i>"
+weight = 11
 [[menu.main]]
 name = "Environments"
 pre = "<i class='fas fa-store'></i>"
 url = "https://environments.fission.io/"
-weight = 102
+weight = 12
 [[menu.main]]
 name = "GitHub"
 pre = "<i class='fab fa-github'></i>"
 url = "https://github.com/fission"
-weight = 103
+weight = 13
 [[menu.main]]
 name = "Slack"
 pre = "<i class='fab fa-slack'></i>"
 url = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
-weight = 104
+weight = 14
