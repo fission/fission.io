@@ -12,4 +12,4 @@ echo "Npm install"
 npm install -D --save autoprefixer@9.7.6 postcss-cli@7.1.0
 
 echo "Running hugo"
-hugo
+hugo --minify --path-warnings --gc
