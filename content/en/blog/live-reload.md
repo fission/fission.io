@@ -85,4 +85,4 @@ development experience.  It accelerates feedback loops
 -- allowing you to test your code as you type.
 
 Check out the [Fission installation guide](/docs/installation/) to get started with
-Fission.  Join us on the [Fission Slack](http://slack.fission.io) to chat, or follow us on Twitter at @fissionio.
+Fission.  Join us on the [Fission Slack](/slack) to chat, or follow us on Twitter at @fissionio.

@@ -26,7 +26,7 @@ This use case is inspired by the demo of [IoT platform for a shipping company bu
 
 ![architecture-diagram](/images/architecture-diagram.png)
 
-The above diagram represents the architecture of the IoT platform. All the Serverless functions are written in [Fission’s JVM environment](/jvm_environment/).
+The above diagram represents the architecture of the IoT platform. All the Serverless functions are written in [Fission’s JVM environment](/docs/usage/languages/java/).
 
 1. The Kafka Producer is a Fission function which can be triggered by a time trigger every few seconds/minutes to simulate incoming data from the fleet. This function generates random 100 records on every invocation. Each record has the following fields of for each vehicle in the fleet:
 

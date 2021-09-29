@@ -92,10 +92,9 @@ We went with something of a hybrid. Though the workflow definition is a static l
 We think this approach is the best of both worlds: we get the advantages of workflows-as-data, but with a lot more flexibility than simple static workflows.
 
 
-Stay tuned for **[Part 2](/posts/fission-workflows-pt-2/)** of this post, as we dive deeper into the potential of Fission Workflows, what implementation looks like, and how it makes serverless application development that much easier.
+Stay tuned for **[Part 2](/posts/getting-started-composing-serverless-functions-with-fission-workflows-part-2/)** of this post, as we dive deeper into the potential of Fission Workflows, what implementation looks like, and how it makes serverless application development that much easier.
 
-_In the meantime, feel free to [**join the Fission community**](https://fission.io/community/)!_
-
+_In the meantime, feel free to [**join the Fission community**](/)!_
 
 ---
 

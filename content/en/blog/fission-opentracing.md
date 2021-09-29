@@ -125,7 +125,7 @@ traceSamplingRate: 0.75
 
 # Try it out!
 
-Open tracing enables developers and operations teams to gather data about important performance and usability metrics of serverless applications. This becomes even more relevant for use cases with highly distributed functions and complex systems. Try out the OpenTracing in Fission and hit us up on [Slack](http://slack.fission.io/) if you have any questions or queries.
+Open tracing enables developers and operations teams to gather data about important performance and usability metrics of serverless applications. This becomes even more relevant for use cases with highly distributed functions and complex systems. Try out the OpenTracing in Fission and hit us up on [Slack](/slack) if you have any questions or queries.
 
 
 --- 
