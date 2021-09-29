@@ -20,7 +20,11 @@
   <meta name="description" content="{{ .Page.Description }}">
 {{ else }}
   {{ $desc := (.Page.Content | safeHTML | truncate 150) }}
+  {{ if gt (len $desc) 0 }}
   <meta name="description" content="{{ $desc }}">
+  {{ else }}
+  <meta name="description" content="{{ .Title }}">
+  {{ end }}
 {{ end }}
 
 {{- template "_internal/opengraph.html" . -}}

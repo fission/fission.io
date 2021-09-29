@@ -2,7 +2,7 @@
 title: "Monitoring Fission logs with Grafana Loki"
 date: 2020-09-14T16:19:12+05:30
 author: "Sahil Lakhwani"
-categories: ["Fission", "Serverless", "go", "logs", "monitoring", "loki", "grafana", "Tutorial", "Faas"]
+categories: [ "Go", "monitoring", "loki", "grafana"]
 description: "Enabling event driven autoscaling with KEDA integration"
 type: "blog"
 ---

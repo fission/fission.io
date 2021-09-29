@@ -3,7 +3,7 @@ title = "Automated Canary Deployments in Fission"
 date = "2018-10-16T01:02:00Z"
 author = "Soam Vasani"
 description = "Canary deployments for serverless functions in Fission"
-categories = ["Canary", "Fission"]
+categories = ["Canary"]
 type = "blog"
 +++
 

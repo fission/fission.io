@@ -1,14 +1,12 @@
-
 +++
 title = "Function builders also support PodSpec now"
 date = "2019-11-01T12:39:32+05:30"
 image = "/images/2020/builder.jpg"
 author = "Vivek Singh"
 description = "There is a lot more you can do with Fission functions and PodSpec."
-categories = ["Fission", "PodSpec", "Builder", "Tolerations", "Volumes", "Init", "Sidecar"]
+categories = ["PodSpec", "Tolerations", "Sidecar"]
 type = "blog"
 +++
-
 
 In a previous [post](/posts/functions-on-steroids-with-podspec/) we discussed about how we can leverage `PodSpec` in the environment pods to enable the functionalities like tolerations, nodeSelectors, volumes, security and a lot others. That functionality was only supported in the environment pods, but now we can provide the `podspec` in the builder pods as well. The details about what `PodSpec` is and the functionalities that it enables are described in the mentioned post. 
 
