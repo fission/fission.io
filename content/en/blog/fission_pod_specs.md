@@ -45,8 +45,7 @@ spec:
   serviceAccount: fission-svc
 ```
 
-Fission now supports using PodSpec in the Fission environment specs. In this tutorial we will look at various use cases that are possible with PodSpec support in Fission. To learn more about the Fission specs please check [this documentation link](https://docs.fission.io/usage/developer-workflow/).
-
+Fission now supports using PodSpec in the Fission environment specs. In this tutorial we will look at various use cases that are possible with PodSpec support in Fission. To learn more about the Fission specs please check [this documentation link](/docs/usage/spec/).
 
 ## Podspec use cases for serverless functions
 
@@ -54,7 +53,7 @@ Fission now supports using PodSpec in the Fission environment specs. In this tut
 
 ### Tolerations on functions
 
-**Taints and tolerations** are mechanisms to influence scheduling of pods in Kubernetes. There are use cases where you want to schedule specific pods onto machines with certain hardware or specific capabilities such as CPU intensive instances. The basic mechanism works by applying taints on nodes of a cluster and tolerations on pods. The pods with tolerations matching a certain taint can get scheduled on those nodes. 
+**Taints and tolerations** are mechanisms to influence scheduling of pods in Kubernetes. There are use cases where you want to schedule specific pods onto machines with certain hardware or specific capabilities such as CPU intensive instances. The basic mechanism works by applying taints on nodes of a cluster and tolerations on pods. The pods with tolerations matching a certain taint can get scheduled on those nodes.
 
 Now you can specify tolerations on functions in the function specification. Let's start with tainting two nodes with "reservation=fission" and two nodes with "reservation=microservices" as shown below. The intent is that two nodes are optimized for functions and other two nodes in cluster are better optimized for long running microservices. We want to schedule functions on nodes with taints meant for functions.
 

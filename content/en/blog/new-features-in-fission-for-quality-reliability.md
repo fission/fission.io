@@ -145,8 +145,7 @@ cost of pooling over a large number of functions, while providing
 performance benefits for all of them.
 
 [See the docs for more about controlling Function execution in
-Fission](https://docs.fission.io/docs/concepts/components/core/executor/)
-
+Fission](/docs/architecture/executor/)
 
 ## Enterprises love Fission
 
@@ -187,4 +186,4 @@ allowfullscreen></iframe>
 [our Slack](http://slack.fission.io).
 
 If you're ready to try it out head over to the docs for instructions
-on [how to install Fission](https://docs.fission.io/latest/installation/installation).
+on [how to install Fission](/docs/installation).

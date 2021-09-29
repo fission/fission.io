@@ -91,4 +91,4 @@ $ fission route create --name foo --url /foo/{bar} --function foofn --createingr
 ```
 
 Fission 1.6.0 added a lot of other cool features as well. Check out the [full changelog](https://github.com/fission/fission/blob/master/CHANGELOG.md#change-log) 
-or go directly to the [release page](https://docs.fission.io/docs/releases/1.6.0/) here.
+or go directly to the [release page](/docs/releases/1.6.0/) here.

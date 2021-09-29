@@ -16,7 +16,7 @@ Most serverless functions are triggered by an event, and these in turn may trigg
 Fission already supports nats-streaming and azure-storage-queue, with  [Kafka integration planned for the 0.11 release](https://github.com/fission/fission/pull/831). 
 Using this Kafka integration we can build a quick demo and show the power of serverless functions for  stream processing use cases.
 
-To follow along the tutorial, first  [install Fission](https://docs.fission.io/docs/installation/) on a Kubernetes cluster of your choice.
+To follow along the tutorial, first  [install Fission](/docs/installation/) on a Kubernetes cluster of your choice.
 
 # Use Case
 
