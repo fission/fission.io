@@ -3,7 +3,7 @@ title = "How to Develop a Serverless Application with Fission (Part 3)"
 date = "2018-09-08T13:27:34+08:00"
 author = "Ta-Ching Chen"
 description = "Write serverless Java functions with JVM"
-categories = ["Fission", "application"]
+categories = ["application"]
 type = "blog"
 +++
 

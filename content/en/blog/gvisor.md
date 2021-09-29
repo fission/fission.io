@@ -2,7 +2,7 @@
 title: "Using gVisor with Fission"
 date: 2021-02-10T18:09:02+05:30
 author: "Harsh Thakur"
-categories: ["Fission", "Serverless", "Security", "gVisor"]
+categories: ["Security", "gVisor"]
 description: "Running workloads securely with gVisor "
 type: "blog"
 ---
