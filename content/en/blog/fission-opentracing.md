@@ -9,7 +9,7 @@ type = "blog"
 
 # Introduction
 
-As the number of functions and their usage grows, it is crucial to monitor and manage them effectively. Fission already [supports logs on CLI](https://fission.io/docs/usage/function/functions/) as well integration with external systems using Fluentd. Fission also has [monitoring enabled using Prometheus](/prometheus) and provides a great way to measure and track your functions automatically.
+As the number of functions and their usage grows, it is crucial to monitor and manage them effectively. Fission already [supports logs on CLI](https://fission.io/docs/usage/function/functions/) as well integration with external systems using Fluentd. Fission also has [monitoring enabled using Prometheus](/posts/using-fissions-prometheus-metrics/) and provides a great way to measure and track your functions automatically.
 
 Serverless functions can be part of a larger distributed system. For example, in the case of serverless applications that become more complex - spanning multiple functions, or in Microservices where functions are triggered between different services that talk to each other to process a single request or perform a business function.
 

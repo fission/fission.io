@@ -96,7 +96,7 @@ that will trigger a roll back.
 ![Automated Canary Deployments](/images/prometheus-canary-screenshot.png)
 
 [See this post for details on how to use Automated Canary Deployments
-in Fission](/automated-canary-deployments/)
+in Fission](/posts/automated-canary-deployments-in-fission/)
 
 ## Prometheus Integration: Easy metrics collection and alerts
 

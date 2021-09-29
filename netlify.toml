@@ -177,11 +177,6 @@ to = "/docs/usage/:splat"
 
 [[redirects]]
 force = true
-from = "/workflows/*"
-to = "/docs/workflows/:splat"
-
-[[redirects]]
-force = true
 from = "/docs/message-queuing/*"
 to = "/docs/triggers/message-queue-trigger/:splat"
 
@@ -208,6 +203,11 @@ to = "/blog"
 [[redirects]]
 force = true
 from = "/workflows"
+to = "/"
+
+[[redirects]]
+force = true
+from = "/workflows/*"
 to = "/"
 
 [[redirects]]
