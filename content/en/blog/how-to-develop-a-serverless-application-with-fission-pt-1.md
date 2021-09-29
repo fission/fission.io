@@ -282,7 +282,7 @@ $ fission fn test --name foobar
 This part we introduce the advantage of adopting fission as serverless framework on kubernetes, basic concept of 
 around fission core and how to create a simple HelloWorld example with fission.
 
-For [Part 2](/posts/how-to-develop-a-serverless-application-with-fission-pt-2) of this post, we will talk about 
+For [Part 2](/posts/how-to-develop-a-serverless-application-with-fission-part-2/) of this post, we will talk about 
 what's the actual request payload being passed to user function and how to create a guestbook application with fission!
 
 In the meantime, feel free to [join the Fission community](https://fission.io/community/)!

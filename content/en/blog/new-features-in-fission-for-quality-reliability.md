@@ -49,7 +49,7 @@ services (i.e. database, API calls, etc.) that are used in Production.
 ![Live-Reload](/images/record-replay.jpg)
 
 [Check out this blog post to learn how to use live-reload in
-Fission.](/live-reload/)
+Fission.](/posts/live-reload-in-fission-instant-feedback-on-your-serverless-functions/)
 
 ## Record-replay: Simplify testing and debugging
 
@@ -183,7 +183,7 @@ allowfullscreen></iframe>
 ## Try Fission out!
 
 [Learn more](https://fission.io) about Fission, or come chat with us on
-[our Slack](http://slack.fission.io).
+[our Slack](/slack).
 
 If you're ready to try it out head over to the docs for instructions
 on [how to install Fission](/docs/installation).

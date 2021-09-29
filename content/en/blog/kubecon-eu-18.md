@@ -216,8 +216,7 @@ Fission Workflows utilizes two main concepts:
 
  **OR**   
 
-[Explore and learn about the inner workings of our workflow engine, Fission Workflows here!](/posts/fission-workflows-pt-1/)
-
+[Explore and learn about the inner workings of our workflow engine, Fission Workflows here!](/posts/getting-started-composing-serverless-functions-with-fission-workflows-part-1/)
 
 ## So Which Approach Should YOU Use?..
 

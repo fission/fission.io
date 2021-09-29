@@ -235,6 +235,6 @@ If you run into any issues, please feel free to reach out at Fission [slack][13]
 [10]: https://twitter.com/_gauravgahlot
 [11]: https://github.com/gauravgahlot
 [12]: http://infracloud.io/
-[13]: https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE
+[13]: https://fission.io/slack
 [14]: https://fission.io/docs/concepts/#packages
 [15]: https://github.com/fission/environments/tree/master/nodejs

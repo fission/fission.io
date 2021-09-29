@@ -10,7 +10,7 @@ type = "blog"
 +++
 
 
-In a previous [post](/fission_pod_specs) we discussed about how we can leverage `PodSpec` in the environment pods to enable the functionalities like tolerations, nodeSelectors, volumes, security and a lot others. That functionality was only supported in the environment pods, but now we can provide the `podspec` in the builder pods as well. The details about what `PodSpec` is and the functionalities that it enables are described in the mentioned post. 
+In a previous [post](/posts/functions-on-steroids-with-podspec/) we discussed about how we can leverage `PodSpec` in the environment pods to enable the functionalities like tolerations, nodeSelectors, volumes, security and a lot others. That functionality was only supported in the environment pods, but now we can provide the `podspec` in the builder pods as well. The details about what `PodSpec` is and the functionalities that it enables are described in the mentioned post. 
 
 In this post we will be looking into how do we use `PodSpec` in builder so that the deployment that will be created for the builder will have `podspec` that we mention in the environment for builder. If we take a look at below environment spec
 {{< highlight "yaml" >}}

@@ -111,7 +111,7 @@ release_branch = "master"
 # the main version. Never is rc.
 release_version = "1.14.1"
 
-slackurl = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+slackurl = "/slack"
 
 installurl = '/docs/installation/'
 learnmoreurl = '/docs/installation/'
@@ -121,7 +121,7 @@ notoc = true
 
 [params.social]
 github = 'fission'
-slackurl = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+slackurl = "/slack"
 twitter = 'fissionio'
 
 [[params.whatsnew]]
@@ -140,7 +140,7 @@ heading = 'Fission WebSocket Sample'
 [params.whatsnew.button]
 hero_class = 'mid-2'
 text = 'Read More!'
-url = 'https://fission.io/posts/websocket-sample/'
+url = '/posts/fission-websocket-sample/'
 
 [[params.whatsnew]]
 badge = 'PODCAST'
@@ -193,7 +193,7 @@ url = "https://twitter.com/fissionio"
 desc = "Chat with other project users in #users"
 icon = "fab fa-slack"
 name = "Slack"
-url = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+url = "/slack"
 [[params.links.user]]
 desc = "Development takes place here!"
 icon = "fab fa-github"
@@ -229,5 +229,5 @@ weight = 13
 [[menu.main]]
 name = "Slack"
 pre = "<i class='fab fa-slack'></i>"
-url = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+url = "/slack"
 weight = 14

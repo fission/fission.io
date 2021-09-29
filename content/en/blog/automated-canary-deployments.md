@@ -132,5 +132,5 @@ Automated Canary Deployments in Fission give you the ability to move
 changes into production with lower risk and increased confidence.
 
 Check out the [Fission installation guide](/docs/installation/) to get started with
-Fission.  Join us on the [Fission Slack](http://slack.fission.io) to
+Fission.  Join us on the [Fission Slack](/slack) to
 chat, or follow us on Twitter at @fissionio.
