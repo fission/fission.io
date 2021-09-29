@@ -17,7 +17,7 @@ All of this make Java and JVM great candidates for Serverless Functions, and for
 
 This tutorial will introduce the JVM environment in Fission and walk through a simple demo.
 
-If you want to follow along the tutorial, it will be a good idea to [install Fission](https://docs.fission.io/0.9.2/installation/installation/) on a Kubernetes cluster of your choice.
+If you want to follow along the tutorial, it will be a good idea to [install Fission](/docs/installation/) on a Kubernetes cluster of your choice.
 
 # JVM in Fission
 

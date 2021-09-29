@@ -40,8 +40,8 @@ After seeing these advantages for adopting Fission as serverless framework, you 
 
 You can install kubernetes and fission by following install guides.
 
-* [Kubernetes installation guide](https://docs.fission.io/docs/installation/#kubernetes-cluster)
-* [Fission installation guide](https://docs.fission.io/docs/installation/#install-fission)
+* [Kubernetes installation guide](/docs/installation/#kubernetes-cluster)
+* [Fission installation guide](/docs/installation/#install-fission)
 
 # Basic Fission Concepts
 
@@ -218,7 +218,7 @@ Then, you can access the function with url path defined.
 $ curl http://${FISSION_ROUTER}/my-first-function
 ```
 
-**NOTE**: For how to set up `$FISSION_ROUTER`, please visit https://docs.fission.io/latest/installation/env_vars/
+**NOTE**: For how to set up `$FISSION_ROUTER`, please visit [here](/docs/installation/env_vars/)
 
 ## Check function execution logs
 

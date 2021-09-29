@@ -40,7 +40,7 @@ There are different ways and configurations to [install the complete stack](http
 ## Prerequisite
 
 - Kubernetes cluster
-- Fission [installed in the cluster](https://docs.fission.io/docs/installation/)
+- Fission [installed in the cluster](/docs/installation/)
 - [Helm](https://helm.sh/) (This post assumes helm 3 in use)
 - kubectl and kubeconfig configured
 

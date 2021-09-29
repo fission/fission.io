@@ -32,7 +32,7 @@ function framework to do this.
 ## Using live-reload in Fission
 
 The `fission` CLI supports [declarative
-specifications](https://docs.fission.io/latest/usage/developer-workflow/)
+specifications](/docs/usage/spec/)
 for Fission resources -- such as functions,
 environments, triggers, etc.  These resources are specified as a set of YAML files that are stored in the specs directory at the root of your Fission application. You don’t have to write these YAML files from scratch - Fission automatically generates the initial versions for you.  And because configuration is declarative, you don’t have to write any imperative deployment scripts for configuration management.
 
