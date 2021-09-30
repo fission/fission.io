@@ -2,7 +2,7 @@
 title = "Hello World in Go for Kubernetes Newbies"
 date = "2018-02-20T13:52:34-08:00"
 author = "Timirah James"
-description = "Getting started with GO lang and Fission on Kubernetes"
+description = "Getting started with Go and Fission on Kubernetes"
 categories = ["Tutorial"]
 type = "blog"
 +++

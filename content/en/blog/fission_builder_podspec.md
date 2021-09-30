@@ -3,8 +3,8 @@ title = "Function builders also support PodSpec now"
 date = "2019-11-01T12:39:32+05:30"
 image = "/images/2020/builder.jpg"
 author = "Vivek Singh"
-description = "There is a lot more you can do with Fission functions and PodSpec."
-categories = ["PodSpec", "Tolerations", "Sidecar"]
+description = "Using PodSpec with Fission buider for function deployment artfiact"
+categories = ["podspec", "tolerations", "sidecar"]
 type = "blog"
 +++
 

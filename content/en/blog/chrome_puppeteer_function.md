@@ -1,10 +1,9 @@
-
 +++
 title = "Headless Chrome with Puppeteer in a function"
 date = "2021-05-09T23:50:51+05:30"
 author = "Vishal Biyani"
 description = "Test websites with a headless chrome and Puppeteer in a fission function"
-categories = ["Puppeteer", "Chrome", "headless", "website", "testing"]
+categories = ["puppeteer", "chrome", "headless", "website-testing"]
 type = "blog"
 +++
 
@@ -19,11 +18,11 @@ Typical use cases for which Puppeteer is used are:
 - Testing of chrome extensions
 - Crawl web pages to gather information from them.
 
-# Demo first!
+# Demo
 
 If you simply want to get a sense of running function run, assuming you have Fission installed, you can run `fission spec apply` and then then test the function
 
-```
+```sh
 $ fission spec apply
 DeployUID: 0e8b177b-19bd-4e97-80b7-42f1f3801ed8
 Resources:
@@ -42,7 +41,7 @@ Validation Successful
 
 The test gives out Google homepage content as a response because that is the URL we have configured in the function.
 
-```
+```sh
 $ fission fn test --name chrome
 
 <!DOCTYPE html><html itemscope="" itemtype="http://schema.org/WebPage" lang="en-IN"><head><meta charset="UTF-8"><meta 
@@ -59,7 +58,7 @@ kBL:'tCe1'};google.sn='webhp';google.kHL='en-IN';})();(function(){google.lc=[];g
 
 The stock Fission image does not have Chromium built in and we use a modified base image. You will need to copy this modified Dockerfile in fission's environment repo at environments/nodejs as it needs rest of code of environment.
 
-```
+```sh
 $ tree
 .
 ├── Dockerfile
@@ -70,9 +69,10 @@ $ tree
 $ docker build -t vishalbiyani/node-chrome:1 .
  
 ```
+
 Or simply add this section to [Dockerfile of NodeJS environment](https://github.com/fission/environments/blob/master/nodejs/Dockerfile), build a new image and keep it ready. We will use this custom image to create environments later.
 
-```
+```dockerfile
 # Needed for chromium
 RUN apk add --no-cache \
       chromium \
@@ -100,7 +100,7 @@ USER pptruser
 
 Let's start by initializing the specs for function and environment:
 
-```
+```sh
 $ fission spec init
 ```
 
@@ -108,7 +108,7 @@ Creating the environment and function specs & apply.
 
 > Note that we are using a custom image `--image vishalbiyani/node-chrome:1` for headless chromium.
 
-```
+```sh
 $ fission env create --name node-chrome --image --image vishalbiyani/node-chrome:1 --builder fission/node-builder --spec
 
 $ fission fn create --name chrome --env node-chrome --src hello.js --src package.json --entrypoint hello --spec
@@ -118,7 +118,7 @@ $ fission spec apply
 
 We have to wait for package building to be successful, and if fails, please rebuild once again:
 
-```
+```sh
 $ fission package rebuild --name chrome-76a831d5-107c-4d09-a4fa-a1d2fab770e8
 
 $ fission package list
@@ -129,7 +129,7 @@ chrome-76a831d5-107c-4d09-a4fa-a1d2fab770e8 succeeded    node-chrome 14 Aug 20 1
 
 Finally the test:
 
-```
+```sh
 $ fission fn test --name chrome
 
 <!DOCTYPE html><html itemscope="" itemtype="http://schema.org/WebPage" lang="en-IN"><head><meta charset="UTF-8"><meta content="/images/branding/googleg/1x/googleg_standard_color_128dp.png" itemprop="image"><title>Google</title><script src="https://apis.google.com/_/scs/abc-static/_/js/k=gapi.gapi.en.

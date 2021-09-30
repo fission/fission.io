@@ -1,5 +1,6 @@
 ---
 title: "AWS SQS"
+description: "Keda based Message Queue Trigger for AWS SQS"	
 draft: false
 weight: 2
 ---

@@ -1,5 +1,6 @@
 ---
 title: "AWS Kinesis"
+description: "Keda based Message Queue Trigger for AWS Kinesis"
 draft: false
 weight: 3
 ---
