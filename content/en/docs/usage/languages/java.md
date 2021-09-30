@@ -1,5 +1,6 @@
 ---
-title: "Java"
+title: "Java Functions"
+description: "Writing Java functions with fission"
 weight: 10
 ---
 

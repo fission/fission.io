@@ -1,5 +1,6 @@
 ---
-title: "Python3"
+title: "Python3 Functions"
+description: "Writing Python functions with fission"
 weight: 10
 ---
 

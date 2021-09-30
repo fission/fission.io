@@ -1,5 +1,6 @@
 ---
-title: "Node.js"
+title: "Node.js Functions"
+description: "Writing Node.js functions with fission"
 weight: 10
 ---
 
