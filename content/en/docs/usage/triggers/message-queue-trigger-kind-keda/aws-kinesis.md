@@ -85,7 +85,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		})
 
 		if err != nil {
-			w.Write([]byte(fmt.Sprintf("error marshalling the message: %v", err)))
+			w.Write([]byte(fmt.Sprintf("error marshaling the message: %v", err)))
 			return
 		}
 		params := &kinesis.PutRecordInput{

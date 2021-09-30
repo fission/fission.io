@@ -127,7 +127,7 @@ $ fission fn create --name hello --env node --code hello.js --minscale 1 --execu
 
 #### Autoscaling
 
-Let's create a function to demonstrate the autoscaling behaviour in Fission.
+Let's create a function to demonstrate the autoscaling behavior in Fission.
 We create a simple function which outputs "Hello World" in using NodeJS.
 We have kept the CPU request and limit purposefully low to simulate the load and also kept the target CPU percent to 50%.
 
@@ -188,11 +188,11 @@ While the load is being generated, we will watch the HorizontalPodAutoscaler and
 As you can notice, the number of pods is scaled from 1 to 3 after the load rises from 8 - 103%.
 After the load generator stops, it takes a few iterations to scale down from 3 to 1 pod.
 
-When testing the scaling behaviour, do keep in mind that the scaling event has an initial delay of up to a minute and waits for the average CPU to reach 110% above the threshold before scaling up.
+When testing the scaling behavior, do keep in mind that the scaling event has an initial delay of up to a minute and waits for the average CPU to reach 110% above the threshold before scaling up.
 It is best to maintain a minimum number of pods which can handle initial load and scale as needed.
 
-You will notice that the scaling up and down has different behaviour in terms of response time.
-This behaviour is governed by the frequency at which the controller watches (which defaults to 30s) and parameters set on controller-manager for upscale/downscale delay.
+You will notice that the scaling up and down has different behavior in terms of response time.
+This behavior is governed by the frequency at which the controller watches (which defaults to 30s) and parameters set on controller-manager for upscale/downscale delay.
 More details can be found [here](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-cooldowndelay)
 
 ```bash

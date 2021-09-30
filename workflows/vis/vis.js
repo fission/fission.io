@@ -42129,7 +42129,7 @@ return /******/ (function(modules) { // webpackBootstrap
         if (this.from === undefined || this.to === undefined || this.options.physics === false) {
           this.via.setOptions({ physics: false });
         } else {
-          // fix weird behaviour where a self referencing node has physics enabled
+          // fix weird behavior where a self referencing node has physics enabled
           if (this.from.id === this.to.id) {
             this.via.setOptions({ physics: false });
           } else {
