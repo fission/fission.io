@@ -8,7 +8,7 @@ description: >
 
 ## What is Fission?
 
-[fission.io](http://fission.io)  [@fissionio](http://twitter.com/fissionio)
+[fission.io](https://fission.io)  [@fissionio](https://twitter.com/fissionio)
 
 Fission is a fast, open source serverless framework for Kubernetes with a focus on developer productivity and high performance.
 
@@ -56,4 +56,4 @@ Hello, world!
 ## Join Us
 
 * [Join Slack](/slack)
-* Twitter: http://twitter.com/fissionio
+* Twitter: https://twitter.com/fissionio

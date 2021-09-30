@@ -496,7 +496,7 @@ Build timestamp: 1540566887
 
 ### Modifying/Rebuild the environment images
 
-For how to rebuild environment image, please visit [here](https://github.com/fission/fission/blob/master/environments/go/README.md)
+For how to rebuild environment image, please visit [here](https://github.com/fission/environments/blob/master/go/README.md)
 
 ### Resource usage 
 
