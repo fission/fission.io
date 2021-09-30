@@ -117,7 +117,7 @@ discoveryRefreshDelay: 1s
 
 #### Install Istio Add-ons
 
-Istio comes with additional add ons for features such as monitoring, distributed tracing etc. If you have installed Istio with Helm, you can decide which addons to enable in values.yaml:
+Istio comes with additional addons for features such as monitoring, distributed tracing etc. If you have installed Istio with Helm, you can decide which addons to enable in values.yaml:
 
 ```yaml
 #
@@ -139,8 +139,8 @@ kiali:
   enabled: true
 ```
 
-We will explore few add ons that we enabled and tried out in the following sections.
-For each of add-ons you can port-forward the service and watch the UI console of the respective service.
+We will explore few addons that we enabled and tried out in the following sections.
+For each of addons you can port-forward the service and watch the UI console of the respective service.
 For example for Jaeger, you can run the port-forward:
 
 ```bash

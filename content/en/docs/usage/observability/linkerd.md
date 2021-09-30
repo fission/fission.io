@@ -56,7 +56,7 @@ linkerd dashboard &
 
 ![Linkerd dashboard](../assets/linkerd-dashboard.png)
 
-- Under namespaces, select fission-function and check the exisiting deployments
+- Under namespaces, select fission-function and check the existing deployments
 
 ![Linkerd before mesh](../assets/linkerd-before.png)
 

@@ -15,7 +15,7 @@ Hence, Prometheus is listed as a dependency for fission chart.
 Either an existing prometheus deployment in the cluster can be used or Prometheus could be installed along with fission.
 To install prometheus with fission, the flag prometheusDeploy can be set to True in the helm chart.
 In order to re-use existing Prometheus deployment, fission checks the value of Prometheus server service environment variable in its controller pod.
-If that cant be accessed, fission proceeds without enabling the canary feature.
+If that can't be accessed, fission proceeds without enabling the canary feature.
 
 #### Canary Config parameters
 

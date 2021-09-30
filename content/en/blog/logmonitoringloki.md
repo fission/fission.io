@@ -9,7 +9,7 @@ type: "blog"
 
 # Importance of Logs
 
-Proper logging in a software is a quick and systematic way to inform the state of the software. Although the definition of 'logs' remains the same along years in software engineering, the scope of what logs are used is has always been increasing. Apart from helping developers and operators, logs can be used by complimenting softwares for security, metrics, triggers, cost estimation and other different operations.
+Proper logging in a software is a quick and systematic way to inform the state of the software. Although the definition of 'logs' remains the same along years in software engineering, the scope of what logs are used is has always been increasing. Apart from helping developers and operators, logs can be used by complimenting software for security, metrics, triggers, cost estimation and other different operations.
 
 # Logs in Fission
 
@@ -21,7 +21,7 @@ A good log monitoring solution can be useful to make full use of these logs.
 
 Grafana Loki is a set of components which provides fully featured logging stack. This comprises of a client to fetch the logs, an aggregator and a visualizing tool. 
 
-The stack supports multiple clients, for the case here we will use Promtail which is the recommended client whn using the stack in Kubernetes.
+The stack supports multiple clients, for the case here we will use Promtail which is the recommended client when using the stack in Kubernetes.
 The components are briefed below.
 
 - **Loki** - Loki is a horizontally scalable, highly available, multi-tenant log aggregation system inspired by Prometheus.

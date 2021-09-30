@@ -26,7 +26,7 @@ See [Fission installation]({{%ref "_index.en.md" %}}) to learn more how to insta
 ## Accessing Routes
 
 If you look at router service - it is exposed as random NodePort on host machine.
-The port can be found with the command bellow:
+The port can be found with the command below:
 
 ```bash
 $ export PORT=$(kubectl get svc router -n fission -o jsonpath='{.spec.ports[0].nodePort}')

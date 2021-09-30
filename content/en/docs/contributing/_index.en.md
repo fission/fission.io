@@ -104,7 +104,7 @@ $ helm list -n fission -oyaml
   namespace: fission
   revision: "1"
   status: deployed
-  updated: 2021-09-13 13:16:28.51769 +0530 IST
+  updated: 2021-09-13 13:16:28.51769
 ```
 
 Also, you should see the Fission services deployed and running:
