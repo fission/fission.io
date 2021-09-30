@@ -222,5 +222,5 @@ to = "/categories/"
 
 [[redirects]]
 force = true
-from = "/categories/busting/"
+from = "/categories/testing/"
 to = "/categories/"
