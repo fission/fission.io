@@ -207,7 +207,7 @@ To use a builder with your environment, create the environment with the --builde
 $ fission env create --name python --image fission/python-env --builder fission/python-builder
 ```
 
-#### A function with depedencies
+#### A function with dependencies
 
 Let's take a simple python function which has a dependency on the `pyyaml` module.
 We can specify the dependencies in `requirements.txt` and a simple command to build from source.

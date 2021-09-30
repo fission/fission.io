@@ -19,7 +19,7 @@ can get your apps up and running quickly, reducing the total lead time
 to ship your new application.  However, to make this "production
 ready", serverless architecture needs to be not just about moving
 fast, but also about moving fast _safely_, and at scale.  That means
-we need features focussed on code quality, testing, better deployment
+we need features focused on code quality, testing, better deployment
 and release practices.
 
 Fission is the first open source serverless framework to offer
