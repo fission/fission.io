@@ -214,3 +214,13 @@ to = "/"
 force = true
 from = "/slack"
 to = "https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE"
+
+[[redirects]]
+force = true
+from = "/categories/busting/"
+to = "/categories/"
+
+[[redirects]]
+force = true
+from = "/categories/busting/"
+to = "/categories/"

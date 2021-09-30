@@ -2,7 +2,7 @@
 title: "Builder Pod"
 weight: 7
 description: >
-  Place to load and execute the user function
+  Place to build the user function
 ---
 
 ## Brief Intro

@@ -58,7 +58,7 @@ $ fission fn test --name hello-world
 #### Accessing HTTP Requests
 
 This section gives a few examples of invoking nodejs functions with HTTP requests and how HTTP request components can be extracted inside the function.
-While these examples give you a rough idea of the usage, there are more real world examples [here](https://github.com/fission/fission/tree/master/examples/nodejs)
+While these examples give you a rough idea of the usage, there are more real world examples [here](https://github.com/fission/examples/tree/master/nodejs)
 
 ##### Headers
 
