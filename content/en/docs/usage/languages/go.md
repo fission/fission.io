@@ -1,5 +1,6 @@
 ---
-title: "Go"
+title: "Go Functions"
+description: "Writing Go functions with fission"
 weight: 10
 ---
 

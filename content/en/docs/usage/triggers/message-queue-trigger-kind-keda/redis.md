@@ -1,5 +1,5 @@
 ---
-title: "Redis"
+title: "Redis Lists"
 draft: false
 description: "Keda based Message Queue Trigger for Redis"
 weight: 8
