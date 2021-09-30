@@ -1,8 +1,12 @@
 ---
-title: "Message Queue Trigger"
+title: "[Deprecated] Message Queue Trigger: Kind Fission"
 date: 2019-12-17T14:38:11+08:00
-weight: 2
+weight: 4
 ---
+
+{{% alert title="Note" color="warning" %}}
+Message Queue Trigger with kind Fission are deprecated, we suggest using [MQ Trigger with Keda](/docs/usage/triggers/message-queue-trigger-kind-keda/) instead.
+{{% /alert %}}
 
 ## How Message Queue Trigger Works
 

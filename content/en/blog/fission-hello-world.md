@@ -2,7 +2,7 @@
 title = "Hello World: Creating Functions using Fission (in Golang)"
 date = "2018-03-05T11:13:45-08:00"
 author = "Timirah James"
-categories = ["Tutorial", "Go"]
+categories = ["go-function"]
 type = "blog"
 +++
 

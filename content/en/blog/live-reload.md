@@ -2,7 +2,7 @@
 title = "Live-Reload in Fission: Instant feedback on your Serverless Functions"
 date = "2018-10-16T01:04:00-07:00"
 author = "Ta-Ching Chen"
-description = "Live reloading of functions for faster feedback!"
+description = "Live reloading of functions for faster feedback"
 categories = ["Dev Workflow"]
 type = "blog"
 +++

@@ -2,7 +2,7 @@
 title = "Getting Started: Composing Serverless Functions with Fission Workflows (Part 2)"
 date = "2018-04-05T14:15:37-07:00"
 author = "Erwin Van Eyk"
-description = "Composing Fission functions with Fission Workflows"
+description = "Composing Fission functions with Fission Workflows (Part 2)"
 categories = ["Workflow"]
 type = "blog"
 +++

@@ -2,6 +2,7 @@
 title = "Women in Open Source: Highlight Series"
 date = "2018-03-31T15:04:18-07:00"
 author = "Timirah James"
+description = "Women in Open Source Highlights"
 categories = ["Community"]
 type = "blog"
 +++

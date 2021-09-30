@@ -1,5 +1,6 @@
 ---
-title: "Kafka"
+title: "Fission Kafka"
+description: "MQTrigger based for Kafka with kind Fission"
 draft: false
 weight: 77
 ---

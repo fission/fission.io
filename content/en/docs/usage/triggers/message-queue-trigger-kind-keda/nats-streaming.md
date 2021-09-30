@@ -1,6 +1,7 @@
 ---
 title: "NATS Streaming"
 draft: false
+description: "Keda based Message Queue Trigger for NATS Streaming"
 weight: 4
 ---
 
