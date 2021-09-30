@@ -2,8 +2,8 @@
 title = "How to Develop a Serverless Application with Fission (Part 1)"
 date = "2018-09-06T15:48:12+08:00"
 author = "Ta-Ching Chen"
-description = "Write serverless Java functions with JVM"
-categories = ["Fission", "application"]
+description = "Write serverless Java functions with JVM (Part 1)"
+categories = ["application"]
 type = "blog"
 +++
 
@@ -40,8 +40,8 @@ After seeing these advantages for adopting Fission as serverless framework, you 
 
 You can install kubernetes and fission by following install guides.
 
-* [Kubernetes installation guide](https://docs.fission.io/docs/installation/#kubernetes-cluster)
-* [Fission installation guide](https://docs.fission.io/docs/installation/#install-fission)
+* [Kubernetes installation guide](/docs/installation/#kubernetes-cluster)
+* [Fission installation guide](/docs/installation/#install-fission)
 
 # Basic Fission Concepts
 
@@ -218,7 +218,7 @@ Then, you can access the function with url path defined.
 $ curl http://${FISSION_ROUTER}/my-first-function
 ```
 
-**NOTE**: For how to set up `$FISSION_ROUTER`, please visit https://docs.fission.io/latest/installation/env_vars/
+**NOTE**: For how to set up `$FISSION_ROUTER`, please visit [here](/docs/installation/env_vars/)
 
 ## Check function execution logs
 
@@ -282,7 +282,7 @@ $ fission fn test --name foobar
 This part we introduce the advantage of adopting fission as serverless framework on kubernetes, basic concept of 
 around fission core and how to create a simple HelloWorld example with fission.
 
-For [Part 2](/posts/how-to-develop-a-serverless-application-with-fission-pt-2) of this post, we will talk about 
+For [Part 2](/posts/how-to-develop-a-serverless-application-with-fission-part-2/) of this post, we will talk about 
 what's the actual request payload being passed to user function and how to create a guestbook application with fission!
 
 In the meantime, feel free to [join the Fission community](https://fission.io/community/)!

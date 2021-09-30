@@ -3,7 +3,7 @@ title = "Fission WebSocket Sample"
 date = "2021-06-11T10:50:51+05:30"
 author = "Gaurav Gahlot"
 description = "Write a serverless broadcast function with NodeJS"
-categories = ["Fission", "Serverless", "Application"]
+categories = ["Websocket", "Application"]
 type = "blog"
 +++
 
@@ -223,19 +223,18 @@ If you run into any issues, please feel free to reach out at Fission [slack][13]
 
 * [Gaurav Gahlot][10]  **|**  [Fission Contributor][11]  **|**  Software Engineer - [InfraCloud Technologies][12]
 
-
 [1]: https://datatracker.ietf.org/doc/html/rfc6455
 [2]: https://hub.docker.com/r/fission/node-env/tags?page=1&ordering=last_updated
 [3]: https://github.com/fission/examples/blob/master/samples/websocket/broadcast.js
-[4]: https://docs.fission.io/docs/triggers/http-trigger/
-[5]: https://docs.fission.io/docs/installation/
+[4]: https://fission.io/docs/usage/triggers/http-trigger/
+[5]: https://fission.io/docs/installation/
 [6]: https://github.com/fission/examples
-[7]: https://docs.fission.io/docs/languages/
-[8]: https://docs.fission.io/docs/concepts/#functions
+[7]: https://fission.io/docs/usage/languages/
+[8]: https://fission.io/docs/concepts/#functions
 [9]: https://www.twitter.com/fissionio
 [10]: https://twitter.com/_gauravgahlot
 [11]: https://github.com/gauravgahlot
 [12]: http://infracloud.io/
-[13]: https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE
-[14]: https://docs.fission.io/docs/concepts/#packages
+[13]: https://fission.io/slack
+[14]: https://fission.io/docs/concepts/#packages
 [15]: https://github.com/fission/environments/tree/master/nodejs

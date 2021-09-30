@@ -1,10 +1,11 @@
 ---
-title: "MQ Trigger: KEDA based"
+title: "Message Queue Trigger: Kind Keda"
+description: "Keda based Message Queue Trigger"
 date: 2020-07-20T14:30:01+05:30
 weight: 3
 ---
 
-_This is a new feature getting released in 1.11 and will be enhanced in coming releases._
+_This is a new feature getting released in 1.11._
 
 ## Brief Introduction
 

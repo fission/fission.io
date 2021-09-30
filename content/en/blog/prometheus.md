@@ -2,8 +2,8 @@
 title = "Using Fission's Prometheus Metrics"
 date = "2018-10-16T01:01:00-07:00"
 author = "Soam Vasani"
-description = "Write serverless Java functions with JVM"
-categories = ["Fission", "application"]
+description = "Fission exposed prometheus metrics"
+categories = ["Prometheus", "application"]
 type = "blog"
 +++
 
@@ -183,7 +183,5 @@ function call rate, error rate and duration quantiles without writing
 any Prometheus integration yourself.  Using Prometheus' Alertmanager
 service, you can also set up alerting for cases where you need it.
 
-Check out the [Fission installation guide](https://docs.fission.io/installation/) to get started with
-Fission.  Join us on the [Fission Slack](http://slack.fission.io) to
-chat, or follow us on Twitter at [@fissionio](https://twitter.com/fissionio).
-
+Check out the [Fission installation guide](/docs/installation/) to get started with
+Fission.  Join us on the Fission Slack to chat, or follow us on Twitter at [@fissionio](https://twitter.com/fissionio).

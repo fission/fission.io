@@ -2,8 +2,8 @@
 title = "Fission Kafka Sample"
 date = "2018-08-30T22:50:51+05:30"
 author = "Vishal Biyani"
-description = "Write serverless Java functions with JVM"
-categories = ["Fission", "Kafka", "Serverless", "redis", "IOT"]
+description = "Write serverless Java functions with JVM as Kafka consumer"
+categories = ["Kafka", "redis", "IOT"]
 type = "blog"
 +++
 
@@ -16,7 +16,7 @@ Most serverless functions are triggered by an event, and these in turn may trigg
 Fission already supports nats-streaming and azure-storage-queue, with  [Kafka integration planned for the 0.11 release](https://github.com/fission/fission/pull/831). 
 Using this Kafka integration we can build a quick demo and show the power of serverless functions for  stream processing use cases.
 
-To follow along the tutorial, first  [install Fission](https://docs.fission.io/docs/installation/) on a Kubernetes cluster of your choice.
+To follow along the tutorial, first  [install Fission](/docs/installation/) on a Kubernetes cluster of your choice.
 
 # Use Case
 
@@ -26,7 +26,7 @@ This use case is inspired by the demo of [IoT platform for a shipping company bu
 
 ![architecture-diagram](/images/architecture-diagram.png)
 
-The above diagram represents the architecture of the IoT platform. All the Serverless functions are written in [Fission’s JVM environment](/jvm_environment/).
+The above diagram represents the architecture of the IoT platform. All the Serverless functions are written in [Fission’s JVM environment](/docs/usage/languages/java/).
 
 1. The Kafka Producer is a Fission function which can be triggered by a time trigger every few seconds/minutes to simulate incoming data from the fleet. This function generates random 100 records on every invocation. Each record has the following fields of for each vehicle in the fleet:
 

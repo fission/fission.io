@@ -3,7 +3,7 @@ title = "Automated Canary Deployments in Fission"
 date = "2018-10-16T01:02:00Z"
 author = "Soam Vasani"
 description = "Canary deployments for serverless functions in Fission"
-categories = ["Canary", "Fission"]
+categories = ["canary"]
 type = "blog"
 +++
 
@@ -47,14 +47,14 @@ incrementally transfer load from one version to another.
 
 First, download a couple of trivial sample functions:
 
-```
+```sh
 $ curl -LO https://raw.githubusercontent.com/fission/fission/master/demos/canary-successful-scenario/func-v1.js
 $ curl -LO https://raw.githubusercontent.com/fission/fission/master/demos/canary-successful-scenario/func-v2.js
 ```
 
 Next, create the environment and functions on your Fission cluster:
 
-```
+```sh
 $ fission env create --name nodejs --image fission/node-env
 
 $ fission fn create --name func-v1 --env nodejs --code func-v1.js
@@ -66,7 +66,7 @@ Next, create a route with two weighted functions.  This route is set
 up to send 100% of load to `func-v1`, and none to `func-v2`.  Still,
 it's important that it's set up for two function versions.
 
-```
+```sh
 $ fission route create --name route-canary \
        --method GET --url /canary          \
        --function func-v1 --weight 100     \
@@ -78,7 +78,7 @@ these weights over time.  Let's create a canary configuration
 resource, which configures the parameters of how exactly the automated
 rollout will occur, and when it will rollback if necessary.
 
-```
+```sh
 fission canary-config create --name canary-1        \
        --funcN func-v2 --funcN-1 func-v1            \
        --httptrigger route-canary                   \
@@ -132,5 +132,5 @@ Automated Canary Deployments in Fission give you the ability to move
 changes into production with lower risk and increased confidence.
 
 Check out the [Fission installation guide](/docs/installation/) to get started with
-Fission.  Join us on the [Fission Slack](http://slack.fission.io) to
+Fission.  Join us on the [Fission Slack](/slack) to
 chat, or follow us on Twitter at @fissionio.

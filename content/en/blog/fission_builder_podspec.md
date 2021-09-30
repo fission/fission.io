@@ -1,16 +1,14 @@
-
 +++
 title = "Function builders also support PodSpec now"
 date = "2019-11-01T12:39:32+05:30"
 image = "/images/2020/builder.jpg"
 author = "Vivek Singh"
-description = "There is a lot more you can do with Fission functions and PodSpec."
-categories = ["Fission", "PodSpec", "Builder", "Tolerations", "Volumes", "Init", "Sidecar"]
+description = "Using PodSpec with Fission buider for function deployment artfiact"
+categories = ["podspec", "tolerations", "sidecar"]
 type = "blog"
 +++
 
-
-In a previous [post](/fission_pod_specs) we discussed about how we can leverage `PodSpec` in the environment pods to enable the functionalities like tolerations, nodeSelectors, volumes, security and a lot others. That functionality was only supported in the environment pods, but now we can provide the `podspec` in the builder pods as well. The details about what `PodSpec` is and the functionalities that it enables are described in the mentioned post. 
+In a previous [post](/posts/functions-on-steroids-with-podspec/) we discussed about how we can leverage `PodSpec` in the environment pods to enable the functionalities like tolerations, nodeSelectors, volumes, security and a lot others. That functionality was only supported in the environment pods, but now we can provide the `podspec` in the builder pods as well. The details about what `PodSpec` is and the functionalities that it enables are described in the mentioned post. 
 
 In this post we will be looking into how do we use `PodSpec` in builder so that the deployment that will be created for the builder will have `podspec` that we mention in the environment for builder. If we take a look at below environment spec
 {{< highlight "yaml" >}}
@@ -67,7 +65,7 @@ spec:
   version: 2
 {{< /highlight  >}}
 
-You can see that for builder we are now specifying the `podspec` and in that we can have almost everything that is supported in kuberentes [PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#pod-v1-core) specification, for example to satisfy our requirement to schedule the builder pod only on the nodes that have label `machinecap=high` we have introduced [nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) in the builder `podspec` that takes care of this requirement.
+You can see that for builder we are now specifying the `podspec` and in that we can have almost everything that is supported in kubernetes [PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#pod-v1-core) specification, for example to satisfy our requirement to schedule the builder pod only on the nodes that have label `machinecap=high` we have introduced [nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) in the builder `podspec` that takes care of this requirement.
 Now if we create this environment, using `fission spec apply` and check the builder pod that has been created, we will be able to see that it has nodeSelector in its `podSpec`.
 {{< highlight "yaml" >}}
 spec:

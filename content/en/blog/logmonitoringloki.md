@@ -2,14 +2,14 @@
 title: "Monitoring Fission logs with Grafana Loki"
 date: 2020-09-14T16:19:12+05:30
 author: "Sahil Lakhwani"
-categories: ["Fission", "Serverless", "go", "logs", "monitoring", "loki", "grafana", "Tutorial", "Faas"]
+categories: [ "Go", "monitoring", "loki", "grafana"]
 description: "Enabling event driven autoscaling with KEDA integration"
 type: "blog"
 ---
 
 # Importance of Logs
 
-Proper logging in a software is a quick and systematic way to inform the state of the software. Although the definition of 'logs' remains the same along years in software engineering, the scope of what logs are used is has always been increasing. Apart from helping developers and operators, logs can be used by complimenting softwares for security, metrics, triggers, cost estimation and other different operations.
+Proper logging in a software is a quick and systematic way to inform the state of the software. Although the definition of 'logs' remains the same along years in software engineering, the scope of what logs are used is has always been increasing. Apart from helping developers and operators, logs can be used by complimenting software for security, metrics, triggers, cost estimation and other different operations.
 
 # Logs in Fission
 
@@ -21,7 +21,7 @@ A good log monitoring solution can be useful to make full use of these logs.
 
 Grafana Loki is a set of components which provides fully featured logging stack. This comprises of a client to fetch the logs, an aggregator and a visualizing tool. 
 
-The stack supports multiple clients, for the case here we will use Promtail which is the recommended client whn using the stack in Kubernetes.
+The stack supports multiple clients, for the case here we will use Promtail which is the recommended client when using the stack in Kubernetes.
 The components are briefed below.
 
 - **Loki** - Loki is a horizontally scalable, highly available, multi-tenant log aggregation system inspired by Prometheus.
@@ -40,7 +40,7 @@ There are different ways and configurations to [install the complete stack](http
 ## Prerequisite
 
 - Kubernetes cluster
-- Fission [installed in the cluster](https://docs.fission.io/docs/installation/)
+- Fission [installed in the cluster](/docs/installation/)
 - [Helm](https://helm.sh/) (This post assumes helm 3 in use)
 - kubectl and kubeconfig configured
 

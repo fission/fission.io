@@ -2,10 +2,10 @@
 title = "Women in Open Source: Highlight Series"
 date = "2018-03-31T15:04:18-07:00"
 author = "Timirah James"
-categories = ["OSS", "Women"]
+description = "Women in Open Source Highlights"
+categories = ["Community"]
 type = "blog"
 +++
-
 
 As we all know, the presence of active women in the Open Source community is scarce. Last year, [GitHub conducted an online survey](http://www.zdnet.com/article/github-open-source-is-dominated-by-men-who-just-cant-communicate/) in which they randomly selected 5,500 developers of open source projects, and found that only 3% of that population were female (crazy right?!?). The knowledge of that fact alone can be intimidating for other women to participate in the open source community.
 

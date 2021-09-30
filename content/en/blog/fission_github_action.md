@@ -3,10 +3,9 @@ title = "New! Fission GitHub Action: Easily Automate Your CI/CD Workflows"
 date = "2019-04-25T18:30:53+05:30"
 author = "Vishal Biyani"
 description = "Easily deploy Fission functions with GitHub Actions"
-categories = ["Fission", "GitHub Action", "CI/CD", "Serverless"]
+categories = ["GitHub Action"]
 type = "blog"
 +++
-
 
 # Introduction
 
@@ -121,7 +120,7 @@ You can find the code used for the demo in [this GitHub repository](https://gith
 
 # There is more!
 
-This tutorial covers the simplest application of the Fission GitHub Action to deploy functions. You can use Fission and other GitHub Actions to build powerful workflows and do a lot more. Try out the Fission GitHub Action to automate your other CI/CD processes and accelerate your development. Reach out to us up on [Slack](http://slack.fission.io/) if you have any queries or interesting ideas that we can explore together.
+This tutorial covers the simplest application of the Fission GitHub Action to deploy functions. You can use Fission and other GitHub Actions to build powerful workflows and do a lot more. Try out the Fission GitHub Action to automate your other CI/CD processes and accelerate your development. Reach out to us up on [Slack](/slack) if you have any queries or interesting ideas that we can explore together.
 
 
 --- 

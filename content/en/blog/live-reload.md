@@ -2,8 +2,8 @@
 title = "Live-Reload in Fission: Instant feedback on your Serverless Functions"
 date = "2018-10-16T01:04:00-07:00"
 author = "Ta-Ching Chen"
-description = "Live reloading of functions for faster feedback!"
-categories = ["Fission", "Dev Workflow"]
+description = "Live reloading of functions for faster feedback"
+categories = ["Dev Workflow"]
 type = "blog"
 +++
 
@@ -32,7 +32,7 @@ function framework to do this.
 ## Using live-reload in Fission
 
 The `fission` CLI supports [declarative
-specifications](https://docs.fission.io/latest/usage/developer-workflow/)
+specifications](/docs/usage/spec/)
 for Fission resources -- such as functions,
 environments, triggers, etc.  These resources are specified as a set of YAML files that are stored in the specs directory at the root of your Fission application. You don’t have to write these YAML files from scratch - Fission automatically generates the initial versions for you.  And because configuration is declarative, you don’t have to write any imperative deployment scripts for configuration management.
 
@@ -85,4 +85,4 @@ development experience.  It accelerates feedback loops
 -- allowing you to test your code as you type.
 
 Check out the [Fission installation guide](/docs/installation/) to get started with
-Fission.  Join us on the [Fission Slack](http://slack.fission.io) to chat, or follow us on Twitter at @fissionio.
+Fission.  Join us on the [Fission Slack](/slack) to chat, or follow us on Twitter at @fissionio.

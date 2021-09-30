@@ -3,7 +3,7 @@ title = "Penetration testing with Gobuster & Fission"
 date = "2021-04-15T15:57:51+05:30"
 author = "Vishal Biyani"
 description = "Penetration testing bruteforcing with Gobuster & Fission functions on demand"
-categories = ["Fission", "gobuster", "busting", "scraping"]
+categories = ["gobuster"]
 type = "blog"
 +++
 

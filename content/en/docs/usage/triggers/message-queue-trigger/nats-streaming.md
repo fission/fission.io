@@ -1,5 +1,5 @@
 ---
-title: "NATS Streaming"
+title: "Fission NATS Streaming"
 weight: 2
 ---
 

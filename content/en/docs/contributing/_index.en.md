@@ -43,7 +43,7 @@ Please check following repositories for your areas of interest,
 
 Do reach out on Slack or Twitter and we are happy to help.
 
-- Drop by the [slack channel](https://join.slack.com/t/fissionio/shared_invite/enQtOTI3NjgyMjE5NzE3LTllODJiODBmYTBiYWUwMWQxZWRhNDhiZDMyN2EyNjAzMTFiYjE2Nzc1NzE0MTU4ZTg2MzVjMDQ1NWY3MGJhZmE).
+- Drop by the [slack channel](/slack).
 - Say Hi on [twitter](https://twitter.com/fissionio).
 
 # Contributing - building & deploying
@@ -104,7 +104,7 @@ $ helm list -n fission -oyaml
   namespace: fission
   revision: "1"
   status: deployed
-  updated: 2021-09-13 13:16:28.51769 +0530 IST
+  updated: 2021-09-13 13:16:28.51769
 ```
 
 Also, you should see the Fission services deployed and running:

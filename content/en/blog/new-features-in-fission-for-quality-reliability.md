@@ -2,8 +2,8 @@
 title = "New in Fission: Live-Reload, Canary Deployments, Prometheus integration "
 date = "2018-10-16T01:05:00-07:00"
 author = "Fission"
-description = "New features in Fission"
-categories = ["Fission", "Prometheus", "Canary"]
+description = "Live-Reload, Canary Deployments, Prometheus integration in Fission"
+categories = ["Prometheus", "Canary"]
 type = "blog"
 +++
 
@@ -19,7 +19,7 @@ can get your apps up and running quickly, reducing the total lead time
 to ship your new application.  However, to make this "production
 ready", serverless architecture needs to be not just about moving
 fast, but also about moving fast _safely_, and at scale.  That means
-we need features focussed on code quality, testing, better deployment
+we need features focused on code quality, testing, better deployment
 and release practices.
 
 Fission is the first open source serverless framework to offer
@@ -49,7 +49,7 @@ services (i.e. database, API calls, etc.) that are used in Production.
 ![Live-Reload](/images/record-replay.jpg)
 
 [Check out this blog post to learn how to use live-reload in
-Fission.](/live-reload/)
+Fission.](/posts/live-reload-in-fission-instant-feedback-on-your-serverless-functions/)
 
 ## Record-replay: Simplify testing and debugging
 
@@ -96,7 +96,7 @@ that will trigger a roll back.
 ![Automated Canary Deployments](/images/prometheus-canary-screenshot.png)
 
 [See this post for details on how to use Automated Canary Deployments
-in Fission](/automated-canary-deployments/)
+in Fission](/posts/automated-canary-deployments-in-fission/)
 
 ## Prometheus Integration: Easy metrics collection and alerts
 
@@ -145,8 +145,7 @@ cost of pooling over a large number of functions, while providing
 performance benefits for all of them.
 
 [See the docs for more about controlling Function execution in
-Fission](https://docs.fission.io/docs/concepts/components/core/executor/)
-
+Fission](/docs/architecture/executor/)
 
 ## Enterprises love Fission
 
@@ -184,7 +183,7 @@ allowfullscreen></iframe>
 ## Try Fission out!
 
 [Learn more](https://fission.io) about Fission, or come chat with us on
-[our Slack](http://slack.fission.io).
+[our Slack](/slack).
 
 If you're ready to try it out head over to the docs for instructions
-on [how to install Fission](https://docs.fission.io/latest/installation/installation).
+on [how to install Fission](/docs/installation).

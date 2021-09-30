@@ -2,8 +2,8 @@
 title = "Hello World in Go for Kubernetes Newbies"
 date = "2018-02-20T13:52:34-08:00"
 author = "Timirah James"
-description = "Getting started with GO lang and Fission on Kubernetes"
-categories = ["tutorial"]
+description = "Getting started with Go and Fission on Kubernetes"
+categories = ["Tutorial"]
 type = "blog"
 +++
 
@@ -181,7 +181,7 @@ Lo and behold, there’s our _**‘Hello World’**_ message.
 
 ### What just happened?
 
-So after we downloaded the application, we then created a container image for our application to and its dependencies to live in. We then pushed that image to Docker Hub, Docker’s official container registry. Pushing our container to the cloud gives us the abilty to access that container any given time, even if we tear down our local cluster, or if we want to pull that container to live in separate cluster. After that, we ran the container, binding our local port to the port of the container (_8080:8080_).
+So after we downloaded the application, we then created a container image for our application to and its dependencies to live in. We then pushed that image to Docker Hub, Docker’s official container registry. Pushing our container to the cloud gives us the ability to access that container any given time, even if we tear down our local cluster, or if we want to pull that container to live in separate cluster. After that, we ran the container, binding our local port to the port of the container (_8080:8080_).
 
 ----
 

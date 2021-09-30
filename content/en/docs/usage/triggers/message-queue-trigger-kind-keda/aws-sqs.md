@@ -1,5 +1,6 @@
 ---
 title: "AWS SQS"
+description: "Keda based Message Queue Trigger for AWS SQS"	
 draft: false
 weight: 2
 ---
@@ -28,7 +29,7 @@ Before we dive into details, let's walk through overall flow of event and functi
 
 {{% notice info %}}
 When communicating to localstack we need aws cli installed in the respactive container(deployment). This is because it uses aws configuration to connect to localstack.
-Below are the commmand to create and send the message to a queue
+Below are the command to create and send the message to a queue
 
 ```bash
 $ aws sqs create-queue --queue-name input

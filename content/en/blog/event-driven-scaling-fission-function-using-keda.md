@@ -2,8 +2,8 @@
 title: "Event Driven Scaling Fission Function Using KEDA"
 date: 2020-07-14T18:09:02+05:30
 author: "Rahul Bhati"
-categories: ["Fission", "Serverless", "go", "Keda", "Event-driven", "Apache Kafka", "Tutorial", "Faas"]
-description: "Enabling event driven autoscaling with KEDA integration"
+categories: ["keda", "event-driven", "kafka"]
+description: "Enabling event driven autoscaling with Fission KEDA Kafka integration"
 type: "blog"
 ---
 

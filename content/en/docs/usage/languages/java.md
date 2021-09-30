@@ -160,7 +160,7 @@ For that you can use `maven-assembly-plugin`:
 </execution>
 ```
 
-Lastly since the `fission-java-core` is currently in the snapshot release, you need to explicitely add the sonatype repository which is where it is published. 
+Lastly since the `fission-java-core` is currently in the snapshot release, you need to explicitly add the sonatype repository which is where it is published.
 
 ```xml
 <repositories>

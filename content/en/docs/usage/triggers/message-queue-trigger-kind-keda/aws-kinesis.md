@@ -1,5 +1,6 @@
 ---
 title: "AWS Kinesis"
+description: "Keda based Message Queue Trigger for AWS Kinesis"
 draft: false
 weight: 3
 ---
@@ -28,7 +29,7 @@ Before we dive into details, let's walk through overall flow of event and functi
 
 {{% notice info %}}
 When communicating to localstack we need aws cli installed in the respactive container(deployment). This is because it uses aws configuration to connect to localstack.
-Below are the commmand to create and send the message to a stream
+Below are the command to create and send the message to a stream
 
 ```bash
 $ aws kinesis create-stream --shard-count 2  --stream-name request
@@ -85,7 +86,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		})
 
 		if err != nil {
-			w.Write([]byte(fmt.Sprintf("error marshalling the message: %v", err)))
+			w.Write([]byte(fmt.Sprintf("error marshaling the message: %v", err)))
 			return
 		}
 		params := &kinesis.PutRecordInput{
@@ -190,8 +191,7 @@ There are a couple of ways you can verify that the consumerfunc is called:
 {"level":"info","ts":1603106377.3916092,"caller":"aws-kinesis-http-connector/main.go:212","msg":"done processing message","shardID":"shardId-000000000000","message":"Hello Msg 111"}
 ```
 
-- Go to aws Kinesis stream and check if messages are comming in response stream
-
+- Go to aws Kinesis stream and check if messages are coming in response stream
 
 ## Introducing an error
 
@@ -219,5 +219,4 @@ Successfully sent to input
 
 We can verify the message in error stream as we did earlier:
 
-- Go to aws Kinesis stream and check if messages are comming in error stream
-
+- Go to aws Kinesis stream and check if messages are coming in error stream

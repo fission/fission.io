@@ -2,7 +2,7 @@
 title: "Using gVisor with Fission"
 date: 2021-02-10T18:09:02+05:30
 author: "Harsh Thakur"
-categories: ["Fission", "Serverless", "Security", "gVisor"]
+categories: ["Security", "gVisor"]
 description: "Running workloads securely with gVisor "
 type: "blog"
 ---
@@ -25,12 +25,12 @@ You can now browse to the security section and enable sandbox with gVisor
 
 # Deploying functions with gVisor
 
-The plain installation of Fission is sufficient to utilise gVisor.
+The plain installation of Fission is sufficient to utilize gVisor.
 
 To try out :
 - You can clone the [examples repository](https://github.com/fission/examples) 
 - Browse to the `samples/hello-py-spec/specs` directory and take a look at the spec of   environment within it.
-- Thanks to PodSpec support in Fission, any feature that's available in Kubernetes pods can be utilised by Fission too. In this case, all we need to do is add a `runtimeClassName` field which will instruct the function to use gVisor.
+- Thanks to PodSpec support in Fission, any feature that's available in Kubernetes pods can be utilized by Fission too. In this case, all we need to do is add a `runtimeClassName` field which will instruct the function to use gVisor.
 
 ![gvisor-podspec](/images/gvisor-podspec.png)
 
@@ -43,7 +43,7 @@ fission spec apply
 Ta-da! Your functions are now utilsing gVisor. 
 
 # Conclusion
-Micro-vm technologies are on the rise as the use for running untrusted code has risen. Fission provides the flexibility to utilise such features out of the box as it is Kubernetes friendly.  We would love to hear how you utilise Fission. 
+Micro-vm technologies are on the rise as the use for running untrusted code has risen. Fission provides the flexibility to utilize such features out of the box as it is Kubernetes friendly.  We would love to hear how you utilize Fission. 
 
 Here is the guide to [Contributing to Fission](/docs/contributing/)
 

@@ -1,6 +1,7 @@
 ---
 title: "NATS Streaming"
 draft: false
+description: "Keda based Message Queue Trigger for NATS Streaming"
 weight: 4
 ---
 
@@ -251,16 +252,16 @@ kubectl logs natstest-b4f6c6579-q2bxd -f
 ```
 
 ```text
-{"level":"info","ts":1616588727.6284368,"caller":"app/main.go:50","msg":"Done processing message","messsage":"Hello, world!\n"}
+{"level":"info","ts":1616588727.6284368,"caller":"app/main.go:50","msg":"Done processing message","message":"Hello, world!\n"}
 {"level":"info","ts":1616588727.6291118,"caller":"app/main.go:36","msg":"Test102"}
-{"level":"info","ts":1616588732.3232052,"caller":"app/main.go:50","msg":"Done processing message","messsage":"Hello, world!\n"}
+{"level":"info","ts":1616588732.3232052,"caller":"app/main.go:50","msg":"Done processing message","message":"Hello, world!\n"}
 {"level":"info","ts":1616588732.3247235,"caller":"app/main.go:36","msg":"Test105"}
-{"level":"info","ts":1616588735.3536534,"caller":"app/main.go:50","msg":"Done processing message","messsage":"Hello, world!\n"}
+{"level":"info","ts":1616588735.3536534,"caller":"app/main.go:50","msg":"Done processing message","message":"Hello, world!\n"}
 {"level":"info","ts":1616588735.35448,"caller":"app/main.go:36","msg":"Test107"}
-{"level":"info","ts":1616588737.6849225,"caller":"app/main.go:50","msg":"Done processing message","messsage":"Hello, world!\n"}
+{"level":"info","ts":1616588737.6849225,"caller":"app/main.go:50","msg":"Done processing message","message":"Hello, world!\n"}
 ```
 
-- Go to nats streaming server queue and check if messages are comming in response queue
+- Go to nats streaming server queue and check if messages are coming in response queue
 
 ## Introducing an error
 
@@ -299,4 +300,4 @@ We can verify the message in error queue as we did earlier:
 
 ```
 
-- Go to nats streaming server and check if messages are comming in error queue
+- Go to nats streaming server and check if messages are coming in error queue
