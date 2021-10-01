@@ -22,4 +22,4 @@ The trigger may also contain a response topic: if specified, the function's outp
 4. Invoke function to get the response.
 5. (A) If it is 200 OK, the trigger publishes result to the response topic (if any).
 6. (B) If there is any error or the state is not equal to 200 OK, the trigger publishes result to the error topic (if any).</br>
-Currently, only NATS and Kafka message queue triggers support error topic.
+Currently, only NATS, Kafka message queue and Redis List triggers support error topic.
