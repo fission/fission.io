@@ -114,8 +114,8 @@ input[type="search"]::placeholder {
   color: white;
   background: #9775f3;
   background: rgb(112, 85, 255);
-  background: url("/images/hero-bg.png") no-repeat fixed;
-  background-size: contain;
+  background: url("/images/hero-bg.webp") no-repeat;
+  background-size: cover;
   margin-left: -15px;
   margin-right: -15px;
 }
@@ -181,7 +181,7 @@ input[type="search"]::placeholder {
 }
 
 .body-container .row {
-  // padding: 30px 20px;
+  padding: 30px 0px;
   margin: 20px auto;
 }
 
@@ -299,8 +299,8 @@ input[type="search"]::placeholder {
 }
 
 .whats-new {
-  background: url("/images/whats-new-bg.png") no-repeat;
-  background-size: contain;
+  background: url("/images/whats-new-bg.webp") no-repeat;
+  background-size: cover;
 }
 
 .whats-new .section-title {
@@ -360,7 +360,7 @@ input[type="search"]::placeholder {
 }
 
 .community-cards {
-  background: url("/images/color-bg.png") no-repeat center;
+  background: url("/images/color-bg.webp") no-repeat center;
   background-size: contain;
 }
 
@@ -405,7 +405,7 @@ input[type="search"]::placeholder {
 
 @media (max-width: 1299px) {
   .hero {
-    background: url("/images/hero-bg.png") no-repeat;
+    background: url("/images/hero-bg.webp") no-repeat;
     background-size: cover;
   }
 }
@@ -426,7 +426,7 @@ input[type="search"]::placeholder {
   }
 
   .hero {
-    background: url("/images/hero-bg.png") no-repeat;
+    background: url("/images/hero-bg.webp") no-repeat;
     background-size: cover;
   }
 
@@ -449,7 +449,7 @@ input[type="search"]::placeholder {
   }
 
   .whats-new {
-    background: url("/images/whats-new-bg.png") no-repeat;
+    background: url("/images/whats-new-bg.webp") no-repeat;
     background-size: cover;
   }
 
