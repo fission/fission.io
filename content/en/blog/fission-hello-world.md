@@ -9,21 +9,17 @@ type = "blog"
 
 # First, What is Serverless?
 
-In the last blog post [Kubernetes for Newbies](/posts/hello-world-creating-functions-using-fission-in-golang/), we went over how to get an application up and running on Kubernetes. Though Kubernetes is surely a hot topic in tech, the “serverless” space has become just as (if not even more) trendy. Why is serverless so popular in the dev community? 
+In the last blog post [Kubernetes for Newbies](/posts/hello-world-creating-functions-using-fission-in-golang/), we went over how to get an application up and running on Kubernetes. Though Kubernetes is surely a hot topic in tech, the “serverless” space has become just as (if not even more) trendy. Why is serverless so popular in the dev community?
 
 Turns out, serverless is a developer’s saving grace when it comes to managing servers. Instead of managing a bunch of servers, Serverless solutions allow developers to … well … not manage servers at all! Serverless completely takes away the burden of managing servers. One could say that Serverless separates the “ops” from devs. Functions as a Service (FaaS) enable developers to deploy parts of an application on an "as needed" basis using short-lived functions in just about any programming language. 
 
 Benefits of using FaaS range from simplified scaling, to easier deployment, lowered costs (you only pay for the resources you use, as opposed to otherwise paying on a per-second basis).
 
-
-
 Let’s do a quick walk through of how to deploy "Hello World" using Fission Functions!
 
+----
 
----- 
-
-# Installations
-
+## Installations
 
 We'll be using Minikube to run Kubernetes locally (just as we did in the [previous blog post](/posts/hello-world-in-go-for-kubernetes-newbies/)).
 
@@ -35,16 +31,13 @@ After you have Minikube installed, launch your cluster by running the following 
 					
 	$ minikube start
 
-
 ### Install the Kubernetes CLI (kubectl)
 
 Once your cluster is ready, you'll need to install the Kubernetes CLI kubectl [as instructed here](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
-
 You can verify if the installation was successful by running:
 
 	$ kubectl get nodes
-
 
 ### Install Helm
 
@@ -80,7 +73,7 @@ If you’re running **OS X**, you can install the Fission CLI by running the fol
 
 **For Windows, download the executable using [this link](https://github.com/fission/fission/releases/download/0.6.0/fission-cli-windows.exe).**
 
->_You can find a complete list of Fission releases here: https://github.com/fission/fission/releases_
+> You can find a complete list of Fission releases here: https://github.com/fission/fission/releases
 
 _To check the current installed version of Fission on your cluster, simply run:_
 
@@ -112,7 +105,7 @@ To verify if the pods are up and running, be sure to run this command:
 
 >_(The status of the pods should be "Running")_
 
-We’ll be using the Golang Hello World example from the fission github repo (which can be found here: https://github.com/fission/examples/blob/master/go/hello.go), so we’ll need to download the code using the following command:
+We’ll be using the Golang Hello World example from the fission github repo (which can be found here: https://github.com/fission/examples/blob/master/go/hello.go ), so we’ll need to download the code using the following command:
 									
 	$ curl https://raw.githubusercontent.com/fission/examples/master/go/hello.go > /tmp/hello.go
 
