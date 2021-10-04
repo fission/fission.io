@@ -37,7 +37,7 @@ $ hugo server
 Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
 Press Ctrl+C to stop
 ```
-You can visite [localhost:1313](http://localhost:1313/) in browser to preview website.
+You can visit [localhost:1313](http://localhost:1313/) in browser to preview website.
 
 ### Making changes
 
