@@ -13,7 +13,7 @@ See [Fission installation]({{%ref "_index.en.md" %}}) to learn more how to insta
 
 The reason to run Logger pods as privileged container is because Fission mounts `hostPath` volume to FluentBit to read container log files and data persistence.
 
-The persistence is for FluentBit [tail plugin](https://github.com/fluent/fluent-bit-docs/blob/master/input/tail.md) to read/write it’s own sqlite database.
+The persistence is for FluentBit [tail plugin](https://github.com/fluent/fluent-bit-docs/blob/master/pipeline/inputs/tail.md) to read/write it’s own sqlite database.
 Fission itself doesn’t persist anything.
 
 ```text
