@@ -1,21 +1,14 @@
 ---
 title: "Kafka"
 date: 2021-10-05T15:39:35+05:30
-<<<<<<< HEAD
 weight: 1
-=======
->>>>>>> Added kafka docs
 ---
 
 This tutorial will demonstrate how to use a Kafka trigger to invoke a function.
 We'll assume you have Fission and Kubernetes installed.
 If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
 
-<<<<<<< HEAD
 You will also need Kafka setup which is reachable from the Fission Kubernetes cluster.
-=======
-You will also need Redis setup which is reachable from the Fission Kubernetes cluster.
->>>>>>> Added kafka docs
 
 ## Installation
 
