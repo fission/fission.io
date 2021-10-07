@@ -9,7 +9,7 @@ type = "blog"
 
 # Introduction
 
-At [Part 2](/posts/how-to-develop-a-serverless-application-with-fission-part-2/), we knew what's real payload was passed to function and how to create a serverless guesbook. 
+At [Part 2](/blog/how-to-develop-a-serverless-application-with-fission-part-2/), we knew what's real payload was passed to function and how to create a serverless guesbook. 
 In the last post, we will go through the final bank sample and know how to deploy a application to different fission clusters.
 
 # A Serverless Bank Application in Golang (Sample)
@@ -183,7 +183,7 @@ go     d30a78ee-a618-11e8-a55e-08002720b796 fission/go-env   3        0      0  
 
 But what about archiving source code into source package? Is there any way to archive it automatically?
 
-At [Part 1](/posts/how-to-develop-a-serverless-application-with-fission-part-1/#add-additional-go-dependencies) we use `ZIP` command to 
+At [Part 1](/blog/how-to-develop-a-serverless-application-with-fission-part-1/#add-additional-go-dependencies) we use `ZIP` command to 
 archive source package. You can achieve this by writing a `ArchiveUploadSpec` YAML file like following. `fission spec` 
 will automatically archives files list on `include` field once it detects `ArchiveUploadSpec` exists.   
 
