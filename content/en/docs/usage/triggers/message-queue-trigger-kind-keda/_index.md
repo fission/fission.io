@@ -66,4 +66,4 @@ $ fission mqt create --name mqttest --function consumer --mqtype kafka \
 --metadata lagThreshold=50 --pollinginterval=30
 ```
 
-For complete tutorial refer [this blog post](/posts/event-driven-scaling-fission-function-using-keda/).
+For complete tutorial refer [this blog post](/blog/event-driven-scaling-fission-function-using-keda/).

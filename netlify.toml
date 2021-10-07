@@ -202,6 +202,11 @@ to = "/blog"
 
 [[redirects]]
 force = true
+from = "/posts/*"
+to = "/blog/:splat"
+
+[[redirects]]
+force = true
 from = "/workflows"
 to = "/"
 

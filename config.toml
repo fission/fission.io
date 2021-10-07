@@ -62,7 +62,7 @@ pygmentsStyle = "tango"
 
 # Configure how URLs look like per section.
 [permalinks]
-blog = "/posts/:slug/"
+blog = "/blog/:slug/"
 
 [markup.goldmark.renderer]
 unsafe = true
@@ -140,7 +140,7 @@ heading = 'Fission WebSocket Sample'
 [params.whatsnew.button]
 hero_class = 'mid-2'
 text = 'Read More!'
-url = '/posts/fission-websocket-sample/'
+url = '/blog/fission-websocket-sample/'
 
 [[params.whatsnew]]
 badge = 'PODCAST'

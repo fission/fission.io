@@ -9,7 +9,7 @@ type = "blog"
 
 _This is the second half of a 2-part introduction to Fission Workflows._
 
-In **[part One](/posts/getting-started-composing-serverless-functions-with-fission-workflows-part-1/)** of this series, we talked about the concepts around Fission Workflows, how to create them, as well as a few demos of use cases in which you might use them. 
+In **[part One](/blog/getting-started-composing-serverless-functions-with-fission-workflows-part-1/)** of this series, we talked about the concepts around Fission Workflows, how to create them, as well as a few demos of use cases in which you might use them. 
 
 So we’ve gone over what workflows are, along with when, and how to execute them. In this blog post we’ll dive deeper, breaking down each component that makes up the fabric of workflows, and what make workflows so efficient.
 
