@@ -104,7 +104,8 @@ github_project_repo = "https://github.com/fission/fission"
 privacy_policy = ""
 
 # Google Custom Search Engine ID. Remove or comment out to disable search.
-gcs_engine_id = "c632b781ffe71b197"
+# gcs_engine_id = "c632b781ffe71b197"
+algolia_docsearch = true
 
 # current release branch - could be rc
 release_branch = "master"
