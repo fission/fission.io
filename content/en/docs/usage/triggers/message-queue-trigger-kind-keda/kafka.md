@@ -24,6 +24,10 @@ Before we dive into details, let's walk through overall flow of event and functi
 4. Fission Kafka trigger takes the response of consumer function (consumer) and drops the message in a response queue named `response-topic`.
    If there is an error, the message is dropped in error queue named `error-topic`.
 
+{{% notice info %}}
+As of now, fission package builds with sarama version 1.29.
+{{% /notice %}}
+
 ## Building the app
 
 ### Kafka Topics
