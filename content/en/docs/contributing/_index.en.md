@@ -80,6 +80,7 @@ $ skaffold run
 $ kind create cluster
 $ kubectl create ns fission
 $ make skaffold-prebuild # This builds all Go binaries required for Fission
+$ make create-crds
 $ skaffold run -p kind
 ```
 
