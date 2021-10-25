@@ -1,5 +1,7 @@
 ---
-title: "Kafka"
+title: "Apache Kafka"
+description: "Keda based Message Queue Trigger for Apache Kafka"	
+
 date: 2021-10-05T15:39:35+05:30
 weight: 1
 ---
