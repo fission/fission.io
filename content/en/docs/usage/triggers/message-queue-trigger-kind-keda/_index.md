@@ -15,7 +15,7 @@ Now, there are two kinds of message queue triggers:
 1. fission
 2. keda
 
-Message queue trigger kind can be specified using "mqtkind" flag.
+Message queue trigger kind can be specified using `mqtkind` flag.
 By default, `mqtkind` is set to `fission` which creates regular [message queue trigger](/docs/usage/triggers/message-queue-trigger/).
 To create message queue trigger of kind keda one must specify `mqtkind=keda`.
 
@@ -51,5 +51,5 @@ For successful creation of these objects, user should specify the following fiel
 2. cooldownperiod: The period to wait after the last trigger reported active before scaling the consumer back to 0
 3. minreplicacount: Minimum number of replicas of consumers to scale down to
 4. maxreplicacount: Maximum number of replicas of consumers to scale up to
-5. metadata: Metadata needed for connecting to source system in format: --metadata key1=value1 --metadata key2=value2
+5. metadata: Metadata needed for connecting to source system in format: `--metadata key1=value1 --metadata key2=value2`
 6. secret: Name of secret object (secret fields must be similarly specified as in mentioned for [particular scaler](https://keda.sh/docs/1.5/scalers/))
