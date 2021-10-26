@@ -32,6 +32,8 @@ Please use the `fission release version` as image tag instead of `latest` when a
 $ fission environment create --name go --image fission/go-env:<release-version> --builder fission/go-builder:<release-version> --version 3
 
 # Example
+$ fission environment create --name go --image fission/go-env-1.14:1.32.1  --builder fission/go-builder-1.14:1.32.1 
+release-version maybe not exist
 $ fission environment create --name go --image fission/go-env-1.12:{{% release-version %}} --builder fission/go-builder-1.12:{{% release-version %}}
 ```
 
