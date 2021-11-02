@@ -19,11 +19,11 @@ fission function update-container [flags]
       --port int                 Port where the application is running (default 8888)
       --command string           Command to be passed to the container. If not specified , the ones defined in the image are used
       --args string              Args to be passed to the command on the container. If not specified , the ones defined in the image are used
-      --secret stringArray       Function access to secret, should be present in the same namespace as the function. You can provide multiple secrets using multiple --secrets flags. In the case of fn update the the secrets will be replaced by the provided list of secrets.
+      --secret stringArray       Function access to secret, should be present in the same namespace as the function. You can provide multiple secrets using multiple --secrets flags. In the case of fn update the secrets will be replaced by the provided list of secrets.
       --configmap stringArray    Function access to configmap, should be present in the same namespace as the function. You can provide multiple configmaps using multiple --configmap flags. In case of fn update the configmaps will be replaced by the provided list of configmaps.
       --fntimeout int            --ft |:|: Maximum time for a request to wait for the response from the function (default 60)
       --idletimeout int          The length of time (in seconds) that a function is idle before pod(s) are eligible for recycling (default 120)
-      --labels string            Comma separated labels to apply to the function. Eg. --labels="environment=dev,application=analytics"
+      --labels string            Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
       --annotation stringArray   Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
       --mincpu int               Minimum CPU to be assigned to pod (In millicore, minimum 1)
       --maxcpu int               Maximum CPU to be assigned to pod (In millicore, minimum 1)

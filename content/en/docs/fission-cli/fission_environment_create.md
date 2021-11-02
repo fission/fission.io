@@ -29,7 +29,7 @@ fission environment create [flags]
       --keeparchive              Keep the archive instead of extracting it into a directory (mainly for the JVM environment because .jar is one kind of zip archive)
       --envNamespace string      --envns |:|: Namespace for environment object (default "default")
       --externalnetwork          Allow pod to access external network (only works when istio feature is enabled)
-      --labels string            Comma separated labels to apply to the function. Eg. --labels="environment=dev,application=analytics"
+      --labels string            Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
       --annotation stringArray   Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
       --spec                     Save to the spec directory instead of creating on cluster
       --dry                      View the generated specs

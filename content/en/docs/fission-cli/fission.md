@@ -11,7 +11,7 @@ Serverless framework for Kubernetes
 
 Fission: Fast and Simple Serverless Functions for Kubernetes
 
- * Github: https://github.com/fission/fission 
+ * GitHub: https://github.com/fission/fission
  * Documentation: https://fission.io/docs
 
 
