@@ -143,7 +143,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 ```
 {{% notice info %}}
 The above example is recommended for development purposes only. For production purposes, you can checkout [YAML specs](https://fission.io/docs/usage/spec/). 
-If you want to use spec with SASL, you can checkout this [example](https://github.com/fission/examples/tree/keda-kafka-go-consumer/samples/kafka-keda).
+If you want to use spec with SASL, you can check out this [example](https://github.com/fission/examples/tree/keda-kafka-go-consumer/samples/kafka-keda).
 {{% /notice %}}
 
 
@@ -250,7 +250,25 @@ There are a couple of ways you can verify that the consumer is called:
 
 ## Debugging
 
+For debugging, you can check the logs of the pods created in the fission namespace.
+```bash
+kubectl get pods -n fission
+NAME                              READY   STATUS    RESTARTS   AGE
+buildermgr-cfd9c9568-dvvlh        1/1     Running   0          31h
+controller-6cc4c468b4-mqxjn       1/1     Running   0          31h
+executor-7fc9cd5f67-h624h         1/1     Running   0          31h
+kubewatcher-559d78ccfb-2k4ph      1/1     Running   0          31h
+mqtrigger-keda-868bb9d9bb-92gp8   1/1     Running   0          31h
+router-56db976b9c-fpzbn           1/1     Running   0          31h
+storagesvc-55bb547596-z57kq       1/1     Running   0          31h
+timer-ddcf7c77d-pxqkd             1/1     Running   0          31h
+```
 
+Instead of running the command `kubectl logs <pod_name>` on every pod, you can use [stern](https://github.com/wercker/stern).
+
+To get logs of all the containers in one terminal, run 
+
+`stern "executor-|router-|controller-|mqtrigger-|storagesvc-|buildergr-" -n fission`
 
 ## Introducing an error
 
