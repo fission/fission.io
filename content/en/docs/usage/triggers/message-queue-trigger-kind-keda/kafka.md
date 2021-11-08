@@ -26,10 +26,6 @@ Before we dive into details, let's walk through overall flow of event and functi
 4. Fission Kafka trigger takes the response of consumer function (consumer) and drops the message in a response queue named `response-topic`.
    If there is an error, the message is dropped in error queue named `error-topic`.
 
-{{% notice info %}}
-As of now, fission package builds with sarama version 1.29.
-{{% /notice %}}
-
 ## Building the app
 
 ### Kafka Topics
@@ -93,6 +89,7 @@ For brevity all values have been hard coded in the code itself.
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"time"
@@ -108,12 +105,27 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	producerConfig.Producer.Retry.Backoff = 100
 	producerConfig.Producer.Return.Successes = true
 	producerConfig.Version = sarama.V1_0_0_0
+	
+	
+	//This code is required if you use kafka with sasl
+	/*producerConfig.Net.SASL.User = "xxxxxxxxx"
+	producerConfig.Net.SASL.Password = "xxxxxxxxxxxxxxxx"
+	producerConfig.Net.SASL.Handshake = true
+	producerConfig.Net.SASL.Enable = true
+	producerConfig.Net.TLS.Enable = true
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true,
+		ClientAuth:         0,
+	}
+
+	producerConfig.Net.TLS.Config = tlsConfig*/
+	
 	producer, err := sarama.NewSyncProducer(brokers, producerConfig)
 	fmt.Println("Created a new producer ", producer)
 	if err != nil {
 		panic(err)
 	}
-	for msg := 1; msg <= 1000; msg++ {
+	for msg := 1; msg <= 10; msg++ {
 		ts := time.Now().Format(time.RFC3339)
 		message := fmt.Sprintf("{\"message_number\": %d, \"time_stamp\": \"%s\"}", msg, ts)
 		_, _, err = producer.SendMessage(&sarama.ProducerMessage{
@@ -129,6 +141,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Successfully sent to request-topic"))
 }
 ```
+{{% notice info %}}
+The above example is recommended for development purposes only. For production purposes, you can checkout [YAML specs](https://fission.io/docs/usage/spec/). 
+If you want to use spec with SASL, you can checkout this [example](https://github.com/fission/examples/tree/keda-kafka-go-consumer/samples/kafka-keda).
+{{% /notice %}}
+
 
 We are now ready to package this code and create a function so that we can execute it later.
 Following commands will create a environment, package and function.
@@ -142,7 +159,7 @@ $ go mod init
 $ go mod tidy
 $ zip -qr kafka.zip *
 
-$ fission env create --name go --image fission/go-env-1.14 --builder fission/go-builder-1.14
+$ fission env create --name go --image fission/go-env-1.16:1.32.1 --builder fission/go-builder-1.16:1.32.1
 $ fission package create --env go --src kafka.zip
 $ fission fn create --name producer --env go --pkg kafka-zip-s2pj --entrypoint Handler
 $ fission package info --name kafka-zip-s2pj
@@ -182,7 +199,7 @@ Let's create a message queue trigger which will invoke the consumer function eve
 The response will be sent to `response-topic` queue and in case of consumer function invocation fails, the error is written to `error-topic` queue.
 
 ```bash
-$ fission mqt create --name kafkatest --function consumer --mqtype kafka --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata bootstrapServers=my-cluster-kafka-bootstrap.kafka.svc:9092 --metadata consumerGroup=my-group --metadata topic=request-topic  --cooldownperiod=30 --pollinginterval=5
+$ fission mqt create --name kafkatest --function consumer --mqtype kafka --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata bootstrapServers=my-cluster-kafka-bootstrap.kafka.svc:9092 --metadata consumerGroup=my-group --metadata topic=request-topic  --cooldownperiod=30 --pollinginterval=5 --secret keda-kafka-secrets
 ```
 
 Parameter list:
@@ -190,6 +207,26 @@ Parameter list:
 - bootstrapServers - Kafka brokers “hostname:port” to connect to for bootstrap.
 - consumerGroup - Name of the consumer group used for checking the offset on the topic and processing the related lag.
 - topic - Name of the topic on which processing the offset lag.
+
+{{% notice info %}}
+If you are using kafka with sasl you need to provide the secret. Below is the example to create a secret.
+```bash
+ $ kubectl apply -f secret.yaml
+ ```
+and secret.yaml file should contain the secret object whose values should correspond with `parameter` name in `TriggerAuthentication.spec.secretTargetRef`.
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keda-kafka-secrets
+  namespace: default
+stringData:
+  sasl: "plaintext"
+  username: "xxxxxx"
+  password: "xxxxxxxxxxxxxxx"
+  tls: "enable"
+```
+{{% /notice %}}
 
 ### Testing it out
 
@@ -210,6 +247,10 @@ There are a couple of ways you can verify that the consumer is called:
 ```
 
 - Connect to your kafka cluster and check if messages are coming in the `response-topic` queue.
+
+## Debugging
+
+
 
 ## Introducing an error
 
