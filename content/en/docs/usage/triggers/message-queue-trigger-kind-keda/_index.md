@@ -37,12 +37,12 @@ To create message queue trigger of kind keda one must specify `mqtkind=keda`.
 
 ### Prerequisite
 
-- KEDA [must be installed](https://keda.sh/docs/2.2/deploy/#helm) on your cluster
+- KEDA [must be installed](https://keda.sh/docs/latest/deploy/#helm) on your cluster
 - Message queue trigger KEDA integration should be enabled.
 
 To enable integration set the value `mqt_keda.enabled` to `true` while installing Fission with helm chart.
 
-When you create a message queue trigger of kind keda, it creates [a ScaledObject and a TriggerAuthentication](https://keda.sh/docs/2.4/concepts/#custom-resources-crd).
+When you create a message queue trigger of kind keda, it creates [a ScaledObject and a TriggerAuthentication](https://keda.sh/docs/latest/concepts/#custom-resources-crd).
 The ScaledObjects represent the desired mapping between an event source (e.g. Apache Kafka) and the Kubernetes deployment.
 A ScaledObject may also reference a TriggerAuthentication which contains the authentication configuration or secrets to monitor the event source.
 For successful creation of these objects, user should specify the following fields while creating a message queue trigger.
@@ -52,4 +52,4 @@ For successful creation of these objects, user should specify the following fiel
 3. minreplicacount: Minimum number of replicas of consumers to scale down to
 4. maxreplicacount: Maximum number of replicas of consumers to scale up to
 5. metadata: Metadata needed for connecting to source system in format: `--metadata key1=value1 --metadata key2=value2`
-6. secret: Name of secret object (secret fields must be similarly specified as in mentioned for [particular scaler](https://keda.sh/docs/1.5/scalers/))
+6. secret: Name of secret object (secret fields must be similarly specified as in mentioned for [particular scaler](https://keda.sh/docs/latest/scalers/))
