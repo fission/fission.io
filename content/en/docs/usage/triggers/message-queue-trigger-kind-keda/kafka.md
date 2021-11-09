@@ -32,7 +32,7 @@ Before we dive into details, let's walk through overall flow of event and functi
 4. Fission Kafka trigger takes the response of consumer function (consumer) and drops the message in a response queue named `response-topic`.
    If there is an error, the message is dropped in error queue named `error-topic`.
 
-### Samples Apps 
+### Sample Apps 
 We have two samples if you want to quickly try out the trigger.
 
 - [Keda Kafka Trigger Sample with Strimzi Kafka](https://github.com/fission/examples/tree/master/samples/kafka-keda)
@@ -304,4 +304,4 @@ We can verify the message in error queue as we did earlier:
 
 - Connect to your kafka cluster and check if messages are coming in `error-topic` queue.
 
-Do checkout [Sample apps](#samples-apps) mentioned above for end to end working example.
+Do checkout [Sample apps](#sample-apps) mentioned above for end to end working example.
