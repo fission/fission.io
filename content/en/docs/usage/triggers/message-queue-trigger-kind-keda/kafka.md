@@ -6,15 +6,21 @@ date: 2021-10-05T15:39:35+05:30
 weight: 1
 ---
 
-This tutorial will demonstrate how to use a Kafka trigger to invoke a function.
+You can use the Kafka message queue trigger to receive messages from Apache Kafka and process them via Fission Function.
+Kafka can be onpremise, hosted on Kubernetes with [Strimzi](https://strimzi.io/) or cloud based such as [Confluent Cloud](https://www.confluent.io/confluent-cloud/).
+
+We demonstrate how to use a Kafka trigger to invoke a Fission function.
 We'll assume you have Fission and Kubernetes installed.
 If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
+Please install the [Keda Helm Chart](https://keda.sh/docs/latest/deploy/#helm) in your cluster for Fission Keda Kafka trigger to work.
 
 You will also need Kafka setup which is reachable from the Fission Kubernetes cluster.
 
 ## Installation
 
 If you want to setup Apache Kafka on the Kubernetes cluster, you can use the [information here](https://strimzi.io/docs/operators/latest/quickstart.html#proc-product-downloads-str).
+
+You can also use service like [Confluent Cloud](https://www.confluent.io/confluent-cloud/) to quickly setup Kafka and create required topics.
 
 ## Overview
 
@@ -26,59 +32,68 @@ Before we dive into details, let's walk through overall flow of event and functi
 4. Fission Kafka trigger takes the response of consumer function (consumer) and drops the message in a response queue named `response-topic`.
    If there is an error, the message is dropped in error queue named `error-topic`.
 
+### Samples Apps 
+We have two samples if you want to quickly try out the trigger.
+
+- [Keda Kafka Trigger Sample with Strimzi Kafka](https://github.com/fission/examples/tree/master/samples/kafka-keda)
+- [Keda Kafka Trigger Sample with SASL plain text authentication and Confluent Cloud](https://github.com/fission/examples/tree/master/samples/kafka-keda-sasl)
+
 ## Building the app
 
 ### Kafka Topics
 
-Create three Kafka topics as mentioned below, replace namespace and cluster accordingly.
+If you are using Strimzi Kafka, you need to create the following topics in Kafka.
+Please replace namespace and cluster accordingly.
 
-1. Kafka topic for function invocation
+1. Kafka `request-topic` for function invocation
 
-```sh
-cat << EOF | kubectl create -n kafka -f -
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaTopic
-metadata:
-  name: request-topic
-  labels:
-    strimzi.io/cluster: "my-cluster"
-spec:
-  partitions: 3
-  replicas: 2
-EOF
-```
+    ```shell
+    cat << EOF | kubectl create -n kafka -f -
+    apiVersion: kafka.strimzi.io/v1beta2
+    kind: KafkaTopic
+    metadata:
+    name: request-topic
+    labels:
+        strimzi.io/cluster: "my-cluster"
+    spec:
+    partitions: 3
+    replicas: 1
+    EOF
+    ```
 
-2. Kafta topic for function response
+2. Kafta `response-topic` for function response
 
-```sh
-cat << EOF | kubectl create -n kafka -f -
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaTopic
-metadata:
-  name: response-topic
-  labels:
-    strimzi.io/cluster: "my-cluster"
-spec:
-  partitions: 3
-  replicas: 2
-EOF
-```
+    ```shell
+    cat << EOF | kubectl create -n kafka -f -
+    apiVersion: kafka.strimzi.io/v1beta2
+    kind: KafkaTopic
+    metadata:
+    name: response-topic
+    labels:
+        strimzi.io/cluster: "my-cluster"
+    spec:
+    partitions: 3
+    replicas: 1
+    EOF
+    ```
 
 3. Kafta topic for error response
 
-```sh
-cat << EOF | kubectl create -n kafka -f -
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaTopic
-metadata:
-  name: error-topic
-  labels:
-    strimzi.io/cluster: "my-cluster"
-spec:
-  partitions: 3
-  replicas: 2
-EOF
-```
+    ```shell
+    cat << EOF | kubectl create -n kafka -f -
+    apiVersion: kafka.strimzi.io/v1beta2
+    kind: KafkaTopic
+    metadata:
+    name: error-topic
+    labels:
+        strimzi.io/cluster: "my-cluster"
+    spec:
+    partitions: 3
+    replicas: 1
+    EOF
+    ```
+
+4. Please ensure your topics are created in Kafka and show ready status.
 
 ### Producer Function
 
@@ -89,69 +104,69 @@ For brevity all values have been hard coded in the code itself.
 package main
 
 import (
-	"crypto/tls"
-	"fmt"
-	"net/http"
-	"time"
+    "crypto/tls"
+    "fmt"
+    "net/http"
+    "time"
 
-	sarama "github.com/Shopify/sarama"
+    sarama "github.com/Shopify/sarama"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	brokers := []string{"my-cluster-kafka-bootstrap.kafka.svc:9092"}
-	producerConfig := sarama.NewConfig()
-	producerConfig.Producer.RequiredAcks = sarama.WaitForAll
-	producerConfig.Producer.Retry.Max = 100
-	producerConfig.Producer.Retry.Backoff = 100
-	producerConfig.Producer.Return.Successes = true
-	producerConfig.Version = sarama.V1_0_0_0
-	
-	
-	//This code is required if you use kafka with sasl
-	/*producerConfig.Net.SASL.User = "xxxxxxxxx"
-	producerConfig.Net.SASL.Password = "xxxxxxxxxxxxxxxx"
-	producerConfig.Net.SASL.Handshake = true
-	producerConfig.Net.SASL.Enable = true
-	producerConfig.Net.TLS.Enable = true
-	tlsConfig := &tls.Config{
-		InsecureSkipVerify: true,
-		ClientAuth:         0,
-	}
+    brokers := []string{"my-cluster-kafka-bootstrap.kafka.svc:9092"}
+    producerConfig := sarama.NewConfig()
+    producerConfig.Producer.RequiredAcks = sarama.WaitForAll
+    producerConfig.Producer.Retry.Max = 100
+    producerConfig.Producer.Retry.Backoff = 100
+    producerConfig.Producer.Return.Successes = true
+    producerConfig.Version = sarama.V1_0_0_0
+    
+    // This code is required if you use kafka with sasl
+    /*
+    producerConfig.Net.SASL.User = "xxxxxxxxx"
+    producerConfig.Net.SASL.Password = "xxxxxxxxxxxxxxxx"
+    producerConfig.Net.SASL.Handshake = true
+    producerConfig.Net.SASL.Enable = true
+    producerConfig.Net.TLS.Enable = true
+    tlsConfig := &tls.Config{
+        InsecureSkipVerify: true,
+        ClientAuth:         0,
+    }
+    producerConfig.Net.TLS.Config = tlsConfig
+    */
 
-	producerConfig.Net.TLS.Config = tlsConfig*/
-	
-	producer, err := sarama.NewSyncProducer(brokers, producerConfig)
-	fmt.Println("Created a new producer ", producer)
-	if err != nil {
-		panic(err)
-	}
-	for msg := 1; msg <= 10; msg++ {
-		ts := time.Now().Format(time.RFC3339)
-		message := fmt.Sprintf("{\"message_number\": %d, \"time_stamp\": \"%s\"}", msg, ts)
-		_, _, err = producer.SendMessage(&sarama.ProducerMessage{
-			Topic: "request-topic",
-			Value: sarama.StringEncoder(message),
-		})
+    producer, err := sarama.NewSyncProducer(brokers, producerConfig)
+    fmt.Println("Created a new producer ", producer)
+    if err != nil {
+        panic(err)
+    }
+    for msg := 1; msg <= 10; msg++ {
+        ts := time.Now().Format(time.RFC3339)
+        message := fmt.Sprintf("{\"message_number\": %d, \"time_stamp\": \"%s\"}", msg, ts)
+        _, _, err = producer.SendMessage(&sarama.ProducerMessage{
+            Topic: "request-topic",
+            Value: sarama.StringEncoder(message),
+        })
 
-		if err != nil {
-			w.Write([]byte(fmt.Sprintf("Failed to publish message to topic %s: %v", "request-topic", err)))
-			return
-		}
-	}
-	w.Write([]byte("Successfully sent to request-topic"))
+        if err != nil {
+            w.Write([]byte(fmt.Sprintf("Failed to publish message to topic %s: %v", "request-topic", err)))
+            return
+        }
+    }
+    w.Write([]byte("Successfully sent to request-topic"))
 }
 ```
-{{% notice info %}}
-The above example is recommended for development purposes only. For production purposes, you can checkout [YAML specs](https://fission.io/docs/usage/spec/). 
-If you want to use spec with SASL, you can check out this [example](https://github.com/fission/examples/tree/keda-kafka-go-consumer/samples/kafka-keda).
-{{% /notice %}}
 
+{{% notice info %}}
+The above example is recommended for development purposes only. For production purposes, you can checkout [YAML specs](https://fission.io/docs/usage/spec/).
+If you want to use spec with SASL, you can check out this [example](https://github.com/fission/examples/tree/master/samples/kafka-keda-sasl).
+{{% /notice %}}
 
 We are now ready to package this code and create a function so that we can execute it later.
 Following commands will create a environment, package and function.
 Verify that build for package succeeded before proceeding.
 
-```sh
+```shell
 $ mkdir kafka_test && cd kafka_test
 $ go mod init
 
@@ -187,9 +202,9 @@ module.exports = async function (context) {
 
 Let's create the environment and function:
 
-```bash
-$ fission env create --name nodeenv --image fission/node-env
-$ fission fn create --name consumer --env nodeenv --code consumer.js
+```shell
+fission env create --name nodeenv --image fission/node-env
+fission fn create --name consumer --env nodeenv --code consumer.js
 ```
 
 ### Connecting via trigger
@@ -199,7 +214,7 @@ Let's create a message queue trigger which will invoke the consumer function eve
 The response will be sent to `response-topic` queue and in case of consumer function invocation fails, the error is written to `error-topic` queue.
 
 ```bash
-$ fission mqt create --name kafkatest --function consumer --mqtype kafka --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata bootstrapServers=my-cluster-kafka-bootstrap.kafka.svc:9092 --metadata consumerGroup=my-group --metadata topic=request-topic  --cooldownperiod=30 --pollinginterval=5 --secret keda-kafka-secrets
+fission mqt create --name kafkatest --function consumer --mqtype kafka --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata bootstrapServers=my-cluster-kafka-bootstrap.kafka.svc:9092 --metadata consumerGroup=my-group --metadata topic=request-topic  --cooldownperiod=30 --pollinginterval=5 --secret keda-kafka-secrets
 ```
 
 Parameter list:
@@ -209,11 +224,15 @@ Parameter list:
 - topic - Name of the topic on which processing the offset lag.
 
 {{% notice info %}}
+
 If you are using kafka with sasl you need to provide the secret. Below is the example to create a secret.
-```bash
- $ kubectl apply -f secret.yaml
- ```
-and secret.yaml file should contain the secret object whose values should correspond with `parameter` name in `TriggerAuthentication.spec.secretTargetRef`.
+
+```shell
+kubectl apply -f secret.yaml
+```
+
+secret.yaml file should contain the secret object whose values should correspond with `parameter` name in `TriggerAuthentication.spec.secretTargetRef`.
+
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -226,13 +245,14 @@ stringData:
   password: "xxxxxxxxxxxxxxx"
   tls: "enable"
 ```
+
 {{% /notice %}}
 
 ### Testing it out
 
 Let's invoke the producer function so that the queue `request-topic` gets some messages and we can see the consumer function in action.
 
-```bash
+```shell
 $ fission fn test --name producer
 Successfully sent to request-topic
 ```
@@ -246,29 +266,15 @@ There are a couple of ways you can verify that the consumer is called:
 {"level":"info","ts":1630296782.8708184,"caller":"app/main.go:58","msg":"Message sending to response successful"}
 ```
 
-- Connect to your kafka cluster and check if messages are coming in the `response-topic` queue.
+- Connect to your kafka cluster and check if messages are coming in the `response-topic` queue or `error-topic` in case of error.
 
 ## Debugging
 
-For debugging, you can check the logs of the pods created in the fission namespace.
-```bash
-kubectl get pods -n fission
-NAME                              READY   STATUS    RESTARTS   AGE
-buildermgr-cfd9c9568-dvvlh        1/1     Running   0          31h
-controller-6cc4c468b4-mqxjn       1/1     Running   0          31h
-executor-7fc9cd5f67-h624h         1/1     Running   0          31h
-kubewatcher-559d78ccfb-2k4ph      1/1     Running   0          31h
-mqtrigger-keda-868bb9d9bb-92gp8   1/1     Running   0          31h
-router-56db976b9c-fpzbn           1/1     Running   0          31h
-storagesvc-55bb547596-z57kq       1/1     Running   0          31h
-timer-ddcf7c77d-pxqkd             1/1     Running   0          31h
-```
+For debugging, you can check the logs of the pods created in the `fission` and `fission-function` namespace.
 
-Instead of running the command `kubectl logs <pod_name>` on every pod, you can use [stern](https://github.com/wercker/stern).
-
-To get logs of all the containers in one terminal, run 
-
-`stern "executor-|router-|controller-|mqtrigger-|storagesvc-|buildergr-" -n fission`
+Typically all function pods would be created in the `fission-function` namespace.
+Based on the environment name, the pods would be created in the `fission-function` namespace.
+You can check consumer and producer function logs.
 
 ## Introducing an error
 
@@ -297,3 +303,5 @@ Successfully sent to input
 We can verify the message in error queue as we did earlier:
 
 - Connect to your kafka cluster and check if messages are coming in `error-topic` queue.
+
+Do checkout [Sample apps](#samples-apps) mentioned above for end to end working example.
