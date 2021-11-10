@@ -15,12 +15,8 @@ description: >
 
 Checking Keda connectors image tag via Fission Helm chart,
 
-```sh
-$ helm show values --version {{% release-version %}} fission-charts/fission-all
-
-# OR
-
-$ helm show values --version {{% release-version %}} fission-charts/fission-core
+```console
+helm show values --version {{% release-version %}} fission-charts/fission-all
 ```
 
 From output you can verify keda connectors image tag.

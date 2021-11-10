@@ -13,7 +13,7 @@ There are many areas we can use contributions - ranging from code, documentation
 First, please read the [code of conduct](https://github.com/fission/.github/blob/main/CODE_OF_CONDUCT.md). By participating, you're expected to uphold this code.
 
 - [Choose something to work on](#choose-something-to-work-on)
-  - [Get Help.](#get-help)
+  - [Get Help](#get-help)
 - [Contributing - building & deploying](#contributing---building--deploying)
   - [Pre-requisite](#pre-requisite)
     - [Use Skaffold with Kind/K8S Cluster to build and deploy](#use-skaffold-with-kindk8s-cluster-to-build-and-deploy)
@@ -39,7 +39,7 @@ Please check following repositories for your areas of interest,
 - For contributing a new Keda Connector, please check the [Keda Connectors repo](https://github.com/fission/keda-connectors)
 - You can contribute to the Fission Docs by adding content to the [docs repo](https://github.com/fission/fission.io)
 
-## Get Help.
+## Get Help
 
 Do reach out on Slack or Twitter and we are happy to help.
 
@@ -69,28 +69,28 @@ You should create a Kubernetes cluster using Kind/Minikube cluster or if using a
 
 - For building & deploying to Cloud Provider K8S cluster such as GKE/EKS/AKS:
 
-```sh
-$ skaffold config set default-repo vishalbiyani  // (vishalbiyani - should be your registry/Dockerhub handle)
-$ skaffold run
+```console
+skaffold config set default-repo vishalbiyani  // (vishalbiyani - should be your registry/Dockerhub handle)
+skaffold run
 ```
 
 - For building & deploying to Kind cluster use Kind profile
   
-```sh
-$ kind create cluster
-$ kubectl create ns fission
-$ make skaffold-prebuild # This builds all Go binaries required for Fission
-$ make create-crds
-$ skaffold run -p kind
+```console
+kind create cluster
+kubectl create ns fission
+make skaffold-prebuild # This builds all Go binaries required for Fission
+make create-crds
+skaffold run -p kind
 ```
 
 - If you want your new changes to reflect after skaffold deploy,
 
-```sh
-$ skaffold delete
-$ kubectl delete ns fission-function
-$ make skaffold-prebuild # This builds all Go binaries required for Fission
-$ skaffold run -p kind
+```console
+skaffold delete
+kubectl delete ns fission-function
+make skaffold-prebuild # This builds all Go binaries required for Fission
+skaffold run -p kind
 ```
 
 ## Validating Installation
@@ -187,10 +187,10 @@ Fetcher helps in fetching and uploading code and in specializing environments.
 Based on arguments you pass to fission-bundle - it becomes that component.
 For ex.
 
-```sh
-$ /fission-bundle --controllerPort "8888" # Runs Controller
+```console
+/fission-bundle --controllerPort "8888" # Runs Controller
 
-$ /fission-bundle --kubewatcher --routerUrl http://router.fission  # Runs Kubewatcher
+/fission-bundle --kubewatcher --routerUrl http://router.fission  # Runs Kubewatcher
 ```
 
 So, most server side components running on server side are fission-bundle binary wrapped in container and used with different arguments.
@@ -248,13 +248,11 @@ All definitions are defined in [pkg/apis/core/v1/types.go](https://github.com/fi
 
 ### Charts
 
-Fission currently has two charts - and we recommend using fission-all for development.
+Fission currently has `fission-all` for development.
 
 ```text
 charts
-├── README.md
-├── fission-all
-└── fission-core
+└── fission-all
 ```
 
 ### Environments

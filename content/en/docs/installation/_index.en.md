@@ -34,8 +34,8 @@ visit [here](https://kubernetes.io/docs/tasks/tools/install-kubectl/) to see how
 See [how to setup config correctly on different platforms]({{% ref "../trouble-shooting/setup/kubernetes.md" %}}#kubeconfig-for-connecting-to-cluster)
 Next, ensure you have access to a cluster.  Do this by using kubectl to check your Kubernetes version:
 
-```sh
-$ kubectl version
+```console
+kubectl version
 ```
 
 ## Helm v3
@@ -98,7 +98,6 @@ $ helm install --version {{% release-version %}} --namespace $FISSION_NAMESPACE 
 {{< tab "OpenShift without LoadBalancer" >}}
 
 Please visit [OpenShift]({{%ref "_index.en.md" %}}) for more detailed information.
-
 
 * Helm v3
 
@@ -235,9 +234,11 @@ $ curl -Lo fission https://github.com/fission/fission/releases/download/{{% rele
 
 {{< /tab >}}
 {{< tab "NixOS" >}}
+
 ```sh
 $ nix-env -iA nixos.fission
 ```
+
 {{< /tab >}}
 {{< tab "Windows" >}}
 For Windows, you can use the linux binary on WSL. Or you can download
