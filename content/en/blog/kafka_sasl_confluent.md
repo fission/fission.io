@@ -3,7 +3,7 @@ title: "Kafka connector with Confluent cloud"
 date: 2021-11-10T11:21:01+05:30
 author: Ankit Chawla
 categories: ["kafka","keda","confluent"]
-draft: true
+draft: false
 ---
 
 Confluent cloud is a popular kafka service which can be used to stream data to any cloud.
