@@ -81,7 +81,7 @@ fission pkg info --name <pkg-name>
 
 {{% notice info %}}
 
-For archive of package with size larger than 256KB, the package is uploaded to storage service. Double check `fission-storage-pvc` is properly setup if
+For archive of package with size larger than 256 KB, the package is uploaded to storage service. Double check `fission-storage-pvc` is properly setup if
 pkg `BUILD_STATUS` is not `succeeded`.
 
 {{% /notice %}}
@@ -499,7 +499,7 @@ For how to rebuild environment image, please visit [here](https://github.com/fis
 
 ### Resource usage
 
-By default, a function can use all resource on node it run on, however, other functions will be affected once a function takes too much resources.
+By default, a function can use all resource on node it runs on, however, other functions will be affected once a function takes too many resources.
 To prevent this, Fission allows users to specify a resource limitation for function.
 
 Following are flags to manage function resource usage limitation.
