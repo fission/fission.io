@@ -6,8 +6,10 @@ categories: ["kafka","keda","confluent"]
 draft: false
 ---
 
-Confluent cloud is a popular kafka service which can be used to stream data to any cloud.
-In this blog post, we will cover using kafka connector with sasl on [confluent cloud](https://www.confluent.io/).
+Confluent Cloud is a fully managed, cloud-native service for Apache Kafka. Managed Kafka offering helps you focus on connecting and processing data, anywhere you need it. You avoid hassle of infrastructure management.
+
+In this blog post, we will connect with Kafka cluster hosted in [Confluent Cloud](https://www.confluent.io/) using Fission Keda Kafka Connector with SASL SSL.
+Using Kafka Connector, we receive latest messages on our desired Kafka topics and process them with Fission functions.
 
 ## Prerequisites
 
@@ -18,44 +20,43 @@ In this blog post, we will cover using kafka connector with sasl on [confluent c
 
 ### Setup KEDA
 
-We will be deploying KEDA using Helm 3. For more installation options, checkout [deploying KEDA](https://keda.sh/docs/1.5/deploy/).
+We will be deploying KEDA using Helm 3. For more installation options, checkout [deploying KEDA](https://keda.sh/docs/latest/deploy/).
 
 1. Add Helm repo
-```
+```console
 $ helm repo add kedacore https://kedacore.github.io/charts
 ```
 2. Update Helm repo
-```
+```console
 $ helm repo update
 ```
 3. Install KEDA Helm chart
-```
+```console
 $ kubectl create namespace keda
 $ helm install keda kedacore/keda --namespace keda
 ```
 
 ### Setup Apache Kafka on Confluent cloud
 
-To setup Kafka on Confluent cloud, refer this [article](https://docs.confluent.io/cloud/current/get-started/index.html) till step 2.
-
+To setup Kafka on Confluent cloud, refer [Quick Start for Apache Kafka using Confluent Cloud](https://docs.confluent.io/cloud/current/get-started/index.html) till Step 2.
 
 ## Setup Kafka Connect
 
 ### Creating Kafka Topics
 
-You have to add the following topics in confluent cloud.
+You have to create the following topics in Confluent Cloud Kafka Cluster.
 
-- request-topic
-- response-topic
-- error-topic
+- `request-topic`
+- `response-topic`
+- `error-topic`
 
-To add, edit or delete kafka topics on the Confluent cloud, refer this [article](https://docs.confluent.io/cloud/current/client-apps/topics/manage.html).
+Refer [Managing Topics in Confluent Cloud](https://docs.confluent.io/cloud/current/client-apps/topics/manage.html) to add, edit or delete topics.
 
 ### Configuring kafka connect
 
-Here we create a Secret object(for SASL) and ConfigMap to configure kafka keda connector to use confluent.
+Here, we create a Secret object(for SASL authentication) and ConfigMap to configure the Kafka Keda Connector to use with Confluent.
 
-Update username and password in Secret object with the api_key and value you get when you create an api key. Update brokers in ConfigMap object. You would get this from Confluent Cloud cluster setting(Bootstrap Servers).
+Update `username` and `password` in the Secret object with the api_key and value you get when you create an api key. Update brokers in ConfigMap object. You would get this from Confluent Cloud cluster setting(Bootstrap Servers).
 
 Save the following file as kafka-config.yaml.
 
