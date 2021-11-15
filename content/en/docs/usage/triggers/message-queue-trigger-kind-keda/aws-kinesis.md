@@ -15,7 +15,7 @@ You will also need AWS Kinesis setup which is reachable from the Fission Kuberne
 
 If you want to setup Kinesis on the Kubernetes cluster, you can use the [information here](https://github.com/localstack/localstack) or you can create streams using your aws account [docs](https://aws.amazon.com/kinesis/data-streams/getting-started/?nc=sn&loc=3).  
 
-Also note that, if you are using localstack then it is only good for testing and dev environments and not for production usage. 
+Also note that, if you are using localstack then it is only good for testing and dev environments and not for production usage.
 
 ## Overview
 
@@ -51,56 +51,56 @@ For brevity all values have been hard coded in the code itself.
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strconv"
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "strconv"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/kinesis"
+    "github.com/aws/aws-sdk-go/aws"
+    "github.com/aws/aws-sdk-go/aws/credentials"
+    "github.com/aws/aws-sdk-go/aws/session"
+    "github.com/aws/aws-sdk-go/service/kinesis"
 )
 
 type message struct {
-	Content string `json:"content"`
+    Content string `json:"content"`
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	region := "ap-south-1"
-	config := &aws.Config{
-		Region:      &region,
-		Credentials: credentials.NewStaticCredentials("xxxxxxxxxxxx", "xxxxxxxxxx", ""),
-	}
+    region := "ap-south-1"
+    config := &aws.Config{
+        Region:      &region,
+        Credentials: credentials.NewStaticCredentials("xxxxxxxxxxxx", "xxxxxxxxxx", ""),
+    }
 
-	s, err := session.NewSession(config)
-	if err != nil {
-		w.Write([]byte(fmt.Sprintf("error creating a session: %v", err)))
-		return
-	}
+    s, err := session.NewSession(config)
+    if err != nil {
+        w.Write([]byte(fmt.Sprintf("error creating a session: %v", err)))
+        return
+    }
 
-	kc := kinesis.New(s)
-	for i := 11; i <= 20; i++ {
-		record, err := json.Marshal(&message{
-			Content: fmt.Sprintf("message count %v", i+1),
-		})
+    kc := kinesis.New(s)
+    for i := 11; i <= 20; i++ {
+        record, err := json.Marshal(&message{
+            Content: fmt.Sprintf("message count %v", i+1),
+        })
 
-		if err != nil {
-			w.Write([]byte(fmt.Sprintf("error marshaling the message: %v", err)))
-			return
-		}
-		params := &kinesis.PutRecordInput{
-			Data:         record,                      // required
-			PartitionKey: aws.String(strconv.Itoa(i)), // required
-			StreamName:   aws.String("request"),       // required
-		}
-		_, err = kc.PutRecord(params)
-		if err != nil {
-			w.Write([]byte(fmt.Sprintf("error putting a record: %v", err)))
-			return
-		}
-	}
-	w.Write([]byte("messages sent successfully"))
+        if err != nil {
+            w.Write([]byte(fmt.Sprintf("error marshaling the message: %v", err)))
+            return
+        }
+        params := &kinesis.PutRecordInput{
+            Data:         record,                      // required
+            PartitionKey: aws.String(strconv.Itoa(i)), // required
+            StreamName:   aws.String("request"),       // required
+        }
+        _, err = kc.PutRecord(params)
+        if err != nil {
+            w.Write([]byte(fmt.Sprintf("error putting a record: %v", err)))
+            return
+        }
+    }
+    w.Write([]byte("messages sent successfully"))
 }
 ```
 
@@ -142,8 +142,8 @@ module.exports = async function (context) {
 Let's create the environment and function:
 
 ```bash
-$ fission env create --name nodeenv --image fission/node-env
-$ fission fn create --name consumerfunc --env nodeenv --code hellokinesis.js
+fission env create --name nodeenv --image fission/node-env
+fission fn create --name consumerfunc --env nodeenv --code hellokinesis.js
 ```
 
 ### Connecting via trigger
@@ -153,9 +153,11 @@ Let's create a message queue trigger which will invoke the consumerfunc every ti
 The response will be sent to `response` stream and in case of consumerfunc invocation fails, the error is written to `error` stream.
 
 ```bash
-$ fission mqt create  --name kinesisdeployment --function helloworld --mqtype aws-kinesis-stream --topic request --resptopic response --mqtkind keda --errortopic error --maxretries 3 --metadata streamName=request --metadata shardCount=2 --metadata awsRegion=ap-south-1 --secret awsSecrets
+fission mqt create  --name kinesisdeployment --function helloworld --mqtype aws-kinesis-stream --topic request --resptopic response --mqtkind keda --errortopic error --maxretries 3 --metadata streamName=request --metadata shardCount=2 --metadata awsRegion=ap-south-1 --secret awsSecrets
 ```
+
 Parameter list:
+
 - streamName - Name of AWS Kinesis Stream
 - awsRegion - AWS Region for the Kinesis Stream
 - shardCount - The target value that a Kinesis data streams consumer can handle.
@@ -163,14 +165,18 @@ Parameter list:
 
 {{% notice info %}}
 if we are using localstack we don't have to give secret but if we are using aws to create kinesis stream we need to provide the secret, below is the example to create secret
+
 ```bash
- $ kubectl create secret generic awsSecrets --from-env-file=./secret.yaml
- ```
+kubectl create secret generic awsSecrets --from-env-file=./secret.yaml
+```
+
 and secret.yaml file should contain values like
+
 ```yaml
 AWS_ACCESS_KEY_ID=foo
 AWS_SECRET_ACCESS_KEY=bar
 ```
+
 {{% /notice %}}
 
 ### Testing it out
