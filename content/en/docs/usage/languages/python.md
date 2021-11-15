@@ -4,8 +4,7 @@ description: "Writing Python functions with fission"
 weight: 10
 ---
 
-Fission supports functions written in Python.
-Both Python 2.x and Python 3.x are supported.
+Fission supports functions written in Python3.7+.
 In this usage guide we'll cover how to set up and use a Python environment on Fission, write functions, and work with dependencies.
 We'll also cover basic troubleshooting.
 
@@ -17,7 +16,7 @@ If not, head over to the [installation guide]({{% ref "../../installation/_index
 Verify your Fission setup with:
 
 ```bash
-$ fission version
+fission version
 ```
 
 ### Add the Python environment to your cluster
@@ -27,7 +26,7 @@ An environment is the language-specific part of Fission.
 It has a container image in which your function will run.
 
 ```bash
-$ fission environment create --name python --image fission/python-env
+fission environment create --name python --image fission/python-env
 ```
 
 ### Create a simple function in Python
@@ -39,11 +38,10 @@ def main():
     return "Hello, world!"
 ```
 
-Create a Fission function (this uploads the file to Fission on the
-cluster):
+Create a Fission function (this uploads the file to Fission on the cluster):
 
 ```bash
-$ fission function create --name hello --env python --code hello.py 
+fission function create --name hello --env python --code hello.py 
 ```
 
 Invoke this function through the Fission CLI:
@@ -136,8 +134,7 @@ For form-encoded requests ( application/x-www-form-urlencoded), use `request.for
 
 For all other requests, use `request.data` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.data) to get the full request body as a string of bytes.
 
-You can find the full docs on the request object in [the flask
-docs](http://flask.pocoo.org/docs/1.0/api/#incoming-request-data).
+You can find the full docs on the request object in [the flask docs](http://flask.pocoo.org/docs/1.0/api/#incoming-request-data).
 
 #### Controlling HTTP Responses
 
@@ -205,7 +202,7 @@ Fission supports _builders_, which are language-specific containers that know ho
 To use a builder with your environment, create the environment with the --builder flag:
 
 ```sh
-$ fission env create --name python --image fission/python-env --builder fission/python-builder
+fission env create --name python --image fission/python-env --builder fission/python-builder
 ```
 
 #### A function with dependencies
@@ -257,7 +254,7 @@ pip3 install -r ${SRC_PKG}/requirements.txt -t ${SRC_PKG} && cp -r ${SRC_PKG} ${
 Make sure the `build.sh` file is executable:
 
 ```bash
-$ chmod +x build.sh
+chmod +x build.sh
 ```
 
 * Archive these files:
@@ -317,13 +314,13 @@ You can do this for dependencies that all your functions need, thus reducing the
 First, get a copy of the Fission source, which includes the Python environment:
 
 ```sh
-$ git clone https://github.com/fission/fission
+git clone https://github.com/fission/fission
 ```
 
 Get to the Python environment:
 
 ```sh
-$ cd fission/environments/python
+cd fission/environments/python
 ```
 
 To add package dependencies, edit `requirements.txt` to add what you need, and rebuild this image as follows:
@@ -333,21 +330,21 @@ To push your image you'll need access to a Docker registry.
 Let's assume you have a DockerHub account called "USER".  (You could use any other registry too.)
 
 ```sh
-$ docker build -t USER/python-env .
-$ docker push USER/python-env
+docker build -t USER/python-env .
+docker push USER/python-env
 ```
 
 Now you can use this image as your function runtime.
 You can re-create the environment, pointing the runtime at this image:
 
 ```sh
-$ fission env create --name python --image USER/python-env ...
+fission env create --name python --image USER/python-env ...
 ```
 
 Or just update it, if you already have an image:
 
 ```sh
-$ fission env update --name python --image USER/python-env ...
+fission env update --name python --image USER/python-env ...
 ```
 
 After this, functions that have the env parameter set to "python" will use this new customized image for running the functions.

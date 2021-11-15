@@ -51,12 +51,12 @@ $ curl nats.default.svc.cluster.local:8222
   <body>
     <img src="http://nats.io/img/logo.png" alt="NATS">
     <br/>
-	<a href=/varz>varz</a><br/>
-	<a href=/connz>connz</a><br/>
-	<a href=/routez>routez</a><br/>
-	<a href=/gatewayz>gatewayz</a><br/>
-	<a href=/leafz>leafz</a><br/>
-	<a href=/subsz>subsz</a><br/>
+    <a href=/varz>varz</a><br/>
+    <a href=/connz>connz</a><br/>
+    <a href=/routez>routez</a><br/>
+    <a href=/gatewayz>gatewayz</a><br/>
+    <a href=/leafz>leafz</a><br/>
+    <a href=/subsz>subsz</a><br/>
     <br/>
     <a href=https://docs.nats.io/nats-server/configuration/monitoring.html>help</a>
   </body>
@@ -84,9 +84,9 @@ All the files required are present [here](https://github.com/fission/keda-connec
 Steps for deploying producer function:
 
 ```sh
-$ docker build . -t producer:latest
-$ kind load docker-image producer:latest --name kind
-$ kubectl apply -f deployment.yaml //replicas is set to 0 when deployed
+docker build . -t producer:latest
+kind load docker-image producer:latest --name kind
+kubectl apply -f deployment.yaml //replicas is set to 0 when deployed
 ```
 
 [Go file](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/producer/main.go)
@@ -95,29 +95,29 @@ $ kubectl apply -f deployment.yaml //replicas is set to 0 when deployed
 package main
 
 import (
-	"fmt"
-	"log"
-	"strconv"
+    "fmt"
+    "log"
+    "strconv"
 
-	"github.com/nats-io/nats.go"
-	"github.com/nats-io/stan.go"
+    "github.com/nats-io/nats.go"
+    "github.com/nats-io/stan.go"
 )
 
 func main() {
-	nc, err := nats.Connect("nats://nats:4222")
-	if err != nil {
-		log.Fatal(err)
-	}
-	sc, err := stan.Connect("test-cluster", "stan-sub", stan.NatsConn(nc))
-	if err != nil {
-		log.Fatal(err)
-	}
-	for i := 100; i < 500; i++ {
-		sc.Publish("hello", []byte("Test"+strconv.Itoa(i)))
-	}
-	fmt.Println("Published all the messages")
+    nc, err := nats.Connect("nats://nats:4222")
+    if err != nil {
+        log.Fatal(err)
+    }
+    sc, err := stan.Connect("test-cluster", "stan-sub", stan.NatsConn(nc))
+    if err != nil {
+        log.Fatal(err)
+    }
+    for i := 100; i < 500; i++ {
+        sc.Publish("hello", []byte("Test"+strconv.Itoa(i)))
+    }
+    fmt.Println("Published all the messages")
 
-	select {}
+    select {}
 }
 ```
 
@@ -189,21 +189,21 @@ The consumer function is golang function which takes the body of the request, ap
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
+    "fmt"
+    "io/ioutil"
+    "net/http"
 )
 
 // Handler is the entry point for this fission function
 func Handler(w http.ResponseWriter, r *http.Request) {
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		http.Error(w, "Error reading request body",
-			http.StatusInternalServerError)
-	}
-	results := string(body)
-	fmt.Println(results)
-	w.Write([]byte("Hello " + results))
+    body, err := ioutil.ReadAll(r.Body)
+    if err != nil {
+        http.Error(w, "Error reading request body",
+            http.StatusInternalServerError)
+    }
+    results := string(body)
+    fmt.Println(results)
+    w.Write([]byte("Hello " + results))
 }
 
 ```
@@ -211,8 +211,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 Let's create the environment and function:
 
 ```bash
-$ fission environment create --name go --image fission/go-env-1.13 --builder fission/go-builder-1.13
-$ fission fn create --name helloworld --env go --src hello.go --entrypoint Handler
+fission environment create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+fission fn create --name helloworld --env go --src hello.go --entrypoint Handler
 ```
 
 ### Connecting via trigger
@@ -222,7 +222,7 @@ Let's create a message queue trigger which will invoke the consumerfunc every ti
 The response will be sent to `response` queue and in case of consumerfunc invocation fails, the error is written to `error` queue.
 
 ```bash
-$ fission mqt create --name natstest --function helloworld --mqtype stan --topic hello --resptopic response --mqtkind keda --errortopic error --maxretries 3 --metadata subject=hello --metadata queueGroup=grp1 --metadata durableName=due --metadata natsServerMonitoringEndpoint=nats.default.svc.cluster.local:8222 --metadata clusterId=test-cluster --metadata natsServer=nats://nats:4222
+fission mqt create --name natstest --function helloworld --mqtype stan --topic hello --resptopic response --mqtkind keda --errortopic error --maxretries 3 --metadata subject=hello --metadata queueGroup=grp1 --metadata durableName=due --metadata natsServerMonitoringEndpoint=nats.default.svc.cluster.local:8222 --metadata clusterId=test-cluster --metadata natsServer=nats://nats:4222
 ```
 
 Parameter list:
@@ -271,13 +271,13 @@ Let's introduce an error scenario - instead of consumer function returning a 200
 package main
 
 import (
-	"net/http"
+    "net/http"
 )
 
 // Handler is the entry point for this fission function
 func Handler(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "Error reading request body",
-			http.StatusNotFound)
+    http.Error(w, "Error reading request body",
+            http.StatusNotFound)
 }
 
 ```
@@ -285,9 +285,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 Update the function with new code and invoke the producer function:
 
 ```bash
-$ fission fn update --name consumerfunc --code hello.go
-$ kubectl scale --replicas=0 deployment/nats-pub
-$ kubectl scale --replicas=1 deployment/nats-pub
+fission fn update --name consumerfunc --code hello.go
+kubectl scale --replicas=0 deployment/nats-pub
+kubectl scale --replicas=1 deployment/nats-pub
 ```
 
 We can verify the message in error queue as we did earlier:

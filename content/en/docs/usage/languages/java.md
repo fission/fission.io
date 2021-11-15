@@ -14,7 +14,7 @@ If not, head over to the [install guide]({{% ref "../../installation/_index.en.m
 Verify your Fission setup with:
 
 ``` sh
-$ fission version
+fission version
 ```
 
 ### Add JVM environment to your cluster
@@ -24,7 +24,7 @@ An environment is the language-specific part of Fission.
 It has a container image in which your function will run.
 
 ``` sh
-$ fission environment create --name java --image fission/jvm-env --builder fission/jvm-builder
+fission environment create --name java --image fission/jvm-env --builder fission/jvm-builder
 ```
 
 ### Write a simple function in Java
@@ -184,7 +184,7 @@ For JVM environment you need to pass `--keeparchive` so that the jar file built 
 You also need to use version 2 or higher of environment.
 
 ```sh
-$ fission env create --name java --image fission/jvm-env --builder fission/jvm-builder --keeparchive --version 2
+fission env create --name java --image fission/jvm-env --builder fission/jvm-builder --keeparchive --version 2
 ```
 
 Next create a package with the builder environment by providing the source package.
@@ -336,8 +336,8 @@ spec:
 You can validate and apply the YAML to create the JVM environment with JVM options.
 
 ```bash
-$ fission spec validate
-$ fission spec apply
+fission spec validate
+fission spec apply
 ```
 
 ### Samples

@@ -14,8 +14,8 @@ We'll assume you have Fission and Kubernetes setup.
 If not, head over to the [install guide]({{% ref "../../installation/_index.en.md" %}}).
 Verify your Fission setup with:
 
-``` bash
-$ fission version
+```bash
+fission version
 ```
 
 ### Add the Go environment to your cluster
@@ -32,20 +32,18 @@ Please use the `fission release version` as image tag instead of `latest` when a
 $ fission environment create --name go --image fission/go-env:<release-version> --builder fission/go-builder:<release-version> --version 3
 
 # Example
-$ fission environment create --name go --image fission/go-env-1.12:{{% release-version %}} --builder fission/go-builder-1.12:{{% release-version %}}
+$ fission environment create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
 ```
 
 You can find all images and image tags at following table.
 
 #### Go environment image list
 
-| Go Version | Image | Builder Image | Go Module Support |
-|------------|------------|-----------|----------|
-| 1.9 | [fission/go-env](https://hub.docker.com/r/fission/go-env/tags) | [fission/go-builder](https://hub.docker.com/r/fission/go-builder/tags) |  | 
-| 1.11.4 | [fission/go-env-1.11.4](https://hub.docker.com/r/fission/go-env-1.11.4/tags) | [fission/go-builder-1.11.4](https://hub.docker.com/r/fission/go-builder-1.11.4/tags) | | |
-| 1.12 | [fission/go-env-1.12](https://hub.docker.com/r/fission/go-env-1.12/tags) | [fission/go-builder-1.12](https://hub.docker.com/r/fission/go-builder-1.12/tags) | V |
-| 1.13 | [fission/go-env-1.13](https://hub.docker.com/r/fission/go-env-1.13/tags) | [fission/go-builder-1.13](https://hub.docker.com/r/fission/go-builder-1.13/tags) | V |
-| 1.14 | [fission/go-env-1.14](https://hub.docker.com/r/fission/go-env-1.14/tags) | [fission/go-builder-1.14](https://hub.docker.com/r/fission/go-builder-1.14/tags) | V |
+| Go Version | Image | Builder Image |
+|------------|------------|-----------|
+| 1.14 | [fission/go-env-1.14](https://hub.docker.com/r/fission/go-env-1.14/tags) | [fission/go-builder-1.14](https://hub.docker.com/r/fission/go-builder-1.14/tags) |
+| 1.15 | [fission/go-env-1.15](https://hub.docker.com/r/fission/go-env-1.15/tags) | [fission/go-builder-1.15](https://hub.docker.com/r/fission/go-builder-1.15/tags) |
+| 1.16 | [fission/go-env-1.16](https://hub.docker.com/r/fission/go-env-1.16/tags) | [fission/go-builder-1.16](https://hub.docker.com/r/fission/go-builder-1.16/tags) |
 
 ### Write a simple function in Go
 
@@ -78,12 +76,12 @@ $ fission fn create --name helloworld --env go --src hw.go --entrypoint Handler
 Before accessing function, need to ensure deploy package of function is in _succeeded_ state.
 
 ```bash
-$ fission pkg info --name <pkg-name>
+fission pkg info --name <pkg-name>
 ```
 
 {{% notice info %}}
 
-For archive of package with size larger than 256KB, the package is upploaded to storage service. Double check `fission-storage-pvc` is properly setup if
+For archive of package with size larger than 256KB, the package is uploaded to storage service. Double check `fission-storage-pvc` is properly setup if
 pkg `BUILD_STATUS` is not `succeeded`.
 
 {{% /notice %}}
@@ -91,7 +89,7 @@ pkg `BUILD_STATUS` is not `succeeded`.
 Now, let's test our first Go function with `test` command
 
 ```bash
-$ fission fn test --name <function-name>
+fission fn test --name <function-name>
 ```
 
 {{% notice info %}}
@@ -140,7 +138,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 Let's create a HTTP trigger for the function we created above.
 
 ```bash
-$ fission httptrigger create --method GET --url "/<url>" --function <fn-namne>
+fission httptrigger create --method GET --url "/<url>" --function <fn-namne>
 ```
 
 ```bash
@@ -322,7 +320,7 @@ See full image list [here](#go-environment-image-list)
 
 #### Go module support
 
-Please use image version equal or after `fission/go-env-1.12`.
+Please use image version equal or after `fission/go-env-1.16`.
 
 Initialize your project
 
@@ -333,12 +331,12 @@ $ go mod init "<module>"
 $ go mod init "github.com/fission/fission/examples/go/go-module-example"
 ```
 
-Follow the [official guide](https://github.com/golang/go/wiki/Modules#daily-workflow) to add project dependencies. 
+Follow the [official guide](https://github.com/golang/go/wiki/Modules#daily-workflow) to add project dependencies.
 To clean and verify the dependencies you can:
 
 ```bash
-$ go mod tidy
-$ go mod verify
+go mod tidy
+go mod verify
 ```
 
 Archive and create package as usual
@@ -483,8 +481,8 @@ At this moment, the directory structure would be like:
 Archive source package.
 
 ```bash
-$ chmod +x customBuild.sh
-$ zip -r example.zip .
+chmod +x customBuild.sh
+zip -r example.zip .
 ```
 
 After editing custom build script, next step is to assign a build command for builder to know what command to run with.
@@ -499,10 +497,10 @@ Build timestamp: 1540566887
 
 For how to rebuild environment image, please visit [here](https://github.com/fission/environments/blob/master/go/README.md)
 
-### Resource usage 
+### Resource usage
 
-By default, a function can use all resource on node it run on, however, other functions will be affected once a function 
-takes too much resources. To prevent this, Fission allows users to specify a resource limitation for function. 
+By default, a function can use all resource on node it run on, however, other functions will be affected once a function takes too much resources.
+To prevent this, Fission allows users to specify a resource limitation for function.
 
 Following are flags to manage function resource usage limitation.
 

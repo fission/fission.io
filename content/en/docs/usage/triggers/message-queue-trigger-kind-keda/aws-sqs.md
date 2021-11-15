@@ -15,7 +15,7 @@ You will also need AWS SQS setup which is reachable from the Fission Kubernetes 
 
 If you want to setup SQS on the Kubernetes cluster, you can use the [information here](https://github.com/localstack/localstack) or you can create queue using your aws account [docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-setting-up.html).  
 
-Also note that, if you are using localstack then it is only good for testing and dev environments and not for production usage. 
+Also note that, if you are using localstack then it is only good for testing and dev environments and not for production usage.
 
 ## Overview
 
@@ -32,12 +32,13 @@ When communicating to localstack we need aws cli installed in the respactive con
 Below are the command to create and send the message to a queue
 
 ```bash
-$ aws sqs create-queue --queue-name input
-$ aws sqs create-queue --queue-name output
-$ aws sqs create-queue --queue-name error
-$ aws sqs list-queues
-$ aws sqs send-message --queue-url https://sqs.ap-south-1.amazonaws.com/xxxxxxxx/input --message-body 'Test Message!'
+aws sqs create-queue --queue-name input
+aws sqs create-queue --queue-name output
+aws sqs create-queue --queue-name error
+aws sqs list-queues
+aws sqs send-message --queue-url https://sqs.ap-south-1.amazonaws.com/xxxxxxxx/input --message-body 'Test Message!'
 ```
+
 {{% /notice %}}
 
 ## Building the app
@@ -51,40 +52,40 @@ For brevity all values have been hard coded in the code itself.
 package main
 ​
 import (
-	"fmt"
-	"log"
+    "fmt"
+    "log"
 ​
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/sqs"
+    "github.com/aws/aws-sdk-go/aws"
+    "github.com/aws/aws-sdk-go/aws/credentials"
+    "github.com/aws/aws-sdk-go/aws/session"
+    "github.com/aws/aws-sdk-go/service/sqs"
 )
 ​
 func Handler(w http.ResponseWriter, r *http.Request) {​
-	queueURL := "https://sqs.ap-south-1.amazonaws.com/xxxxxxxxxxxx/input"
-	region := "ap-south-1"
-	config := &aws.Config{
-		Region:      &region,
-		Credentials: credentials.NewStaticCredentials("xxxxxxxxxxxx", "xxxxxxxxxx", ""),
-	}
+    queueURL := "https://sqs.ap-south-1.amazonaws.com/xxxxxxxxxxxx/input"
+    region := "ap-south-1"
+    config := &aws.Config{
+        Region:      &region,
+        Credentials: credentials.NewStaticCredentials("xxxxxxxxxxxx", "xxxxxxxxxx", ""),
+    }
 ​
-	sess, err := session.NewSession(config)
-	if err != nil {
-		log.Panic("Error while creating session")
-	}
-	svc := sqs.New(sess)
+    sess, err := session.NewSession(config)
+    if err != nil {
+        log.Panic("Error while creating session")
+    }
+    svc := sqs.New(sess)
 ​
-	for i := 100; i < 200; i++ {
-		msg := fmt.Sprintf("Hello Msg %v", i+1)
-		_, err := svc.SendMessage(&sqs.SendMessageInput{
-			DelaySeconds: aws.Int64(10),
-			MessageBody:  &msg,
-			QueueUrl:     &queueURL,
-		})
-		if err != nil {
-			log.Panic("Error while writing message")
-		}
-	}
+    for i := 100; i < 200; i++ {
+        msg := fmt.Sprintf("Hello Msg %v", i+1)
+        _, err := svc.SendMessage(&sqs.SendMessageInput{
+            DelaySeconds: aws.Int64(10),
+            MessageBody:  &msg,
+            QueueUrl:     &queueURL,
+        })
+        if err != nil {
+            log.Panic("Error while writing message")
+        }
+    }
 }
 ```
 
@@ -131,8 +132,8 @@ module.exports = async function (context) {
 Let's create the environment and function:
 
 ```bash
-$ fission env create --name nodeenv --image fission/node-env
-$ fission fn create --name consumerfunc --env nodeenv --code hellosqs.js
+fission env create --name nodeenv --image fission/node-env
+fission fn create --name consumerfunc --env nodeenv --code hellosqs.js
 ```
 
 ### Connecting via trigger
@@ -142,23 +143,29 @@ Let's create a message queue trigger which will invoke the consumerfunc every ti
 The response will be sent to `output` queue and in case of consumerfunc invocation fails, the error is written to `error` queue.
 
 ```bash
-$ fission mqt create  --name sqstest --function consumerfunc --mqtype aws-sqs-queue --topic input --resptopic output --mqtkind keda --errortopic error --metadata queueURL=https://sqs.ap-south-1.amazonaws.com/xxxxxxxx/input --metadata awsRegion=ap-south-1 --secret awsSecrets
+fission mqt create  --name sqstest --function consumerfunc --mqtype aws-sqs-queue --topic input --resptopic output --mqtkind keda --errortopic error --metadata queueURL=https://sqs.ap-south-1.amazonaws.com/xxxxxxxx/input --metadata awsRegion=ap-south-1 --secret awsSecrets
 ```
+
 Parameter list:
+
 - queueURL - Full URL for the SQS Queue
 - awsRegion - AWS Region for the SQS Queue
 - secret - AWS credentials require to connect the queue e.g. below
 
 {{% notice info %}}
 If we are using localstack we don't have to give secret but if we are using aws SQS we need to provide the secret, below is the example to create secret
+
 ```bash
- $ kubectl create secret generic awsSecrets --from-env-file=./secret.yaml
- ```
+kubectl create secret generic awsSecrets --from-env-file=./secret.yaml
+```
+
 and secret.yaml file should contain values which should correspond with `parameter` name in `TriggerAuthentication.spec.secretTargetRef` like
+
 ```yaml
 awsAccessKeyID=foo 
 awsSecretAccessKey=bar
 ```
+
 {{% /notice %}}
 
 ### Testing it out
@@ -180,7 +187,6 @@ There are a couple of ways you can verify that the consumerfunc is called:
 ```
 
 - Go to aws SQS queue and check if messages are coming in output queue.
-
 
 ## Introducing an error
 
@@ -209,4 +215,3 @@ Successfully sent to input
 We can verify the message in error queue as we did earlier:
 
 - Go to aws SQS queue and check if messages are coming in error queue.
-
