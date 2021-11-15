@@ -15,7 +15,7 @@ If not, head over to the [install guide]({{% ref "../../installation/_index.en.m
 Verify your Fission setup with:
 
 ```bash
-$ fission version
+fission version
 ```
 
 ### Add the Nodejs runtime environment to your cluster
@@ -25,7 +25,7 @@ An environment is the language-specific part of Fission.
 It has a container image in which your function will run.
 
 ```bash
-$ fission environment create --name nodejs --image fission/node-env
+fission environment create --name nodejs --image fission/node-env
 ```
 
 ### Write a simple function in Nodejs
@@ -45,13 +45,13 @@ Create a function with the following command.
 Note that the value for `--env` flag is `nodejs` which was created with `fission env create` command above.
 
 ```bash
-$ fission function create --name hello-world --code helloWorld.js --env nodejs
+fission function create --name hello-world --code helloWorld.js --env nodejs
 ```
 
 Test the function with the below command and you should see "hello, world!" in the output:
 
 ```bash
-$ fission fn test --name hello-world
+fission fn test --name hello-world
 ```
 
 ### HTTP requests and HTTP responses
@@ -86,7 +86,7 @@ module.exports = async function(context) {
 Create a function with the following command.
 
 ```bash
-$ fission function create --name hello-world --code hello.js --env nodejs
+fission function create --name hello-world --code hello.js --env nodejs
 ```
 
 Create an HTTP trigger to invoke the function.
@@ -98,7 +98,7 @@ fission httptrigger create --url /hello-world --function hello-world
 Test the function with the below command and you should see "hello, world!" in the output
 
 ```bash
-$ curl HTTP://$FISSION_ROUTER/hello-world -H "X-Internal-Token: abcdefghtsdfjsldjf123"
+curl HTTP://$FISSION_ROUTER/hello-world -H "X-Internal-Token: abcdefghtsdfjsldjf123"
 ```
 
 ##### Query string
@@ -129,19 +129,19 @@ module.exports = async function(context) {
 Create a function with the following command:
 
 ```bash
-$ fission function create --name hello-user --code helloUser.js --env nodejs
+fission function create --name hello-user --code helloUser.js --env nodejs
 ```
 
 Create an HTTP trigger to invoke the function:
 
 ```bash
-$ fission httptrigger create --url /hello-user --function hello-user
+fission httptrigger create --url /hello-user --function hello-user
 ```
 
 Test the function with the below command and you should see "hello, foo!" in the output:
 
 ```bash
-$ curl HTTP://$FISSION_ROUTER/hello-user?user=foo
+curl HTTP://$FISSION_ROUTER/hello-user?user=foo
 ```
 
 ##### Body
@@ -168,19 +168,19 @@ module.exports = async function(context) {
 Create a function with the following command:
 
 ```bash
-$ fission function create --name job-status --code jobStatus.js --env nodejs
+fission function create --name job-status --code jobStatus.js --env nodejs
 ```
 
 Create an HTTP trigger to invoke the function:
 
 ```bash
-$ fission httptrigger create --url /job-status --function job-status --method POST
+fission httptrigger create --url /job-status --function job-status --method POST
 ```
 
 Invoke the function with a POST HTTP request with the appropriate JSON body and you will see the response "Successfully saved job status for job ID: 1234"
 
 ```bash
-$ curl -XPOST HTTP://$FISSION_ROUTER/job-status -d '{"job_id" : "1234", "job_status": "Passed"}'
+curl -XPOST HTTP://$FISSION_ROUTER/job-status -d '{"job_id" : "1234", "job_status": "Passed"}'
 ```
 
 Next lets see an example of writing a function which extracts a request body in the Plain Text format
@@ -202,19 +202,19 @@ module.exports = async function(context) {
 Create a function with the following command:
 
 ```bash
-$ fission function create --name word-count --code wordCount.js --env nodejs
+fission function create --name word-count --code wordCount.js --env nodejs
 ```
 
 Create an HTTP trigger to invoke the function
 
 ```bash
-$ fission httptrigger create --url /word-count --function word-count --method POST
+fission httptrigger create --url /word-count --function word-count --method POST
 ```
 
 Invoke the function with a POST HTTP request with a text body and you will see the count of number of words in the HTTP response.
 
 ```bash
-$ curl -XPOST -H "Content-Type: text/plain" HTTP://$FISSION_ROUTER/word-count -d '{"It's a beautiful day!"}'
+curl -XPOST -H "Content-Type: text/plain" HTTP://$FISSION_ROUTER/word-count -d '{"It's a beautiful day!"}'
 ```
 
 #### Controlling HTTP Responses
@@ -246,19 +246,19 @@ module.exports = async function(context) {
 Create a function with the following command:
 
 ```bash
-$ fission function create --name function-metadata --code functionMetadata.js --env nodejs
+fission function create --name function-metadata --code functionMetadata.js --env nodejs
 ```
 
 Create an HTTP trigger to invoke the function:
 
 ```bash
-$ fission httptrigger create --url /function-metadata --function function-metadata --method GET
+fission httptrigger create --url /function-metadata --function function-metadata --method GET
 ```
 
 Invoke the function with a '-v' flag on curl command to display all headers
 
 ```bash
-$ curl HTTP://$FISSION_ROUTER/function-metadata -v
+curl HTTP://$FISSION_ROUTER/function-metadata -v
 ```
 
 We can see the headers in the output as below
@@ -311,19 +311,19 @@ module.exports = async function(context) {
 Create a function with the following command.
 
 ```bash
-$ fission function create --name error-handling --code validateInput.js --env nodejs
+fission function create --name error-handling --code validateInput.js --env nodejs
 ```
 
 Create an HTTP trigger to invoke the function
 
 ```bash
-$ fission httptrigger create --url /error-handling --function error-handling --method POST
+fission httptrigger create --url /error-handling --function error-handling --method POST
 ```
 
 Invoke the function with this curl command where job_id is empty and you should see "job_id cannot be empty"
 
 ```bash
-$ curl -XPOST HTTP://$FISSION_ROUTER/error-handling -d '{"job_status": "Passed"}'
+curl -XPOST HTTP://$FISSION_ROUTER/error-handling -d '{"job_status": "Passed"}'
 ```
 
 ### Working with dependencies
@@ -342,7 +342,7 @@ Here's an example of using this image.
 First, create an environment with runtime image and builder image as follows:
 
 ```bash
-$ fission environment create --name nodejs --image fission/node-env --builder fission/node-builder
+fission environment create --name nodejs --image fission/node-env --builder fission/node-builder
 ```
 
 Next, create a file `momentExample.js` with the following content.
@@ -380,26 +380,26 @@ Next, create a zip archive of these 2 files with `zip node-source-example.zip mo
 Now create a fission source package with the zip file just created. This command outputs the name of the package created.
 
 ```bash
-$ fission package create --src node-source-example.zip --env nodejs
+fission package create --src node-source-example.zip --env nodejs
 ```
 
 Next, create a fission function with the package created above, let's assume the package name is 'node-source-example-abcd':
 
 ```bash
-$ fission function create --name node-builder-example --pkg node-source-example-abcd --env nodejs --entrypoint "momentExample"
+fission function create --name node-builder-example --pkg node-source-example-abcd --env nodejs --entrypoint "momentExample"
 ```
 
 If everything was successful so far, then, build status of the source package will be set to 'succeeded'.
 This can be checked with the following command.
 
 ```bash
-$ fission package info --name node-source-example-abcd
+fission package info --name node-source-example-abcd
 ```
 
 Next, test your function with the following and the output should have the current time.
 
 ```bash
-$ fission fn test --name node-builder-example
+fission fn test --name node-builder-example
 ```
 
 ##### Details of the fission nodejs builder image

@@ -36,51 +36,51 @@ For brevity all values have been hard coded in the code itself.
 package main
 ​
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strconv"
-	"time"
+    "context"
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "strconv"
+    "time"
 
-	"github.com/go-redis/redis/v8"
+    "github.com/go-redis/redis/v8"
 )
 
 type publish_data struct {
-	Sid  int    `json:"sid"`
-	Data string `json:"data"`
-	Time int64  `json:"time"`
+    Sid  int    `json:"sid"`
+    Data string `json:"data"`
+    Time int64  `json:"time"`
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 
-	address := "redis-headless.ot-operators.svc.cluster.local:6379"
-	password := ""
-	listName := "request-topic"
+    address := "redis-headless.ot-operators.svc.cluster.local:6379"
+    password := ""
+    listName := "request-topic"
 
-	var ctx = context.Background()
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     address,
-		Password: password,
-		DB:       0,
-	})
+    var ctx = context.Background()
+    rdb := redis.NewClient(&redis.Options{
+        Addr:     address,
+        Password: password,
+        DB:       0,
+    })
 
-	for i := 0; i < 10; i++ {
-		current_time := time.Now()
-		secs := current_time.Unix()
-		resp := publish_data{
-			Sid:  i,
-			Data: "Message number: " + strconv.Itoa(i+1),
-			Time: secs,
-		}
-		resp_json, _ := json.Marshal(resp)
-		_, err := rdb.RPush(ctx, listName, resp_json).Result()
-		if err != nil {
-			w.Write([]byte(fmt.Sprintf("Failed to publish message to topic %s: %v", listName, err)))
-			return
-		}
-	}
-	w.Write([]byte(fmt.Sprintf("Successfully sent to %s", listName)))
+    for i := 0; i < 10; i++ {
+        current_time := time.Now()
+        secs := current_time.Unix()
+        resp := publish_data{
+            Sid:  i,
+            Data: "Message number: " + strconv.Itoa(i+1),
+            Time: secs,
+        }
+        resp_json, _ := json.Marshal(resp)
+        _, err := rdb.RPush(ctx, listName, resp_json).Result()
+        if err != nil {
+            w.Write([]byte(fmt.Sprintf("Failed to publish message to topic %s: %v", listName, err)))
+            return
+        }
+    }
+    w.Write([]byte(fmt.Sprintf("Successfully sent to %s", listName)))
 }
 ```
 
@@ -96,7 +96,7 @@ $ go mod init
 $ go mod tidy
 $ zip -qr redis.zip *
 
-$ fission env create --name goenv --image fission/go-env-1.13 --builder fission/go-builder-1.13
+$ fission env create --name goenv --image fission/go-env-1.16 --builder fission/go-builder-1.16
 $ fission package create --env goenv --src redis.zip
 $ fission fn create --name producerfunc --env goenv --pkg redis-zip-zlre --entrypoint Handler
 $ fission package info --name redis-zip-zlre
@@ -125,8 +125,8 @@ module.exports = async function (context) {
 Let's create the environment and function:
 
 ```bash
-$ fission env create --name nodeenv --image fission/node-env
-$ fission fn create --name consumerfunc --env nodeenv --code hello.js
+fission env create --name nodeenv --image fission/node-env
+fission fn create --name consumerfunc --env nodeenv --code hello.js
 ```
 
 ### Connecting via trigger
@@ -136,7 +136,7 @@ Let's create a message queue trigger which will invoke the consumerfunc every ti
 The response will be sent to `response-topic` queue and in case of consumerfunc invocation fails, the error is written to `error-topic` queue.
 
 ```bash
-$ fission mqt create --name redistest --function consumerfunc --mqtype redis --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata address=redis-headless.ot-operators.svc.cluster.local:6379 --metadata listLength=10 --metadata listName=request-topic
+fission mqt create --name redistest --function consumerfunc --mqtype redis --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata address=redis-headless.ot-operators.svc.cluster.local:6379 --metadata listLength=10 --metadata listName=request-topic
 ```
 
 Parameter list:

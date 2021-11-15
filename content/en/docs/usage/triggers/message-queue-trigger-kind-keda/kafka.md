@@ -32,7 +32,8 @@ Before we dive into details, let's walk through overall flow of event and functi
 4. Fission Kafka trigger takes the response of consumer function (consumer) and drops the message in a response queue named `response-topic`.
    If there is an error, the message is dropped in error queue named `error-topic`.
 
-### Sample Apps 
+### Sample Apps
+
 We have two samples if you want to quickly try out the trigger.
 
 - [Keda Kafka Trigger Sample with Strimzi Kafka](https://github.com/fission/examples/tree/master/samples/kafka-keda)
@@ -174,7 +175,7 @@ $ go mod init
 $ go mod tidy
 $ zip -qr kafka.zip *
 
-$ fission env create --name go --image fission/go-env-1.16:1.32.1 --builder fission/go-builder-1.16:1.32.1
+$ fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
 $ fission package create --env go --src kafka.zip
 $ fission fn create --name producer --env go --pkg kafka-zip-s2pj --entrypoint Handler
 $ fission package info --name kafka-zip-s2pj
