@@ -11,7 +11,7 @@ Managed Kafka offering helps you focus on connecting and processing data, anywhe
 You avoid hassle of infrastructure management.
 
 In this blog post, we will connect with Kafka cluster hosted in [Confluent Cloud](https://www.confluent.io/) using Fission Keda Kafka Connector with SASL SSL.
-Using Kafka Connector, we receive latest messages on our desired Kafka topics and process them with Fission functions.
+Using Kafka Connector, we receive the latest messages on our desired Kafka topics and process them with Fission functions.
 
 ## Prerequisites
 
