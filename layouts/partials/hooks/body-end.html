@@ -1,0 +1,10 @@
+{{ with .Site.Params.algolia_docsearch }}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+apiKey: '546c199d400943e54815d691539af39d',
+indexName: 'fission',
+inputSelector: '.td-search-input',
+debug: false // Set debug to true if you want to inspect the dropdown
+});
+</script>
+{{ end }}
