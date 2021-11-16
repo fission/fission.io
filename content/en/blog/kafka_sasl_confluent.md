@@ -47,7 +47,7 @@ We will be deploying KEDA using Helm 3. For more installation options, checkout 
 
 To setup Kafka on Confluent cloud, refer [Quick Start for Apache Kafka using Confluent Cloud](https://docs.confluent.io/cloud/current/get-started/index.html) till Step 2.
 
-## Setup Kafka Connect
+## Setup Kafka Topics and Connection
 
 ### Creating Kafka Topics
 
@@ -59,7 +59,7 @@ You have to create the following topics in Confluent Cloud Kafka Cluster.
 
 Refer [Managing Topics in Confluent Cloud](https://docs.confluent.io/cloud/current/client-apps/topics/manage.html) to add, edit or delete topics.
 
-### Configuring kafka connect
+### Configuring Kafka Connection Details
 
 The connector requires API key and secret to connect to Confluent Cloud.
 In the Kafka Cluster Credentials section, click Generate Kafka API key & secret.
