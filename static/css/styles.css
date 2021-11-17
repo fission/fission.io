@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
 
 body {
     font-family: 'Lato', sans-serif;
@@ -265,7 +265,7 @@ ul {
     flex-direction: row;
     /* justify-content: center; */
     align-items: center;
-
+    
 }
 
 .card-header-custom img {
@@ -478,7 +478,7 @@ ul {
 }
 
 @media (max-width : 1199px) {
-
+    
     .no-show-hamburger {
         display: none;
     }
@@ -490,7 +490,7 @@ ul {
 
 
 @media (min-width: 320px) and (max-width: 990px) {
-
+  
     .show-desktop {
         display: none;
     }
@@ -498,7 +498,7 @@ ul {
     .show-mobile {
         display: block;
     }
-
+    
     .show-mobile-margin {
         margin-top: 30px;
     }
@@ -556,7 +556,7 @@ ul {
       .community-cards {
         background: unset;
     }
-
+  
   }
 
 

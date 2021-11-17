@@ -4,13 +4,6 @@ Add styles or override variables from the theme here.
 
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
-
-body {
-	font-family: 'Lato', sans-serif !important;
-	font-weight:300 !important;
-}
-
 $display1-weight: 500 !default;
 $display2-weight: 100 !default;
 
@@ -106,88 +99,37 @@ input[type="search"]::placeholder {
   margin: 0 30px;
 }
 
-.td-content > h1 { font-weight: 700; }
-.td-content > h2 { font-weight: 700; }
-.td-content > h3 { font-weight: 700; }
-.td-content > h4 { font-weight: 700; }
-.td-content > h5 { font-weight: 700; }
-.td-content > h6 { font-weight: 700; }
-.td-content > h7 { font-weight: 700; }
+.td-content > h1 { font-weight: 600; }
+.td-content > h2 { font-weight: 600; }
+.td-content > h3 { font-weight: 600; }
+.td-content > h4 { font-weight: 600; }
+.td-content > h5 { font-weight: 600; }
+.td-content > h6 { font-weight: 600; }
+.td-content > h7 { font-weight: 600; }
 
 // Custom CSS for homepage
 
 .hero {
   padding: 20px 0px 25px 0px;
   color: white;
-  background: rgb(33,39,73);
-  background: linear-gradient(130deg, #473782 50%, #2c2c62 70%);
+  background: #9775f3;
+  background: rgb(112, 85, 255);
+  background: url("/images/hero-bg.webp") no-repeat;
+  background-size: cover;
   margin-left: -15px;
   margin-right: -15px;
-  position: relative;
-  overflow: hidden;
-
-	.container {
-		position: relative;
-		z-index: 2;
-	}
-}
-
-@media (min-width: 992px) {
-  .hero {
-    padding: 130px 0 100px;
-  }
-
-  .hero-banner {
-    transform: scale(1.4) translateY(10%);
-  }
-
-}
-
-@media (min-width: 1170px) {
-	.hero {
-		&:before {
-			content: '';
-			width: 60vw;
-			height: 60vw;
-			display: block;
-			background: linear-gradient(90deg, rgba(42,24,102,1) 59%, rgba(44,44,98,1) 70%);
-			position: absolute;
-			left: -20vw;
-			top: -20vw;
-			transform: rotate(45deg);
-			border-radius: 10%;
-		}
-
-		&:after {
-			content: '';
-			width: 20vw;
-			height: 100vw;
-			display: block;
-			background: linear-gradient(-74deg, #2c2c62 50%, #3f3479 70%);
-			position: absolute;
-			left: 55vw;
-			bottom: -40vw;
-			z-index: 1;
-			transform: rotate(45deg);
-		}
-
-		.container {
-			position: relative;
-			z-index: 2;
-		}
-	}
 }
 
 .hero-title {
-  font-family: "Lato", sans-serif !important;
-  font-weight: 700 !important;
-  // margin-top: 80px;
-  font-size: 56px;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  margin-top: 80px;
+  font-size: 47px;
 }
 
-// .hero-banner {
-//   margin-top: 80px;
-// }
+.hero-banner {
+  margin-top: 80px;
+}
 
 .hero-big {
   background: rgb(112, 85, 255);
@@ -213,8 +155,12 @@ input[type="search"]::placeholder {
 
 .hero-mid {
   background: rgb(112, 85, 255);
-  background: linear-gradient(140deg,rgba(112, 85, 255, 1) 0%, rgba(140, 61, 180, 1) 100%);
-  padding: 16px 30px;
+  background: linear-gradient(
+    140deg,
+    rgba(112, 85, 255, 1) 0%,
+    rgba(140, 61, 180, 1) 100%
+  );
+  padding: 14px 26px;
   border-radius: 4px;
   border: none;
 
@@ -223,8 +169,8 @@ input[type="search"]::placeholder {
   justify-content: center;
   align-items: center;
 
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 700;
   color: white;
   margin: 30px 0px 10px 0px;
 }
@@ -239,16 +185,10 @@ input[type="search"]::placeholder {
   margin: 20px auto;
 }
 
-.td-navbar {
-	.nav-link {
-		font-weight: normal !important;
-	}
-}
-
 .section-title {
   color: #3b3c4c;
   font-weight: 700;
-  font-size: 46px;
+  font-size: 42px;
   margin: 12px 0px;
 }
 
@@ -257,7 +197,6 @@ input[type="search"]::placeholder {
   font-weight: 700;
   margin: 12px 0px;
   font-size: 18px;
-	line-height: 1.2;
 }
 
 .section-text {
@@ -289,22 +228,19 @@ input[type="search"]::placeholder {
   flex-direction: column;
 }
 
-.push-up .col-lg-4, .whats-new .col-lg-4,
-.community-cards .card-shadow, .community-cards.show-desktop  .col-lg-6{
-	margin-bottom: 20px;
-}
-
 .card-shadow {
   padding: 35px 30px 30px 30px;
   text-align: center;
-  box-shadow: 0 5px 10px 0 rgba(41,26,204,0.12);
+  box-shadow: 2px 2px 16px rgba(49, 50, 58, 0.15);
   border: none;
   border-radius: 6px;
-	height: 100%;
+
+  min-height: 370px;
+  margin-bottom: 15px;
 }
 
 .card-shadow .section-text-bold {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .card-shadow img {
@@ -313,36 +249,22 @@ input[type="search"]::placeholder {
 
 .card-shadow .section-text {
   color: #5a5b75;
-  font-size: 16px;
-	line-height: 1.5;
+  font-size: 14px;
 }
 
 .feature-card {
-  padding: 20px;
-  border-radius: 0;
-	height: 100%;
-	border: 1px solid #E8E8E8;
-  background-color: #FFFFFF;
-}
+  padding: 20px 30px 10px 30px;
+  border-radius: 6px;
 
-.feature-card .card-header-custom .section-text-bold {
-	font-size: 20px;
-	margin: 4px 0 0;
-}
-
-.feature-card p.section-text {
-	font-size: 15px;
-}
-
-.feature-card p:last-child {
-	margin-bottom: 0;
+  min-height: 280px;
+  margin-bottom: 15px;
 }
 
 .card-header-custom {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-	min-height: 58px;
+  /* justify-content: center; */
+  align-items: center;
 }
 
 .card-header-custom img {
@@ -379,59 +301,32 @@ input[type="search"]::placeholder {
 .whats-new {
   background: url("/images/whats-new-bg.webp") no-repeat;
   background-size: cover;
-	background-position: 0 -150px;
-}
-
-.whats-new .card-shadow {
-	height: 100%;
 }
 
 .whats-new .section-title {
   color: white;
   margin-bottom: 5px;
-	margin-top: 4rem
+  margin-top: 5;
 }
 
 .whats-new .card-shadow {
   background: white;
   padding: 25px 15px 15px 15px;
   min-height: unset;
-  box-shadow: 0 5px 10px 0 rgba(41,26,204,0.12);
-}
-
-.whats-new .card-shadow:hover {
-	box-shadow: 5px 10px 30px 0 rgba(41,26,204,0.12);
 }
 
 .whats-new .card-shadow-content {
   padding: 0px 12px;
 }
 
-.whats-new .card-shadow  button {
-	padding: 12px 22px !important;
-}
-
-@media (min-width: 992px) {
-	.whats-new .card-shadow  .section-text-bold {
-		min-height: 80px;
-	}
-
-	.whats-new .card-shadow  .section-text {
-		min-height: 122px;
-	}
-}
-
-
-
-
 .card-badge {
   background: #f2f0fb;
-  padding: 6px 15px;
+  padding: 5px 13px;
   text-transform: uppercase;
   border-radius: 5px;
   color: #5a5b75;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .card-shadow .hero-mid {
@@ -477,12 +372,6 @@ input[type="search"]::placeholder {
 
 .community-cards .card-header-custom {
   margin-right: auto;
-	display: flex;
-	align-items: center;
-}
-
-.community-cards .card-header-custom p.section-text-bold {
-	margin: 0;
 }
 
 .community-cards .card-shadow img {
@@ -571,10 +460,6 @@ input[type="search"]::placeholder {
 
 .feature-section .card {
   margin-bottom: 26px;
-}
-
-.feature-section .col-lg-4{
-	margin-bottom: 25px;
 }
 
 @media (max-width: 480px) {
