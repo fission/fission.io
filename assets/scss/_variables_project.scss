@@ -244,6 +244,7 @@ input[type="search"]::placeholder {
 	.nav-link {
 		font-weight: normal !important;
 		color: #f4f4f4 !important;
+		border-bottom: 1px solid transparent;
 		&:hover {
 			color: #fff !important;
 			border-bottom: 1px solid #E361FD;
@@ -252,7 +253,7 @@ input[type="search"]::placeholder {
 }
 
 .td-search-input::placeholder {
-	color: #fff !important
+	color: #fff !important;
 }
 
 .section-title {
