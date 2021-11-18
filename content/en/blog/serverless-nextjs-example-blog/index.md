@@ -15,7 +15,7 @@ You can refer to the [Next.js documentation](https://nextjs.org/docs) for more d
 
 ## Next.js Example Blog with Fission
 
-Next.js is gaining lot of popularity in serverless world.
+Next.js is gaining a lot of popularity in serverless world.
 Fission can be used to host a low traffic frontend website, with minimal cost and reduced maintenance.
 Fission can host your existing Next.js application with few modifications.
 
@@ -23,14 +23,14 @@ Fission recently launched support for prefixed path routing in [1.13.1 release](
 Using prefix path routing, a single Fission function can handle multiple routes.
 We use this feature to create a blog with Next.js.
 
-Lets do a walkthrough of how to deploy a Next.js application with Fission.
+Let's do a walkthrough of how to deploy a Next.js application with Fission.
 
 ## Get Next.js application running
 
 Typical Next.js application has a `pages` directory, which contains all the pages to be served.
-There are supplimentary directories such as `styles`, `data`, `components`, `public` etc which could be part of your Next.js application.
+There are supplimentary directories such as `styles`, `data`, `components`, `public` etc. which could be part of your Next.js application.
 
-We have a built demo blog application with Fission, source code is available on [Github](https://github.com/fission/examples/tree/master/samples/nextjs-blog-demo).
+We have a built demo blog application with Fission, source code is available on [GitHub](https://github.com/fission/examples/tree/master/samples/nextjs-blog-demo).
 
 Clone the [examples repository](https://github.com/fission/examples) first.
 
@@ -43,7 +43,7 @@ We will do a quick walkthrough of our code structure in Next.js blog.
 ├── next.config.js  # All the configuration for Next.js
 ├── package.json    # Node module dependencies
 ├── pages           # Code for all the pages
-├── public          # Static files like css, js, images
+├── public          # Static files like CSS, JS, images
 └── styles          # Styles for the blog
 ```
 
@@ -107,7 +107,7 @@ module.exports = async function (context, callback) {
 ```
 
 We also provide configuration with `next.config.js` file.
-Lets have look at our `next.config.js` file.
+Let's have look at our `next.config.js` file.
 
 ```js
 module.exports = {
@@ -157,7 +157,7 @@ fission env create --spec --name nodejs --image fission/node-env-16
 fission package create --spec --deploy nextjs-source.zip --env nodejs --name nextjs-source
 # Define function and entrypoint for our Next.js application
 fission fn create --spec --name nextjs-func --pkgname nextjs-source --entrypoint "app"
-# Create Fission route to access our Next.js application outside of Fission
+# Create route to access our Next.js application outside of Fission
 fission route create --spec --name next-blog --function nextjs-func \
     --method GET --method POST --prefix /nextapp  --keepprefix
 ```
