@@ -9,7 +9,7 @@ description: >
 Note: Fission upgrades cause a downtime as of now, however we try to minimize it. Please upvote the [issue#1856](https://github.com/fission/fission/issues/1856) so we can priortize fixing it.
 {{< /notice >}}
 
-## Upgrade to latest Fission version
+## Upgrade to the latest Fission version
 
 ### Upgrade/Replace the CRDs
 

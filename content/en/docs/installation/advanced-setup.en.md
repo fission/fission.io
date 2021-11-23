@@ -10,7 +10,7 @@ In this guide you will learn how to setup fission in order to serve heavy worklo
 ## Define Correct Resource Request/Limits
 
 By default, there is no resource requests/limits setting for fission component pods.
-But it's always wise set them up if you're trying to running any application on Kubernetes for production.
+But it's always wise set them up if you're trying to run any application on Kubernetes for production.
 We recommend that you run benchmarks to simulate real traffic and setup resource request/limits of components accordingly.
 
 You can get component pods resource usage by using the following command.
