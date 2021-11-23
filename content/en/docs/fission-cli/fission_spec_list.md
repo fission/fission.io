@@ -16,7 +16,7 @@ fission spec list [flags]
 ```
       --deployid string     --id |:|: Deployment ID for the spec deployment config
       --specdir string      Directory to store specs, defaults to ./specs
-      --specignore string   File containing specs to be ingored inside --specdir, defaults to .specignore
+      --specignore string   File containing specs to be ignored inside --specdir, defaults to .specignore
   -h, --help                help for list
 ```
 
