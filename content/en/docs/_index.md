@@ -35,23 +35,95 @@ Visit [concepts]({{% ref "./concepts/" %}}) for more details.
 
 ## Usage
 
-```bash
+{{< tabs "Run Fission Function" >}}
+{{< tab "Node.js function" >}}
+
+```sh
 # Add the stock NodeJS env to your Fission deployment
 $ fission env create --name nodejs --image fission/node-env
 
-# A javascript one-liner that prints "hello world"
-$ curl https://raw.githubusercontent.com/fission/examples/master/nodejs/hello.js > hello.js
+# A javascript function that prints "hello world"
+$ curl -LO https://raw.githubusercontent.com/fission/examples/master/nodejs/hello.js
 
 # Upload your function code to fission
-$ fission function create --name hello --env nodejs --code hello.js
+$ fission function create --name hello-js --env nodejs --code hello.js
 
-# Map GET /hello to your new function
-$ fission route create --method GET --url /hello --function hello
-
-# Run the function.  This takes about 100msec the first time.
-$ fission function test --name hello
+# Test your function.  This takes about 100msec the first time.
+$ fission function test --name hello-js
 Hello, world!
 ```
+
+{{< /tab >}}
+{{< tab "Python function" >}}
+
+```sh
+# Add the stock Python env to your Fission deployment
+$ fission env create --name python --image fission/python-env
+
+# A Python function that prints "hello world"
+$ curl -LO https://raw.githubusercontent.com/fission/examples/master/python/hello.py
+
+# Upload your function code to fission
+$ fission function create --name hello-py --env python --code hello.py
+
+# Test your function.  This takes about 100msec the first time.
+$ fission function test --name hello-py
+Hello, world!
+```
+
+{{< /tab >}}
+{{< tab "Go function" >}}
+
+```sh
+# Add the stock Go env to your Fission deployment
+$ fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+
+# A Go function that prints "hello world"
+$ curl -LO https://raw.githubusercontent.com/fission/examples/master/go/hello.go
+
+# Upload your function code to fission
+$ fission function create --name hello-go --env go --src hello.go --entrypoint Handler
+
+# Wait for your source code to be built, package status should be succeeded. This may take a few minutes.
+$ fission pkg list | grep hello-go
+hello-go-8bb933b5-b12b-499b-a951-ee2245c8f1b5 succeeded    go     23 Nov 21 10:55 IST
+
+# Test your function. This takes about 100msec the first time.
+$ fission function test --name hello-go
+Hello, world!
+```
+
+{{< /tab >}}
+{{< tab "Java function" >}}
+
+```sh
+# Add the stock Java env to your Fission deployment
+$ fission environment create --name java --image fission/jvm-env --builder fission/jvm-builder --keeparchive --version 3
+
+# A Java function that prints "hello world"
+$ mkdir -p src/main/java/io/fission/
+$ curl -L https://raw.githubusercontent.com/fission/examples/master/jvm/java/src/main/java/io/fission/HelloWorld.java \
+  -o src/main/java/io/fission/HelloWorld.java
+# pom.xml contains dependencies for the function.
+$ curl -LO https://raw.githubusercontent.com/fission/environments/master/jvm/examples/java/pom.xml
+
+# Upload your function code to fission via zip
+$ zip java-src-pkg.zip -r src/ pom.xml
+$ fission package create --name hello-pkg --env java --src java-src-pkg.zip
+Package 'hello-pkg' created
+
+# Wait for your source code to be built, package status should be succeeded. This may take a few minutes.
+$ fission pkg list | grep hello-pkg
+hello-pkg                                     succeeded    java   23 Nov 21 11:19 IST
+
+# Test your function. This takes about 100msec the first time.
+$ fission function create --name hello-java --env java --pkg hello-pkg --entrypoint io.fission.HelloWorld
+$ fission function test --name hello-java
+Hello World!
+```
+
+{{< /tab >}}
+{{< /tabs >}}
 
 ## Join Us
 
