@@ -32,6 +32,9 @@ enableMissingTranslationPlaceholders = true
 # Comment out to disable taxonomies in Docsy
 # disableKinds = ["taxonomy", "taxonomyTerm"]
 
+# First one is picked as the Twitter card image if not set on page.
+images = ["images/facebook-og-default-image.png"]
+
 # You can add your own taxonomies
 [taxonomies]
 author = "author"
