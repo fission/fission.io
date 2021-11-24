@@ -67,6 +67,9 @@ blog = "/blog/:slug/"
 [markup.goldmark.renderer]
 unsafe = true
 
+[markup.highlight]
+style = "tango"
+
 ## Configuration for BlackFriday markdown parser: https://github.com/russross/blackfriday
 [blackfriday]
 angledQuotes = false
