@@ -123,6 +123,9 @@ twitterurl = 'https://twitter.com/fissionio'
 
 notoc = true
 
+# First one is picked as the Twitter card image if not set on page.
+images = ["images/og-image-fission.png"]
+
 [params.social]
 github = 'fission'
 slackurl = "/slack"
