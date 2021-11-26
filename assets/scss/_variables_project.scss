@@ -511,6 +511,10 @@ input[type="search"]::placeholder {
   margin-top: 4px;
 }
 
+.community-cards a:hover .card-shadow {
+	box-shadow: 0 10px 11px rgba(41, 26, 204, .12);
+}
+
 .text-highlight {
   color: #8147d2;
 }
