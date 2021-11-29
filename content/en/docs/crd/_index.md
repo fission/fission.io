@@ -41,7 +41,7 @@ _Appears in:_
 
 
 
-Archive contains or references a collection of source or binary files.
+Archive contains or references a collection of sources or binary files.
 
 _Appears in:_
 - [PackageSpec](#packagespec)
@@ -49,7 +49,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `type` _[ArchiveType](#archivetype)_ | Type defines how the package is specified: literal or URL. Available value:  - literal  - url |
-| `literal` _integer array_ | Literal contents of the package. Can be used for encoding packages below TODO (256KB?) size. |
+| `literal` _integer array_ | Literal contents of the package. Can be used for encoding packages below TODO (256 KB?) size. |
 | `url` _string_ | URL references a package. |
 | `checksum` _[Checksum](#checksum)_ | Checksum ensures the integrity of packages referenced by URL. Ignored for literals. |
 
@@ -207,7 +207,7 @@ Environment is environment for building and running user functions.
 
 
 
-EnvironmentReference is a reference to a environment.
+EnvironmentReference is a reference to an environment.
 
 _Appears in:_
 - [FunctionSpec](#functionspec)
@@ -231,7 +231,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `version` _integer_ | Version is the Environment API version 
- Version "1" allows user to run code snippet in a file and it's supported by most of environments except tensorflow-serving. 
+ Version "1" allows user to run code snippet in a file, and it's supported by most of the environments except tensorflow-serving. 
  Version "2" supports downloading and compiling user function if source archive is not empty. 
  Version "3" is almost the same with v2, but you're able to control the size of pre-warm pool of the environment. |
 | `runtime` _[Runtime](#runtime)_ | Runtime is configuration for running function, like container image etc. |
@@ -258,7 +258,7 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `ExecutorType` _[ExecutorType](#executortype)_ | ExecutorType is the executor type of a function used. Defaults to "poolmgr". 
+| `ExecutorType` _[ExecutorType](#executortype)_ | ExecutorType is the executor type of function used. Defaults to "poolmgr". 
  Available value:  - poolmgr  - newdeploy  - container |
 | `MinScale` _integer_ | This is only for newdeploy to set up minimum replicas of deployment. |
 | `MaxScale` _integer_ | This is only for newdeploy to set up maximum replicas of deployment. |
@@ -412,8 +412,8 @@ _Appears in:_
 | `method` _string_ | Use Methods instead of Method. This field is going to be deprecated in a future release HTTP method to access a function. |
 | `methods` _string array_ | HTTP methods to access a function |
 | `functionref` _[FunctionReference](#functionreference)_ | FunctionReference is a reference to the target function. |
-| `createingress` _boolean_ | If CreateIngress is true, router will create a ingress definition. |
-| `ingressconfig` _[IngressConfig](#ingressconfig)_ | TODO: make IngressConfig a independent Fission resource IngressConfig for router to set up Ingress. |
+| `createingress` _boolean_ | If CreateIngress is true, router will create an ingress definition. |
+| `ingressconfig` _[IngressConfig](#ingressconfig)_ | TODO: make IngressConfig an independent Fission resource IngressConfig for router to set up Ingress. |
 
 
 #### IngressConfig
@@ -427,7 +427,7 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `annotations` _object (keys:string, values:string)_ | Annotations will be add to metadata when creating Ingress. |
+| `annotations` _object (keys:string, values:string)_ | Annotations will be added to metadata when creating Ingress. |
 | `path` _string_ | Path is for path matching. The format of path depends on what ingress controller you used. |
 | `host` _string_ | Host is for ingress controller to apply rules. If host is empty or "*", the rule applies to all inbound HTTP traffic. |
 | `tls` _string_ | TLS is for user to specify a Secret that contains TLS key and certificate. The domain name in the key and crt must match the value of Host field. |
@@ -446,7 +446,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `ExecutionStrategy` _[ExecutionStrategy](#executionstrategy)_ | ExecutionStrategy specifies low-level parameters for function execution, such as the number of instances. |
-| `StrategyType` _[StrategyType](#strategytype)_ | StrategyType is the strategy type of a function. Now it only supports 'execution'. |
+| `StrategyType` _[StrategyType](#strategytype)_ | StrategyType is the strategy type of function. Now it only supports 'execution'. |
 
 
 #### KubernetesWatchTrigger
