@@ -15,7 +15,7 @@ Fission is a fast, open source serverless framework for Kubernetes with a focus 
 Fission operates on _just the code_: Docker and Kubernetes are abstracted away under normal operation, though you can use both to extend Fission if you want to.
 
 Fission is extensible to any language; the core is written in Go, and language-specific parts are isolated in something called _environments_ (more below).
-Fission currently supports NodeJS, Python, Ruby, Go, PHP, Bash, and any Linux executable, with more languages coming soon.
+Fission currently supports NodeJS, Python, Go, Java, Ruby, PHP, Bash, and any Linux executable, with more languages coming soon.
 
 ## Performance: 100msec cold start
 
