@@ -6,3 +6,4 @@ resources/_gen
 *.~??~
 public/
 ebug/
+.hugo_build.lock
