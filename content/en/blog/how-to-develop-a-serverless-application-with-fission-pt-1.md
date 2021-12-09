@@ -252,7 +252,7 @@ dependencies in real world. To support this, here are couple steps to follow wit
 2. Archive all go files (include dependencies)
 3. Create function with ZIP file just created
 
-Let's use [vendor-example](https://github.com/fission/examples/tree/master/go/module-example) as demonstration. The structure of `vendor-example` looks like this
+Let's use [vendor-example](https://github.com/fission/fission/tree/master/examples/go/vendor-example) as demonstration. The structure of `vendor-example` looks like this
 ```bash
 vendor-example/
 ├── main.go

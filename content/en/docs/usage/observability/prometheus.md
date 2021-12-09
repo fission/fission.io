@@ -143,7 +143,7 @@ There are other more Fission metrics, which can be found under `Metrics` in the 
 
 With Grafana, visuals dashboards can be created to monitor multiple metrics in an organized way.
 
-You can refer to [this dashboard](https://github.com/fission/examples/blob/master/dashboards/prometheus-fission-functions.json) that shows log metrics from all the major components of Fission.
+You can refer to [Fission functions dashboard](https://github.com/fission/examples/blob/master/dashboards/prometheus-fission-functions.json) that shows log metrics from all the major components of Fission.
 
 Once imported, the dashboard will look similar to below image.
 
