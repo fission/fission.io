@@ -25,7 +25,7 @@ We'll be using Minikube to run Kubernetes locally (just as we did in the [previo
 
 ### Install Minikube
 
- Go ahead and follow the instructions to install Minikube [here](https://github.com/kubernetes/minikube).
+ Go ahead and follow the instructions to [install Minikube](https://github.com/kubernetes/minikube).
 
 After you have Minikube installed, launch your cluster by running the following command:			
 					
@@ -124,7 +124,7 @@ Finally, we can invoke our function, using this command:
 
 ## What's Next?
 
-Go ahead and try your hand at using Fission Functions for your own cool projects! Remember that you can use Fission with other languages. Try it out using NodeJS, Python, Ruby, or any of the other languages within our listed [environments](https://github.com/fission/fission/tree/master/environments)! Don't forget to tell us about what you made by tweeting us [@fissionio](http://twitter.com/fissionio), and feel free to ask questions on our Slack http://fissionio.slack.com.
+Go ahead and try your hand at using Fission Functions for your own cool projects! Remember that you can use Fission with other languages. Try it out using NodeJS, Python, Ruby, or any of the other languages within our listed [fission environments](https://environments.fission.io/)! Don't forget to tell us about what you made by tweeting us [@fissionio](http://twitter.com/fissionio), and feel free to ask questions on our Slack http://fissionio.slack.com.
 
 
 

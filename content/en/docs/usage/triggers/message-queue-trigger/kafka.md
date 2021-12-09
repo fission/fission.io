@@ -10,11 +10,11 @@ We'll assume you have Fission and Kubernetes installed with Kafka MQ integration
 If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
 
 You will also need Kafka setup which is reachable from the Fission Kubernetes cluster.
-If you want to setup Kafka on the Kubernetes cluster, you can use the [information here](https://github.com/fission/fission-kafka-sample/tree/master/00_setup).
+If you want to setup Kafka on the Kubernetes cluster, you can refer to this [Fission Kafka Example](https://github.com/fission/fission-kafka-sample#setup).
 
 ## Installation
 
-You can install Kafka through the incubator helm chart [here](https://github.com/helm/charts/tree/master/incubator/kafka).
+You can [install Kafka](https://github.com/helm/charts/tree/master/incubator/kafka) through the incubator helm chart .
 
 ## Overview
 
@@ -29,7 +29,7 @@ Before we dive into details, let's walk through overall flow of event and functi
 {{% notice info %}}
 Fission supports Kafka [record headers](https://issues.apache.org/jira/browse/KAFKA-4208).
 Make sure you set correct version of Kafka to `kafka.version` in values.yaml while installing Fission.
-For more details please refer to Extra configuration section [here](https://github.com/fission/fission/tree/master/charts/#extra-configuration-for-fission-all).
+For more details please refer to [Extra configuration](https://github.com/fission/fission/tree/master/charts/#extra-configuration-for-fission-all) section.
 {{% /notice %}}
 
 ## Building the app
@@ -150,7 +150,7 @@ $ fission mqt create --name kafkatest --function consumerfunc --mqtype kafka --t
 
 If your Kafka broker is running somewhere else (not at `broker.kafka:9092`), you will have to provide custom configuration for Kafka broker host while installing fission.
 You can do that by creating a config file, set the value of `kafka.brokers` to your broker URL and provide this config file while installing fission through helm using -f flag.
-You can refer this [link](https://github.com/fission/fission/blob/master/charts/fission-all/values.yaml) to find out more about this config parameter.
+Suggested reading about [helm chart config parameters](https://github.com/fission/fission/blob/master/charts/fission-all/values.yaml) 
 
 ### Testing it out
 

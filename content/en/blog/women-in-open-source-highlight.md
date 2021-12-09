@@ -85,7 +85,7 @@ Everyone supports each other, especially to the new-comers.
 
 **Twitter:** [@mary_grace](https://twitter.com/mary_grace)
 
-**Github:*** [github.com/mary-grace](https://github.coom/mary-grace)
+**Github:*** [github.com/mary-grace](https://github.com/mary-grace)
 
 
 _**What encouraged you to get into Open Source?**_

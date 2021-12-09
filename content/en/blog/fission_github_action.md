@@ -53,7 +53,7 @@ First, a quick overview of what goes on behind the scenes of the Fission GitHub 
 
 ## Building a workflow with the Fission GitHub Action
 
-Now using this Action - let’s build a simple workflow which will be triggered once there’s a code push and deploy/apply the functions. The workflow is defined in .github/main.workflow file in the same repository as code. You can check out more details and [options of GitHub workflow here](https://developer.github.com/actions/managing-workflows/workflow-configuration-options/)
+Now using this Action - let’s build a simple workflow which will be triggered once there’s a code push and deploy/apply the functions. The workflow is defined in .github/main.workflow file in the same repository as code. You can check out more details and [options of GitHub workflow here](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions)
 
 
 ```

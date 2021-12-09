@@ -273,10 +273,9 @@ Package 'java-src-pkg-zip-dqo5' created
 
 ### Modifying the environment images
 
-The JVM environment's source code is available [here](https://github.com/fission/fission/tree/master/environments/jvm).
-If you only want to add libraries to the OS or add some additional files etc. to environment, it would be easier to simply extend the official Fission JVM environment image and use it.
+If you only want to add libraries to the OS or add some additional files etc. to environment, it would be easier to simply extend the official [Fission JVM environment](https://github.com/fission/environments/tree/master/jvm) image and use it.
 
-The JVM builder image source code is [available here](https://github.com/fission/fission/tree/master/environments/jvm/builder) and could be extended or written from scratch to use other tools such as Gradle etc.
+The JVM builder image source code is [available here](https://github.com/fission/environments/tree/master/jvm) and could be extended or written from scratch to use other tools such as Gradle etc.
 It would be easier to extend the Fission official image and then add tools.
 
 ### Resource usage
@@ -342,5 +341,5 @@ fission spec apply
 
 ### Samples
 
-- The Fission Kafka sample is a complete application written in Java and uses Kafka to interact between functions. The source code and more information can be found [here](https://github.com/fission/fission-kafka-sample)
-- The Fission workflow sample uses [Fission workflows](https://github.com/fission/fission-workflows) and Java functions. The source code and more information can be found [here](https://github.com/fission/fission-workflow-sample)
+- The Fission Kafka sample is a complete application written in Java and uses Kafka to interact between functions. Refer to our [Fission Kakfa sample](https://github.com/fission/fission-kafka-sample) to know more.
+- The Fission workflow sample uses [Fission workflows](https://github.com/fission/fission-workflows) and Java functions. You can refer to the [fission workflow sample](https://github.com/fission/fission-workflow-sample) code to get started.

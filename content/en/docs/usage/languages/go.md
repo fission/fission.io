@@ -376,7 +376,7 @@ $ fission fn test --name foobar
 
 ### Custom builds
 
-If no custom build script included in source archive, by default builder manager will execute the [build.sh](https://github.com/fission/fission/tree/master/environments/go/builder) in go builder image.
+If no custom build script included in source archive, by default builder manager will execute the [build.sh](https://github.com/fission/environments/blob/master/go/builder/build.sh) in go builder image.
 In this part, we will go through how to run custom build script during the build process.
 
 Before we write our own script, we need to dive into the original build script to see what's useful inside.
@@ -495,7 +495,7 @@ Build timestamp: 1540566887
 
 ### Modifying/Rebuild the environment images
 
-For how to rebuild environment image, please visit [here](https://github.com/fission/environments/blob/master/go/README.md)
+Refer to our [Go environment guide for Fission](https://github.com/fission/environments/blob/master/go/README.md) to learn about rebuilding environment images.
 
 ### Resource usage
 
