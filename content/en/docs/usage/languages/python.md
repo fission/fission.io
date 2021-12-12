@@ -314,13 +314,13 @@ You can do this for dependencies that all your functions need, thus reducing the
 First, get a copy of the Fission source, which includes the Python environment:
 
 ```sh
-git clone https://github.com/fission/fission
+git clone https://github.com/fission/environments
 ```
 
 Get to the Python environment:
 
 ```sh
-cd fission/environments/python
+cd environments/python
 ```
 
 To add package dependencies, edit `requirements.txt` to add what you need, and rebuild this image as follows:
