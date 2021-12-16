@@ -5,10 +5,8 @@ description: >
   Component to spin up function pods
 ---
 
-## Brief Intro
-
 Executor is the component to spin up function pods for functions.
-When Router receives requests to a function, it checks whether a function service record exists in its cache.
+When [Router](/docs/architecture/router) receives requests to a function, it checks whether a function service record exists in its cache.
 If cache misses, the function service record was found or expired, it asks Executor to provide a new one.
 Executor then retrieves function information from Kubernetes CRD and invokes one of the executor types to spin up function pods.
 Once the function pods are up, a function service record that contains the address of a service/pod will be returned.
@@ -16,13 +14,11 @@ Router side caching of function service is not applicable in case of poolmanager
 
 Fission now supports two different executor types:
 
-* PoolManager
-* NewDeploy
+* [PoolManager](#poolmanager)
+* [New Deployment](#new-deployment)
 
 These two executor types have different strategies to launch, specialize, and manage pod(s).
 You should choose one of the executor types wisely based on the scenario.
-
-## Diagram
 
 {{< img "../assets/executor.png" "Fig.1 Executor" "40em" "1" >}}
 
@@ -57,8 +53,6 @@ To overcome this limitation, the `concurrency` field is introduced to control th
 
 [1] The cold start time depends on the package size of the function.
 If it's a snippet of code, the cold start time usually is less than 100ms.
-
-#### Diagram
 
 {{< img "../assets/poolmanager.png" "Fig.2 PoolManager" "50em" "1" >}}
 
@@ -96,8 +90,6 @@ When the function is invoked, there is no delay since the pod is already created
 Also minscale ensures that the pods are not cleaned up even if the function is idle.
 This is great for functions where lower latency is more important than saving resource consumption when functions are idle.
 
-#### Diagram
-
 {{< img "../assets/newdeploy.png" "Fig.3 NewDeploy" "50em" "1" >}}
 
 1. Router asks the service address of a function.
@@ -129,5 +121,5 @@ Autoscaling is useful for workloads where you expect intermittent spikes in work
 It also enables optimal the usage of resources to execute functions, by using a baseline capacity with minimum scale and ability to burst up to maximum scale based on spikes in demand.
 
 {{% notice info %}}
-Learn more further usage/setup of **executor type** for functions, please see [here]({{% ref "../usage/function/executor.en.md" %}}).
+Refer to our documentation on [Controlling Function Execution]({{% ref "../usage/function/executor.en.md" %}}) to learn more about **executor type**.
 {{% /notice %}}

@@ -5,12 +5,8 @@ description: >
   Record and persist function logs
 ---
 
-## Brief Intro
-
-Logger is deployed as DaemonSet to help to forward function logs to a centralized database service for log persistence.
+Logger is deployed as <a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/" target="_blank">DaemonSet</a> to help to forward function logs to a centralized database service for log persistence.
 Currently, only InfluxDB is supported to store logs.
-
-## Diagram
 
 {{< img "../assets/logger.png" "Fig.1 Logger" "45em" "1" >}}
 
