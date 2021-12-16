@@ -5,8 +5,8 @@ description: >
   Place to load and execute the user function
 ---
 
-Function Pod is for serving HTTP requests from the clients.
-It contains two containers: 
+Function Pod serves HTTP requests received from the clients.
+It consists of two containers: 
 * Fetcher
 * Environment Container
 

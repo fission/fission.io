@@ -5,8 +5,8 @@ description: >
   Place to build the user function
 ---
 
-Builder Pod is to build source archive into a deployment archive that is able to use in the function pod.
-It contains two containers:
+Builder pod builds the source archive and generates a deployment archive. This deployment archive is used by the [function pod](/docs/architecture/function-pod).
+It consists of two containers:
 * Fetcher
 * Builder Container
 
