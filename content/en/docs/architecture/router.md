@@ -5,14 +5,10 @@ description: >
   Bridge between triggers and functions
 ---
 
-## Brief Intro
-
 The router forwards HTTP requests to function pods.
-If there's no running service for a function, it requests one from executor, while holding on to the request; the router will forward the request to the pod once the function service is ready.
+If there's no running service for a function, it requests one from [executor](/docs/architecture/executor), while holding on to the request; the router will forward the request to the pod once the function service is ready.
 
 The router is the only stateless component and can be scaled up if needed, according to load.
-
-## Diagram
 
 {{< img "../assets/router.png" "Fig.1 Router" "45em" "1" >}}
 

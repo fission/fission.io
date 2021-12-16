@@ -5,12 +5,19 @@ description: >
   Place to build the user function
 ---
 
-## Brief Intro
+Builder pod builds the source archive and generates a deployment archive. This deployment archive is used by the [function pod](/docs/architecture/function-pod).
+It consists of two containers:
+* Fetcher
+* Builder Container
 
-Builder Pod is to build source archive into a deployment archive that is able to use in the function pod.
-It contains two containers: Fetcher and Builder Container.
+### Fetcher
 
-## Diagram
+Fetcher is responsible to pull source archive from the [StorageSvc](/docs/architecture/storagesvc/) and verify the checksum of file to ensure the integrity of file.
+After the build process, it uploads the deployment archive to StorageSvc.
+
+### Builder Container
+
+Builder Container compiles function source code into executable binary/files and is language-specific.
 
 {{< img "../assets/builder-pod.png" "Fig.1 Builder Pod" "50em" "1" >}}
 
@@ -23,11 +30,4 @@ Finally, save the result back to the share volume.
 
 6. Builder Manager asks Fetcher to upload the deployment archive.
 
-## Builder Container
 
-Builder Container compiles function source code into executable binary/files and is language-specific.
-
-## Fetcher
-
-Fetcher is responsible to pull source archive from the StorageSvc and verify the checksum of file to ensure the integrity of file.
-After the build process, it uploads the deployment archive to StorageSvc.

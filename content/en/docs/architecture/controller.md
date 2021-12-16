@@ -4,17 +4,12 @@ weight: 2
 description: >
   Accept REST API requests and create Fission resources
 ---
-
-## Brief Intro
-
 Controller is the component that the client talks to.
 It contains CRUD APIs for functions, triggers, environments, Kubernetes event watches, etc. and proxy APIs to internal 3rd-party services.
 
-All fission resources are stored in Kubernetes CRDs.
+All fission resources are stored in <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/" target="_blank">Kubernetes CRDs</a>.
 It needs to be able to talk to Kubernetes API service.
 To access CRDs in all namespaces, a service account with cluster-wide admin permission is used by Controller.
-
-## Diagram
 
 {{< img "../assets/controller.png" "Fig.1 Controller" "40em" "1" >}}
 

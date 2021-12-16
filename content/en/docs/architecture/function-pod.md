@@ -5,12 +5,19 @@ description: >
   Place to load and execute the user function
 ---
 
-## Brief Intro
+Function Pod serves HTTP requests received from the clients.
+It consists of two containers: 
+* Fetcher
+* Environment Container
 
-Function Pod is for serving HTTP requests from the clients.
-It contains two containers: Fetcher and Environment Container.
+### Fetcher
 
-## Diagram
+Fetcher is responsible to pull deployment archive from the [StorageSvc](/docs/architecture/storagesvc) and verify the checksum of file to ensure the integrity of file.
+
+### Environment Container
+
+Environment Container runs user-defined functions and is language-specific.
+Each environment container must contain an HTTP server and a loader for functions.
 
 {{< img "../assets/function-pod.png" "Fig.1 Function Pod" "50em" "1" >}}
 
@@ -20,12 +27,3 @@ It contains two containers: Fetcher and Environment Container.
 4. Call the specialized endpoint on the environment container to start function specialization.
 5. Environment Container loads the user function from the volume.
 6. Start serving the requests from Router.
-
-## Environment Container
-
-Environment Container runs user-defined functions and is language-specific.
-Each environment container must contain an HTTP server and a loader for functions.
-
-## Fetcher
-
-Fetcher is responsible to pull deployment archive from the StorageSvc and verify the checksum of file to ensure the integrity of file.
