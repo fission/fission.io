@@ -243,21 +243,10 @@ To install the operator, run:
 
 ```sh
 kubectl create namespace observability
-kubectl create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/crds/jaegertracing.io_jaegers_crd.yaml
-kubectl create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/service_account.yaml
-kubectl create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role.yaml
-kubectl create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role_binding.yaml
-kubectl create -n observability -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/operator.yaml
+kubectl create -n observability -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.29.1/jaeger-operator.yaml
 ```
 
-The operator will activate extra features if given cluster-wide permissions. To enable that, run:
-
-```sh
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/cluster_role.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/cluster_role_binding.yaml
-```
-
-Note that you'll need to download and customize the cluster_role_binding.yaml if you are using a namespace other than observability.
+Note that you'll need to download and customize the Role Bindings if you are using a namespace other than observability.
 
 Once the jaeger-operator deployment in the namespace observability is ready, create a Jaeger instance, like:
 
