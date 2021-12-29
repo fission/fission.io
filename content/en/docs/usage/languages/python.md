@@ -29,6 +29,8 @@ It has a container image in which your function will run.
 fission environment create --name python --image fission/python-env
 ```
 
+> **Note**: If your function references external libraries, modules or has dependencies, you will need to create a **custom image** for your Python environment. You can skip to [working with dependencies](#working-with-dependencies) section to understand more.
+
 ### Create a simple function in Python
 
 Create a file named `hello.py`:
