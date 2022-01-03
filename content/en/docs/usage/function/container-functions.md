@@ -11,7 +11,7 @@ With 1.14 release, Fission allows you to run your existing container as a functi
 
 #### Running container image with Fission
 
-`fission function run-container` provides required options to run an exiting container image as a Fission function.
+`fission function run-container` provides required options to run an existing container image as a Fission function.
 
 ```sh
 $ fission function run-container --name cn-hello --image gcr.io/google-samples/node-hello:1.0 --port 8080
