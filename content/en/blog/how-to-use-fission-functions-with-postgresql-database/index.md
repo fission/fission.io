@@ -1,27 +1,23 @@
 +++
-title = "How to use Fission functions with PostgreSQL database"
-date = "2021-12-27T12:28:34+05:30"
+title = "How to use PostgreSQL database with Fission functions"
+date = "2022-01-05T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Tutorial on how to use Fission functions with PostgreSQL database on Kubernetes Cluster."
 categories = ["Tutorial","Application","Python","Database"]
 type = "blog"
 +++
 
-Software development and deployment methods have evolved greatly over the years.
-From the times when system admins used to setup servers to run software applications to today when developers are not concerned about how the server is provisioned. Containers and container orchestration tools like Kubernetes help developers deploy serverless applications quickly.
-Similarly, serverless functions like [Fission](https://fission.io) help you focus on the code rather than the infrastructure.
-
-In this blog post, I'll show you how to use **Fission functions with PostgreSQL database**.
-
-{{< imgproc votingapp-fission-functions-with-postgresql-database.png Fit "1000X1000" >}}
-Voting App using Fission functions with PostgreSQL Database
+{{< imgproc postgresql-with-fission-functions.png Fit "1000X1000" >}}
+How to use PostgreSQL database with Fission functions
 {{< /imgproc >}}
+
+In today's blog post we will see how we can use Fission functions to connect to a PostgreSQL database and perform basic operations on it.
+By the end of this blog post, you would have learnt how to use PostgreSQL database with Fission functions.
 
 ## Voting App using Fission functions with PostgreSQL Database
 
 We will create a basic voting application that allows users to vote for an option and view the results.
 This application is written in **Python** and uses **PostgreSQL** database to store the results.
-By the end of this blog post, you would have learnt how to use PostgreSQL database with Fission functions.
 
 So let's get started!
 
@@ -51,35 +47,35 @@ Below are a few guides you can refer to for installing PostgreSQL:
 > *Note: If you have installed it using Helm Charts, please note down the service url and port number. This will be used to connect to the database from the function. You can get it by running  `helm status postgresql` in your terminal. You will get the following output.*
 
 ```bash
-    NAME: postgresql
-    LAST DEPLOYED: Tue Dec 21 16:50:16 2021
-    NAMESPACE: default
-    STATUS: deployed
-    REVISION: 1
-    TEST SUITE: None
-    NOTES:
-    CHART NAME: postgresql
-    CHART VERSION: 10.13.14
-    APP VERSION: 11.14.0
+NAME: postgresql
+LAST DEPLOYED: Tue Dec 21 16:50:16 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+CHART NAME: postgresql
+CHART VERSION: 10.13.14
+APP VERSION: 11.14.0
 
-    ** Please be patient while the chart is being deployed **
+** Please be patient while the chart is being deployed **
 
-    PostgreSQL can be accessed via port 5432 on the following DNS names from within your cluster:
+PostgreSQL can be accessed via port 5432 on the following DNS names from within your cluster:
 
-        postgresql.default.svc.cluster.local - Read/Write connection
+postgresql.default.svc.cluster.local - Read/Write connection
 
-    To get the password for "postgres" run:
+To get the password for "postgres" run:
 
-        export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
 
-    To connect to your database run the following command:
+To connect to your database run the following command:
 
-        kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:11.14.0-debian-10-r17 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgresql -U postgres -d postgres -p 5432
+kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:11.14.0-debian-10-r17 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgresql -U postgres -d postgres -p 5432
 
-    To connect to your database from outside the cluster execute the following commands:
+To connect to your database from outside the cluster execute the following commands:
 
-        kubectl port-forward --namespace default svc/postgresql 5432:5432 &
-        PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
+kubectl port-forward --namespace default svc/postgresql 5432:5432 &
+PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
 
 ```
 
@@ -88,22 +84,22 @@ Below are a few guides you can refer to for installing PostgreSQL:
 For this application, we have created a database named `votedb` and a table named `votebank`. You can use the following `sql` query to create the table:
 
 ``` sql
-    CREATE TABLE votebank (
-        id serial PRIMARY KEY,
-        voter_id VARCHAR ( 50 )  NOT NULL,
-        vote VARCHAR ( 50 ) NOT NULL
-    );
+CREATE TABLE votebank (
+id serial PRIMARY KEY,
+voter_id VARCHAR ( 50 )  NOT NULL,
+vote VARCHAR ( 50 ) NOT NULL
+);
 ```
 
 ``` sql
-                                    Table "public.votebank"
-  Column  |         Type          | Collation | Nullable |               Default                
+                                  Table "public.votebank"
+Column  |         Type          | Collation | Nullable |               Default                
 ----------+-----------------------+-----------+----------+--------------------------------------
- id       | integer               |           | not null | nextval('votebank_id_seq'::regclass)
- voter_id | character varying(50) |           | not null | 
- vote     | character varying(50) |           | not null | 
+id       | integer               |           | not null | nextval('votebank_id_seq'::regclass)
+voter_id | character varying(50) |           | not null | 
+vote     | character varying(50) |           | not null | 
 Indexes:
-    "votebank_pkey" PRIMARY KEY, btree (id)
+  "votebank_pkey" PRIMARY KEY, btree (id)
 
 ```
 
@@ -126,20 +122,20 @@ After this create a docker image and push it to your Docker hub repository.
 
 Building the docker image for our custom Python environment. *(Replace the username with your actual username on Docker Hub.)*
 
-``` dockerfile
+``` bash
 docker build -t username/python-postgres:latest --build-arg PY_BASE_IMG=3.7-alpine -f Dockerfile .
 ```
 
 Pushing the docker image to Docker Hub registry:
 
-``` dockerfile
+``` bash
 docker push username/python-postgres:latest
 ```
 
 #### Source Package Setup
 
 We will create two folders, `frontend` that will have the frontend related code, and `backend` that will have backend and database related code.
-Below is how the folders will look. 
+Below is how the folders will look.
 
 - `frontend`:
   - `frontend.py` - code to get and display votes.
@@ -165,13 +161,13 @@ We will create a zip file of both, `frontend` and backed `folders`.
 You can either zip them manually or create a bash script like the one below to do it for you.
 
 ```bash
-    pushd backend
-    zip -r ../backend.zip *
-    popd
+pushd backend
+zip -r ../backend.zip *
+popd
 
-    pushd frontend
-    zip -r ../frontend.zip *
-    popd
+pushd frontend
+zip -r ../frontend.zip *
+popd
 ```
 
 <br>
@@ -273,40 +269,40 @@ Read more about [Fission Spec](https://fission.io/docs/usage/spec/) to know more
 You can open a terminal and key in the all the following commands at once.
 
 ``` yaml
-    fission spec init
-    fission env create --name pythonsrc --image python-postgres --builder fission/python-builder:latest --spec
-    fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
-    fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
-    fission route create --name backend --method POST --url /castvote --function backend --spec
-    fission package create --name frontend-pkg --sourcearchive frontend.zip --env pythonsrc --spec
-    fission fn create --name frontend --pkg frontend-pkg --entrypoint "frontend.main" --spec
-    fission route create --name frontend --method POST --method GET --url /voteapp --function frontend --spec
+fission spec init
+fission env create --name pythonsrc --image python-postgres --builder fission/python-builder:latest --spec
+fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
+fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
+fission route create --name backend --method POST --url /castvote --function backend --spec
+fission package create --name frontend-pkg --sourcearchive frontend.zip --env pythonsrc --spec
+fission fn create --name frontend --pkg frontend-pkg --entrypoint "frontend.main" --spec
+fission route create --name frontend --method POST --method GET --url /voteapp --function frontend --spec
 ```
 
 This will create a `specs` folder with specs for each resource that is required to run this example of using Fission functions with PostgreSQL.
 
 ``` bash
-    fission spec init
-    fission env create --name pythonsrc --image atulinfracloud/python-postgres --builder fission/python-builder:latest --spec
-    fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
-    fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
-    fission route create --name backend --method POST --url /castvote --function backend --spec
-    fission package create --name frontend-pkg --sourcearchive frontend.zip --env pythonsrc --spec
-    fission fn create --name frontend --pkg frontend-pkg --entrypoint "frontend.main" --spec
-    fission route create --name frontend --method POST --method GET --url /voteapp --function frontend --spec
-    Creating fission spec directory 'specs'
-    poolsize setting default to 3
-    Saving Environment 'default/pythonsrc' to 'specs/env-pythonsrc.yaml'
-    Saving ArchiveUploadSpec '/backend-zip-TRdc' to 'specs/package-backend-pkg.yaml'
-    Saving Package 'default/backend-pkg' to 'specs/package-backend-pkg.yaml'
-    Warning: Function's environment is different than package's environment, package's environment will be used for creating function
-    Saving Function 'default/backend' to 'specs/function-backend.yaml'
-    Saving HTTPTrigger 'default/backend' to 'specs/route-backend.yaml'
-    Saving ArchiveUploadSpec '/frontend-zip-PDPu' to 'specs/package-frontend-pkg.yaml'
-    Saving Package 'default/frontend-pkg' to 'specs/package-frontend-pkg.yaml'
-    Warning: Function's environment is different than package's environment, package's environment will be used for creating function
-    Saving Function 'default/frontend' to 'specs/function-frontend.yaml'
-    Saving HTTPTrigger 'default/frontend' to 'specs/route-frontend.yaml'
+fission spec init
+fission env create --name pythonsrc --image atulinfracloud/python-postgres --builder fission/python-builder:latest --spec
+fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
+fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
+fission route create --name backend --method POST --url /castvote --function backend --spec
+fission package create --name frontend-pkg --sourcearchive frontend.zip --env pythonsrc --spec
+fission fn create --name frontend --pkg frontend-pkg --entrypoint "frontend.main" --spec
+fission route create --name frontend --method POST --method GET --url /voteapp --function frontend --spec
+Creating fission spec directory 'specs'
+poolsize setting default to 3
+Saving Environment 'default/pythonsrc' to 'specs/env-pythonsrc.yaml'
+Saving ArchiveUploadSpec '/backend-zip-TRdc' to 'specs/package-backend-pkg.yaml'
+Saving Package 'default/backend-pkg' to 'specs/package-backend-pkg.yaml'
+Warning: Function's environment is different than package's environment, package's environment will be used for creating function
+Saving Function 'default/backend' to 'specs/function-backend.yaml'
+Saving HTTPTrigger 'default/backend' to 'specs/route-backend.yaml'
+Saving ArchiveUploadSpec '/frontend-zip-PDPu' to 'specs/package-frontend-pkg.yaml'
+Saving Package 'default/frontend-pkg' to 'specs/package-frontend-pkg.yaml'
+Warning: Function's environment is different than package's environment, package's environment will be used for creating function
+Saving Function 'default/frontend' to 'specs/function-frontend.yaml'
+Saving HTTPTrigger 'default/frontend' to 'specs/route-frontend.yaml'
 
 ```
 
@@ -315,23 +311,23 @@ You can then run `fission spec apply`  command to have all the resources created
 > *Make sure you run `.\package.sh` before applying the spec as the .zip files are required to create the resources.*
 
 ``` bash
-    fission spec apply
-    DeployUID: a1a8cb83-4867-479c-9faa-f3356279633e
-    Resources:
-    * 2 Functions
-    * 1 Environments
-    * 2 Packages 
-    * 2 Http Triggers 
-    * 0 MessageQueue Triggers
-    * 0 Time Triggers
-    * 0 Kube Watchers
-    * 2 ArchiveUploadSpec
-    Validation Successful
-    Spec doesn't belong to Git Tree.
-    1 environment created: pythonsrc
-    2 packages created: backend-pkg, frontend-pkg
-    2 functions created: backend, frontend
-    2 HTTPTriggers created: backend, frontend
+fission spec apply
+DeployUID: a1a8cb83-4867-479c-9faa-f3356279633e
+Resources:
+* 2 Functions
+* 1 Environments
+* 2 Packages 
+* 2 Http Triggers 
+* 0 MessageQueue Triggers
+* 0 Time Triggers
+* 0 Kube Watchers
+* 2 ArchiveUploadSpec
+Validation Successful
+Spec doesn't belong to Git Tree.
+1 environment created: pythonsrc
+2 packages created: backend-pkg, frontend-pkg
+2 functions created: backend, frontend
+2 HTTPTriggers created: backend, frontend
 
 ```
 
