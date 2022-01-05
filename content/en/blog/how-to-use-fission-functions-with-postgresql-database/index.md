@@ -42,7 +42,6 @@ Below are a few guides you can refer to for installing PostgreSQL:
 - PostgreSQL Docker container - <a href="https://hub.docker.com/_/postgres" target="_blank">Docker Hub</a>
 - PostgreSQL HELM charts - <a href="https://bitnami.com/stack/postgresql/helm" target="_blank">Bitnami</a> - *used in this example*
 
-<br>
 
 > *Note: If you have installed it using Helm Charts, please note down the service url and port number. This will be used to connect to the database from the function. You can get it by running  `helm status postgresql` in your terminal. You will get the following output.*
 
@@ -111,7 +110,6 @@ Using PostgreSQL database with Fission functions require certain non-standard li
 Some of these require C extension to be present in the Python environment.
 Please refer to our [Fisson Python Environment](https://github.com/fission/environments/tree/master/python) guide and follow the steps to create a custom image.
 
-<br>
 
 In this case we need extra libraries like *postgresql-dev and libpq*.
 For this you need to update the `Dockerfile` and append these two libraries  in the `RUN` command.
@@ -150,7 +148,6 @@ Below is how the folders will look.
   - `build.sh` - bash script to process the requirements.txt.
   - `___init__.py` - standard Python init file.
 
-<br>
 
 You can view the complete source code [here](https://github.com/fission/examples/tree/master/python/votingapp).
 
@@ -170,7 +167,7 @@ zip -r ../frontend.zip *
 popd
 ```
 
-<br>
+
 
 ## Steps to use Fission functions with PostgreSQL database
 
