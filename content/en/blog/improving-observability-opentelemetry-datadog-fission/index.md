@@ -17,7 +17,7 @@ Amongst all such practices, **Observability** is going to be our point of discus
 
 Observability is all about gaining greater control and visibility over your application.
 It actually tells you what is really happening in your application.
-With most of the applications today adopting a microservices architecture, the applications have become complex with a lot of moving parts.
+With most of the applications today adopting a microservices-oriented architecture, the applications have become complex with a lot of moving parts.
 And hence observability is a key to build a robust and reliable system.
 **Logs**, **Metrics** and **Trace** are the **3 pillars of observability**. While logs and metrics are very helpful, trace allows you to traverse the entire journey of a request.
 
