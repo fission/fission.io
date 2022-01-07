@@ -5,6 +5,7 @@ author = "Atulpriya Sharma"
 description = "Tutorial on how to use Fission functions with PostgreSQL database on Kubernetes Cluster."
 categories = ["Tutorial","Application","Python","Database"]
 type = "blog"
+images = ["images/featured/postgresql-with-fission-functions.png"]
 +++
 
 {{< imgproc postgresql-with-fission-functions.png Fit "1000X1000" >}}

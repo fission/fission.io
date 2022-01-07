@@ -142,21 +142,21 @@ url = 'https://platform9.com/wp-content/uploads/2019/03/dzone-refcard-fissionio.
 
 [[params.whatsnew]]
 badge = 'BLOG'
-body = 'In this post we will look into how we can develop a simple a web socket based chat application using Fission functions.'
-heading = 'Fission WebSocket Sample'
+body = 'Learn how to use Fission functions with PostgreSQL database.'
+heading = 'Fission Functions with PostgreSQL Sample'
 [params.whatsnew.button]
 hero_class = 'mid-2'
-text = 'Read More!'
-url = '/blog/fission-websocket-sample/'
+text = 'Read More'
+url = '/blog/how-to-use-postgresql-database-with-fission-functions/'
 
 [[params.whatsnew]]
-badge = 'PODCAST'
-body = 'Soam Vasani – the creator of Fission – sat down with Jeffrey Meyerson from Software Engineering Daily podcast to talk all-things serverless and Kubernetes.'
-heading = 'Talking Serverless on Kubernetes with Software Engineering Dail'
+badge = 'BLOG'
+body = 'Tutorial to deploy Next.js applications with Fission.'
+heading = 'Next.js Application with Fission'
 [params.whatsnew.button]
 hero_class = 'mid-2'
-text = 'Listen Now!'
-url = 'https://platform9.com/blog/talking-serverless-on-kubernetes-with-software-engineering-daily'
+text = 'REad More'
+url = '/blog/serverless-next.js-example-blog-with-fission/'
 
 # User interface configuration
 [params.ui]
