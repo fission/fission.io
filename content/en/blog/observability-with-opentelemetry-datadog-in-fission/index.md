@@ -1,10 +1,11 @@
 +++
-title = "Improving Observability with OpenTelemetry & Datadog in Fission"
-date = "2022-01-04T11:30:34+05:30"
+title = "Observability with OpenTelemetry & Datadog in Fission"
+date = "2022-01-11T11:30:34+05:30"
 author = "Atulpriya Sharma"
-description = "Guide on how you can improve observability with OpenTelemetry & Datadog in Fission."
+description = "Tutorial to show how you can improve observability with OpenTelemetry & Datadog in Fission."
 categories = ["Tutorial","Application","Python","Observability"]
 type = "blog"
+images = ["images/featured/opentelemetry-datadog-fission-featured.png"]
 +++
 
 {{< imgproc opentelemetry-datadog-fission-featured.png Fit "1000X1000" >}}
@@ -30,12 +31,12 @@ That's where **OpenTelemetry** comes into the picture.
 
 OpenTelemetry gives us vendor-neutral APIs that helps us collect and export our traces to any 3rd party application.
 That means that OpenTelemetry will help you collect the traces and send it to any application that you want to by just changing the configuration.
-You can export your traces to applications like Prometheus, Jaeger, Datadog or anything else that you use.
+You can export your traces to applications like Jaeger, Datadog, Signoz or anything else that you use.
 
 **Datadog** on the other hand is an observability service for cloud applications.
 It allows you to monitor databases, servers, applications, tools & services.
 It provides you with multiple integration options from where we could send metrics, logs and trace data to Datadog.
-OpenTelemetry is one of the integrations that we can use to share traces from our application to Datadog.
+OpenTelemetry has Datadog integration which can be used to share traces from our application.
 
 ## Integrating OpenTelemetry & Datadog with Fission for enhanced Tracing
 
@@ -45,14 +46,14 @@ This example will show you how you can create custom traces in your Fission func
 The sample code is written in **Python** and uses **OpenTelemetry SDK** along with **Datadog** and **Fission**
 
 {{< imgproc architecture.png Fit "1000X1000" >}}
-Integrating OpenTelemetry & Datadog with Fission functions
+Architecture diagram of our app using Fission function, OpenTelemetry & Datadog
 {{< /imgproc >}}
 
 ## Pre Requisites
 
 As a developer, you already know that you simply cannot start coding without setting up the environment.
 So, let's look into the pre requisites that are required to send traces to Datadog using OpenTelemetry and Fission.
-The entire source code for this application can be found [here](https://github.com/fission/examples/tree/master/python/opentelemetry-datadog)
+The entire source code for this application can be found in our [OpenTelemetry Datadog Sample Repo](https://github.com/fission/examples/tree/master/python/opentelemetry-datadog).
 
 So let's get started!
 
@@ -146,14 +147,14 @@ data:
 ...
 ```
 
-> Note: The complete yaml configuration that you need to apply for `OpenTelemetry` to work correctly can be found in the `optel-config.yaml` file [here](https://github.com/fission/examples/blob/master/python/opentelemetry-datadog/optel-config.yaml).
+> Note: The complete yaml configuration that you need to apply for `OpenTelemetry` to work correctly can be found in the [optel-config.yaml](https://github.com/fission/examples/blob/master/python/opentelemetry-datadog/optel-config.yaml) file.
 > Use the command `kubectl apply -f optel-config.yaml` to apply the configuration.
 
 ### Datadog
 
 Since we are going to use **Datadog** for this example, we need to have a Datadog account.
 They offer multiple pricing plans, however the free tier is good enough for this example.
-You can register for a trial account [here](https://www.datadoghq.com/).
+You can register for a trial account by visiting [DatadogHQ](https://www.datadoghq.com/).
 
 Once you have the account, you need to generate an `API KEY` to autheticate our app to share trace data with Datadog.
 To get this, navigate to `Personal Settings -> Security -> Application Keys`.
