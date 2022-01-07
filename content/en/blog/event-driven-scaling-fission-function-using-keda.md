@@ -168,7 +168,7 @@ module gitub.com/therahulbhati/scalingfissionfunction
 
 go 1.15
 
-require github.com/Shopify/sarama v1.30.1
+require github.com/Shopify/sarama v1.29.0
 ```
 
 Let’s create the environment and function
