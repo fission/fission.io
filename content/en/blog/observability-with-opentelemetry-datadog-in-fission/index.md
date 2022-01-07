@@ -201,7 +201,7 @@ fission env create --name pythonoptel --image username/python-opentelemetry --bu
 
 Create source package.
 To create a source package you need to zip the source folder.
-Excecute the below command to generate the zip archive:
+Execute the below command to generate the zip archive:
 
 ```bash
 ./package.sh
