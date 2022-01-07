@@ -40,7 +40,7 @@ The rest of the post will walk through a step by step guide for using the new me
 
 ### Setup KEDA
 
-We will be deploying KEDA using Helm 3. For more installation options, checkout [deploying KEDA](https://keda.sh/docs/1.5/deploy/).
+We will be deploying KEDA using Helm 3. For more installation options, checkout [deploying KEDA](https://keda.sh/docs/2.5/deploy/).
 
 1. Add Helm repo
 ```
@@ -166,17 +166,14 @@ go.mod
 ```
 module gitub.com/therahulbhati/scalingfissionfunction
 
-go 1.12
+go 1.15
 
-require (
-	github.com/Shopify/sarama v1.23.1
-	gopkg.in/jcmturner/goidentity.v3 v3.0.0 // indirect
-)
+require github.com/Shopify/sarama v1.30.1
 ```
 
 Let’s create the environment and function
 ```
-$ fission environment create --name go --image fission/go-env-1.12:1.10.0 --builder fission/go-builder-1.12:1.10.0
+$ fission environment create --name go --image fission/go-env-1.15 --builder fission/go-builder-1.15
 $ fission fn create --name producer --env go --src producer.go --src go.mod --entrypoint Handler 
 ```
 
