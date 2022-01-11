@@ -5,7 +5,7 @@ description: >
   Environment variables used by Fission CLI
 ---
 
-## Namespace
+## Namespaces
 
 {{% notice info %}}
 You only need to set this if there are multiple Fission installations in **different namespaces** within the same Kubernetes cluster.
@@ -14,7 +14,12 @@ You only need to set this if there are multiple Fission installations in **diffe
 Set `FISSION_NAMESPACE` to the namespace where the Fission installed.
 
 ``` bash
-$ export FISSION_NAMESPACE <namespace>
+$ export FISSION_NAMESPACE=<namespace>
+```
+
+In case you've decided to use a separate namespace for functions, you also want to set `FISSION_FUNCTION_NAMESPACE`. It is the default case for `helm` installations to use `fission-function` namespace.
+``` bash
+$ export FISSION_FUNCTION_NAMESPACE=<namespace>
 ```
 
 ## Fission Router Address
