@@ -701,3 +701,20 @@ a {
       font-style: italic;
   }
 }
+
+
+.DocSearch-Hit-title mark {
+	padding: 0;
+}
+
+.DocSearch-Hit-icon svg {
+	vertical-align: top;
+}
+
+.DocSearch-Hits mark {
+	padding-left: 0;
+}
+
+.DocSearch-Hit-content-wrapper {
+	overflow-y: hidden;
+}
