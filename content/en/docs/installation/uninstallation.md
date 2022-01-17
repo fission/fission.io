@@ -6,7 +6,7 @@ description: >
   Uninstallation guide for Fission
 ---
 If you want to completely uninstall Fission from your cluster, the following command will help you do that.
-This might be required in situations where in you want to uninstall the current version and [install Fission](/docs/installation/index.html) as a fresh instance.
+This might be required in situations where in you want to uninstall the current version and [install Fission](/docs/installation/) as a fresh instance.
 
 ```bash
 helm delete --purge <release name>
@@ -19,7 +19,7 @@ The above command will *only delete the installed services*. Custom resources th
 Get a list of fission CRDs
 
 ```bash
-kubectl get crd
+kubectl get crd | grep "fission.io"
 ```
 
 ```bash
@@ -28,13 +28,8 @@ canaryconfigs.fission.io                   2022-01-17T05:47:28Z
 environments.fission.io                    2022-01-17T05:47:29Z
 functions.fission.io                       2022-01-17T05:47:29Z
 httptriggers.fission.io                    2022-01-17T05:47:29Z
-instrumentations.opentelemetry.io          2022-01-03T04:38:39Z
-issuers.cert-manager.io                    2022-01-03T04:36:14Z
-jaegers.jaegertracing.io                   2022-01-03T04:51:35Z
 kuberneteswatchtriggers.fission.io         2022-01-17T05:47:29Z
 messagequeuetriggers.fission.io            2022-01-17T05:47:29Z
-opentelemetrycollectors.opentelemetry.io   2022-01-03T04:38:39Z
-orders.acme.cert-manager.io                2022-01-03T04:36:15Z
 packages.fission.io                        2022-01-17T05:47:30Z
 timetriggers.fission.io                    2022-01-17T05:47:30Z
 
