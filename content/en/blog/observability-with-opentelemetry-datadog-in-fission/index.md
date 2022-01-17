@@ -8,10 +8,6 @@ type = "blog"
 images = ["images/featured/opentelemetry-datadog-fission-featured.png"]
 +++
 
-{{< imgproc opentelemetry-datadog-fission-featured.png Fit "1000X1000" >}}
-Integrating OpenTelemetry & Datadog with Fission functions
-{{< /imgproc >}}
-
 Software development isn’t just about writing a piece of code and running it.
 There are a lot of other processes around it that ensure that your code is going to work as expected in the real world.
 Amongst all such practices, **Observability** is going to be our point of discussion today.
@@ -37,6 +33,8 @@ You can export your traces to applications like Jaeger, Datadog, Signoz or anyth
 It allows you to monitor databases, servers, applications, tools & services.
 It provides you with multiple integration options from where we could send metrics, logs and trace data to Datadog.
 OpenTelemetry has Datadog integration which can be used to share traces from our application.
+
+{{< figure src="/images/featured/opentelemetry-datadog-fission-featured.png" alt="Observability with OpenTelemetry and Datadog in Fission" height="600" width="1000">}}
 
 ## Integrating OpenTelemetry & Datadog with Fission for enhanced Tracing
 
