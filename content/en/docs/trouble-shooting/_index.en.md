@@ -1,6 +1,6 @@
 ---
 title: "Troubleshooting"
-weight: 60
+weight: 5
 description: >
   Troubleshoot guides
 ---

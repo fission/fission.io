@@ -1,7 +1,7 @@
 ---
 title: "Installing Fission"
 linkTitle: Installation
-weight: 10
+weight: 1
 description: >
   Installation guide for Fission installation
 ---
