@@ -128,7 +128,7 @@ module.exports = async function (context) {
     let obj = context.request.body;
     return {
         status: 200,
-        body: "Received Message "+ JSON.stringify(obj)
+        body: "Consumer Response "+ JSON.stringify(obj)
     };
 }
 ```
@@ -197,31 +197,11 @@ Messages in the GCP Pub/Sub request queue
 
 If you've followed the tutorial correctly, the message queue trigger will be triggered and our `consumer` function will be invoked.
 
-Below should be the output that you should see:
+When the consumer function is invoked, it will process the message in the `request-topic` and push them to the `response-topic`.
+We can verify the same by checking the messages in the `response-topic` on the GCP console.
 
-```json
-Received Message {
-  data: b'<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta char...'
-  ordering_key: ''
-  attributes: {
-    "Content-Type": "application/json",
-    "KEDA-Error-Topic": "error-topic",
-    "KEDA-Response-Topic": "response-topic",
-    "KEDA-Source-Name": "gcptest",
-    "KEDA-Topic": "request-topic-sub"
-  }
-}.
-Received Message {
-  data: b'<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta char...'
-  ordering_key: ''
-  attributes: {
-    "Content-Type": "application/json",
-    "KEDA-Error-Topic": "error-topic",
-    "KEDA-Response-Topic": "response-topic",
-    "KEDA-Source-Name": "gcptest",
-    "KEDA-Topic": "request-topic-sub"
-  }
-```
+{{< img "../images/gcp-pub-sub-response-queue.png" "" "60em" "1" >}}
+Messages in the GCP Pub/Sub response queue
 
 ## Debugging
 
