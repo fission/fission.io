@@ -2,7 +2,7 @@
 title: "NATS Streaming"
 draft: false
 description: "Keda based Message Queue Trigger for NATS Streaming"
-weight: 4
+weight: 5
 ---
 
 This tutorial will demonstrate how to use a NATS Streaming trigger to invoke a function.
