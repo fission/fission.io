@@ -87,7 +87,7 @@ Specifies how frequently user traffic needs to be incremented for the new versio
 
 ### Environment
 
-Environments provide a run time which is used to execute Fission functions. Currently Fission supports pre-built environments that include NodeJS, Python3, Go, JVM, Ruby, Binary, PHP, .NET and Pearl.
+Environments provide a run time which is used to execute Fission functions. Currently, Fission supports pre-built environments that include NodeJS, Python3, Go, JVM, Ruby, Binary, PHP, .NET and Pearl.
 
 ### Executor
 
@@ -103,7 +103,7 @@ Specifies the threshold in percentage beyond which the new version of a function
 
 ### Failure Type - *Canary Config*
 
-Specifies the parameter for checking the health of the new version of a function. *For now, the only supported type is status-code which is the http status code. So if a function returns a status code other than 200, its considered to be unhealthy.*
+Specifies the parameter for checking the health of the new version of a function. *For now, the only supported type is status-code which is the http status code. So if a function returns a status code other than 200, it is considered to be unhealthy.*
 
 ### Fetcher
 
@@ -137,7 +137,7 @@ Function pod is where a Fission function is loaded and executed. A function pod 
 
 ### HTTP Trigger / Route
 
-It is a type of trigger that invokes a Fission function whenever there is an HTTP request. You can specify a relative URL and HTTP method for a HTTP trigger.
+It is a type of trigger that invokes a Fission function whenever there is an HTTP request. You can specify a relative URL and HTTP method for an HTTP trigger.
 
 ---
 
@@ -263,7 +263,7 @@ This is a file that lists down all the external 3rd party modules, libraries tha
 
 ### Router
 
-Router is responsible for forwarding HTTP requests to functions pods.
+Router is responsible for forwarding HTTP requests to function pods.
 
 ### Runtime
 
@@ -281,7 +281,7 @@ Specifications (*specs*) are YAML files that are used to instruct Fission CLI ab
 
 ### Storage Service
 
-The storage service is the home for all archives of packages with sizes larger than 256KB.
+The storage service is the home for all archives of packages with sizes larger than 256 KB.
 
 ## T
 
