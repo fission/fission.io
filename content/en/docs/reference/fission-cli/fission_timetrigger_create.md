@@ -1,6 +1,7 @@
 ---
 title: fission timetrigger create
 slug: fission_timetrigger_create
+url: /docs/reference/fission-cli/fission_timetrigger_create/
 ---
 ## fission timetrigger create
 

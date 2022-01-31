@@ -1,6 +1,7 @@
 ---
 title: fission httptrigger create
 slug: fission_httptrigger_create
+url: /docs/reference/fission-cli/fission_httptrigger_create/
 ---
 ## fission httptrigger create
 

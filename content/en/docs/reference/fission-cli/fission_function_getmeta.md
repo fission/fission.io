@@ -1,6 +1,7 @@
 ---
 title: fission function getmeta
 slug: fission_function_getmeta
+url: /docs/reference/fission-cli/fission_function_getmeta/
 ---
 ## fission function getmeta
 

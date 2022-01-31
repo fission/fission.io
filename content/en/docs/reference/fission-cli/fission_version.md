@@ -1,6 +1,7 @@
 ---
 title: fission version
 slug: fission_version
+url: /docs/reference/fission-cli/fission_version/
 ---
 ## fission version
 

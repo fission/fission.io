@@ -1,6 +1,7 @@
 ---
 title: fission function test
 slug: fission_function_test
+url: /docs/reference/fission-cli/fission_function_test/
 ---
 ## fission function test
 

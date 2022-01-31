@@ -1,6 +1,7 @@
 ---
 title: fission spec apply
 slug: fission_spec_apply
+url: /docs/reference/fission-cli/fission_spec_apply/
 ---
 ## fission spec apply
 

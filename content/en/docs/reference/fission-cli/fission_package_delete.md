@@ -1,6 +1,7 @@
 ---
 title: fission package delete
 slug: fission_package_delete
+url: /docs/reference/fission-cli/fission_package_delete/
 ---
 ## fission package delete
 

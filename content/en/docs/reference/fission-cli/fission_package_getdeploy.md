@@ -1,6 +1,7 @@
 ---
 title: fission package getdeploy
 slug: fission_package_getdeploy
+url: /docs/reference/fission-cli/fission_package_getdeploy/
 ---
 ## fission package getdeploy
 

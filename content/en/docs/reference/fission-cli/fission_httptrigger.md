@@ -1,6 +1,7 @@
 ---
 title: fission httptrigger
 slug: fission_httptrigger
+url: /docs/reference/fission-cli/fission_httptrigger/
 ---
 ## fission httptrigger
 

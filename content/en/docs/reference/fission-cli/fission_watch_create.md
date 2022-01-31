@@ -1,6 +1,7 @@
 ---
 title: fission watch create
 slug: fission_watch_create
+url: /docs/reference/fission-cli/fission_watch_create/
 ---
 ## fission watch create
 

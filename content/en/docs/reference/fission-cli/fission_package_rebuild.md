@@ -1,6 +1,7 @@
 ---
 title: fission package rebuild
 slug: fission_package_rebuild
+url: /docs/reference/fission-cli/fission_package_rebuild/
 ---
 ## fission package rebuild
 

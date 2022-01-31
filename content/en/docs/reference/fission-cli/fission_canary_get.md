@@ -1,6 +1,7 @@
 ---
 title: fission canary get
 slug: fission_canary_get
+url: /docs/reference/fission-cli/fission_canary_get/
 ---
 ## fission canary get
 

@@ -1,6 +1,7 @@
 ---
 title: fission function delete
 slug: fission_function_delete
+url: /docs/reference/fission-cli/fission_function_delete/
 ---
 ## fission function delete
 

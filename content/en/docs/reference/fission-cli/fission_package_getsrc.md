@@ -1,6 +1,7 @@
 ---
 title: fission package getsrc
 slug: fission_package_getsrc
+url: /docs/reference/fission-cli/fission_package_getsrc/
 ---
 ## fission package getsrc
 

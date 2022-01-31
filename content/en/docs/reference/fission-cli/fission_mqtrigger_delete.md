@@ -1,6 +1,7 @@
 ---
 title: fission mqtrigger delete
 slug: fission_mqtrigger_delete
+url: /docs/reference/fission-cli/fission_mqtrigger_delete/
 ---
 ## fission mqtrigger delete
 

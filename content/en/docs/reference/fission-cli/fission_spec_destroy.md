@@ -1,6 +1,7 @@
 ---
 title: fission spec destroy
 slug: fission_spec_destroy
+url: /docs/reference/fission-cli/fission_spec_destroy/
 ---
 ## fission spec destroy
 

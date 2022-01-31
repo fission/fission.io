@@ -1,6 +1,7 @@
 ---
 title: fission spec
 slug: fission_spec
+url: /docs/reference/fission-cli/fission_spec/
 ---
 ## fission spec
 

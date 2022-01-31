@@ -1,6 +1,7 @@
 ---
 title: fission spec validate
 slug: fission_spec_validate
+url: /docs/reference/fission-cli/fission_spec_validate/
 ---
 ## fission spec validate
 

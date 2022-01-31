@@ -1,6 +1,7 @@
 ---
 title: fission timetrigger showschedule
 slug: fission_timetrigger_showschedule
+url: /docs/reference/fission-cli/fission_timetrigger_showschedule/
 ---
 ## fission timetrigger showschedule
 

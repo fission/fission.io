@@ -1,6 +1,7 @@
 ---
 title: fission function get
 slug: fission_function_get
+url: /docs/reference/fission-cli/fission_function_get/
 ---
 ## fission function get
 

@@ -1,6 +1,7 @@
 ---
 title: fission support
 slug: fission_support
+url: /docs/reference/fission-cli/fission_support/
 ---
 ## fission support
 

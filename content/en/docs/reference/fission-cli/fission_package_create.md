@@ -1,6 +1,7 @@
 ---
 title: fission package create
 slug: fission_package_create
+url: /docs/reference/fission-cli/fission_package_create/
 ---
 ## fission package create
 

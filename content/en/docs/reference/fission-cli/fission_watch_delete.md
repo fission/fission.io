@@ -1,6 +1,7 @@
 ---
 title: fission watch delete
 slug: fission_watch_delete
+url: /docs/reference/fission-cli/fission_watch_delete/
 ---
 ## fission watch delete
 

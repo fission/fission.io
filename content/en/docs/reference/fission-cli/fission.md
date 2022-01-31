@@ -1,6 +1,7 @@
 ---
 title: fission
 slug: fission
+url: /docs/reference/fission-cli/fission/
 ---
 ## fission
 

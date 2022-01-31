@@ -1,6 +1,7 @@
 ---
 title: fission timetrigger update
 slug: fission_timetrigger_update
+url: /docs/reference/fission-cli/fission_timetrigger_update/
 ---
 ## fission timetrigger update
 

@@ -1,6 +1,7 @@
 ---
 title: fission spec init
 slug: fission_spec_init
+url: /docs/reference/fission-cli/fission_spec_init/
 ---
 ## fission spec init
 

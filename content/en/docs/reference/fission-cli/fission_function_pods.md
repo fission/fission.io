@@ -1,6 +1,7 @@
 ---
 title: fission function pods
 slug: fission_function_pods
+url: /docs/reference/fission-cli/fission_function_pods/
 ---
 ## fission function pods
 

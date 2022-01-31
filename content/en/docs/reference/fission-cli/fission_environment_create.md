@@ -1,6 +1,7 @@
 ---
 title: fission environment create
 slug: fission_environment_create
+url: /docs/reference/fission-cli/fission_environment_create/
 ---
 ## fission environment create
 

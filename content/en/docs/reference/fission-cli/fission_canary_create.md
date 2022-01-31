@@ -1,8 +1,9 @@
 ---
 title: fission canary create
 slug: fission_canary_create
+url: /docs/reference/fission-cli/fission_canary_create/
 ---
-### fission canary create
+## fission canary create
 
 Create a canary config
 
@@ -10,7 +11,7 @@ Create a canary config
 fission canary create [flags]
 ```
 
-#### Options
+### Options
 
 ```
       --name string                 Name for the canary config
@@ -24,7 +25,7 @@ fission canary create [flags]
   -h, --help                        help for create
 ```
 
-#### Options inherited from parent commands
+### Options inherited from parent commands
 
 ```
       --kube-context string   Kubernetes context to be used for the execution of Fission commands
@@ -32,7 +33,7 @@ fission canary create [flags]
   -v, --verbosity int         -v |:|: CLI verbosity (0 is quiet, 1 is the default, 2 is verbose) (default 1)
 ```
 
-#### SEE ALSO
+### SEE ALSO
 
 * [fission canary](/docs/reference/fission-cli/fission_canary/)	 - Create, Update and manage canary configs
 

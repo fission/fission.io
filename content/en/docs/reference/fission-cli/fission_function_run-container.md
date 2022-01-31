@@ -1,6 +1,7 @@
 ---
 title: fission function run-container
 slug: fission_function_run-container
+url: /docs/reference/fission-cli/fission_function_run-container/
 ---
 ## fission function run-container
 

@@ -1,6 +1,7 @@
 ---
 title: fission package
 slug: fission_package
+url: /docs/reference/fission-cli/fission_package/
 ---
 ## fission package
 

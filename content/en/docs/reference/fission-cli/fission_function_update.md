@@ -1,6 +1,7 @@
 ---
 title: fission function update
 slug: fission_function_update
+url: /docs/reference/fission-cli/fission_function_update/
 ---
 ## fission function update
 

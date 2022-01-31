@@ -1,6 +1,7 @@
 ---
 title: fission environment pods
 slug: fission_environment_pods
+url: /docs/reference/fission-cli/fission_environment_pods/
 ---
 ## fission environment pods
 

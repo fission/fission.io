@@ -1,6 +1,7 @@
 ---
 title: fission httptrigger delete
 slug: fission_httptrigger_delete
+url: /docs/reference/fission-cli/fission_httptrigger_delete/
 ---
 ## fission httptrigger delete
 

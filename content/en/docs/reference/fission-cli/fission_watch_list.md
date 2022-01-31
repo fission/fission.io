@@ -1,6 +1,7 @@
 ---
 title: fission watch list
 slug: fission_watch_list
+url: /docs/reference/fission-cli/fission_watch_list/
 ---
 ## fission watch list
 

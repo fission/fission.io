@@ -1,6 +1,7 @@
 ---
 title: fission environment list
 slug: fission_environment_list
+url: /docs/reference/fission-cli/fission_environment_list/
 ---
 ## fission environment list
 

@@ -1,6 +1,7 @@
 ---
 title: fission package list
 slug: fission_package_list
+url: /docs/reference/fission-cli/fission_package_list/
 ---
 ## fission package list
 

@@ -1,6 +1,7 @@
 ---
 title: fission mqtrigger create
 slug: fission_mqtrigger_create
+url: /docs/reference/fission-cli/fission_mqtrigger_create/
 ---
 ## fission mqtrigger create
 

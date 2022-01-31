@@ -1,6 +1,7 @@
 ---
 title: fission timetrigger delete
 slug: fission_timetrigger_delete
+url: /docs/reference/fission-cli/fission_timetrigger_delete/
 ---
 ## fission timetrigger delete
 

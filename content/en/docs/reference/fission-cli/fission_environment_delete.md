@@ -1,6 +1,7 @@
 ---
 title: fission environment delete
 slug: fission_environment_delete
+url: /docs/reference/fission-cli/fission_environment_delete/
 ---
 ## fission environment delete
 

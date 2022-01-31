@@ -1,6 +1,7 @@
 ---
 title: fission timetrigger list
 slug: fission_timetrigger_list
+url: /docs/reference/fission-cli/fission_timetrigger_list/
 ---
 ## fission timetrigger list
 

@@ -1,6 +1,7 @@
 ---
 title: fission support dump
 slug: fission_support_dump
+url: /docs/reference/fission-cli/fission_support_dump/
 ---
 ## fission support dump
 

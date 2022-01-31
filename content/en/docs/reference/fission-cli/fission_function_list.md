@@ -1,6 +1,7 @@
 ---
 title: fission function list
 slug: fission_function_list
+url: /docs/reference/fission-cli/fission_function_list/
 ---
 ## fission function list
 

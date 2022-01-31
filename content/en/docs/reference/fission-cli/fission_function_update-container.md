@@ -1,6 +1,7 @@
 ---
 title: fission function update-container
 slug: fission_function_update-container
+url: /docs/reference/fission-cli/fission_function_update-container/
 ---
 ## fission function update-container
 

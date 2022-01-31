@@ -1,6 +1,7 @@
 ---
 title: fission package update
 slug: fission_package_update
+url: /docs/reference/fission-cli/fission_package_update/
 ---
 ## fission package update
 

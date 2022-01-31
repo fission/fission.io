@@ -1,6 +1,7 @@
 ---
 title: fission mqtrigger list
 slug: fission_mqtrigger_list
+url: /docs/reference/fission-cli/fission_mqtrigger_list/
 ---
 ## fission mqtrigger list
 

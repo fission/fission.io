@@ -1,6 +1,7 @@
 ---
 title: fission function create
 slug: fission_function_create
+url: /docs/reference/fission-cli/fission_function_create/
 ---
 ## fission function create
 

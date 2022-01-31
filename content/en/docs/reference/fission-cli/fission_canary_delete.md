@@ -1,6 +1,7 @@
 ---
 title: fission canary delete
 slug: fission_canary_delete
+url: /docs/reference/fission-cli/fission_canary_delete/
 ---
 ## fission canary delete
 

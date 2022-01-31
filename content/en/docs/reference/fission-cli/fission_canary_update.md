@@ -1,6 +1,7 @@
 ---
 title: fission canary update
 slug: fission_canary_update
+url: /docs/reference/fission-cli/fission_canary_update/
 ---
 ## fission canary update
 

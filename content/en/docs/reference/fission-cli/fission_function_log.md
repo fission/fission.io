@@ -1,6 +1,7 @@
 ---
 title: fission function log
 slug: fission_function_log
+url: /docs/reference/fission-cli/fission_function_log/
 ---
 ## fission function log
 

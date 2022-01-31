@@ -1,6 +1,7 @@
 ---
 title: fission canary list
 slug: fission_canary_list
+url: /docs/reference/fission-cli/fission_canary_list/
 ---
 ## fission canary list
 
