@@ -1,6 +1,6 @@
 ---
 title: "Architecture"
-weight: 30
+weight: 2
 no_list: true
 description: >
   Fission architecture in detail

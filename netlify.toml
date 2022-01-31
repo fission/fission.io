@@ -229,3 +229,21 @@ to = "/categories/"
 force = true
 from = "/categories/testing/"
 to = "/categories/"
+
+[[redirects]]
+force = true
+from = "/docs/crd-reference/"
+to = "/docs/reference/crd-reference/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/"
+to = "/docs/reference/fission-cli/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/*"
+to = "/docs/reference/fission-cli/:splat"
+status = 301
