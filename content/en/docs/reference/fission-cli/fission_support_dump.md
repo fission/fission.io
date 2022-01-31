@@ -28,5 +28,5 @@ fission support dump [flags]
 
 ### SEE ALSO
 
-* [fission support](/docs/fission-cli/fission_support/)	 - Collect diagnostic information for support
+* [fission support](/docs/reference/fission-cli/fission_support/)	 - Collect diagnostic information for support
 

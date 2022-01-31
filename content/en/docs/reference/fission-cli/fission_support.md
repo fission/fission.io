@@ -22,6 +22,6 @@ Collect diagnostic information for support
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission support dump](/docs/fission-cli/fission_support_dump/)	 - Collect & dump all necessary information for troubleshooting
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission support dump](/docs/reference/fission-cli/fission_support_dump/)	 - Collect & dump all necessary information for troubleshooting
 

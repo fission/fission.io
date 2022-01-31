@@ -22,16 +22,16 @@ Create, update and manage functions
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission function create](/docs/fission-cli/fission_function_create/)	 - Create a function (and optionally, an HTTP route to it)
-* [fission function delete](/docs/fission-cli/fission_function_delete/)	 - Delete a function
-* [fission function get](/docs/fission-cli/fission_function_get/)	 - Get function source code
-* [fission function getmeta](/docs/fission-cli/fission_function_getmeta/)	 - Get function metadata
-* [fission function list](/docs/fission-cli/fission_function_list/)	 - List functions
-* [fission function log](/docs/fission-cli/fission_function_log/)	 - Display function logs
-* [fission function pods](/docs/fission-cli/fission_function_pods/)	 - List pods currently used by a function
-* [fission function run-container](/docs/fission-cli/fission_function_run-container/)	 - Alpha: Run a container image as a function
-* [fission function test](/docs/fission-cli/fission_function_test/)	 - Test a function
-* [fission function update](/docs/fission-cli/fission_function_update/)	 - Update a function
-* [fission function update-container](/docs/fission-cli/fission_function_update-container/)	 - Alpha: Update a function running a container
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission function create](/docs/reference/fission-cli/fission_function_create/)	 - Create a function (and optionally, an HTTP route to it)
+* [fission function delete](/docs/reference/fission-cli/fission_function_delete/)	 - Delete a function
+* [fission function get](/docs/reference/fission-cli/fission_function_get/)	 - Get function source code
+* [fission function getmeta](/docs/reference/fission-cli/fission_function_getmeta/)	 - Get function metadata
+* [fission function list](/docs/reference/fission-cli/fission_function_list/)	 - List functions
+* [fission function log](/docs/reference/fission-cli/fission_function_log/)	 - Display function logs
+* [fission function pods](/docs/reference/fission-cli/fission_function_pods/)	 - List pods currently used by a function
+* [fission function run-container](/docs/reference/fission-cli/fission_function_run-container/)	 - Alpha: Run a container image as a function
+* [fission function test](/docs/reference/fission-cli/fission_function_test/)	 - Test a function
+* [fission function update](/docs/reference/fission-cli/fission_function_update/)	 - Update a function
+* [fission function update-container](/docs/reference/fission-cli/fission_function_update-container/)	 - Alpha: Update a function running a container
 

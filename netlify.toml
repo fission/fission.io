@@ -229,3 +229,321 @@ to = "/categories/"
 force = true
 from = "/categories/testing/"
 to = "/categories/"
+
+[[redirects]]
+force = true
+from = "/docs/crd-reference/"
+to = "/docs/reference/crd-reference/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/"
+to = "/docs/reference/fission-cli/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission/"
+to = "/docs/reference/fission-cli/fission/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_canary/"
+to = "/docs/reference/fission-cli/fission_canary/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_canary_create/"
+to = "/docs/reference/fission-cli/fission_canary_create/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_canary_delete/"
+to = "/docs/reference/fission-cli/fission_canary_delete/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_canary_get/"
+to = "/docs/reference/fission-cli/fission_canary_get/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_canary_list/"
+to = "/docs/reference/fission-cli/fission_canary_list/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_canary_update/"
+to = "/docs/reference/fission-cli/fission_canary_update/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_environment/"
+to = "/docs/reference/fission-cli/fission_environment/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_environment_create/"
+to = "/docs/reference/fission-cli/fission_environment_create/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_environment_delete/"
+to = "/docs/reference/fission-cli/fission_environment_delete/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_environment_get/"
+to = "/docs/reference/fission-cli/fission_environment_get/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_environment_list/"
+to = "/docs/reference/fission-cli/fission_environment_list/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_environment_pods/"
+to = "/docs/reference/fission-cli/fission_environment_pods/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_environment_update/"
+to = "/docs/reference/fission-cli/fission_environment_update/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function/"
+to = "/docs/reference/fission-cli/fission_function/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_create/"
+to = "/docs/reference/fission-cli/fission_function_create/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_delete/"
+to = "/docs/reference/fission-cli/fission_function_delete/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_get/"
+to = "/docs/reference/fission-cli/fission_function_get/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_getmeta/"
+to = "/docs/reference/fission-cli/fission_function_getmeta/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_list/"
+to = "/docs/reference/fission-cli/fission_function_list/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_log/"
+to = "/docs/reference/fission-cli/fission_function_log/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_pods/"
+to = "/docs/reference/fission-cli/fission_function_pods/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_run-container/"
+to = "/docs/reference/fission-cli/fission_function_run-container/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_test/"
+to = "/docs/reference/fission-cli/fission_function_test/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_update/"
+to = "/docs/reference/fission-cli/fission_function_update/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_function_update-container/"
+to = "/docs/reference/fission-cli/fission_function_update-container/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_httptrigger/"
+to = "/docs/reference/fission-cli/fission_httptrigger/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_httptrigger_create/"
+to = "/docs/reference/fission-cli/fission_httptrigger_create/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_httptrigger_delete/"
+to = "/docs/reference/fission-cli/fission_httptrigger_delete/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_httptrigger_get/"
+to = "/docs/reference/fission-cli/fission_httptrigger_get/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_httptrigger_list/"
+to = "/docs/reference/fission-cli/fission_httptrigger_list/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_httptrigger_update/"
+to = "/docs/reference/fission-cli/fission_httptrigger_update/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_mqtrigger/"
+to = "/docs/reference/fission-cli/fission_mqtrigger/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_mqtrigger_create/"
+to = "/docs/reference/fission-cli/fission_mqtrigger_create/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_mqtrigger_delete/"
+to = "/docs/reference/fission-cli/fission_mqtrigger_delete/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_mqtrigger_list/"
+to = "/docs/reference/fission-cli/fission_mqtrigger_list/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_mqtrigger_update/"
+to = "/docs/reference/fission-cli/fission_mqtrigger_update/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package/"
+to = "/docs/reference/fission-cli/fission_package/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_create/"
+to = "/docs/reference/fission-cli/fission_package_create/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_delete/"
+to = "/docs/reference/fission-cli/fission_package_delete/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_getdeploy/"
+to = "/docs/reference/fission-cli/fission_package_getdeploy/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_getsrc/"
+to = "/docs/reference/fission-cli/fission_package_getsrc/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_info/"
+to = "/docs/reference/fission-cli/fission_package_info/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_list/"
+to = "/docs/reference/fission-cli/fission_package_list/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_rebuild/"
+to = "/docs/reference/fission-cli/fission_package_rebuild/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_package_update/"
+to = "/docs/reference/fission-cli/fission_package_update/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_spec/"
+to = "/docs/reference/fission-cli/fission_spec/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_spec_apply/"
+to = "/docs/reference/fission-cli/fission_spec_apply/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_spec_destroy/"
+to = "/docs/reference/fission-cli/fission_spec_destroy/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_spec_init/"
+to = "/docs/reference/fission-cli/fission_spec_init/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/fission-cli/fission_spec_init/"
+to = "/docs/reference/fission-cli/fission_spec_init/"
+status = 301

@@ -22,10 +22,10 @@ Create, update and manage HTTP triggers
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission httptrigger create](/docs/fission-cli/fission_httptrigger_create/)	 - Create an HTTP trigger
-* [fission httptrigger delete](/docs/fission-cli/fission_httptrigger_delete/)	 - Delete an HTTP trigger
-* [fission httptrigger get](/docs/fission-cli/fission_httptrigger_get/)	 - Get HTTP trigger details
-* [fission httptrigger list](/docs/fission-cli/fission_httptrigger_list/)	 - List HTTP triggers
-* [fission httptrigger update](/docs/fission-cli/fission_httptrigger_update/)	 - Update an HTTP trigger
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission httptrigger create](/docs/reference/fission-cli/fission_httptrigger_create/)	 - Create an HTTP trigger
+* [fission httptrigger delete](/docs/reference/fission-cli/fission_httptrigger_delete/)	 - Delete an HTTP trigger
+* [fission httptrigger get](/docs/reference/fission-cli/fission_httptrigger_get/)	 - Get HTTP trigger details
+* [fission httptrigger list](/docs/reference/fission-cli/fission_httptrigger_list/)	 - List HTTP triggers
+* [fission httptrigger update](/docs/reference/fission-cli/fission_httptrigger_update/)	 - Update an HTTP trigger
 

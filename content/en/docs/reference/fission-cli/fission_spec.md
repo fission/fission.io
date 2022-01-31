@@ -22,10 +22,10 @@ Manage a declarative application specification
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission spec apply](/docs/fission-cli/fission_spec_apply/)	 - Create, update, or delete resources from application specification
-* [fission spec destroy](/docs/fission-cli/fission_spec_destroy/)	 - Delete all Fission resources in the application specification
-* [fission spec init](/docs/fission-cli/fission_spec_init/)	 - Create an initial declarative application specification
-* [fission spec list](/docs/fission-cli/fission_spec_list/)	 - List all the resources that were created through this spec
-* [fission spec validate](/docs/fission-cli/fission_spec_validate/)	 - Validate declarative application specification
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission spec apply](/docs/reference/fission-cli/fission_spec_apply/)	 - Create, update, or delete resources from application specification
+* [fission spec destroy](/docs/reference/fission-cli/fission_spec_destroy/)	 - Delete all Fission resources in the application specification
+* [fission spec init](/docs/reference/fission-cli/fission_spec_init/)	 - Create an initial declarative application specification
+* [fission spec list](/docs/reference/fission-cli/fission_spec_list/)	 - List all the resources that were created through this spec
+* [fission spec validate](/docs/reference/fission-cli/fission_spec_validate/)	 - Validate declarative application specification
 

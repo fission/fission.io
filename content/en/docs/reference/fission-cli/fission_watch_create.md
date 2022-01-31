@@ -33,5 +33,5 @@ fission watch create [flags]
 
 ### SEE ALSO
 
-* [fission watch](/docs/fission-cli/fission_watch/)	 - Create, update and manage kube watcher
+* [fission watch](/docs/reference/fission-cli/fission_watch/)	 - Create, update and manage kube watcher
 

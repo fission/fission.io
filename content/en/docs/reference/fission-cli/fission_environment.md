@@ -22,11 +22,11 @@ Create, update and manage environments
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission environment create](/docs/fission-cli/fission_environment_create/)	 - Create an environment
-* [fission environment delete](/docs/fission-cli/fission_environment_delete/)	 - Delete an environment
-* [fission environment get](/docs/fission-cli/fission_environment_get/)	 - Get environment details
-* [fission environment list](/docs/fission-cli/fission_environment_list/)	 - List environments
-* [fission environment pods](/docs/fission-cli/fission_environment_pods/)	 - List pods currently maintained by an environment
-* [fission environment update](/docs/fission-cli/fission_environment_update/)	 - Update an environment
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission environment create](/docs/reference/fission-cli/fission_environment_create/)	 - Create an environment
+* [fission environment delete](/docs/reference/fission-cli/fission_environment_delete/)	 - Delete an environment
+* [fission environment get](/docs/reference/fission-cli/fission_environment_get/)	 - Get environment details
+* [fission environment list](/docs/reference/fission-cli/fission_environment_list/)	 - List environments
+* [fission environment pods](/docs/reference/fission-cli/fission_environment_pods/)	 - List pods currently maintained by an environment
+* [fission environment update](/docs/reference/fission-cli/fission_environment_update/)	 - Update an environment
 

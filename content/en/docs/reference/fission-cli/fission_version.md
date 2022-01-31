@@ -27,5 +27,5 @@ fission version [flags]
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
 

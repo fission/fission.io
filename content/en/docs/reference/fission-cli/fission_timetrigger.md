@@ -22,10 +22,10 @@ Create, update and manage time triggers
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission timetrigger create](/docs/fission-cli/fission_timetrigger_create/)	 - Create a time trigger
-* [fission timetrigger delete](/docs/fission-cli/fission_timetrigger_delete/)	 - Delete a time trigger
-* [fission timetrigger list](/docs/fission-cli/fission_timetrigger_list/)	 - List time triggers
-* [fission timetrigger showschedule](/docs/fission-cli/fission_timetrigger_showschedule/)	 - Show schedule for cron spec
-* [fission timetrigger update](/docs/fission-cli/fission_timetrigger_update/)	 - Update a time trigger
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission timetrigger create](/docs/reference/fission-cli/fission_timetrigger_create/)	 - Create a time trigger
+* [fission timetrigger delete](/docs/reference/fission-cli/fission_timetrigger_delete/)	 - Delete a time trigger
+* [fission timetrigger list](/docs/reference/fission-cli/fission_timetrigger_list/)	 - List time triggers
+* [fission timetrigger showschedule](/docs/reference/fission-cli/fission_timetrigger_showschedule/)	 - Show schedule for cron spec
+* [fission timetrigger update](/docs/reference/fission-cli/fission_timetrigger_update/)	 - Update a time trigger
 

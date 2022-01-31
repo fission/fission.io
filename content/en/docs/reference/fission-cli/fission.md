@@ -25,15 +25,15 @@ Fission: Fast and Simple Serverless Functions for Kubernetes
 
 ### SEE ALSO
 
-* [fission canary](/docs/fission-cli/fission_canary/)	 - Create, Update and manage canary configs
-* [fission environment](/docs/fission-cli/fission_environment/)	 - Create, update and manage environments
-* [fission function](/docs/fission-cli/fission_function/)	 - Create, update and manage functions
-* [fission httptrigger](/docs/fission-cli/fission_httptrigger/)	 - Create, update and manage HTTP triggers
-* [fission mqtrigger](/docs/fission-cli/fission_mqtrigger/)	 - Create, update and manage message queue triggers
-* [fission package](/docs/fission-cli/fission_package/)	 - Create, update and manage packages
-* [fission spec](/docs/fission-cli/fission_spec/)	 - Manage a declarative application specification
-* [fission support](/docs/fission-cli/fission_support/)	 - Collect diagnostic information for support
-* [fission timetrigger](/docs/fission-cli/fission_timetrigger/)	 - Create, update and manage time triggers
-* [fission version](/docs/fission-cli/fission_version/)	 - Show client/server version information
-* [fission watch](/docs/fission-cli/fission_watch/)	 - Create, update and manage kube watcher
+* [fission canary](/docs/reference/fission-cli/fission_canary/)	 - Create, Update and manage canary configs
+* [fission environment](/docs/reference/fission-cli/fission_environment/)	 - Create, update and manage environments
+* [fission function](/docs/reference/fission-cli/fission_function/)	 - Create, update and manage functions
+* [fission httptrigger](/docs/reference/fission-cli/fission_httptrigger/)	 - Create, update and manage HTTP triggers
+* [fission mqtrigger](/docs/reference/fission-cli/fission_mqtrigger/)	 - Create, update and manage message queue triggers
+* [fission package](/docs/reference/fission-cli/fission_package/)	 - Create, update and manage packages
+* [fission spec](/docs/reference/fission-cli/fission_spec/)	 - Manage a declarative application specification
+* [fission support](/docs/reference/fission-cli/fission_support/)	 - Collect diagnostic information for support
+* [fission timetrigger](/docs/reference/fission-cli/fission_timetrigger/)	 - Create, update and manage time triggers
+* [fission version](/docs/reference/fission-cli/fission_version/)	 - Show client/server version information
+* [fission watch](/docs/reference/fission-cli/fission_watch/)	 - Create, update and manage kube watcher
 

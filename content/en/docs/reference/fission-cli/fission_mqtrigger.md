@@ -22,9 +22,9 @@ Create, update and manage message queue triggers
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission mqtrigger create](/docs/fission-cli/fission_mqtrigger_create/)	 - Create a message queue trigger
-* [fission mqtrigger delete](/docs/fission-cli/fission_mqtrigger_delete/)	 - Delete a message queue trigger
-* [fission mqtrigger list](/docs/fission-cli/fission_mqtrigger_list/)	 - List message queue triggers
-* [fission mqtrigger update](/docs/fission-cli/fission_mqtrigger_update/)	 - Update a message queue trigger
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission mqtrigger create](/docs/reference/fission-cli/fission_mqtrigger_create/)	 - Create a message queue trigger
+* [fission mqtrigger delete](/docs/reference/fission-cli/fission_mqtrigger_delete/)	 - Delete a message queue trigger
+* [fission mqtrigger list](/docs/reference/fission-cli/fission_mqtrigger_list/)	 - List message queue triggers
+* [fission mqtrigger update](/docs/reference/fission-cli/fission_mqtrigger_update/)	 - Update a message queue trigger
 

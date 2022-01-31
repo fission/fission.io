@@ -31,5 +31,5 @@ fission mqtrigger list [flags]
 
 ### SEE ALSO
 
-* [fission mqtrigger](/docs/fission-cli/fission_mqtrigger/)	 - Create, update and manage message queue triggers
+* [fission mqtrigger](/docs/reference/fission-cli/fission_mqtrigger/)	 - Create, update and manage message queue triggers
 

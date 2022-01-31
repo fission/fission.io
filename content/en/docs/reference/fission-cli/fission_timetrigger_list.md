@@ -31,5 +31,5 @@ fission timetrigger list [flags]
 
 ### SEE ALSO
 
-* [fission timetrigger](/docs/fission-cli/fission_timetrigger/)	 - Create, update and manage time triggers
+* [fission timetrigger](/docs/reference/fission-cli/fission_timetrigger/)	 - Create, update and manage time triggers
 

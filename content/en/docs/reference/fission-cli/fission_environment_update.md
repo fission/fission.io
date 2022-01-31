@@ -42,5 +42,5 @@ fission environment update [flags]
 
 ### SEE ALSO
 
-* [fission environment](/docs/fission-cli/fission_environment/)	 - Create, update and manage environments
+* [fission environment](/docs/reference/fission-cli/fission_environment/)	 - Create, update and manage environments
 

@@ -32,5 +32,5 @@ fission spec apply [flags]
 
 ### SEE ALSO
 
-* [fission spec](/docs/fission-cli/fission_spec/)	 - Manage a declarative application specification
+* [fission spec](/docs/reference/fission-cli/fission_spec/)	 - Manage a declarative application specification
 

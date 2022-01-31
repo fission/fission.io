@@ -59,5 +59,5 @@ fission function update [flags]
 
 ### SEE ALSO
 
-* [fission function](/docs/fission-cli/fission_function/)	 - Create, update and manage functions
+* [fission function](/docs/reference/fission-cli/fission_function/)	 - Create, update and manage functions
 

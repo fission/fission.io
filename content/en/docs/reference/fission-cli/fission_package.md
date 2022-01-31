@@ -22,13 +22,13 @@ Create, update and manage packages
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission package create](/docs/fission-cli/fission_package_create/)	 - Create a package
-* [fission package delete](/docs/fission-cli/fission_package_delete/)	 - Delete a package
-* [fission package getdeploy](/docs/fission-cli/fission_package_getdeploy/)	 - Get package details
-* [fission package getsrc](/docs/fission-cli/fission_package_getsrc/)	 - Get package details
-* [fission package info](/docs/fission-cli/fission_package_info/)	 - Show package information
-* [fission package list](/docs/fission-cli/fission_package_list/)	 - List packages
-* [fission package rebuild](/docs/fission-cli/fission_package_rebuild/)	 - Rebuild a failed package
-* [fission package update](/docs/fission-cli/fission_package_update/)	 - Update a package
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission package create](/docs/reference/fission-cli/fission_package_create/)	 - Create a package
+* [fission package delete](/docs/reference/fission-cli/fission_package_delete/)	 - Delete a package
+* [fission package getdeploy](/docs/reference/fission-cli/fission_package_getdeploy/)	 - Get package details
+* [fission package getsrc](/docs/reference/fission-cli/fission_package_getsrc/)	 - Get package details
+* [fission package info](/docs/reference/fission-cli/fission_package_info/)	 - Show package information
+* [fission package list](/docs/reference/fission-cli/fission_package_list/)	 - List packages
+* [fission package rebuild](/docs/reference/fission-cli/fission_package_rebuild/)	 - Rebuild a failed package
+* [fission package update](/docs/reference/fission-cli/fission_package_update/)	 - Update a package
 

@@ -22,8 +22,8 @@ Create, update and manage kube watcher
 
 ### SEE ALSO
 
-* [fission](/docs/fission-cli/fission/)	 - Serverless framework for Kubernetes
-* [fission watch create](/docs/fission-cli/fission_watch_create/)	 - Create a kube watcher
-* [fission watch delete](/docs/fission-cli/fission_watch_delete/)	 - Delete a kube watcher
-* [fission watch list](/docs/fission-cli/fission_watch_list/)	 - List kube watchers
+* [fission](/docs/reference/fission-cli/fission/)	 - Serverless framework for Kubernetes
+* [fission watch create](/docs/reference/fission-cli/fission_watch_create/)	 - Create a kube watcher
+* [fission watch delete](/docs/reference/fission-cli/fission_watch_delete/)	 - Delete a kube watcher
+* [fission watch list](/docs/reference/fission-cli/fission_watch_list/)	 - List kube watchers
 

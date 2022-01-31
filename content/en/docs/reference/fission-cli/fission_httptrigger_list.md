@@ -32,5 +32,5 @@ fission httptrigger list [flags]
 
 ### SEE ALSO
 
-* [fission httptrigger](/docs/fission-cli/fission_httptrigger/)	 - Create, update and manage HTTP triggers
+* [fission httptrigger](/docs/reference/fission-cli/fission_httptrigger/)	 - Create, update and manage HTTP triggers
 

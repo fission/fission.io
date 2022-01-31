@@ -28,5 +28,5 @@ fission canary get [flags]
 
 ### SEE ALSO
 
-* [fission canary](/docs/fission-cli/fission_canary/)	 - Create, Update and manage canary configs
+* [fission canary](/docs/reference/fission-cli/fission_canary/)	 - Create, Update and manage canary configs
 

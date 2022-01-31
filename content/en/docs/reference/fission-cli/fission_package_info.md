@@ -28,5 +28,5 @@ fission package info [flags]
 
 ### SEE ALSO
 
-* [fission package](/docs/fission-cli/fission_package/)	 - Create, update and manage packages
+* [fission package](/docs/reference/fission-cli/fission_package/)	 - Create, update and manage packages
 
