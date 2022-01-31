@@ -13,7 +13,7 @@ description: >
 
 ### Annotation - -*-ingressannotation*
 
-Use `--ingressannotation` to specify meta data while creating HTTP Trigger and customize their behaviour.
+Use `--ingressannotation` to specify meta data while creating HTTP Trigger and customize their behavior.
 
 ### Archive
 
