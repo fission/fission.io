@@ -1,11 +1,11 @@
 +++
 title = "Demystifying Fission - New Deploy"
-date = "2022-01-28T11:30:34+05:30"
+date = "2022-02-07T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Understand how New Deploy executor works in Fission."
 categories = ["Fission"]
 type = "blog"
-images = ["images/featured/opentelemetry-datadog-fission-featured.png"]
+images = ["images/featured/demystifying-fission-new-deploy-featured.png"]
 +++
 
 Times change and technologies evolve.
@@ -36,6 +36,10 @@ In such situations, Pool Manager might not be the best choice since it doesn’t
 Further the limits that you can apply are only at the environment level, you couldn’t modify anything on the pods.
 These were some practical challenges that some of our users came across and that’s when we started working on a different executor that could address those needs.
 
+
+{{< figure src="/images/featured/demystifying-fission-new-deploy-featured.png" alt="Understand how New Deploy executor works in Fission." height="600" width="1000">}}
+
+
 ## New Deployment - Scale your functions at ease
 
 New Deployment or NewDeploy is the new executor that gives you greater control over your functions along with inherent scaling capabilities.
@@ -51,7 +55,7 @@ $ fission fn create --name foobar --env nodejs --code hello.js --executortype ne
 
 #### Granular control over functions
 
-NewDeploy also provides auto scaling and resource limit settings to be configured for individual functions.
+NewDeploy also provides auto-scaling and resource limit settings to be configured for individual functions.
 Unliked Pool Manager that allowed you to configure settings at an environment level only. With this capability, each of your functions can specify the resource limits which can be different from different functions based on their use cases.
 Another thing to note is that, whatever limits you specify for the function will override the values specified at the environment level.
 
@@ -98,11 +102,11 @@ The answer pretty much boils down to two things: **Idle Cost vs Latency**
 Based on what is more important to you, you can choose to go either with Pool Manager or New Deploy.
 
 With Pool Manager you are guaranteed with low latency due to warm pools of pods.
-So if your requirement is low latency but you’re fine paying for the idle pods, Pool Manager should be your choice.
+So if your requirement is low latency, but you’re fine paying for the idle pods, Pool Manager should be your choice.
 
 On the other hand, if you want your functions to scale dynamically to respond to spikes in traffic with a low idle cost but can do with the higher latency, NewDeploy should be your choice. With New Deploy, you can also choose to keep the latency low in this case by setting the `-- minscale > 0`, however that will increase your idle cost.
 
-Hence depending on your use case, you can choose the option that’s best suited to you. Below is a table for easy reference:
+Hence, depending on your use case, you can choose the option that’s best suited to you. Below is a table for easy reference:
 
 | Executor Type | Min Scale | Latency | Idle Cost                                      |
 |---------------|-----------|---------|------------------------------------------------|
