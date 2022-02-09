@@ -211,7 +211,7 @@ nix-env -iA nixos.fission
 {{< /tab >}}
 {{< tab "Windows" >}}
 For Windows, you can use the linux binary on WSL. Or you can download
-this windows executable: [fission.exe](https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-cli-windows.exe)
+this windows executable: [fission.exe](https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-{{% release-version %}}-windows-amd64.exe)
 {{< /tab >}}
 {{< /tabs >}}
 
