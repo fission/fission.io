@@ -1,6 +1,6 @@
 +++
 title = "Demystifying Fission - New Deploy"
-date = "2022-02-07T11:30:34+05:30"
+date = "2022-02-09T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Understand how New Deploy executor works in Fission."
 categories = ["Fission"]
@@ -21,7 +21,7 @@ You can carry Fission with you wherever you go - across vendors and on premise a
 
 ## Pool Manager Recap
 
-In our previous blog post, we talked about Pool Manager and how it helps you execute Fission functions.
+In our [previous blog post](/blog/demystifying-fission-pool-manager/), we talked about Pool Manager and how it helps you execute Fission functions.
 Pool Manager is currently the default executor in Fission and also one of the most widely used one.
 From maintaining a warm pool, it ensures that you experience lower cold start times without compromising on the performance.
 
