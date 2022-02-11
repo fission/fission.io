@@ -29,12 +29,6 @@ From maintaining a warm pool, it ensures that you experience lower cold start ti
 It was also quite flexible in terms of providing you with options to tweak resource limits at the environment level.
 From allowing you to define the pool size to deciding on the number of requests per pod, Pool Manager is perfect for a lot of scenarios.
 
-## Why not Pool Manager
-
-One of the main benefits of using the pool manager was due to its innate capability of maintaining a **warm pool of pods**.
-Everytime a function is called, one pod is taken out of this pool for loading the function.
-Immediately the pool manager relinquishes the pool with new pods according to the defined pool size.
-
 Since you always have a pool of pods in the warm state, you are consuming resources.
 And that adds up to your bill.
 So if you're wanting to optimize your costs, pool manager might not be a great idea.
