@@ -1,6 +1,6 @@
 +++
 title = "Demystifying Fission - New Deploy"
-date = "2022-02-09T11:30:34+05:30"
+date = "2022-02-10T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Understand how New Deploy executor works in Fission."
 categories = ["Fission"]
@@ -11,34 +11,37 @@ images = ["images/featured/demystifying-fission-new-deploy-featured.png"]
 Times change and technologies evolve.
 The serverless architecture has been around for quite some time now as an option to deploy applications to the cloud.
 Most of the mainstream cloud providers launched their Function as a Service offerings about a decade ago.
-*Fun Fact: Did you know that Amazon’s Alexa is entirely running on AWS Lambda functions? All of Alexa’s skills are hosted on Lambda functions which are perfect for the use case.*
+
+*Fun Fact: Did you know that Amazon’s Alexa Skills are entirely running on AWS Lambda functions? All of [Alexa’s skills are hosted on Lambda functions](https://developer.amazon.com/en-US/docs/alexa/ask-overviews/what-is-the-alexa-skills-kit.html) which are perfect for the use case.*
 They need functions to load quickly and don’t need to store any state.
 
 Alexa is just one use case, there are many more such use cases that are perfect candidates for FaaS.
 Fission is another serverless framework made for Kubernetes.
 It can help you achieve all of these with low cold start times,greater control and without locking you with a particular vendor.
-You can carry Fission with you wherever you go - across vendors and on premise as well.
+You can carry Fission with you wherever you go - *across vendors and on premise as well*.
 
 ## Pool Manager Recap
 
 In our [previous blog post](/blog/demystifying-fission-pool-manager/), we talked about Pool Manager and how it helps you execute Fission functions.
-Pool Manager is currently the default executor in Fission and also one of the most widely used one.
+Pool Manager is currently the **default executor in Fission** and also one of the most widely used one.
 From maintaining a warm pool, it ensures that you experience lower cold start times without compromising on the performance.
 
 It was also quite flexible in terms of providing you with options to tweak resource limits at the environment level.
 From allowing you to define the pool size to deciding on the number of requests per pod, Pool Manager is perfect for a lot of scenarios.
 
-## Drawbacks of Pool Manager
+## Why not Pool Manager
 
-However, there might be scenarios where you are expecting massive traffic to your application and want to scale up quickly to cater to all the requests.
-In such situations, Pool Manager might not be the best choice since it doesn’t come with inherent capabilities to scale rapidly.
+One of the main benefits of using the pool manager was due to its innate capability of maintaining a **warm pool of pods**.
+Everytime a function is called, one pod is taken out of this pool for loading the function.
+Immediately the pool manager relinquishes the pool with new pods according to the defined pool size.
 
-Further the limits that you can apply are only at the environment level, you couldn’t modify anything on the pods.
-These were some practical challenges that some of our users came across and that’s when we started working on a different executor that could address those needs.
+Since you always have a pool of pods in the warm state, you are consuming resources.
+And that adds up to your bill.
+So if you're wanting to optimize your costs, pool manager might not be a great idea.
 
+Also, pool manager allowed you to configure limits only at the environment level, you couldn’t modify anything on the pods.
 
-{{< figure src="/images/featured/demystifying-fission-new-deploy-featured.png" alt="Understand how New Deploy executor works in Fission." height="600" width="1000">}}
-
+{{< figure src="/images/featured/demystifying-fission-new-deploy-featured.png" alt="Understand how New Deploy executor works in Fission." height="600" width="800">}}
 
 ## New Deployment - Scale your functions at ease
 
@@ -56,7 +59,8 @@ $ fission fn create --name foobar --env nodejs --code hello.js --executortype ne
 #### Granular control over functions
 
 NewDeploy also provides auto-scaling and resource limit settings to be configured for individual functions.
-Unliked Pool Manager that allowed you to configure settings at an environment level only. With this capability, each of your functions can specify the resource limits which can be different from different functions based on their use cases.
+Unliked Pool Manager that allowed you to configure settings at an environment level only.
+With this capability, each of your functions can specify the resource limits which can be different from different functions based on their use cases.
 Another thing to note is that, whatever limits you specify for the function will override the values specified at the environment level.
 
 For instance, you can provide limits to min/max scale, min/max CPU, min/max memory as mentioned below. Do keep in mind that you are creating a function and not an environment unlike Pool Manager
