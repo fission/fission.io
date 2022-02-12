@@ -64,6 +64,8 @@ _Appears in:_
 
 
 
+
+
 #### BuildStatus
 
 _Underlying type:_ `string`
@@ -605,6 +607,8 @@ _Appears in:_
 | `buildstatus` _[BuildStatus](#buildstatus)_ | BuildStatus is the package build status. |
 | `buildlog` _string_ | BuildLog stores build log during the compilation. |
 | `lastUpdateTimestamp` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#time-v1-meta)_ | LastUpdateTimestamp will store the timestamp the package was last updated metav1.Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON. https://github.com/kubernetes/apimachinery/blob/44bd77c24ef93cd3a5eb6fef64e514025d10d44e/pkg/apis/meta/v1/time.go#L26-L35 |
+
+
 
 
 #### Runtime

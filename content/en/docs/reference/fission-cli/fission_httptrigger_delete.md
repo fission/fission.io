@@ -17,6 +17,7 @@ fission httptrigger delete [flags]
       --name string               HTTP trigger name
       --function string           Name of the function for trigger(s)
       --triggerNamespace string   --triggerns |:|: Namespace for trigger object (default "default")
+      --ignorenotfound            Treat "resource not found" as a successful delete.
   -h, --help                      help for delete
 ```
 
