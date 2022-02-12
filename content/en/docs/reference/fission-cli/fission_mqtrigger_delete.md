@@ -16,6 +16,7 @@ fission mqtrigger delete [flags]
 ```
       --name string               Message queue trigger name
       --triggerNamespace string   --triggerns |:|: Namespace for trigger object (default "default")
+      --ignorenotfound            Treat "resource not found" as a successful delete.
   -h, --help                      help for delete
 ```
 

@@ -16,6 +16,7 @@ fission watch delete [flags]
 ```
       --function string           Function name
       --triggerNamespace string   --triggerns |:|: Namespace for trigger object (default "default")
+      --ignorenotfound            Treat "resource not found" as a successful delete.
   -h, --help                      help for delete
 ```
 

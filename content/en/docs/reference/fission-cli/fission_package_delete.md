@@ -18,6 +18,7 @@ fission package delete [flags]
   -f, --force                 -f |:|: Force update a package even if it is used by one or more functions
       --orphan                Orphan packages that are not referenced by any function
       --pkgNamespace string   --pkgns |:|: Namespace for package object (default "default")
+      --ignorenotfound        Treat "resource not found" as a successful delete.
   -h, --help                  help for delete
 ```
 

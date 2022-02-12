@@ -16,6 +16,7 @@ fission function delete [flags]
 ```
       --name string          Function name
       --fnNamespace string   --fns |:|: Namespace for function object (default "default")
+      --ignorenotfound       Treat "resource not found" as a successful delete.
   -h, --help                 help for delete
 ```
 

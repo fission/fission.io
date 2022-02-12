@@ -16,6 +16,8 @@ fission environment delete [flags]
 ```
       --name string           Environment name
       --envNamespace string   --envns |:|: Namespace for environment object (default "default")
+      --ignorenotfound        Treat "resource not found" as a successful delete.
+  -f, --force                 -f |:|: Force delete env even if one or more functions exist
   -h, --help                  help for delete
 ```
 

@@ -16,6 +16,7 @@ fission canary delete [flags]
 ```
       --name string              Name for the canary config
       --canaryNamespace string   --canaryns |:|: Namespace for canary config object (default "default")
+      --ignorenotfound           Treat "resource not found" as a successful delete.
   -h, --help                     help for delete
 ```
 
