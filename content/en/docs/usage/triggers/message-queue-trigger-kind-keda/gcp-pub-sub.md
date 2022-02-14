@@ -120,7 +120,7 @@ fission fn create --name producer --env python-gcp --src pub/pub.py  --entrypoin
 
 ### Consumer Function
 
-The consumer function is a NodeJS program which takes the body of the request, process the message and drops it in the `resposne-queue`
+The consumer function is a NodeJS program which takes the body of the request, process the message and drops it in the `response-queue`
 
 ```js
 module.exports = async function (context) {

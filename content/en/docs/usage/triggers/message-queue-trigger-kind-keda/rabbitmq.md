@@ -225,7 +225,7 @@ fission fn create --spec --name rabbitmq-producer --env go --pkg rabbitmq-produc
 
 ### Consumer Function
 
-The consumer function is a go program which takes the body of the request, process the message and drops it in the `resposne-queue`
+The consumer function is a go program which takes the body of the request, process the message and drops it in the `response-queue`
 
 ```go
 package main
