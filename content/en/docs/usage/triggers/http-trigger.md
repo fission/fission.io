@@ -16,6 +16,8 @@ $ curl http://$FISSION_ROUTER/hello
 Hello World!
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 {{% notice info %}}
 FISSION_ROUTER is the externally-visible address of your
 Fission router service.  For how to set up environment variable

@@ -154,6 +154,8 @@ $ fission fn test --name producerfunc
 Successfully sent to request-topic
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 There are a couple of ways you can verify that the consumerfunc is called:
 
 - Check the logs of `mqtrigger-redis` pods:
