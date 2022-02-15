@@ -2,7 +2,7 @@
 title: "Authentication"
 weight: 40
 description: >
-  Guide to setup basic authentication with Fission
+  Guide to set up basic authentication with Fission
 ---
 
 ## Authentication in Fission
@@ -36,7 +36,7 @@ This can be found in `charts/fission-all/values.yaml`.
 
 >> Refer to our [installation](_index.en.md) guide if you are installing Fission for the first time. Or visit our [Fission Upgrade](upgrade) guide if you're upgrading from an older version.
 
-Once the installation is successfull, you need to generate the `auth token`.
+Once the installation is successful, you need to generate the `auth token`.
 To do that, you will export the values and set up `$FISSION_USERNAME`, `$FISSION_PASSWORD` and `$FISSION_AUTH_TOKEN` env variables.
 
 ```bash
