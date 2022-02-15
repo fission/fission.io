@@ -7,6 +7,43 @@ description: >
 
 In this section, we will cover how to troubleshoot your functions and collect information to troubleshoot problems related to Fission.
 
+### Fission Services Check
+
+From v1.16.0, Fission CLI supports environment check that allows you to check the status of Kubernetes environment and Fission services with a single `check` command.
+
+Check the status of Kubernetes cluster before installing Fission
+
+```bash
+$ fission check --pre
+
+kubernetes
+--------------------
+√ kubernetes version is compatible
+
+```
+
+After Fission is installed, check if all the Fission services are running and healthy
+
+```bash
+$ fission check
+
+fission-services
+--------------------
+√ controller is running fine
+√ executor is running fine
+√ router is running fine
+× storagesvc deployment is not running
+
+fission-version
+--------------------
+√ fission is up-to-date
+
+```
+
+*The above output shows when any of the Fission services is not running as expected.*
+
+Refer to the following sections for further analysis.
+
 ### Check Pods Status and Logs
 
 If the Fission installation doesn't work for you, you can follow guides below to troubleshoot.
