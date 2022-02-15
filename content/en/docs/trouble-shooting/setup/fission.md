@@ -7,15 +7,11 @@ description: >
 
 In this section, we will cover how to troubleshoot your functions and collect information to troubleshoot problems related to Fission.
 
-### Enrivonment Check
+### Fission Services Check
 
 From v1.16.0, Fission CLI supports environment check that allows you to check the status of Kubernetes environment and Fission services with a single `check` command.
 
 Check the status of Kubernetes cluster before installing Fission
-
-```bash
-$ fission check --pre
-```
 
 ```bash
 $ fission check --pre
@@ -27,10 +23,6 @@ kubernetes
 ```
 
 After Fission is installed, check if all the Fission services are running and healthy
-
-```bash
-$ fission check
-```
 
 ```bash
 $ fission check
