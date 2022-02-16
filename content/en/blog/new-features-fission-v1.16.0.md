@@ -17,8 +17,8 @@ In this blog post, I’ll throw light on these features and how you can use them
 ## 4 New Features in Fission v.1.16.0
 
 This release comes with 4 new features.
-Most of these features were requested by the community and we’re glad that a few of them came forward and implemented those features.
-Hence without much ado, let’s go straight into the 4 new features in Fission.
+Most of these features were requested by the community, and we’re glad that a few of them came forward and implemented those features.
+Hence, without much ado, let’s go straight into the 4 new features in Fission.
 
 {{< figure src="/images/featured/fission-new-features-v1.16.0.png" alt="New Fission Features Released v1.16.0" height="400" width="600">}}
 
@@ -94,11 +94,11 @@ The value of the `commit` label for different status of the file is as follows:
 
 A couple of minor feature additions were done to the Fission Spec CLI commands.
 
-One of the concerns was that when any Fission CRD is deleted and if the resources are not found, the command exits with non zero error code.
+One of the concerns was that when any Fission CRD is deleted and if the resources are not found, the command exits with non-zero error code.
 Considering the **need for graceful exit**, we’ve added a new `--ignorenotfound` flag that returns a zero exit status even if the resource is not found.
 
 Another one is regarding Fission resources via specs.
-When a resource is already deployed with fission spec and we are trying to override it with some other deployed, then the command fails due to conflict.
+When a resource is already deployed with fission spec, and we are trying to override it with some other deployed, then the command fails due to conflict.
 To allow this behavior, the `--force` flag was added that would allow you to override existing resources.
 
 ## Tried Fission Yet?
