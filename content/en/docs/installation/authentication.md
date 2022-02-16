@@ -18,7 +18,7 @@ Fission does so by enabling authentication for Fission Router.
 This is an optional feature that can be enabled/disable depending on your requirement.
 
 When enabled, a new endpoint for authentication will be registered in the router.
-All the API calls to Fission functions will now be routed through this endpoint.
+All the API calls to Fission functions will now be routed through function endpoints using authentication token.
 
 Fission will also create a secret named `router` in `fission` namespace with a default `username`, a randomly generated `password` and a `jwtSigninKey`.
 This secret is mounted on a volume on the router pod.
@@ -59,6 +59,8 @@ You can also set other parameters related to Authentication
 
 >> Refer to our [installation](_index.en.md) guide if you are installing Fission for the first time. Or visit our [Fission Upgrade](upgrade) guide if you're upgrading from an older version.
 
+## Generating Auth Token
+
 Once the installation is successful, you need to generate the `auth token`.
 To do that, you will export the values and set up `$FISSION_USERNAME`, `$FISSION_PASSWORD` and `$FISSION_AUTH_TOKEN` env variables.
 
@@ -67,6 +69,8 @@ export FISSION_USERNAME=$(kubectl get secrets/router --template={{.data.username
 export FISSION_PASSWORD=$(kubectl get secrets/router --template={{.data.password}} -n fission | base64 -d)
 export FISSION_AUTH_TOKEN=$(fission token create --username $FISSION_USERNAME --password $FISSION_PASSWORD)
 ```
+
+To understand more about generating tokens, refer to our [Fission Token Create](/docs/reference/fission-cli/fission_token_create/) document.
 
 With this all your API calls to Fission functions are now authenticated using the token generated.
 *If a malformed token is used, the API call will fail and return an error.*
