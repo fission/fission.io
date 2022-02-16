@@ -5,14 +5,14 @@ description: >
   Guide to set up basic authentication with Fission
 ---
 
-## Authentication in Fission
+## Authentication for Fission Functions
 
 When using Fission, if you are using an ingress, you might already have some form of authentication in place for external calls.
 But if you aren't, Fission didn't provide a way to configure authentication for your API calls.
 
-Starting with v1.16.0, Fission allows you to have an authentication mechanism in place.
+Starting with [v1.16.0](/docs/releases/v1.16.0-rc1/), Fission allows you to have an **authentication mechanism in place for Fission function invocations**.
 
-## Understanding Authentication in Fission
+## Understanding Authentication for Fission Functions
 
 Fission does so by enabling authentication for Fission Router.
 This is an optional feature that can be enabled/disable depending on your requirement.
@@ -34,6 +34,29 @@ This can be found in `charts/fission-all/values.yaml`.
 --set authentication.enabled=true
 ```
 
+You can also set other parameters related to Authentication
+
+```yaml
+  ## authUriPath defines authentication endpoint path via router 
+  ## default '/auth/login'
+  authUriPath:
+
+  ## authUsername is used as a username for authentication
+  ## default 'admin'
+  authUsername: admin
+  
+  ## jwtSigningKey is the signing key used for signing the JWT token
+  jwtSigningKey: serverless
+
+  ## jwtExpiryTime is the JWT expiry timein seconds
+  ## default '120'
+  jwtExpiryTime: 
+  
+  ## jwtIssuer is the issuer of JWT
+  ## default 'fission'
+  jwtIssuer: fission
+```
+
 >> Refer to our [installation](_index.en.md) guide if you are installing Fission for the first time. Or visit our [Fission Upgrade](upgrade) guide if you're upgrading from an older version.
 
 Once the installation is successful, you need to generate the `auth token`.
@@ -42,7 +65,7 @@ To do that, you will export the values and set up `$FISSION_USERNAME`, `$FISSION
 ```bash
 export FISSION_USERNAME=$(kubectl get secrets/router --template={{.data.username}} -n fission | base64 -d)
 export FISSION_PASSWORD=$(kubectl get secrets/router --template={{.data.password}} -n fission | base64 -d)
-export FISSION_AUTH_TOKEN=$(fi token create --username $FISSION_USERNAME --password $FISSION_PASSWORD)
+export FISSION_AUTH_TOKEN=$(fission token create --username $FISSION_USERNAME --password $FISSION_PASSWORD)
 ```
 
 With this all your API calls to Fission functions are now authenticated using the token generated.
