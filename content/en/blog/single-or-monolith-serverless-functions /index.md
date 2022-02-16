@@ -24,7 +24,7 @@ Design principles like these are not limited to any specific domain or technolog
 Whether you are writing a low level code that would be etched on a chip or a serverless function that would be running on the cloud.
 The decision of applying any of these principles depend on the developer and the use case, however following them will only make the code better and optimized.
 
-While all of them are equally important, that one that is of interest to us in this blog post is the single responsibility principle - *each function must have only one specific operation that ir performs*
+While all of them are equally important, that one that is of interest to us in this blog post is the single responsibility principle - *each function must have only one specific operation that it performs*
 This infact forms the basis of microservices and serverless.
 
 With serverless functions becoming mainstream today, many developers have a question whether to use single or monolith serverless functions for their application? Before we dive into the answer, let’s understand what we mean by single and monolith serverless functions.  
@@ -43,10 +43,10 @@ The client facing application will call this function which will return the outp
 
 ### Sample application
 
-To understand the single and monolith serverless functions, we will build a simple Stock Keeper application developed using Python using Fission functions.
-The application provides the user with a web UI from where the user can enquire about the stock status of a product.
+To understand the single and monolith serverless functions, we will build a simple **Inventory Status Check** application developed using Python and Fission functions.
+The application provides the user with a web UI from where the user can enquire about the inventory status of a product.
 The application will return the stock amount.
-If the stock is less than a certain amount, it will show a reorder form that will allow the user to place and order more stock for that product.
+If the stock is less than a certain amount, it will show a reorder form that will allow the user to place an order for more stock for that product.
 Once placed successfully, the app will show a tentative delivery date for the new stock.
 
 {{< imgproc storekeeper-app.png Fit "800x800" >}}
