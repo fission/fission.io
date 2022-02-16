@@ -52,6 +52,8 @@ $ curl http://${FISSION_ROUTER}/hello
 Hello, world!
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 You can also create a function with executor type "newdeploy" and provide the minimum and maximum number of instances of the function.
 
 ```bash
@@ -101,6 +103,8 @@ $ curl http://${FISSION_ROUTER}/hello
 Hello, Fission!
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 #### Test and debug function
 
 You can run a function using the test command. If the function call succeeds, it will output the function's response:
@@ -110,6 +114,8 @@ $ fission fn test --name hello
 
 Hello, Fission!
 ```
+
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
 
 But if there is an error in the function's execution (it returns HTTP >= 300), then the logs of function execution are displayed:
 

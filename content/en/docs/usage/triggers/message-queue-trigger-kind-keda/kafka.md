@@ -258,6 +258,8 @@ $ fission fn test --name producer
 Successfully sent to request-topic
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 There are a couple of ways you can verify that the consumer is called:
 
 - Check the logs of `mqtrigger-kafka` pods:

@@ -304,6 +304,8 @@ $ fission fn test --name producer
 Published 10 messages to topic request-topic
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 To verify if the messages were successfully sent, navigate to the RabbitMQ portal and observe the count of `Ready Messages` under `request-topic`
 
 If you've followed the tutorial correctly, the message queue trigger will be triggered and our `consumer` function will be invoked.

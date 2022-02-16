@@ -188,6 +188,8 @@ $ fission fn test --name
 Successfully sent to input
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 There are a couple of ways you can verify that the consumerfunc is called:
 
 - Check the logs of `mqtrigger-kinesis` pods:

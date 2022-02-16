@@ -190,6 +190,8 @@ Published messages to projects/projectid/topics/request-topic.
 Messages Published!
 ```
 
+>> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+
 To verify if the messages were successfully sent, navigate to the Google Cloud console and observe the `request-topic-sub` subscription and verify the count of messages sent.
 
 {{< img "../images/gcp-pub-sub-queue.png" "" "60em" "1" >}}
