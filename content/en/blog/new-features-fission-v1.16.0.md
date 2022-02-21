@@ -98,7 +98,7 @@ One of the concerns was that when any Fission CRD is deleted and if the resource
 Considering the **need for graceful exit**, we’ve added a new `--ignorenotfound` flag that returns a zero exit status even if the resource is not found.
 
 Another one is regarding Fission resources via specs.
-When a resource is already deployed with fission spec and we are trying to deploy it with some other deployment, then the command fails due to conflict.
+When a resource is already deployed with fission spec, and we are trying to deploy it with some other deployment, then the command fails due to conflict.
 To allow this behavior, the `--force` flag was added that would allow you to include the existing resources in the new deployment.
 
 ## Tried Fission Yet?
