@@ -3,7 +3,7 @@ title = "Function Composition in a Serverless World [Video]"
 date = "2018-05-14T09:16:30-07:00"
 author = "Erwin Van Eyk"
 description = "Fission functions with Fission Workflows basics"
-categories = ["Workflow"]
+categories = ["Fission"]
 type = "blog"
 +++
 

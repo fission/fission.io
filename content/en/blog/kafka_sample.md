@@ -3,7 +3,7 @@ title = "Fission Kafka Sample"
 date = "2018-08-30T22:50:51+05:30"
 author = "Vishal Biyani"
 description = "Write serverless Java functions with JVM as Kafka consumer"
-categories = ["Kafka", "redis", "IOT"]
+categories = ["Tutorials"]
 type = "blog"
 +++
 

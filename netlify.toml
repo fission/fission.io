@@ -247,3 +247,9 @@ force = true
 from = "/docs/fission-cli/*"
 to = "/docs/reference/fission-cli/:splat"
 status = 301
+
+[[redirects]]
+force = true
+from = "/categories/canary"
+to = "/categories/"
+status = 301

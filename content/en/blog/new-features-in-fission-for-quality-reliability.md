@@ -3,7 +3,7 @@ title = "New in Fission: Live-Reload, Canary Deployments, Prometheus integration
 date = "2018-10-16T01:05:00-07:00"
 author = "Fission"
 description = "Live-Reload, Canary Deployments, Prometheus integration in Fission"
-categories = ["Prometheus", "Canary"]
+categories = ["Fission"]
 type = "blog"
 +++
 

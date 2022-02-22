@@ -3,7 +3,7 @@ title = "Fission WebSocket Sample"
 date = "2021-06-11T10:50:51+05:30"
 author = "Gaurav Gahlot"
 description = "Write a serverless broadcast function with NodeJS"
-categories = ["Websocket", "Application"]
+categories = ["Tutorials"]
 type = "blog"
 +++
 

@@ -3,7 +3,7 @@ title = "Observability with OpenTelemetry & Datadog in Fission"
 date = "2022-01-17T06:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Tutorial to show how you can improve observability with OpenTelemetry & Datadog in Fission."
-categories = ["Tutorial","Application","Python","Observability"]
+categories = ["Tutorials"]
 type = "blog"
 images = ["images/featured/opentelemetry-datadog-fission-featured.png"]
 +++

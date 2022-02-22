@@ -3,7 +3,7 @@ title = "Setting Ingress for your Functions"
 date = "2019-10-28T22:09:38+08:00"
 author = "Ta-Ching Chen"
 description = "How to use ingress with TLS for Fission functions"
-categories = ["ingress", "TLS"]
+categories = ["Fission"]
 type = "blog"
 +++
 
