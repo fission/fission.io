@@ -3,7 +3,7 @@ title = "Function Composition: What It Means, and Why You Should Care"
 date = "2018-06-08T11:39:15-07:00"
 author = "Timirah James"
 description = "Composing Fission functions with Fission Workflows"
-categories = ["Workflow"]
+categories = ["Fission"]
 type = "blog"
 +++
 

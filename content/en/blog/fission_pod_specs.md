@@ -3,7 +3,7 @@ title = "Functions On Steroids With PodSpec"
 date = "2019-05-20T13:41:33+05:30"
 author = "Vishal Biyani"
 description = "Using podSpec with Fission function specifications"
-categories = ["podSpec", "tolerations", "sidecar"]
+categories = ["Fission"]
 type = "blog"
 +++
 

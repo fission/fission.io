@@ -2,7 +2,7 @@
 title: "Serverless Kafka Consumer for Confluent Cloud"
 date: 2021-11-10T11:21:01+05:30
 author: Ankit Chawla
-categories: ["kafka","keda","confluent"]
+categories: ["Tutorials"]
 draft: false
 ---
 

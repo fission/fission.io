@@ -3,7 +3,7 @@ title = "Using Fission's Prometheus Metrics"
 date = "2018-10-16T01:01:00-07:00"
 author = "Soam Vasani"
 description = "Fission exposed prometheus metrics"
-categories = ["Prometheus", "application"]
+categories = ["Fission"]
 type = "blog"
 +++
 

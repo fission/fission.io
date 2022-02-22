@@ -2,7 +2,7 @@
 title: "Serverless Next.js Example Blog with Fission"
 date: 2021-11-17T13:29:16+05:30
 author: Sanket Sudake
-categories: ["nextjs"]
+categories: ["Tutorials"]
 draft: false
 ---
 

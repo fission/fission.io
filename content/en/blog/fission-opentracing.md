@@ -3,7 +3,7 @@ title = "Monitor Fission serverless functions with OpenTracing"
 date = "2019-02-22T15:42:30+05:30"
 author = "Vishal Biyani"
 description = "Tracing Fission functions with Jaeger's distributed tracing technology"
-categories = ["OpenTracing", "Jaeger"]
+categories = ["Tutorials"]
 type = "blog"
 +++
 

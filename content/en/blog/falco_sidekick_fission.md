@@ -2,6 +2,7 @@
 title: "Kubernetes Response Engine: Falcosidekick + Fission"
 date: 2021-09-01
 author: Gaurav Gahlot
+categories: ["Tutorials"]
 slug: falcosidekick-response-engine-fission
 ---
 

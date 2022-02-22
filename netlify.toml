@@ -247,3 +247,243 @@ force = true
 from = "/docs/fission-cli/*"
 to = "/docs/reference/fission-cli/:splat"
 status = 301
+
+[[redirects]]
+force = true
+from = "/categories/canary"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/chrome"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/community"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/confluent"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/database"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/dev-workflow"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/event-driven"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/github-action"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/go"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/go-function"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/gobuster"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/grafana"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/gvisor"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/headless"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/ingress"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/iot"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/jaeger"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/java"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/jvm"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/kafka"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/keda"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/loki"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/monitoring"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/nats"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/nextjs"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/observability"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/opentracing"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/podspec"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/prometheus"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/puppeteer"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/python"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/redis"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/security"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/sidecar"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/tls"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/tolerations"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/tutorial"
+to = "/categories/tutorials"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/website-testing"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/websocket"
+to = "/categories/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/categories/workflow"
+to = "/categories/"
+status = 301

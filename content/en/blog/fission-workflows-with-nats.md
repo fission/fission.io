@@ -3,7 +3,7 @@ title = "FaaS Function Composition with Fission Workflows and NATS"
 date = "2018-03-22T01:46:30-07:00"
 author = "Soam Vasani"
 description = "Compose functions to execute workflows with NATS and Fission functions"
-categories = ["NATS", "Workflow"]
+categories = ["Tutorials"]
 type = "blog"
 +++
 

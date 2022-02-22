@@ -3,7 +3,7 @@ title = "How to use PostgreSQL database with Fission functions"
 date = "2022-01-05T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Tutorial on how to use Fission functions with PostgreSQL database on Kubernetes Cluster."
-categories = ["Tutorial","Application","Python","Database"]
+categories = ["Tutorials"]
 type = "blog"
 images = ["images/featured/postgresql-with-fission-functions.png"]
 +++

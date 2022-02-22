@@ -3,7 +3,7 @@ title = "Single or Monolith Serverless Functions - What should you choose?"
 date = "2022-02-09T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Building a serverless application but confused between single or monolith serverless functions? Here's something to help you."
-categories = ["Fission"]
+categories = ["General"]
 type = "blog"
 images = ["images/featured/single-monolith-featured.png"]
 +++
