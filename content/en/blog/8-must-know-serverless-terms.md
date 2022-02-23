@@ -33,11 +33,11 @@ A cloud native developer would often design an application using **microservices
 ### Microservices
 
 Back in the day, a typical application code used to be one large file with lots of lines of codes.
-Developing them wasn’t easy and updating/maintaining them was a herculean task.
+Developing them wasn’t easy and updating/maintaining them was a Herculean task.
 Realizing that problem, we started making our code more and more loosely coupled eventually leading to microservices.
 
 Microservice architectural pattern is where a software is composed of **many small independent services** that communicate with each other using APIs.
-Each of these micro services can be developed, upgraded and deployed without affecting the other services.
+Each of these microservices can be developed, upgraded and deployed without affecting the other services.
 Each of these services have the ability to **independently scale** to meet the peak demands.
 
 The best part that I like is that each of these services can be written in a completely different language using different tools.
@@ -73,7 +73,7 @@ If you’re new to Kubernetes, you can check out these free videos on [School of
 ### Serverless
 
 As applications become increasingly complex, we want developers to focus more on the code rather than the setting up of the environment/infrastructure.
-Serverless is a cloud execution model that provides an easier and cost effective way to deploy cloud native applications.
+Serverless is a cloud execution model that provides an easier and cost-effective way to deploy cloud native applications.
 
 Serverless allows for **automatic provision of computing resources** to run applications either on demand or on occurrence of a specific event.
 It will also scale the resources automatically in response to an increase or decreased demands.
@@ -107,7 +107,7 @@ Cold start vs cost is often something that businesses need to decide.
 ### Infrastructure as Code
 
 Infrastructure until now was provisioned manually by means of shell scripts.
-However with the advent of cloud computing and cloud native design, the demand for accurate, reusable and disposable infrastructure increased.
+However, with the advent of cloud computing and cloud native design, the demand for accurate, reusable and disposable infrastructure increased.
 It also required infrastructure to be scalable and all of this should be repeatable.
 
 To ensure the consistency of infrastructure along with easier management, the concept of Infrastructure as code came in.
