@@ -55,13 +55,13 @@ One of the major problems before containers was that an application would run pe
 But as soon as it is deployed on another system, it fails due to dependencies, libraries not being present.
 Containers get rid of this problem by packaging all the dependencies, libraries along with the source code in a lightweight, immutable container.
 
-The containerized application can be tested and deployed as a container image on any system with a host os and will guarantee that your application executes.
+The containerized application can be tested and deployed as a container image on any system with a host OS and will guarantee that your application executes.
 Some of the popular containerization tools are **Docker**, **AmazonECS**, **Azure Container Service**, **Google Container Engine**.
 
 ### Kubernetes
 
 Applications today comprise of hundreds of microservices packaged in hundreds of containers.
-As the number of containers increased, the need for a single tool to manage them all arised.
+As the number of containers increased, the need for a single tool to manage them all became much more important.
 And that’s where Kubernetes came in.
 
 An orchestration tool originally developed by Google, Kubernetes has become a **de facto container orchestration tool** today.
@@ -86,7 +86,7 @@ Hence, as a developer your focus will be on writing the code while the cloud ser
 Another important offering around serverless is FaaS - *function as a service*.
 As the name implies, FaaS is a **cloud computing service that allows you to execute code in response to a trigger event**.
 As a developer, you will only deploy the code for a function and the cloud provider will automatically provision the resources required to execute it.
-FaaS is a cost efficient mode to deploy and execute code whilst being flexible and scalable.
+FaaS is a cost-efficient mode to deploy and execute code whilst being flexible and scalable.
 
 There are a lot of FaaS service offerings out there namely **Lambda**, **Azure Functions**, **Google Cloud Functions** to name a few.
 While these offerings run on their respective clouds, there are services like [**Fission**](https://fission.io) that are open source and allow you to deploy and execute functions on Kubernetes clusters irrespective of where they reside.
