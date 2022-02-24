@@ -16,14 +16,18 @@ Now, there are two kinds of message queue triggers:
 2. keda
 
 Message queue trigger kind can be specified using `mqtkind` flag.
-By default, `mqtkind` is set to `fission` which creates regular [message queue trigger](/docs/usage/triggers/message-queue-trigger/).
-To create message queue trigger of kind keda one must specify `mqtkind=keda`.
+
+{{% notice info %}}
+
+Starting from fission version 1.16, the default value of the flag `--mqtkind` is keda. To create the regular [message queue trigger](/docs/usage/triggers/message-queue-trigger/) one must specify `--mqtkind=fission`.
+
+{{% /notice %}}
 
 ## Architecture
 
 {{< img "../assets/mqt-kind-keda.png" "" "40em" "1" >}}
 
-1. The user creates a trigger - for Keda based integration you have to specify the `mqtkind=keda` and add all relevant parameters.
+1. The user creates a trigger adding all relevant parameters.
    These parameters are different for each message queue and hence are encapsulated in a metadata field and follow a key-value format.
    As soon as you create the MQ Trigger, Fission creates a ScaledObject and a consumer deployment object which is referenced by ScaledObject.
    The ScaledObject is a Keda’s way of encapsulating the consumer deployment and all relevant information for connecting to an event source!

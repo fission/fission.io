@@ -134,8 +134,8 @@ module.exports = async function (context) {
 Let's create the environment and function:
 
 ```bash
-$ fission env create --name nodeenv --image fission/node-env
-$ fission fn create --name consumerfunc --env nodeenv --code hellokafka.js
+fission env create --name nodeenv --image fission/node-env
+fission fn create --name consumerfunc --env nodeenv --code hellokafka.js
 ```
 
 ### Connecting via trigger
@@ -145,12 +145,12 @@ Let's create a message queue trigger which will invoke the consumerfunc every ti
 The response will be sent to `output` topic and in case of consumerfunc invocation fails, the error is written to `error` topic.
 
 ```bash
-$ fission mqt create --name kafkatest --function consumerfunc --mqtype kafka --topic input --resptopic output --errortopic error
+fission mqt create --name kafkatest --function consumerfunc --mqtype kafka --mqtkind fission --topic input --resptopic output --errortopic error
 ```
 
 If your Kafka broker is running somewhere else (not at `broker.kafka:9092`), you will have to provide custom configuration for Kafka broker host while installing fission.
 You can do that by creating a config file, set the value of `kafka.brokers` to your broker URL and provide this config file while installing fission through helm using -f flag.
-Suggested reading about [helm chart config parameters](https://github.com/fission/fission/blob/master/charts/fission-all/values.yaml) 
+Suggested reading about [helm chart config parameters](https://github.com/fission/fission/blob/master/charts/fission-all/values.yaml)
 
 ### Testing it out
 

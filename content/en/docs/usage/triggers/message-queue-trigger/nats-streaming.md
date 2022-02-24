@@ -16,13 +16,13 @@ And you can change the default setting in [values.yaml](https://github.com/fissi
 You should see a pod with `nats-streaming` prefix with following command.
 
 ```bash
-$ kubectl -n fission get pod -l svc=nats-streaming
+kubectl -n fission get pod -l svc=nats-streaming
 ```
 
 If the NATS Streaming is enabled, a kubernetes deployment called `mqtrigger-nats-streaming` will be created as well.
 
 ```bash
-$ kubectl -n fission get deploy|grep mqtrigger-nats-streaming
+kubectl -n fission get deploy|grep mqtrigger-nats-streaming
 ```
 
 The Message Queue Trigger talks to NATS Streaming through Kubernetes service, you can get the service information with command.
@@ -55,7 +55,7 @@ nats://defaultFissionAuthToken@nats-streaming:4222
 If the connection information changed, please modify the environment variable of mqtrigger-nats-streaming deployment as well.
 
 ```bash
-$ kubectl -n fission edit deployment mqtrigger-nats-streaming
+kubectl -n fission edit deployment mqtrigger-nats-streaming
 ```
 
 ## Local Test
@@ -63,22 +63,22 @@ $ kubectl -n fission edit deployment mqtrigger-nats-streaming
 Create a message queue trigger that invokes any function you created before.
 
 ```bash
-$ fission mqt create --name hello --function hello1 --topic foobar
+fission mqt create --name hello --function hello1 --topic foobar --mqtkind fission
 ```
 
 To test the setup locally, we need to forward local ports traffic to nats-streaming server in kubernetes cluster.
 
 ```bash
-$ export NATS_POD=$(kubectl -n fission get pod -l svc=nats-streaming -o name)
-$ kubectl -n fission port-forward ${NATS_POD} 4222:4222
+export NATS_POD=$(kubectl -n fission get pod -l svc=nats-streaming -o name)
+kubectl -n fission port-forward ${NATS_POD} 4222:4222
 ```
 
 In this way we can connect to nats-streaming server locally with `127.0.0.1:4222`.
 (**NOTICE**: for local test only)
 
 ```bash
-$ cd ${GOPATH}/src/github.com/fission/fission/test/tests/mqtrigger/nats
-$ go run stan-pub.go -s nats://defaultFissionAuthToken@127.0.0.1:4222 -c fissionMQTrigger -id clientPub foobar ""
+cd ${GOPATH}/src/github.com/fission/fission/test/tests/mqtrigger/nats
+go run stan-pub.go -s nats://defaultFissionAuthToken@127.0.0.1:4222 -c fissionMQTrigger -id clientPub foobar ""
 ```
 
 Then, you should see the function invocation logs.
