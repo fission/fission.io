@@ -1,11 +1,11 @@
 +++
 title = "8 Must Know Serverless Terms For A Developer"
-date = "2022-02-23T11:30:34+05:30"
+date = "2022-02-24T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Planning to start your cloud native journey? Here are 8 Must Know Serverless Terms For A Developer."
 categories = ["General"]
 type = "blog"
-images = ["images/featured/single-monolith-featured.png"]
+images = ["/images/featured/serverless-terms.png"]
 +++
 
 I’ve been a mobile developer for most of my professional career.
@@ -13,6 +13,8 @@ The transition from Java to Android wasn’t a big deal. However, over the years
 
 What that meant is that a lot of us developers had to get a hang of the serverless world.
 So to help all of you looking to get started with the serverless journey, here are the **8 Must Know Serverless Terms** you should know as a developer.
+
+{{< figure src="/images/featured/serverless-terms.png" alt="Planning to start your cloud native journey? Here are 8 Must Know Serverless Terms For A Developer." height="600" width="800">}}
 
 ## Starting Your Serverless Journey
 
