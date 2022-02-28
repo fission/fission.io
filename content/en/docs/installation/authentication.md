@@ -57,7 +57,7 @@ You can also set other parameters related to Authentication
   jwtIssuer: fission
 ```
 
->> Refer to our [installation](_index.en.md) guide if you are installing Fission for the first time. Or visit our [Fission Upgrade](upgrade) guide if you're upgrading from an older version.
+>> Refer to our [installation](_index.en.md) guide if you are installing Fission for the first time. Or visit our [Fission Upgrade](../upgrade) guide if you're upgrading from an older version.
 
 ## Generating Auth Token
 

@@ -50,7 +50,7 @@ The above diagram represents the architecture of the IoT platform. All the Serve
 
 ## Dashboard
 
-Once you setup required components ([explained here](https://github.com/fission/fission-kafka-sample/tree/master/00_setup)) and deploy the functions, you will see a dashboard like below. Based on the data present in your system, the look and feel will vary.
+Once you setup required components ([explained here](https://github.com/fission/fission-kafka-sample#setup)) and deploy the functions, you will see a dashboard like below. Based on the data present in your system, the look and feel will vary.
 
 ![dashboard-diagram](/images/iot-demo-screen.png)
 
