@@ -13,7 +13,7 @@ You will also need NATS Streaming server setup which is reachable from the Fissi
 
 ## Installation
 
-If you want to setup NATS Streaming server on the Kubernetes cluster, you can use the [information here](https://github.com/nats-io/nats-streaming-server) or you can check the documentation for nats streaming [docs](https://docs.nats.io/nats-on-kubernetes/minimal-setup).  
+If you want to setup NATS Streaming server on the Kubernetes cluster, you can use the [information here](https://github.com/nats-io/nats-streaming-server) or you can check the documentation for nats streaming [docs](https://docs.nats.io/running-a-nats-service/nats-kubernetes).  
 You can also setup NATS streaming server with this [yaml](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/nats-streaming-server/nats-dep.yaml) file.(Monitoring is already configured)
 
 {{% notice info %}}
