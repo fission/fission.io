@@ -1,24 +1,27 @@
 +++
-title = "8 Must Know Serverless Terms For A Developer"
-date = "2022-03-01T11:30:34+05:30"
+title = "8 Must Know Terms For A Serverless Developer"
+date = "2022-03-03T15:30:34+05:30"
 author = "Atulpriya Sharma"
-description = "Planning to start your cloud native journey? Here are 8 Must Know Serverless Terms For A Developer."
+description = "Are you building a serverless application? Here are 8 terms you must know as a serverless developer."
 categories = ["General"]
 type = "blog"
-images = ["/images/featured/serverless-terms.png"]
+images = ["/images/featured/serverless-developer.png"]
 +++
 
 I’ve been a mobile developer for most of my professional career.
-The transition from Java to Android wasn’t a big deal. However, over the years the entire technological landscape has transformed, thanks to serverless and microservices. Many of the mobile apps that I developed have a serverless component running somewhere on the cloud.
+The transition from Java to Android wasn’t a big deal.
+However, most of the mobile apps today have shifted their backend to serverless.
+This makes mobile apps more light-weight and improves their maintainability.
 
-What that meant is that a lot of us developers had to get a hang of the serverless world.
-So to help all of you looking to get started with the serverless journey, here are the **8 Must Know Serverless Terms** you should know as a developer.
+As I set out to build and learn more about serverless applications, I'd like to share my learnings with you.
+This post lists **8 terms you must know as a serverless developer**.
 
-{{< figure src="/images/featured/serverless-terms.png" alt="Planning to start your cloud native journey? Here are 8 Must Know Serverless Terms For A Developer." height="600" width="1000">}}
+{{< figure src="/images/featured/serverless-developer.png" alt="Are you building a serverless application? Here are 8 terms you must know as a serverless developer." height="600" width="1000">}}
 
-## Serverless Terms You Should Know
+## Terms You Should Know As A Serverless Developer
 
-Serverless is the present and future of the software industry.
+Serverless has become a preferred way to build applications by developers.
+Thanks to the ease of building and deployment that it offers.
 Irrespective of what type of an IT professional you are, you would definitely have to interact with some serverless or cloud components in the future.
 To help you get started quickly, here are some serverless terms you should know as a developer:
 
@@ -35,13 +38,13 @@ To help you get started quickly, here are some serverless terms you should know 
 
 I’m sure that you are aware of what cloud computing is.
 If you are not, you should read more about [cloud computing](https://glossary.cncf.io/cloud_computing/).
-**Cloud Native** is essentially a concept of building and deploying applications in such a way that they take full advantage of the distributed cloud computing offering.
+**Cloud Native** is a concept of building and deploying applications in such a way that they take full advantage of the distributed cloud computing offering.
 
 {{< figure src="https://docs.microsoft.com/en-us/dotnet/architecture/cloud-native/media/cloud-native-foundational-pillars.png" alt="Cloud Native. Courtesy: Microsoft." height="400" width="600">}} Cloud Native. Courtesy: microsoft.com
 
 Cloud native applications leverage the services in the cloud to be more resilient, scalable and flexible.
 More often than not, such applications are developed without a lot of coding, thanks to the various cloud services.
-A cloud native developer would often design an application using **microservices**, deploy it on a container and run it on the cloud.
+A serverless developer would often design an application using **microservices**, deploy it on a container and run it on the cloud.
 
 ### Microservices
 
@@ -50,8 +53,7 @@ Developing them wasn’t easy and updating/maintaining them was a Herculean task
 Realizing that problem, we started making our code more and more loosely coupled eventually leading to **microservices**.
 
 Microservice architectural pattern is where a software is composed of **many small independent services** that communicate with each other using APIs.
-Each of these microservices can be developed, upgraded and deployed without affecting the other services.
-Each of these services have the ability to **independently scale** to meet the peak demands.
+Each of these microservices can be developed, upgraded and deployed without affecting the other services and have the ability to **independently scale** to meet the peak demands.
 
 {{< figure src="https://cdn.pixabay.com/photo/2018/03/21/16/04/ecommerce-3247176_1280.png" alt="Microservices - small independent services. Courtesy: Pixabay." height="400" width="600">}} Microservices - small independent services. Courtesy: pixabay.com.
 
@@ -80,8 +82,7 @@ As the number of containers increased, the need for a single tool to manage them
 And that’s where **Kubernetes** came in.
 
 An orchestration tool originally developed by Google, Kubernetes has become a **de facto container orchestration tool** today.
-It allows you to manage all your containers across multiple clusters.
-It is an open source tool that allows you to deploy, scale and manage your containerized applications.
+It is an open source tool that allows you to manage all your containers across multiple clusters by enabling you to deploy, scale & manage containerized applications.
 *Don't be consfused if you see K8s, it's just another way of denoting Kubernetes.*
 
 {{< figure src="https://d33wubrfki0l68.cloudfront.net/69e55f968a6f44613384615c6a78b881bfe28bd6/42cd3/_common-resources/images/flower.svg" alt="Kubernetes - container orchestration tool. Courtesy: kubernetes.io" height="400" width="600">}} Kubernetes - container orchestration tool. Courtesy: kubernetes.io
@@ -96,16 +97,15 @@ As applications become increasingly complex, we want developers to focus more on
 
 {{< figure src="https://www.infracloud.io/assets/New%20Assets/serverless-consulting/serverless-hero-img.svg" alt="Serverless - cost-effective way to deploy cloud native applications. Courtesy: infracloud.io" height="400" width="600">}} Serverless - cost-effective way to deploy cloud native applications. Courtesy: infracloud.io
 
-
 Serverless allows for **automatic provision of computing resources** to run applications either on demand or on occurrence of a specific event.
 It will also scale the resources automatically in response to an increase or decreased demands.
-Hence, as a developer your focus will be on writing the code while the cloud service provider will ensure you have the required resources to run it, when you need it.
+Hence, as a serverless developer your focus will be on writing the code while the cloud service provider will ensure you have the required resources to run it, when you need it.
 
 ### Function As a Service - FaaS
 
 Another important offering around serverless is **FaaS** - *function as a service*.
 As the name implies, FaaS is a **cloud computing service that allows you to execute code in response to a trigger event**.
-As a developer, you will only deploy the code for a function and the cloud provider will automatically provision the resources required to execute it.
+As a serverless developer, you will only deploy the code for a function and the cloud provider will automatically provision the resources required to execute it.
 FaaS is a cost-efficient mode to deploy and execute code whilst being flexible and scalable.
 
 {{< figure src="https://spring.io/images/diagram-serverless-standalone-bbe45ff683ff780f3014dfdd18a80909.svg" alt="FaaS - execute code in response to a trigger event. Courtesy: spring.io" height="400" width="600">}} FaaS - execute code in response to a trigger event. Courtesy: spring.io
@@ -147,7 +147,7 @@ Some of the popular Infrastructure as code tools are **Ansible**, **Terraform**,
 ## Conclusion
 
 The world of cloud computing and serverless is a universe in itself that is vast and ever expanding.
-The serverless terms mentioned above can be a good starting point for anyone who wants to embark on a cloud native journey.
+The terms mentioned above can be a good starting point for anyone who wants to embark on becoming a serverless developer.
 While it may sound Greek and Latin at the moment, you’ll slowly understand them as you start using them.
 So if you’ve been waiting to start your cloud native journey, we’ve now made it easier for you.
 
