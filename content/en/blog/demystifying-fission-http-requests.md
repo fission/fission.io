@@ -5,7 +5,7 @@ author = "Atulpriya Sharma"
 description = "Understand how http requests work with Fission functions."
 categories = ["Fission"]
 type = "blog"
-images = ["images/featured/demystifying-fission-new-deploy-featured.png"]
+images = ["images/featured/demystifying-fission-http-requests.png"]
 +++
 
 The first ever message that was sent from one computer to another was "lo" on the ARPRANET in 1969.
@@ -13,6 +13,8 @@ That one message was a stepping stone to the modern day emails, instant messages
 In today's blog post in our Demystifying Fission series, we are going to talk about how Fission handles HTTP requests and routes them to functions.
 
 But before we dive into it, let us do some revision, shall we?
+
+{{< figure src="/images/featured/demystifying-fission-http-requests.png" alt="HTTP requests in Fission" height="600" width="800">}} HTTP requests in Fission
 
 ## Hypertext Transfer Portofol - HTTP
 
@@ -64,7 +66,7 @@ Fission Router acts as a bridge between triggers and functions.
 It forwards HTTP requests to functions pods.
 If a function pod is already running, the router will route the request to the pod, else it will request for one from the [executor](/docs/architecture/executor).
 
-{{< figure src="https://platform9.com/wp-content/uploads/2019/01/diagram_how-fission-works.png" alt="Fission architecture. Courtesy: platform9.com" height="600" width="800">}} Fission architecture. Courtesy: platform9.com"
+{{< figure src="https://platform9.com/wp-content/uploads/2019/01/diagram_how-fission-works.png" alt="Fission architecture. Courtesy: platform9.com" height="600" width="800">}} Fission architecture. Courtesy: platform9.com
 
 ### How Fission maps HTTP requests to user function
 
