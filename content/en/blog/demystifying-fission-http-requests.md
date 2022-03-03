@@ -16,7 +16,7 @@ But before we dive into it, let us do some revision, shall we?
 
 {{< figure src="/images/featured/demystifying-fission-http-requests.png" alt="HTTP requests in Fission" height="600" width="800">}} HTTP requests in Fission
 
-## Hypertext Transfer Portofol - HTTP
+## Hypertext Transfer Portocol - HTTP
 
 The foundation of the modern day internet is Hypertext Transfer Protocol - HTTP.
 An application layer protocol, HTTP allows two networked devices to communicate with each other.
@@ -42,7 +42,7 @@ Every HTTP request sent to the server is served with a response.
 The response you receive from the server contains the data you requested for.
 The response also has some more information along with the data requested for.
 
-- **HTTP Status Code**: *3 digit codes used to indicate the status of a HTTP request.*
+- **HTTP Status Code**: *3-digit codes used to indicate the status of an HTTP request.*
 - **HTTP Response Headers**: *Just like HTTP Request Headers, these are key-value based information providing additional context to the response.*
 
 ## Fission Functions
@@ -63,7 +63,7 @@ You must now be wondering, **how does a trigger *trigger* a function?**
 That's the job of the [Fission Router](/docs/architecture/router).
 
 Fission Router acts as a bridge between triggers and functions.
-It forwards HTTP requests to functions pods.
+It forwards HTTP requests to function pods.
 If a function pod is already running, the router will route the request to the pod, else it will request for one from the [executor](/docs/architecture/executor).
 
 {{< figure src="https://platform9.com/wp-content/uploads/2019/01/diagram_how-fission-works.png" alt="Fission architecture. Courtesy: platform9.com" height="600" width="800">}} Fission architecture. Courtesy: platform9.com
@@ -83,10 +83,9 @@ Once both are matched, router will then proxy request to the function pod (a pod
 Now, we know how a request being proxied to the user function, there are some questions you might want to ask:
 
 1. Will `router` modify http request?
-2. What's the payload that will be passed to function?
+2. What's the payload that will be passed to the function?
 
-To answer these questions, let's create a python function that returns HTTP `Header`, `Query String` and `Message Body`
-to see what's inside of a request sent to user function.
+To answer these questions, let's create a python function that returns HTTP `Header`, `Query String` and `Message Body` to see what's inside of a request sent to user function.
 
 * requestdata.py
   
@@ -103,7 +102,7 @@ def main():
 ```bash
 $ fission env create --name pythonv1 --image fission/python-env:0.9.2 --version 1 --period 5
 
-# With flag --method and --url, we can create a function and a HTTP trigger at the same time. 
+# With flag --method and --url, we can create a function and an HTTP trigger at the same time. 
 $ fission fn create --name reqpayload --env pythonv1 \
     --code requestdata.py --method POST --url "/test/{foobar}"
 
@@ -159,7 +158,7 @@ For example, `{foobar}` in `"/test/{foobar}"` will be converted and added to req
 
 ## Conclusion
 
-Many of you would have created Fission functions, but we're sure you wouldn't have know about this.
+Many of you would have created Fission functions, but we're sure you wouldn't have known about this.
 HTTP triggers are one of the most popular ways to trigger a Fission function.
 Understanding how Fission processes these requests and responses, will make it easier for you develop your application on Fission.
 Moreover, with this understanding, debugging or troubleshooting your Fission functions would be a faster and easier.
