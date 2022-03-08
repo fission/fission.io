@@ -5,19 +5,22 @@ author = "Atulpriya Sharma"
 description = "Using CockroachDB and REST APIs in Fission to create a Guestbook application"
 categories = ["Tutorials"]
 type = "blog"
+images = ["images/featured/guestbook-application-featured.png"]
 +++
 
 Fission provides you with a serverless framework that you can deploy on your Kubernetes clusters.
-There are various use cases where you can use Fission and today we'll show you how to develop a guestbook application with Fission in GoLang using CockroachDB as a database.
+There are various use cases where you can use Fission, and today we'll show you how to develop a guestbook application with Fission in GoLang using CockroachDB as a database.
 
 ## Serverless Guestbook Application
 
 ![router maps req to fn](/images/how-to-develop-a-serverless-application-with-fission/guestbook-diagram.svg)
 
-The guestbook is composed with four REST APIs and each API consist of a function and a HTTP trigger.  
+The guestbook is composed with four REST APIs and each API consist of a function and an HTTP trigger.  
 This application allows a user to create, edit and delete a message.
 You can submit a message, retrieve a list of messages, delete a message all by means of REST APIs.
 You can clone [Fission REST API Repo](https://github.com/fission/fission-restapi-sample) and follow the guide to install/try guestbook sample.
+
+{{< figure src="/images/featured/guestbook-application-featured.png" alt="Using CockroachDB and REST APIs in Fission to create a Guestbook application." height="600" width="800">}}
 
 ## Create Fission Objects for REST API
 
@@ -32,14 +35,14 @@ DELETE http://api.example.com/user-management/users/{id}
 
 To create a REST API with fission, we need to create following things to make it work:
 
-* `HTTP Trigger` with specific HTTP method and URL contains the resource type we want manipulate with.
+* `HTTP Trigger` with specific HTTP method and URL contains the resource type we want to manipulate with.
 * `Function` to handle the HTTP request.
 
 ## Installation
 
 ### HTTP Trigger
 
-The first step is to create a HTTP trigger for your function
+The first step is to create an HTTP trigger for your function
 
 ```bash
 $ fission httptrigger create --method GET --url "/my-first-function" --function hello
@@ -71,11 +74,11 @@ $ fission httptrigger create --method GET \
 ### Function
 
 To handle a REST API request, normally a function need to extract resource from the request URL.
-In fission you can get the resource value from request header directly as we described in [Request Payload](#request-payload).
+In Fission, you can get the resource value from request header directly as we described in [Request Payload](#request-payload).
 
 That means you can get value from header with key `X-Fission-Params-Id` if URL is `/guestbook/messages/{id}`.
 
-In Golang you can use `CanonicalMIMEHeaderKey` to transform letter case.
+In Golang, you can use `CanonicalMIMEHeaderKey` to transform letter case.
 
 * [rest-api/api.go](https://github.com/fission/fission-restapi-sample/blob/f011b08cf08412250c295a534f71fb381fd30e4d/rest-api/api.go#L83-L100)
 
