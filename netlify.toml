@@ -491,7 +491,7 @@ status = 301
 [[redirects]]
 force = true
 from = "/blog/how-to-develop-a-serverless-application-with-fission-part-1/"
-to = "blog"
+to = "/blog"
 status = 301
 
 [[redirects]]
@@ -503,5 +503,5 @@ status = 301
 [[redirects]]
 force = true
 from = "/blog/how-to-develop-a-serverless-application-with-fission-part-3/"
-to = "blog"
+to = "/blog"
 status = 301
