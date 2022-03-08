@@ -487,3 +487,21 @@ force = true
 from = "/categories/workflow"
 to = "/categories/"
 status = 301
+
+[[redirects]]
+force = true
+from = "/blog/how-to-develop-a-serverless-application-with-fission-part-1/"
+to = "blog"
+status = 301
+
+[[redirects]]
+force = true
+from = "/blog/how-to-develop-a-serverless-application-with-fission-part-2/"
+to = "/blog/guestbook-application-with-fission-and-cockroachdb/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/blog/how-to-develop-a-serverless-application-with-fission-part-3/"
+to = "blog"
+status = 301
