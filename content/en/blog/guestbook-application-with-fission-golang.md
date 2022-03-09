@@ -9,7 +9,7 @@ images = ["images/featured/guestbook-application-featured.png"]
 +++
 
 Fission provides you with a serverless framework that you can deploy on your Kubernetes clusters.
-There are various use cases where you can use Fission, and today we'll show you how to develop a guestbook application with Fission in GoLang using CockroachDB as a database.
+There are various use cases where you can use Fission, and today we'll show you how to develop a guestbook application with Fission in Go using CockroachDB as a database.
 
 ## Serverless Guestbook Application
 
@@ -35,8 +35,8 @@ DELETE http://api.example.com/user-management/users/{id}
 
 To create a REST API with fission, we need to create following things to make it work:
 
-* `HTTP Trigger` with specific HTTP method and URL contains the resource type we want to manipulate with.
-* `Function` to handle the HTTP request.
+* `HTTP Trigger` with specific HTTP method and URL contains the resource type we want to manipulate with. Read more about [HTTP Triggers](../../docs/reference/crd-reference/#httptrigger)
+* `Function` to handle the HTTP request. Read more about [Function](../../docs/reference/crd-reference/#function)
 
 ## Installation
 
@@ -45,7 +45,7 @@ To create a REST API with fission, we need to create following things to make it
 The first step is to create an HTTP trigger for your function
 
 ```bash
-$ fission httptrigger create --method GET --url "/my-first-function" --function hello
+$ fission httptrigger create --url /guestbook/messages --method POST --function restapi-post --name restpost
 ```
 
 There are 3 important elements in the command:
@@ -58,8 +58,7 @@ As a real world REST API, the URL would be more complex and contains the resourc
 To support such use cases, you can change URL to something like following:
 
 ```bash
-$ fission httptrigger create --method GET \
-    --url "/guestbook/messages/{id}" --function restapi-get
+$ fission httptrigger create --url "/guestbook/messages/{id:[0-9]+}" --method GET --function restapi-get --name restgetpart
 ```
 
 Since fission uses `gorilla/mux` as underlying URL router, you can write regular expression in URL to filter out illegal API requests.
@@ -67,8 +66,7 @@ Since fission uses `gorilla/mux` as underlying URL router, you can write regular
 * [route-restGetPart.yaml](https://github.com/fission/fission-restapi-sample/blob/master/specs/route-restGetPart.yaml)
 
 ```bash
-$ fission httptrigger create --method GET \
-    --url "/guestbook/messages/{id:[0-9]+}" --function restapi-get
+$ fission httptrigger create --url "/guestbook/messages/{id:[0-9]+}" --method GET --function restapi-get --name restgetpart
 ```
 
 ### Function
@@ -78,9 +76,9 @@ In Fission, you can get the resource value from request header directly as we de
 
 That means you can get value from header with key `X-Fission-Params-Id` if URL is `/guestbook/messages/{id}`.
 
-In Golang, you can use `CanonicalMIMEHeaderKey` to transform letter case.
+In Go, you can use `CanonicalMIMEHeaderKey` to transform letter case.
 
-* [rest-api/api.go](https://github.com/fission/fission-restapi-sample/blob/f011b08cf08412250c295a534f71fb381fd30e4d/rest-api/api.go#L83-L100)
+* [rest-api/api.go](https://github.com/fission/fission-restapi-sample/blob/f98a46f4dc3756b42fce7fd292705d74e1fad249/rest-api/api.go#L83-L101)
 
 ```go
 import (
@@ -114,7 +112,7 @@ func MessageGetHandler(w http.ResponseWriter, r *http.Request) {
 
 In this way, you can access `query string` and `message body` as usual.
 
-* [rest-api/api.go](https://github.com/fission/fission-restapi-sample/blob/4398eb195aeb59523101aa68a62782d91f86d85a/rest-api/api.go#L65-L67)
+* [rest-api/api.go](https://github.com/fission/fission-restapi-sample/blob/f98a46f4dc3756b42fce7fd292705d74e1fad249/rest-api/api.go#L109-L111)
 
 ```go
 func GetQueryString(r *http.Request, query string) string {
