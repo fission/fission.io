@@ -152,7 +152,7 @@ helm repo add cockroachdb https://charts.cockroachdb.com/
 helm repo update
 ```
 
-Install cockroachdb using helm
+Install cockroachdb using helm and provide values from [cockroachdb.yaml](https://github.com/fission/fission-restapi-sample/blob/master/cockroachdb.yaml)
 
 ```bash
 helm install my-release --values cockroachdb.yaml cockroachdb/cockroachdb
@@ -225,10 +225,12 @@ fission spec apply
 
 ## Testing The Guestbook Application
 
-Since this guestbook application is created using `REST` APIs, we first need to expore the `$FISSION_ROUTER`
+Since this guestbook application is created using `REST` APIs, we first need to export the `$FISSION_ROUTER` along with the port
 
 ```bash
-export FISSION_ROUTER=$(minikube ip):$(kubectl -n fission get svc router -o jsonpath='{...nodePort}')
+export PORT=8889
+kubectl --namespace fission port-forward $(kubectl --namespace fission get pod -l svc=router -o name) $PORT:8888
+export FISSION_ROUTER=127.0.0.1:$PORT
 ```
 
 Create a post
