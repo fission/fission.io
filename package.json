@@ -4,11 +4,12 @@
   "description": "Fission.io dependencies",
   "main": "index.js",
   "dependencies": {
-    "autoprefixer": "^10.2.1",
-    "postcss": "^8.3.11",
+    "postcss": "^8.3.11"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.2",
     "postcss-cli": "^8.3.1"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
