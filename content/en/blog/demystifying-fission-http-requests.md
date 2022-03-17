@@ -1,6 +1,6 @@
 +++
 title = "Demystifying Fission - HTTP Requests in Fission"
-date = "2022-03-02T09:30:34+05:30"
+date = "2022-03-17T09:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Understand how http requests work with Fission functions."
 categories = ["Fission"]
@@ -164,7 +164,7 @@ Understanding how Fission processes these requests and responses, will make it e
 Moreover, with this understanding, debugging or troubleshooting your Fission functions would be a faster and easier.
 
 **Demystifying Fission** is our series of blog posts on topics that'll help you understand Fission better.
-Do check out our other post in the Demystifying Fission series:
+Do check out our other posts in the Demystifying Fission series:
 
 - [Understanding Pool Manager](/blog/demystifying-fission-pool-manager)
 - [Understanding New Deploy](/blog/demystifying-fission-new-deploy)
