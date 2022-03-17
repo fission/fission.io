@@ -166,3 +166,15 @@ From controlling the pool size to limiting the resources and controlling functio
 
 If you have any questions regarding Pool Manager or are confused what’s the best configuration for your setup, feel free to reach out to us.
 Join [Fission Slack](https://fission.io/slack) channel or [Tweet to Us](https://twitter.com/fissionio) and we should be more than happy to help!
+
+**Demystifying Fission** is our series of blog posts on topics that'll help you understand Fission better.
+Do check out our other posts in the Demystifying Fission series:
+
+- [Understanding New Deploy](/blog/demystifying-fission-new-deploy)
+- [Understanding HTTP Requests in Fission](/blog/demystifying-fission-http-requests-in-fission)
+
+---
+
+**_Author:_**
+
+[Atulpriya Sharma](https://twitter.com/TheTechMaharaj)  **|**  Developer Advocate - [InfraCloud Technologies](http://infracloud.io/)

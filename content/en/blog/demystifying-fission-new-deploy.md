@@ -119,3 +119,15 @@ NewDeploy as the name suggests is a newer way that Fission has adopted to execut
 Now that you have learnt about Pool MAnager and New Deploy, why not try them? Head over to our examples repo and try out the various samples that we have created. Change the executors and see how it works.
 
 If you have a specific requirement and are confused which one to use, please share it in our [Fission Slack](https://fission.io/slack) Channel or get in touch with us on [Twitter](https://twitter.com/fissionio) and we’d be happy to help.
+
+**Demystifying Fission** is our series of blog posts on topics that'll help you understand Fission better.
+Do check out our other posts in the Demystifying Fission series:
+
+- [Understanding Pool Manager](/blog/demystifying-fission-pool-manager)
+- [Understanding HTTP Requests in Fission](/blog/demystifying-fission-http-requests-in-fission)
+
+---
+
+**_Author:_**
+
+[Atulpriya Sharma](https://twitter.com/TheTechMaharaj)  **|**  Developer Advocate - [InfraCloud Technologies](http://infracloud.io/)
