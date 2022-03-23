@@ -43,15 +43,15 @@ The key of Fission resides in customizable environments.
 As a developer, you can **modify any of Fission's supported environments** and rebuild them.
 Not only that, you can even create a new environment from scratch.
 We have a blog post about using [PostgreSQL with Fission](../blog/how-to-use-postgresql-database-with-fission-functions/) where we show how to modify an environment.
-Even the components in Fission are stored as kubernetes CRDs and are customizable.
+Even the components in Fission are stored as Kubernetes Custom Resource Definitions(CRDs) and are customizable.
 
-Due to customizability of environments, there are many companies that prefer using Fission.
-Some of them are even offering serverless function hosting services.
+Due to customizability of environments, there are many organizations that prefer using Fission.
+Many have of them have build Function as a service(FaaS) platform on top of Fission for enterprise hosting.
 
 ### Greater Control Over Your Infrastructure
 
-While Fission takes care of the underlying infrastructure, it doesn't mean that it doesn't offer you any control.
-From configuring memory limits to CPU utilization, you can configure these settings at the lowest pod level.
+While Fission takes care of the underlying infrastructure, it also offers you a lot of customization options and better control through abstractions.
+From configuring memory limits to CPU utilization, you can configure these settings at the lowest pod/container level.
 Fission Executors like [Pool Manager](../demystifying-fission-pool-manager) & [New Deploy](../demystifying-fission-new-deploy) allow you to fine tune the function execution by configuring settings at the environment and pod level.
 
 ```bash
@@ -63,7 +63,7 @@ $ fission fn create --name foobar --env nodejs --code hello.js --executortype ne
 For instance, you can configure a pod to execute only one function at a time.
 You can also create and maintain a pool of warm pods to reduce the cold start times for functions.
 Thanks to Fission's ability to integrate with observability tools like [OpenTelemetry & Datadog](../observability-with-opentelemetry-datadog-in-fission/), you know what's exactly happening in your infrastructure.
-And based on that, you can fine tune your applications and infrastructure to take the maximum advantage.
+Based on the observability, you can fine tune your applications and infrastructure to take the maximum advantage.
 
 ### Vendor agnostic
 
