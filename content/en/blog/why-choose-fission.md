@@ -11,7 +11,7 @@ images = ["images/featured/why-fission-serverless-framework.png"]
 The Serverless paradigm is empowering developers to focus only on building the application and not worry about anything else.
 Kubernetes has become an industry standard for hosting cloud native or container based microservice applications.
 It works seamlessly across public/private clouds and provides a common platform without any vendor lock-in.
-Hence it makes naturally a good choice to build serverless frameworks on top of Kubernetes.
+Hence, it makes naturally a good choice to build serverless frameworks on top of Kubernetes.
 
 There are a handful of Kubernetes serverless frameworks out there and Fission is one of the popular ones.
 
@@ -74,7 +74,7 @@ While it all is easy, you are pretty much locked in with a vendor.
 {{< figure src="https://d33wubrfki0l68.cloudfront.net/964dac0d5d27fec1d6b6d1a723842f4d14c1ead3/78fef/images/fission-illustration.svg" alt="Fission Serverless Framework" height="500" width="500">}} Fission is built on Kubernetes
 
 When you use an AWS lambda serverless function, it is tightly coupled with the entire AWS ecosystem.
-Hence if you want to move such a serverless function to another cloud provider like Azure or GCP, it isn’t going to be easy as you would have to create and configure a lot of things from scratch in the new environment.
+Hence, if you want to move such a serverless function to another cloud provider like Azure or GCP, it isn’t going to be easy as you would have to create and configure a lot of things from scratch in the new environment.
 
 On the other hand, **Fission is built on top of Kubernetes** and hence migrating applications across different clouds is much easier.
 Disaster recovery also is relatively easier to set up and deploy in Fission due to [Fission spec files](/docs/usage/spec/).
@@ -93,7 +93,7 @@ While we strive hard to have the documentations in place, if there's anything mi
 From the most basic of issues to the most complex ones, there's a pretty good **community support that comes Free with Fission** ;)
 
 With a suite of benefits that come along with Fission, don't you think it's time to give Fission a try?
-Fission is powering applications of enterprises across the globe so it is production ready.
+Fission is powering applications of enterprises across the globe, so it is production ready.
 With the dedicated support from the maintainers and the active community, you can trust Fission to take care of your enterprise requirements.
 
 Read more about [Fission](/docs/) or get in touch with us so that we can help you get started.
