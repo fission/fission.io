@@ -113,7 +113,7 @@ At this point, all the external traffic that enters the Istio Service mesh will 
 
 ## Request Routing
 
-As dicussed earlier, Istio allows extended configuration when it comes to traffic management.
+As discussed earlier, Istio allows extended configuration when it comes to traffic management.
 One of them is **request routing** and this will be done using a **Virtual Service**.
 With this you can set the traffic percentage and decide a destination to send the traffic to.
 
