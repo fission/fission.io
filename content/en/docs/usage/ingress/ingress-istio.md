@@ -12,7 +12,7 @@ In this document, we shall look into how you can use Istio as Ingress with Fissi
 ## Pre-requisites
 
 To begin with, you need to have Istio installed on your cluster.
-There are multiple options to setup Istio and based on your setup, you can choose one of many ways available to [install Istio](https://istio.io/latest/docs/setup/install/).
+There are multiple options to set up Istio and based on your setup, you can choose one of many ways available to [install Istio](https://istio.io/latest/docs/setup/install/).
 
 To install Fission you can refer to [Fission Installation](/docs/installation).
 Set the `enableIstio` flag as `true` during the setup to enable Istio in Fission
@@ -157,7 +157,7 @@ The router then forwards it to the respective application based on the `routes` 
 
 ### Add HTTP Fault Delay
 
-As part of the Traffic Management services, Istio allows you to add a HTTP fault delay.
+As part of the Traffic Management services, Istio allows you to add an HTTP fault delay.
 This comes handy when you want to test the resiliency of your application.
 HTTP fault delays allow you to add delays before a request is processed, that way it'll help you discover timeout related issues.
 
