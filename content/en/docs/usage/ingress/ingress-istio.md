@@ -18,7 +18,7 @@ To install Fission you can refer to [Fission Installation](/docs/installation).
 Set the `enableIstio` flag as `true` during the setup to enable Istio in Fission
 
 ```bash
-helm install --version v1.15.1 --namespace fission \
+helm install --version {{% release-version %}} --namespace fission \
   --set serviceType=NodePort,routerServiceType=NodePort \
   --set enableIstio=true \
   fission-charts/fission-all
@@ -41,9 +41,6 @@ You can clone it from our [examples repository](https://github.com/fission/examp
 One of the features of Istio is its ability to let you easily control the flow of traffic and API calls between services.
 It provides a lot of options to manage traffic coming in to your cluster.
 While Istio supports Kubernetes Ingress, it offers an **Istio Gateway** that provides more customization and flexibility than Ingress.
-
-Kubernetes ingress is a load balancer that receives incoming traffic.
-However, it doesn't have support for configuring traffic routing.
 [Istio Gateway](https://istio.io/latest/docs/tasks/traffic-management/ingress/ingress-control/) brings in the flexibility and allows you to control the traffic coming in to your cluster.
 All of this can be done using Istio routing rules.
 
