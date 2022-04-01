@@ -5,14 +5,14 @@ author = "Atulpriya Sharma"
 description = "Developing a Serverless Twitter Bot on Fission using Python"
 categories = ["Tutorials"]
 type = "blog"
-images = ["images/featured/serverless-twitter-bot-fission.png"]
+images = ["images/featured/serverless-twitterbot-fission.png"]
 +++
 
 Social Media can be extremely overwhelming whilst being useful. Twitter of all is one of the most hyperactive social media platforms. If you are an enterprise, most likely you’ll have tons of tweets  and DMs to reply to. While there are off the shelf tools available to help you do that, there’s always some missing functionality.
 
 So why not develop a solution on your own? In today’ post I’ll show you how to develop a serverless Twitter Bot running on Fission. The simple application will show you how to use Twitter API and deploy the bot as a serverless function in Fission on your Kubernetes cluster.
 
-{{< figure src="/images/featured/serverless-twitter-bot-fission.png" alt="Developing Serverless Twitter Bot on Fission" height="600" width="1000">}}
+{{< figure src="/images/featured/serverless-twitterbot-fission.png" alt="Developing Serverless Twitter Bot on Fission" height="600" width="1000">}}
 
 ## Understanding Serverless The Twitter Bot
 
