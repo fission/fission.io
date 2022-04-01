@@ -165,7 +165,7 @@ Below is how you can create a time trigger to run the function after every minut
 fission timer create --name minute --function tweetbot --cron "@every 1m"
 ```
 
-With this you have successfully developed a serverless twitter bot that can respond to mentions. Anyone who mentions you in a tweet, the bot will automatically respond to it with the generic message and drop a notification in your Slack channel.
+With this you have successfully developed a serverless Twitter bot that can respond to mentions. Anyone who mentions you in a tweet, the bot will automatically respond to it with the generic message and drop a notification in your Slack channel.
 
 ## Conclusion
 
