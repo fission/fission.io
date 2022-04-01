@@ -16,7 +16,7 @@ So why not develop a solution on your own? In today’ post I’ll show you how 
 
 ## Understanding Serverless The Twitter Bot
 
-Before I take you through the code, let me help you understand what our serverless Twitter Bot will do. Below are a few pointer to help you understand the app and the use case better:
+Before I take you through the code, let me help you understand what our serverless Twitter Bot will do. Below are a few pointers to help you understand the app and the use case better:
 
 * Respond to any tweet that mentions you with a generic message
 * Send a notification to Slack channel about the mention
@@ -32,14 +32,14 @@ The serverless Twitter bot is developed using Python and uses the following libr
 
 ## Pre Requisites
 
-There are a couple things that need to be done before we start writing the code. We need to create a Twitter App and a Slack App so that we can achieve what we want. Both the applications are free to create and you just need an account.
+There are a couple things that need to be done before we start writing the code. We need to create a Twitter App, and a Slack App so that we can achieve what we want. Both the applications are free to create and you just need an account.
 
 ### Creating a Twitter App
 
 1. Head to [Twitter Developer portal](https://developer.twitter.com/), if you don't have an account create one. (_note that this will be the account on which our bot will run_)
 2. Create a **New Project** and provide details like Project Name, Use Case and Project Description.
 3. On the next page, choose **Create New App**.
-4. Choose an App Environment as Development and provide an **App Name**.
+4. Select App Environment as Development and provide an **App Name**.
 5. Save the **API Keys** and Secrets generated.
 6. From the Project Page, choose **OAuth** from User Authentication Settings.
 7. Turn on **OAuth 1.0a** option and choose Read and Write.
@@ -56,7 +56,7 @@ At this point, your Twitter App is ready to be used. Make sure to save `consumer
 1. Head to [Slack API portal](https://api.slack.com/), if you don't have an account create one.
 2. Click on Create A New App and create it from Scratch.
 3. Provide a unique **App Name**.
-4. Choose a **Slack Workspace** - _you should be a part of some workspace_
+4. Select a **Slack Workspace** - _you should be a part of some workspace_
 5. On the basic information page, select **Incoming Webhooks** and activate it.
 6. Click on Add New Webhook to workspace
 7. In a new window, select/enter a new channel name. This is the channel to which your slack app will send notifications.
@@ -165,7 +165,7 @@ Below is how you can create a time trigger to run the function after every minut
 fission timer create --name minute --function tweetbot --cron "@every 1m"
 ```
 
-With this you have successfully developed a serverless twitter bot that can respond to mentions. Anyone who mentions you in a tweet, the bot will automatically respond to it with the generic message and drop a notification in your slack channel.
+With this you have successfully developed a serverless twitter bot that can respond to mentions. Anyone who mentions you in a tweet, the bot will automatically respond to it with the generic message and drop a notification in your Slack channel.
 
 ## Conclusion
 
