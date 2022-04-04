@@ -21,9 +21,9 @@ Before I take you through the code, let me help you understand what our serverle
 * Respond to any tweet that mentions you with a generic message
 * Send a notification to Slack channel about the mention
 * Will be deployed as Fission function
-* Will execute at regular intervals using Fission’s Time Trigger
+* Will execute at regular intervals using Fission’s [Time Trigger](/docs/usage/triggers/timer/)
 
-The serverless Twitter bot is developed using Python and uses the following libraries:
+The serverless Twitter bot is developed in Python language and uses the following libraries:
 
 * **[Tweepy](https://www.tweepy.org/)** - Twitter SDK in Python to interact with Twitter
 * **[Slack SDK](https://slack.dev/python-slack-sdk/)** - Slack SDK in Python to send notification to Slack channel
