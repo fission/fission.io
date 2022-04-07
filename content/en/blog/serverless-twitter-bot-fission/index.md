@@ -34,6 +34,10 @@ The serverless Twitter bot is developed in Python language and uses the followin
 
 There are a couple things that need to be done before we start writing the code. We need to create a Twitter App, and a Slack App so that we can achieve what we want. Both the applications are free to create and you just need an account.
 
+### Fission
+
+Before you start working on this demo, you need to ensure that you have Fission installed and running on your system. You can refer to our [Fission Installation](/docs/installation) guide for more.
+
 ### Creating a Twitter App
 
 1. Head to [Twitter Developer portal](https://developer.twitter.com/), if you don't have an account create one. (_note that this will be the account on which our bot will run_)
