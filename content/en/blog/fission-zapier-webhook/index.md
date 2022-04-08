@@ -52,7 +52,7 @@ There are three things that you need to have this application working.
 
 1. Fission
 2. Google Account
-3. Zapier Starter Account - *the basic Free account doesn’t provide Webhook integration, however you can use their 14 day trial.*
+3. Zapier Starter Account - *the basic Free account doesn’t provide Webhook integration, however you can use their 14-day trial.*
 
 ### Fission
 
@@ -82,8 +82,8 @@ We will first start by creating a Zapier Webhook and a Zap before working on the
 4. At this point, you will have the Zapier Webhook URL
 5. In the next step, test the Webhook url by sending dummy data to it, you should see Zapier showing the data that you sent it
 6. Next, we create an **Action** that will be performed after the event is triggered
-7. Choose **Google Sheets** from App Event options & select **Create Spreadsheet Row**
-8. Choose your **Google Account** - *the same one where you created the spreadsheet*. It will ask you to allow Zapier to access Google Drive. You need to allow it for this integration to work
+7. Select **Google Sheets** from App Event options & select **Create Spreadsheet Row**
+8. Pick your **Google Account** - *the same one where you created the spreadsheet*. It will ask you to allow Zapier to access Google Drive. You need to allow it for this integration to work
 9. From the dropdown menu, select the spreadsheet you created earlier and choose a worksheet
 10. Zapier will automatically populate the option based on the row headers provided
 11. At this point we need the actual data to validate and create the Zap, you can pause here and proceed with the example to generate data, comeback and verify
