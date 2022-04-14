@@ -1,6 +1,6 @@
 +++
 title = "Fission Serverless Function + Zapier Webhook - Automate your workflows"
-date = "2022-04-07T11:30:34+05:30"
+date = "2022-04-14T11:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Automate your workflows with Fission serverless functions and Zapier Webhooks"
 categories = ["Tutorials"]
@@ -154,7 +154,7 @@ fission route create --name pawesome --method POST --method GET --prefix /paweso
 Port forward the service to access it from browser
 
 ```bash
-kubectl port-forward svc/router 8888:80 -nfissionouter 8888:80 -nfission
+kubectl port-forward svc/router 8888:80 -nfission
 ```
 
 Navigate to `http://127.0.0.1:8888/pawesome` to access the application. Choose any product and click on Place Order. In the dialog box, enter your name and email id rest can be ignored and click on Submit. You should see Order Placed Successfully dialog box. Open the Google Sheet that you had created, you should see a new row added with the `name`, `email id` and `itemOrdered`.
