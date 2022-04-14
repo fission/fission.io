@@ -1,6 +1,6 @@
 +++
 title = "Fission Serverless Function + Zapier Webhook - Automate your workflows"
-date = "2022-04-14T11:30:34+05:30"
+date = "2022-04-14T11:35:34+05:30"
 author = "Atulpriya Sharma"
 description = "Automate your workflows with Fission serverless functions and Zapier Webhooks"
 categories = ["Tutorials"]
