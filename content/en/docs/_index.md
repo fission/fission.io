@@ -125,6 +125,10 @@ Hello World!
 {{< /tab >}}
 {{< /tabs >}}
 
+## Fission Examples
+
+Check out more examples on how you can use Fission in our [Fission Examples Repo](https://github.com/fission/examples/).
+
 ## Join Us
 
 * [Join Slack](/slack)
