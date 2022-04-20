@@ -72,7 +72,7 @@ We have successfully created a Twitter App and a Slack App. Let's now create the
 
 ## Creating Twitter Bot
 
-You can clone the [TwitterBot repository](https://github.com/fission/examples/tree/master/python/TwitterBot) to create this application. Remember ot update the code with your tokens, keys and usernames.
+You can clone the [TwitterBot repository](https://github.com/fission/examples/tree/main/python/TwitterBot) to create this application. Remember ot update the code with your tokens, keys and usernames.
 
 `app.py` is the file which has the actual code. Make sure to update the `username` in `app.py` before running the script.
 

@@ -64,7 +64,7 @@ conn = new WebSocket("ws://<node-internal-ip>:<router-svc-node-port>/broadcast")
 
 ```
 git clone https://github.com/fission/examples.git
-cd examples/samples/websocket
+cd examples/miscellaneous/websocket
 ```
 
 - There you must have the `specs` directory. 
@@ -101,7 +101,7 @@ Send message from either of the window, it will be broadcasted to all others.
 
 ```
 git clone https://github.com/fission/examples.git
-cd examples/samples/websocket
+cd examples/miscellaneous/websocket
 ```
 
 - Remove the existing specs directory
@@ -225,7 +225,7 @@ If you run into any issues, please feel free to reach out at Fission [slack][13]
 
 [1]: https://datatracker.ietf.org/doc/html/rfc6455
 [2]: https://hub.docker.com/r/fission/node-env/tags?page=1&ordering=last_updated
-[3]: https://github.com/fission/examples/blob/master/samples/websocket/broadcast.js
+[3]: https://github.com/fission/examples/blob/main/miscellaneous/websocket/broadcast.js
 [4]: https://fission.io/docs/usage/triggers/http-trigger/
 [5]: https://fission.io/docs/installation/
 [6]: https://github.com/fission/examples

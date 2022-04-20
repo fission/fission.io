@@ -338,7 +338,7 @@ Congratulations! You now know how to use Fission functions with PostgreSQL datab
 
 *So what side are you on, Mountains or Beaches? ;)*
 
-You can find the code to this example [here](https://github.com/fission/examples/tree/master/python/votingapp). For any issues or clarification, you can reach out to the author.
+You can find the code to this example [here](https://github.com/fission/examples/tree/main/python/votingapp). For any issues or clarification, you can reach out to the author.
 
 ## Want more?
 

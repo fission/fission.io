@@ -36,8 +36,8 @@ Before we dive into details, let's walk through overall flow of event and functi
 
 We have two samples if you want to quickly try out the trigger.
 
-- [Keda Kafka Trigger Sample with Strimzi Kafka](https://github.com/fission/examples/tree/master/samples/kafka-keda)
-- [Keda Kafka Trigger Sample with SASL plain text authentication and Confluent Cloud](https://github.com/fission/examples/tree/master/samples/kafka-keda-sasl)
+- [Keda Kafka Trigger Sample with Strimzi Kafka](https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda)
+- [Keda Kafka Trigger Sample with SASL plain text authentication and Confluent Cloud](https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda-sasl)
 
 ## Building the app
 
@@ -160,7 +160,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 {{% notice info %}}
 The above example is recommended for development purposes only. For production purposes, you can checkout [YAML specs](https://fission.io/docs/usage/spec/).
-If you want to use spec with SASL, you can check out this [example](https://github.com/fission/examples/tree/master/samples/kafka-keda-sasl).
+If you want to use spec with SASL, you can check out this [example](https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda-sasl).
 {{% /notice %}}
 
 We are now ready to package this code and create a function so that we can execute it later.

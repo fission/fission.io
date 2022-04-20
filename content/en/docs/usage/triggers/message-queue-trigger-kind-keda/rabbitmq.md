@@ -77,7 +77,7 @@ Before we dive into details, let us walk through the overall flow of events and 
 
 ### Sample App
 
-You can get the source code for the sample app explained in this document in our [Keda RabbitMQ Trigger Repo](https://github.com/fission/examples/tree/master/samples/keda-rabbitmq-go)
+You can get the source code for the sample app explained in this document in our [Keda RabbitMQ Trigger Repo](https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/keda-kafka-rabbitmq)
 
 ## Building the app
 

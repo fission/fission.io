@@ -34,7 +34,7 @@ At this point, you have fission installed along with Istio sidecar injection ena
 Let us now look into various ways of using Istio with Fission.
 
 For this entire documentation, we are going to use our [Single vs Monolith](https://fission.io/blog/single-or-monolith-serverless-functions-what-should-you-choose/) example.
-You can clone it from our [examples repository](https://github.com/fission/examples/tree/master/python/SinglevsMonolith).
+You can clone it from our [examples repository](https://github.com/fission/examples/tree/main/python/SinglevsMonolith).
 
 ## Configure Istio Gateway
 

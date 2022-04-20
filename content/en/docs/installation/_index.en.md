@@ -231,7 +231,7 @@ It might take one or two mintues for fission to start running. check the status 
 $ fission env create --name nodejs --image fission/node-env
 
 # A javascript function that prints "hello world"
-$ curl -LO https://raw.githubusercontent.com/fission/examples/master/nodejs/hello.js
+$ curl -LO https://raw.githubusercontent.com/fission/examples/main/nodejs/hello.js
 
 # Upload your function code to fission
 $ fission function create --name hello-js --env nodejs --code hello.js
@@ -249,7 +249,7 @@ Hello, world!
 $ fission env create --name python --image fission/python-env
 
 # A Python function that prints "hello world"
-$ curl -LO https://raw.githubusercontent.com/fission/examples/master/python/hello.py
+$ curl -LO https://raw.githubusercontent.com/fission/examples/main/python/hello.py
 
 # Upload your function code to fission
 $ fission function create --name hello-py --env python --code hello.py
@@ -267,7 +267,7 @@ Hello, world!
 $ fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
 
 # A Go function that prints "hello world"
-$ curl -LO https://raw.githubusercontent.com/fission/examples/master/go/hello.go
+$ curl -LO https://raw.githubusercontent.com/fission/examples/main/go/hello%20world/hello.go
 
 # Upload your function code to fission
 $ fission function create --name hello-go --env go --src hello.go --entrypoint Handler
@@ -290,7 +290,7 @@ $ fission environment create --name java --image fission/jvm-env --builder fissi
 
 # A Java function that prints "hello world"
 $ mkdir -p src/main/java/io/fission/
-$ curl -L https://raw.githubusercontent.com/fission/examples/master/jvm/java/src/main/java/io/fission/HelloWorld.java \
+$ curl -L https://raw.githubusercontent.com/fission/examples/main/java/hello-world/src/main/java/io/fission/HelloWorld.java \
   -o src/main/java/io/fission/HelloWorld.java
 # pom.xml contains dependencies for the function.
 $ curl -LO https://raw.githubusercontent.com/fission/environments/master/jvm/examples/java/pom.xml
@@ -320,5 +320,5 @@ For more language tutorials, visit [Language]({{< ref "../usage/languages/" >}})
 If something went wrong, we'd love to help -- please [drop by the Fission slack](/slack) and ask for help.
 
 Check out the
-[examples](https://github.com/fission/examples/tree/master)
+[examples](https://github.com/fission/examples/tree/main)
 for some example functions.
