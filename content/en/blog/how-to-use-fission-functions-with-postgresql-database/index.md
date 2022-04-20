@@ -150,7 +150,7 @@ Below is how the folders will look.
   - `___init__.py` - standard Python init file.
 
 
-You can view the complete source code [here](https://github.com/fission/examples/tree/master/python/votingapp).
+You can view the complete source code [here](https://github.com/fission/examples/tree/main/python/votingapp).
 
 > *Make sure that build.sh file is executable. Update the permissions using `chmod +x build.sh`*
 
