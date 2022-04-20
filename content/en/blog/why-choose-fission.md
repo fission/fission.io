@@ -42,7 +42,7 @@ You can check out all the [Fission supported environments](https://environments.
 The key of Fission resides in customizable environments.
 As a developer, you can **modify any of Fission's supported environments** and rebuild them.
 Not only that, you can even create a new environment from scratch.
-We have a blog post about using [PostgreSQL with Fission](../blog/how-to-use-postgresql-database-with-fission-functions/) where we show how to modify an environment.
+We have a blog post about using [PostgreSQL with Fission](../how-to-use-postgresql-database-with-fission-functions/) where we show how to modify an environment.
 Even the components in Fission are stored as Kubernetes Custom Resource Definitions(CRDs) and are customizable.
 
 Due to customizability of environments, there are many organizations that prefer using Fission.
