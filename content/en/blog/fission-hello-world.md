@@ -105,10 +105,10 @@ To verify if the pods are up and running, be sure to run this command:
 
 >_(The status of the pods should be "Running")_
 
+
 We’ll be using the Golang Hello World example from the fission github repo (which can be found here: https://github.com/fission/examples/blob/main/go/hello-world/hello.go ), so we’ll need to download the code using the following command:
 									
 	$ curl https://raw.githubusercontent.com/fission/examples/main/go/hello-world/hello.go > /tmp/hello.go
-
 
 Now let’s deploy our function using this command:
 
