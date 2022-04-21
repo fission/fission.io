@@ -51,7 +51,7 @@ Architecture diagram of our app using Fission function, OpenTelemetry & Datadog
 
 As a developer, you already know that you simply cannot start coding without setting up the environment.
 So, let's look into the pre requisites that are required to send traces to Datadog using OpenTelemetry and Fission.
-The entire source code for this application can be found in our [OpenTelemetry Datadog Sample Repo](https://github.com/fission/examples/tree/master/python/opentelemetry-datadog).
+The entire source code for this application can be found in our [OpenTelemetry Datadog Sample Repo](https://github.com/fission/examples/tree/main/python/opentelemetry-datadog).
 
 So let's get started!
 
@@ -145,7 +145,7 @@ data:
 ...
 ```
 
-> Note: The complete yaml configuration that you need to apply for `OpenTelemetry` to work correctly can be found in the [optel-config.yaml](https://github.com/fission/examples/blob/master/python/opentelemetry-datadog/optel-config.yaml) file.
+> Note: The complete yaml configuration that you need to apply for `OpenTelemetry` to work correctly can be found in the [optel-config.yaml](https://github.com/fission/examples/blob/main/python/opentelemetry-datadog/optel-config.yaml) file.
 > Use the command `kubectl apply -f optel-config.yaml` to apply the configuration.
 
 ### Datadog

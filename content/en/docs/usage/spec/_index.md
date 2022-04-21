@@ -301,4 +301,4 @@ You can refer latest definitions for Fission Custom Resources at [doc.crds.dev/g
 
 ## More Examples
 
-For more spec examples, please visit [fission/examples](https://github.com/fission/examples/tree/master/spec-example).
+For more spec examples, please visit [fission/examples](https://github.com/fission/examples/tree/main/miscellaneous/spec-example).

@@ -23,7 +23,7 @@ If you want to follow along the tutorial, it will be a good idea to [install Fis
 
 The new [JVM environment](https://github.com/fission/environments/tree/master/jvm) support allows you to use Java functions in Fission. 
 
-This tutorial explains how Java functions work in Fission and guides you through building a simple "Hello World" function with the JVM environment, so you can see the Java support in action. This example can also be found in our [examples directory on GitHub](https://github.com/fission/examples/tree/master/jvm/java).
+This tutorial explains how Java functions work in Fission and guides you through building a simple "Hello World" function with the JVM environment, so you can see the Java support in action. This example can also be found in our [examples directory on GitHub](https://github.com/fission/examples/tree/main/java).
 
 # JVM Environment: Insider View
 
@@ -154,7 +154,7 @@ Hello World!
 
 # Want more?
 
-- More examples can be found in our [examples directory on GitHub](https://github.com/fission/examples/tree/master/jvm/)
+- More examples can be found in our [examples directory on GitHub](https://github.com/fission/examples/tree/main/java)
 
 
 **Follow us on Twitter for more updates! [@fissionio](https://www.twitter.com/fissionio)**

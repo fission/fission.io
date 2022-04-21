@@ -9,7 +9,7 @@ type = "blog"
 
 # Introduction
 
-Running chrome headless is useful for various test automation tasks but running a headless Chrome in Docker can be tricky ([More details here](https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker)). Also the [this Github issue](https://github.com/puppeteer/puppeteer/issues/3994#issuecomment-524396092) has some good insights on the issues you might face. This blog shows running headless chrome in a fission function. You can find the working example with code etc. in [examples repo here](https://github.com/fission/examples/tree/master/samples/nodejs-chrome-headless).
+Running chrome headless is useful for various test automation tasks but running a headless Chrome in Docker can be tricky ([More details here](https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker)). Also the [this Github issue](https://github.com/puppeteer/puppeteer/issues/3994#issuecomment-524396092) has some good insights on the issues you might face. This blog shows running headless chrome in a fission function. You can find the working example with code etc. in [examples repo here](https://github.com/fission/examples/tree/main/miscellaneous/nodejs-chrome-headless).
 
 Typical use cases for which Puppeteer is used are:
 

@@ -41,7 +41,7 @@ $ helm install --namespace fission --name-template fission https://github.com/fi
 ```
 # Function code
 
-Now that our Fission setup is ready, let's get the function code ready! You will find all this code and details in fission/example [repo here](https://github.com/fission/examples/tree/master/samples/gobuster-example) for reference.
+Now that our Fission setup is ready, let's get the function code ready! You will find all this code and details in fission/example [repo here](https://github.com/fission/examples/tree/main/miscellaneous/gobuster-example) for reference.
 
 We have a simple shell script which uses gobuster binary and provides as argument a website and the txt file which has patterns to be tested for. You can notice that all files are being referenced from directory `/userfunc/deployarchive/` - i.e. because we are using deployment archive type and all files will land in same directory.
 

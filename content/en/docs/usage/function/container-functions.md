@@ -95,7 +95,7 @@ trigger 'nextapp' created
 
 Visit app URL, `http://<router_url>/nextapp/`
 
-You can refer it source for the application [here](https://github.com/fission/examples/tree/master/container-functions/next-app).
+You can refer it source for the application [here](https://github.com/fission/examples/tree/main/miscellaneous/container-functions/next-app).
 
 ### Command options
 

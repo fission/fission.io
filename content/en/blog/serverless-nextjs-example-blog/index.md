@@ -30,7 +30,7 @@ Let's do a walkthrough of how to deploy a Next.js application with Fission.
 Typical Next.js application has a `pages` directory, which contains all the pages to be served.
 There are supplimentary directories such as `styles`, `data`, `components`, `public` etc. which could be part of your Next.js application.
 
-We have a built demo blog application with Fission, source code is available on [GitHub](https://github.com/fission/examples/tree/master/samples/nextjs-blog-demo).
+We have a built demo blog application with Fission, source code is available on [GitHub](https://github.com/fission/examples/tree/main/miscellaneous/nextjs-blog-demo).
 
 Clone the [examples repository](https://github.com/fission/examples) first.
 

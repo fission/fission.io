@@ -352,7 +352,7 @@ fission fn test --name kafka-producer
 Now you will be able to see new pods being created in the second terminal.
 If you check the logs of the created pod, you will see all the messages that were created by the producer function.
 
-You can also see the source for this blog at [Keda Kafka Example](https://github.com/fission/examples/tree/master/samples/kafka-keda-sasl)
+You can also see the source for this blog at [Keda Kafka Example](https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda-sasl)
 
 You can also look at [Kafka Connector documentation](/docs/usage/triggers/message-queue-trigger-kind-keda/kafka/).
 

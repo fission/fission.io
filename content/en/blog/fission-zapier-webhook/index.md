@@ -93,7 +93,7 @@ We will first start by creating a Zapier Webhook and a Zap before working on the
 
 ## Application Setup & Deployment
 
-Clone the [Pawesome Repo](https://github.com/fission/examples/tree/master/python/ZapierWebhook) to your local system to begin setting up the application.
+Clone the [Pawesome Repo](https://github.com/fission/examples/tree/main/python/ZapierWebhook) to your local system to begin setting up the application.
 
 ### Setting up Secret
 

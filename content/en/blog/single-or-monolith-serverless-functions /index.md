@@ -53,7 +53,7 @@ Once placed successfully, the app will show a tentative delivery date for the ne
 Sample Stock Keeper application
 {{< /imgproc >}}
 
-You can refer to the entire code on this application in our [Fission GitHub samples repo](https://github.com/fission/examples/tree/master/python/SinglevsMonolith)
+You can refer to the entire code on this application in our [Fission GitHub samples repo](https://github.com/fission/examples/tree/main/python/SinglevsMonolith)
 
 > Note: *For simplicity, the app returns a random number for the stock. For placing the order too, it returns a random date.
 For real world implementations, you can have the function connect to a database and get the current stock for a product.

@@ -177,7 +177,7 @@ Lastly since the `fission-java-core` is currently in the snapshot release, you n
 
 The current build environment for Java has support for Maven builds.
 You can upload the source code and the JVM builder will build the source code into a jar.
-Let's take [Java example from here](https://github.com/fission/examples/tree/master/jvm/java) and build using Fission builder.
+Let's take [Java example from here](https://github.com/fission/examples/tree/main/java) and build using Fission builder.
 
 Let's first create a JVM environment with builder.
 For JVM environment you need to pass `--keeparchive` so that the jar file built from source is not extracted for running the function.
