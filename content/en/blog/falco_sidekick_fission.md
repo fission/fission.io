@@ -90,7 +90,7 @@ Windows:
   $ fission env create --name nodejs --image fission/node-env
 
   # Get a hello world
-  $ curl https://raw.githubusercontent.com/fission/examples/master/nodejs/hello.js > hello.js
+  $ curl https://raw.githubusercontent.com/fission/examples/main/nodejs/hello.js > hello.js
 
   # Register this function with Fission
   $ fission function create --name hello --env nodejs --code hello.js

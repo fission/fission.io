@@ -314,7 +314,7 @@ For this test we will be using a simple NodeJS based function.
 fission env create --name nodejs --image fission/node-env
 
 # get hello world function
-curl https://raw.githubusercontent.com/fission/examples/master/nodejs/hello.js > hello.js
+curl https://raw.githubusercontent.com/fission/examples/main/nodejs/hello.js > hello.js
 
 # register the function with Fission
 fission function create --name hello --env nodejs --code hello.js
