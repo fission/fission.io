@@ -263,8 +263,10 @@ _Appears in:_
  Available value:  - poolmgr  - newdeploy  - container |
 | `MinScale` _integer_ | This is only for newdeploy to set up minimum replicas of deployment. |
 | `MaxScale` _integer_ | This is only for newdeploy to set up maximum replicas of deployment. |
-| `TargetCPUPercent` _integer_ | This is only for newdeploy to set up target CPU utilization of HPA. |
+| `TargetCPUPercent` _integer_ | Deprecated: use hpaMetrics instead. This is only for executor type newdeploy and container to set up target CPU utilization of HPA. Applicable for executor type newdeploy and container. |
 | `SpecializationTimeout` _integer_ | This is the timeout setting for executor to wait for pod specialization. |
+| `hpaMetrics` _[MetricSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#metricspec-v2beta2-autoscaling) array_ | hpaMetrics is the list of metrics used to determine the desired replica count of the Deployment created for the function. Applicable for executor type newdeploy and container. |
+| `hpaBehavior` _[HorizontalPodAutoscalerBehavior](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#horizontalpodautoscalerbehavior-v2beta2-autoscaling)_ | hpaBehavior is the behavior of HPA when scaling in up/down direction. Applicable for executor type newdeploy and container. |
 
 
 #### ExecutorType
