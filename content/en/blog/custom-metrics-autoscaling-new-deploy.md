@@ -1,20 +1,20 @@
 +++
-title = "Autoscaling on Custom Metrics in New Deploy Functions"
+title = "Autoscaling serverless functions with custom metrics"
 date = "2022-05-11T14:43:46+05:30"
 author = "Ankit Chawla"
-description = "Implementing custom metrics for HPA scaling"
-categories = ["Fission"]
+description = "Let us see how to enable autoscaling for serverless functions with custom metrics"
+categories = ["Tutorials"]
 type = "blog"
 +++
 
 
-Autoscaling is one of the key features of kubernetes because of its capability to scale up or down according to the load. This is pretty useful as optimizes cost and no human interference is required for scaling. It is intelligent enough to make its own decisions on scaling matters.
+Autoscaling is one of the key features of Kubernetes because of its capability to scale up or down according to the load. This is pretty useful as optimizes cost with minimum human intervention. Autoscaling adjusts your applications and resources based on the rise and fall in the demand.
 
-The default metric for new deploy functions to depend on is `targetCPU` which is provided by the kubernetes metrics server. But what if you want the functions to scale based on some third party software's metrics?
+In the earlier versions of Fission, new deploy functions depended only on `targetCPU` metric for scaling. But what if you want the functions to scale based on some third party software's metrics?
 
 In our latest release of fission(`fission 1.16.0-rc2`), we have upgraded our autoscaling dependencies to `v2beta2` and fission now supports adding custom metrics to the new deploy functions.
 
-So in this blog post we will cover scraping and exposing kafka metrics and then providing the metrics to our function.
+In this blog post we will cover scraping and exposing kafka metrics and then providing the metrics to our function.
 
 ## Prerequisites
 
@@ -51,7 +51,7 @@ helm install fission fission-charts/fission-all --namespace fission -f kafka-fis
 ## Setting up Apache Kafka
 
 We'll be using [Strimzi](https://strimzi.io/) to run the Kafka cluster.
-Create the kafka namespace. Then we'll install strimzi in the namespace.
+Create kafka namespace and install strimzi in it.
 
 ```bash
 kubectl create ns kafka
@@ -61,6 +61,8 @@ kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
 Wait until the `strimzi-cluster-operator` starts running.
 
 Save the following file as `kafka-config.yaml`.
+This file contains the configuration to set up the `kafka cluster` and the `kafka-exporter`.
+It also defines all the kafka metrics which will be made accessible by the `kafka-exporter`.  
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -295,9 +297,6 @@ data:
         memberType: "$3"
 ```
 
-This file contains the configuration to set up the `kafka cluster` and the `kafka-exporter`.
-It also defines all the kafka metrics which will be made accessible by the `kafka-exporter`.  
-
 ```bash
 kubectl apply -f kafka-config.yaml
 ```
@@ -310,7 +309,7 @@ We'll create the following kafka topics
 - response-topic
 - error-topic
 
-Paste the following yaml to a file named `kafka-topic.yaml` and then apply it.
+Paste the following contents in a new yaml file. Name it `kafka-topic.yaml` and apply it.
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -350,7 +349,7 @@ kubectl apply -f kafka-topic.yaml -n kafka
 
 ## Setting up Prometheus monitoring
 
-Now we will set up Prometheus in the `monitoring` namespace which will monitor the kafka metrics and also expose the metrics when we create the adapter.
+We will set up Prometheus in the `monitoring` namespace which will monitor the kafka metrics and also expose the metrics when we create the adapter.
 We'll be using [kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack) to set up Prometheus on the cluster.
 
 ```bash
@@ -594,3 +593,11 @@ kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/kafka/pods/%2A/
 ## Testing
 
 Run a producer function to send 10000 messages to the topic `request-topic` and check the namespace `fission-function` where the new deploy pods will be created or destroyed according to the metric value.
+
+## Conclusion
+
+By now you would have understood how to provide custom metrics to the HPA. You can now try this with other softwares. In the latest version of fission, we have added quite a few metrics. You can try using these metrics with the new deploy functions.
+
+## Want More?
+
+More examples can be found in our [examples directory on GitHub](https://github.com/fission/examples/). Follow **[Fission on Twitter](https://www.twitter.com/fissionio)** for more updates!
