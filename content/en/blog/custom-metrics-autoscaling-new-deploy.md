@@ -8,7 +8,7 @@ type = "blog"
 +++
 
 
-Autoscaling is one of the key features of kubernetes because of its capability to scale up or down according to the load. This is pretty useful as optimizes cost and no human interference is required for scaling. It's intelligent enough to make it's own decisions on scaling matters.
+Autoscaling is one of the key features of kubernetes because of its capability to scale up or down according to the load. This is pretty useful as optimizes cost and no human interference is required for scaling. It is intelligent enough to make its own decisions on scaling matters.
 
 The default metric for new deploy functions to depend on is `targetCPU` which is provided by the kubernetes metrics server. But what if you want the functions to scale based on some third party software's metrics?
 
@@ -21,11 +21,11 @@ So in this blog post we will cover scraping and exposing kafka metrics and then 
 - A Kubernetes cluster with the latest version of helm.
 - The latest version of Fission-CLI on the local machine
 
-## Steps to setup autoscaling on custom metrics
+## Steps to set up autoscaling on custom metrics
 
-- First we will setup a strimzi kafka exporter which is going to provide the metrics that we feed to the newdeploy HPA.
+- First we will set up a strimzi kafka exporter which is going to provide the metrics that we feed to the newdeploy HPA.
 - Next we will use a pod monitor to scrape the metrics from the kafka pods.
-- Finally we will setup a prometheus adapter which will expose the metrics to our HPA.
+- Finally we will set up a prometheus adapter which will expose the metrics to our HPA.
 The HPA will then scale up and down according to that metric value.
 
 ## Installing fission
@@ -295,7 +295,7 @@ data:
         memberType: "$3"
 ```
 
-This file contains the configuration to setup the `kafka cluster` and the `kafka-exporter`.
+This file contains the configuration to set up the `kafka cluster` and the `kafka-exporter`.
 It also defines all the kafka metrics which will be made accessible by the `kafka-exporter`.  
 
 ```bash
@@ -350,8 +350,8 @@ kubectl apply -f kafka-topic.yaml -n kafka
 
 ## Setting up Prometheus monitoring
 
-Now we will setup Prometheus in the `monitoring` namespace which will monitor the kafka metrics and also expose the metrics when we create the adapter.
-We'll be using [kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack) to setup Prometheus on the cluster.
+Now we will set up Prometheus in the `monitoring` namespace which will monitor the kafka metrics and also expose the metrics when we create the adapter.
+We'll be using [kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack) to set up Prometheus on the cluster.
 
 ```bash
 kubectl create ns monitoring
@@ -537,11 +537,11 @@ It will create an environment, a package, a newdeploy function and a kafka mqtri
 
 We need to get the uid of the mqtrigger which is also the name of the `consumergroup`.
 
-Run the command `kubectl get messagequeuetriggers.fission.io -oyaml` and copy the the field `uid` value which is under `metadata`.
+Run the command `kubectl get messagequeuetriggers.fission.io -oyaml` and copy the `uid` field value which is under `metadata`.
 
 ## Setting up Prometheus adapter
 
-We have kafka and prometheus both up and running but we need an adapter to expose the custom metrics to the HPA in our newdeploy function.
+We have kafka and prometheus both up and running, but we need an adapter to expose the custom metrics to the HPA in our newdeploy function.
 So we'll install the [prometheus adapter](https://artifacthub.io/packages/helm/prometheus-community/prometheus-adapter) using helm with the provided configuration file.
 
 We'll be using the `kafka_consumergroup_lag` metric to determine if the HPA should scale or not.
@@ -583,7 +583,7 @@ kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/kafka/pods/*/ka
 {"kind":"MetricValueList","apiVersion":"custom.metrics.k8s.io/v1beta1","metadata":{"selfLink":"/apis/custom.metrics.k8s.io/v1beta1/namespaces/kafka/pods/%2A/kafka_consumergroup_lag"},"items":[{"describedObject":{"kind":"Pod","namespace":"kafka","name":"my-cluster-kafka-exporter-55867498c9-pnqhz","apiVersion":"/v1"},"metricName":"kafka_consumergroup_lag","timestamp":"2022-05-09T12:35:58Z","value":"0","selector":null}]}
 ```
 
-**NOTE**: If you are using a shell different from bash(eg. zsh), then this might not work. Try using the following command in that scenario.
+**NOTE**: If you are using a shell different from bash(e.g. zsh), then this might not work. Try using the following command in that scenario.
 
 ```bash
 kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/kafka/pods/%2A/kafka_consumergroup_lag
