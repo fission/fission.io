@@ -12,7 +12,8 @@ Autoscaling is one of the key features of Kubernetes because of its capability t
 
 In the earlier versions of Fission, new deploy functions depended only on `targetCPU` metric for scaling. But what if you want the functions to scale based on some third party software's metrics?
 
-In our latest release of fission(`fission 1.16.0-rc2`), we have upgraded our autoscaling dependencies to `v2beta2` and fission now supports adding custom metrics to the new deploy functions.
+In our latest release of fission(`fission 1.16.0-rc2`), we have upgraded our autoscaling dependencies to [`v2beta2`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#horizontalpodautoscaler-v2beta2-autoscaling) from [`v1`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#horizontalpodautoscaler-v1-autoscaling) since `v1` doesn't support custom metrics.
+This allows fission to support adding custom metrics to the new deploy functions.
 
 In this blog post we will cover scraping and exposing kafka metrics and then providing the metrics to our function.
 
@@ -32,7 +33,7 @@ The HPA will then scale up and down according to that metric value.
 
 We'll be using [kafka mqtrigger type fission](https://fission.io/docs/usage/triggers/message-queue-trigger/kafka/) which requires some configuration to be specified while installing with helm.
 
-Create a file `kafka-fission-config.yaml` and paste the following configuration with the appropriate broker url.
+Create a file [`kafka-fission-config.yaml`](https://github.com/fission/examples/blob/main/miscellaneous/newdeploy-custommetrics/kafka-config/kafka-fission-config.yaml) and paste the following configuration with the appropriate broker url.
 
 ```yaml
 kafka:
@@ -60,242 +61,9 @@ kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
 
 Wait until the `strimzi-cluster-operator` starts running.
 
-Save the following file as `kafka-config.yaml`.
+Save the file as [`kafka-config.yaml`](https://github.com/fission/examples/blob/main/miscellaneous/newdeploy-custommetrics/kafka-config/kafka-config.yaml).
 This file contains the configuration to set up the `kafka cluster` and the `kafka-exporter`.
 It also defines all the kafka metrics which will be made accessible by the `kafka-exporter`.  
-
-```yaml
-apiVersion: kafka.strimzi.io/v1beta2
-kind: Kafka
-metadata:
-  name: my-cluster
-  namespace: kafka
-spec:
-  kafka:
-    replicas: 1
-    listeners:
-      - name: plain2
-        port: 9092
-        type: internal
-        tls: false
-      - name: tls
-        port: 9093
-        type: internal
-        tls: true
-        authentication:
-          type: tls
-      - name: external
-        port: 9094
-        type: nodeport
-        tls: false
-    storage:
-      type: jbod
-      volumes:
-        - id: 0
-          type: persistent-claim
-          size: 20Gi
-          deleteClaim: false
-    config:
-      offsets.topic.replication.factor: 1
-      transaction.state.log.replication.factor: 1
-      transaction.state.log.min.isr: 1
-    metricsConfig:
-      type: jmxPrometheusExporter
-      valueFrom:
-        configMapKeyRef:
-          name: kafka-metrics
-          key: kafka-metrics-config.yml
-  zookeeper:
-    replicas: 1
-    storage:
-      type: persistent-claim
-      size: 20Gi
-      deleteClaim: false
-    metricsConfig:
-      type: jmxPrometheusExporter
-      valueFrom:
-        configMapKeyRef:
-          name: kafka-metrics
-          key: zookeeper-metrics-config.yml
-  entityOperator:
-    topicOperator: {}
-    userOperator: {}
-  kafkaExporter:
-    groupRegex: ".*"
-    topicRegex: ".*"
-    logging: debug
-    enableSaramaLogging: true
-    readinessProbe:
-      initialDelaySeconds: 15
-      timeoutSeconds: 5
-    livenessProbe:
-      initialDelaySeconds: 15
-      timeoutSeconds: 5
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: kafka-metrics
-  namespace: kafka
-  labels:
-    app: strimzi
-data:
-  kafka-metrics-config.yml: |
-    # See https://github.com/prometheus/jmx_exporter for more info about JMX Prometheus Exporter metrics
-    lowercaseOutputName: true
-    rules:
-    # Special cases and very specific rules
-    - pattern: kafka.server<type=(.+), name=(.+), clientId=(.+), topic=(.+), partition=(.*)><>Value
-      name: kafka_server_$1_$2
-      type: GAUGE
-      labels:
-       clientId: "$3"
-       topic: "$4"
-       partition: "$5"
-    - pattern: kafka.server<type=(.+), name=(.+), clientId=(.+), brokerHost=(.+), brokerPort=(.+)><>Value
-      name: kafka_server_$1_$2
-      type: GAUGE
-      labels:
-       clientId: "$3"
-       broker: "$4:$5"
-    - pattern: kafka.server<type=(.+), cipher=(.+), protocol=(.+), listener=(.+), networkProcessor=(.+)><>connections
-      name: kafka_server_$1_connections_tls_info
-      type: GAUGE
-      labels:
-        cipher: "$2"
-        protocol: "$3"
-        listener: "$4"
-        networkProcessor: "$5"
-    - pattern: kafka.server<type=(.+), clientSoftwareName=(.+), clientSoftwareVersion=(.+), listener=(.+), networkProcessor=(.+)><>connections
-      name: kafka_server_$1_connections_software
-      type: GAUGE
-      labels:
-        clientSoftwareName: "$2"
-        clientSoftwareVersion: "$3"
-        listener: "$4"
-        networkProcessor: "$5"
-    - pattern: "kafka.server<type=(.+), listener=(.+), networkProcessor=(.+)><>(.+):"
-      name: kafka_server_$1_$4
-      type: GAUGE
-      labels:
-       listener: "$2"
-       networkProcessor: "$3"
-    - pattern: kafka.server<type=(.+), listener=(.+), networkProcessor=(.+)><>(.+)
-      name: kafka_server_$1_$4
-      type: GAUGE
-      labels:
-       listener: "$2"
-       networkProcessor: "$3"
-    # Some percent metrics use MeanRate attribute
-    # Ex) kafka.server<type=(KafkaRequestHandlerPool), name=(RequestHandlerAvgIdlePercent)><>MeanRate
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)Percent\w*><>MeanRate
-      name: kafka_$1_$2_$3_percent
-      type: GAUGE
-    # Generic gauges for percents
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)Percent\w*><>Value
-      name: kafka_$1_$2_$3_percent
-      type: GAUGE
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)Percent\w*, (.+)=(.+)><>Value
-      name: kafka_$1_$2_$3_percent
-      type: GAUGE
-      labels:
-        "$4": "$5"
-    # Generic per-second counters with 0-2 key/value pairs
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)PerSec\w*, (.+)=(.+), (.+)=(.+)><>Count
-      name: kafka_$1_$2_$3_total
-      type: COUNTER
-      labels:
-        "$4": "$5"
-        "$6": "$7"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)PerSec\w*, (.+)=(.+)><>Count
-      name: kafka_$1_$2_$3_total
-      type: COUNTER
-      labels:
-        "$4": "$5"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)PerSec\w*><>Count
-      name: kafka_$1_$2_$3_total
-      type: COUNTER
-    # Generic gauges with 0-2 key/value pairs
-    - pattern: kafka.(\w+)<type=(.+), name=(.+), (.+)=(.+), (.+)=(.+)><>Value
-      name: kafka_$1_$2_$3
-      type: GAUGE
-      labels:
-        "$4": "$5"
-        "$6": "$7"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+), (.+)=(.+)><>Value
-      name: kafka_$1_$2_$3
-      type: GAUGE
-      labels:
-        "$4": "$5"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)><>Value
-      name: kafka_$1_$2_$3
-      type: GAUGE
-    # Emulate Prometheus 'Summary' metrics for the exported 'Histogram's.
-    # Note that these are missing the '_sum' metric!
-    - pattern: kafka.(\w+)<type=(.+), name=(.+), (.+)=(.+), (.+)=(.+)><>Count
-      name: kafka_$1_$2_$3_count
-      type: COUNTER
-      labels:
-        "$4": "$5"
-        "$6": "$7"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+), (.+)=(.*), (.+)=(.+)><>(\d+)thPercentile
-      name: kafka_$1_$2_$3
-      type: GAUGE
-      labels:
-        "$4": "$5"
-        "$6": "$7"
-        quantile: "0.$8"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+), (.+)=(.+)><>Count
-      name: kafka_$1_$2_$3_count
-      type: COUNTER
-      labels:
-        "$4": "$5"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+), (.+)=(.*)><>(\d+)thPercentile
-      name: kafka_$1_$2_$3
-      type: GAUGE
-      labels:
-        "$4": "$5"
-        quantile: "0.$6"
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)><>Count
-      name: kafka_$1_$2_$3_count
-      type: COUNTER
-    - pattern: kafka.(\w+)<type=(.+), name=(.+)><>(\d+)thPercentile
-      name: kafka_$1_$2_$3
-      type: GAUGE
-      labels:
-        quantile: "0.$4"
-  zookeeper-metrics-config.yml: |
-    # See https://github.com/prometheus/jmx_exporter for more info about JMX Prometheus Exporter metrics
-    lowercaseOutputName: true
-    rules:
-    # replicated Zookeeper
-    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+)><>(\\w+)"
-      name: "zookeeper_$2"
-      type: GAUGE
-    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+)><>(\\w+)"
-      name: "zookeeper_$3"
-      type: GAUGE
-      labels:
-        replicaId: "$2"
-    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+), name2=(\\w+)><>(Packets\\w+)"
-      name: "zookeeper_$4"
-      type: COUNTER
-      labels:
-        replicaId: "$2"
-        memberType: "$3"
-    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+), name2=(\\w+)><>(\\w+)"
-      name: "zookeeper_$4"
-      type: GAUGE
-      labels:
-        replicaId: "$2"
-        memberType: "$3"
-    - pattern: "org.apache.ZooKeeperService<name0=ReplicatedServer_id(\\d+), name1=replica.(\\d+), name2=(\\w+), name3=(\\w+)><>(\\w+)"
-      name: "zookeeper_$4_$5"
-      type: GAUGE
-      labels:
-        replicaId: "$2"
-        memberType: "$3"
-```
 
 ```bash
 kubectl apply -f kafka-config.yaml
@@ -309,7 +77,7 @@ We'll create the following kafka topics
 - response-topic
 - error-topic
 
-Paste the following contents in a new yaml file. Name it `kafka-topic.yaml` and apply it.
+Paste the following contents in a new yaml file. Name it [`kafka-topic.yaml`](https://github.com/fission/examples/blob/main/miscellaneous/newdeploy-custommetrics/kafka-config/kafka-topic.yaml) and apply it.
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
@@ -357,108 +125,7 @@ kubectl create ns monitoring
 helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false,prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
 ```
 
-Next we have to create `strimzi-pod-monitor.yaml` which will scrape the metrics from the kafka pods.
-
-```yaml
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: cluster-operator-metrics
-  labels:
-    app: strimzi
-spec:
-  selector:
-    matchLabels:
-      strimzi.io/kind: cluster-operator
-  namespaceSelector:
-    matchNames:
-      - kafka
-  podMetricsEndpoints:
-  - path: /metrics
-    port: http
----
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: entity-operator-metrics
-  labels:
-    app: strimzi
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: entity-operator
-  namespaceSelector:
-    matchNames:
-      - kafka
-  podMetricsEndpoints:
-  - path: /metrics
-    port: healthcheck
----
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: bridge-metrics
-  labels:
-    app: strimzi
-spec:
-  selector:
-    matchLabels:
-      strimzi.io/kind: KafkaBridge
-  namespaceSelector:
-    matchNames:
-      - kafka
-  podMetricsEndpoints:
-  - path: /metrics
-    port: rest-api
----
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: kafka-resources-metrics
-  labels:
-    app: strimzi
-spec:
-  selector:
-    matchExpressions:
-      - key: "strimzi.io/kind"
-        operator: In
-        values: ["Kafka", "KafkaConnect", "KafkaMirrorMaker", "KafkaMirrorMaker2"]
-  namespaceSelector:
-    matchNames:
-      - kafka
-  podMetricsEndpoints:
-  - path: /metrics
-    port: tcp-prometheus
-    relabelings:
-    - separator: ;
-      regex: __meta_kubernetes_pod_label_(strimzi_io_.+)
-      replacement: $1
-      action: labelmap
-    - sourceLabels: [__meta_kubernetes_namespace]
-      separator: ;
-      regex: (.*)
-      targetLabel: namespace
-      replacement: $1
-      action: replace
-    - sourceLabels: [__meta_kubernetes_pod_name]
-      separator: ;
-      regex: (.*)
-      targetLabel: kubernetes_pod_name
-      replacement: $1
-      action: replace
-    - sourceLabels: [__meta_kubernetes_pod_node_name]
-      separator: ;
-      regex: (.*)
-      targetLabel: node_name
-      replacement: $1
-      action: replace
-    - sourceLabels: [__meta_kubernetes_pod_host_ip]
-      separator: ;
-      regex: (.*)
-      targetLabel: node_ip
-      replacement: $1
-      action: replace
-```
+Next we have to create [`strimzi-pod-monitor.yaml`](https://github.com/fission/examples/blob/main/miscellaneous/newdeploy-custommetrics/prometheus/strimzi-pod-monitor.yaml) which will scrape the metrics from the kafka pods.
 
 ```bash
 kubectl apply -f strimzi-pod-monitor.yaml -n monitoring
@@ -545,7 +212,7 @@ So we'll install the [prometheus adapter](https://artifacthub.io/packages/helm/p
 
 We'll be using the `kafka_consumergroup_lag` metric to determine if the HPA should scale or not.
 
-Save the file as `prometheus-adapter.yaml`.
+Save the file as (`prometheus-adapter.yaml`)[https://github.com/fission/examples/blob/main/miscellaneous/newdeploy-custommetrics/prometheus_adapter/prometheus-adapter.yaml].
 
 ```yaml
 prometheus:
@@ -596,7 +263,9 @@ Run a producer function to send 10000 messages to the topic `request-topic` and 
 
 ## Conclusion
 
-By now you would have understood how to provide custom metrics to the HPA. You can now try this with other softwares. In the latest version of fission, we have added quite a few metrics. You can try using these metrics with the new deploy functions.
+By now you would have understood how to provide custom metrics to the HPA. You can try exposing other kafka metrics through the prometheus adapter. In the latest version of fission, we have added quite a few new metrics. You can try using those metrics with the new deploy functions.
+
+If you have any doubts, feel free to reach us at [fission slack](https://fission.io/slack)
 
 ## Want More?
 
