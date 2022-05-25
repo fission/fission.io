@@ -1,6 +1,6 @@
 +++
 title = "New Features in Fission: Health Check, Authentication & Much More"
-date = "2022-02-15T01:05:00-07:00"
+date = "2022-05-24T01:05:00-07:00"
 author = "Atulpriya Sharma"
 description = "New Features in Fission: Custom Metrics, Authentication & Much More"
 categories = ["Fission"]
