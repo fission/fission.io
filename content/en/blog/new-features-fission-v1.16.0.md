@@ -2,7 +2,7 @@
 title = "New Features in Fission: Health Check, Authentication & Much More"
 date = "2022-02-15T01:05:00-07:00"
 author = "Atulpriya Sharma"
-description = "New Features in Fission: Health Check, Authentication & Much More"
+description = "New Features in Fission: Custom Metrics, Authentication & Much More"
 categories = ["Fission"]
 type = "blog"
 +++
@@ -10,17 +10,24 @@ type = "blog"
 The best part of being an open source project is that there so many opportunities to improve.
 People from all over the world come together and contribute to make a project better.
 And we’re thankful to our amazing community that has helped us make Fission better over time.
-With just two months into 2022, we are happy to announce a **new version of Fission - v.1.16.0** that brings exciting new features, bug fixes and enhancements.
+We are happy to announce a **new version of Fission - v1.16.0** that brings exciting new features, bug fixes and enhancements.
 
 In this blog post, I’ll throw light on these features and how you can use them.
 
-## 4 New Features in Fission v.1.16.0
+## 6 New Features in Fission v.1.16.0
 
-This release comes with 4 new features.
+This release comes with 6 new features.
 Most of these features were requested by the community, and we’re glad that a few of them came forward and implemented those features.
-Hence, without much ado, let’s go straight into the 4 new features in Fission.
+Hence, without much ado, let’s go straight into the 6 new features in Fission.
 
 {{< figure src="/images/featured/fission-new-features-v1.16.0.png" alt="New Fission Features Released v1.16.0" height="400" width="600">}}
+
+### Autoscaling functions with Custom metrics
+
+In our previous releases, whenever you create a function based on newdeploy or container executor type, it would scale up or down according to the load which was determined by the metric `targetCPU`.
+There was no way you could scale on the basis of metrics like number of messages in a queue, number of requests etc.
+In our latest release, you can now provide `hpaMetrics` in the function spec file which will allow scaling based on any metric the user has exposed.
+If you are interested in knowing more about this feature, you can go through this [blog](https://fission.io/blog/autoscaling-serverless-functions-with-custom-metrics/).
 
 ### Authentication for Fission Function Calls
 
@@ -89,6 +96,17 @@ The value of the `commit` label for different status of the file is as follows:
 | Tracked file with changes in worktree | `<commitID>-unstaged` |
 | Tracked file with changes staged      | `<commitID>-staged`   |
 | Tracked file with clean commit        | `<commitID>`          |
+
+### Fission metrics
+
+Debugging is quite a hard process and it might take more time than required if the approach is not right.
+To make things a bit easier, we have added new prometheus metrics in our latest version.
+We have some metrics like `http_requests_total`, `http_requests_in_flight` etc which are common to all fission components.
+Other than that, we have added some specific metrics for each of the components. For example, we have added `fission_archive_memory_bytes` to keep track of total memory consumed currently by archives in the `storagesvc` component.
+Lastly, there are some default metrics provided by the Go language like `go_goroutines` which tell you number of goroutines currently existing.
+To access the metrics, you just need to install prometheus on the cluster.
+You can install prometheus using [prometheus-community/prometheus](https://artifacthub.io/packages/helm/prometheus-community/prometheus) or [prometheus-community/kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack).
+We'll be releasing a blog soon listing all the metrics.
 
 ### Fission Spec CLI Support
 
