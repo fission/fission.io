@@ -126,7 +126,7 @@ You can use Fission to build serverless backends, implement webhooks or even cre
 All of this can be done on your private Kubernetes cluster or on any public cloud Kubernetes offering.
 
 With the addition of these new features, you can take advantage of Fission and develop more secure and flexible applications.
-To view the complete list of changes, read our [v1.16.0 release documentation](docs/releases/v1.16.0-rc1/).
+To view the complete list of changes, read our [v1.16.0 release documentation](docs/releases/v1.16.0/).
 
 To help you get started, we have quite a few sample codes in the [Fission Example Repository](https://github.com/fission/examples) that you must check and try.
 If you have any issues or suggestions, share them with us.
