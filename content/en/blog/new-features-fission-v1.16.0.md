@@ -99,9 +99,9 @@ The value of the `commit` label for different status of the file is as follows:
 
 ### Fission metrics
 
-Debugging is quite a hard process and it might take more time than required if the approach is not right.
-To make things a bit easier, we have added new prometheus metrics in our latest version.
-We have some metrics like `http_requests_total`, `http_requests_in_flight` etc which are common to all fission components.
+Debugging is quite a hard process and it might be time consumimg if you have no idea what caused the error.
+To make things a bit easier, we have added new prometheus metrics in our latest version which will provide better insights into fission.
+We have some metrics like `http_requests_total`, `http_requests_in_flight` etc. which are common to all fission components.
 Other than that, we have added some specific metrics for each of the components. For example, we have added `fission_archive_memory_bytes` to keep track of total memory consumed currently by archives in the `storagesvc` component.
 Lastly, there are some default metrics provided by the Go language like `go_goroutines` which tell you number of goroutines currently existing.
 To access the metrics, you just need to install prometheus on the cluster.
