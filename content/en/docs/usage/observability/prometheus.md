@@ -40,76 +40,46 @@ We'll install Prometheus and Grafana in a namespace named `monitoring`.
 To create the namespace, run the following command in a terminal:
 
 ```bash
-$ expose METRICS_NAMESPACE=monitoring
-$ kubectl create namespace $METRICS_NAMESPACE
+expose METRICS_NAMESPACE=monitoring
+kubectl create namespace $METRICS_NAMESPACE
 ```
 
 Install Prometheus and Grafana with the release name `fission-metrics`.
 
 ```bash
-$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-$ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-$ helm repo update
-$ helm install fission-metrics --namespace monitoring prometheus-community/kube-prometheus-stack \
-  --set kubelet.serviceMonitor.https=true \
-  --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
-  --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
-  --set prometheus.prometheusSpec.ruleSelectorNilUsesHelmValues=false
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false,prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
 ```
 
 This will install Prometheus and Grafana in the `monitoring` namespace.
-Along with the Prometheus server, it'll also install other components viz. `node-exporter`, `kube-state-metrics` and `pushgateway`.
+Along with the Prometheus server, it'll also install other components viz. `node-exporter`, `kube-state-metrics` and `alertmanager`.
 
-### Adding ServiceMonitor for Fission
+### Enabling Service Monitors in Fission
 
-By default, this installation will not discover the metrics exposed by Fission.
-To be able to scrape those metrics, we can install ServiceMonitor, which is a Kubernetes custom resource used to by the Prometheus Operator to add new targets.
-
-Create the manifest:
+You'll to need enable service monitors which will scrape metrics from fission components.
 
 ```bash
-$ cat <<EOF > servicemonitors.yaml
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: executor-service-app
-spec:
-  selector:
-    matchLabels:
-      svc: executor
-  endpoints:
-  - targetPort: 8080
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: router-service-app
-spec:
-  selector:
-    matchLabels:
-      svc: router
-  endpoints:
-  - targetPort: 8080
-EOF
+helm upgrade fission fission-charts/fission-all --namespace fission --set serviceMonitor.enabled=true --set serviceMonitor.namespace=monitoring
 ```
-
-Install the ServiceMonitors.
-
-```bash
-$ kubectl apply -f servicemonitors.yaml --namespace fission
-```
-
-This will install the ServiceMonitors in the `fission` namespace, the same where Fission is installed.
 
 ### Accessing Grafana UI
 
-The installation creates a Service named `fission-metrics-grafana`. To access this, you can use Kubernetes port forwarding
+The installation creates a Service named `prometheus-grafana`. To access this, you can use Kubernetes port forwarding
 
 ```bash
-$ kubectl --namespace monitoring port-forward svc/fission-metrics-grafana 3000:80
+kubectl --namespace monitoring port-forward svc/prometheus-grafana 3000:80
 ```
 
 The Grafana can be now accessed on <http://localhost:3000>.
+
+To log in to the Grafana dashboard, enter `admin` in the `username` field.
+
+For password, you'll need to run the following command:
+
+```bash
+kubectl get secret --namespace monitoring prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
   
 This installation also adds Prometheus as a data source for Grafana automatically.
 You can verify and update this in the `Data Sources` section of the UI.
@@ -137,7 +107,7 @@ To track the duration of a specific function
 fission_function_duration_seconds{name="hello"}
 ```
 
-There are other more Fission metrics, which can be found under `Metrics` in the Explore screen.
+There are a few more Fission metrics available which are listed [here](/docs/reference/metrics-reference)
 
 ## Fission Dashboard
 
