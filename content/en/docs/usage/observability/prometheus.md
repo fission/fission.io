@@ -107,7 +107,7 @@ To track the duration of a specific function
 fission_function_duration_seconds{name="hello"}
 ```
 
-There are a few more Fission metrics available which are listed [here](/docs/reference/metrics-reference)
+There are a few more Fission metrics available which are listed in [Metrics Reference](/docs/reference/metrics-reference)
 
 ## Fission Dashboard
 

@@ -1,9 +1,13 @@
 ---
 title: "Fission Metrics Reference"
-weight: 10
+weight: 8
 description: >
   Fission Metrics - List of Prometheus metrics in Fission
 ---
+
+{{< notice info >}}
+To access these metrics, you'll need to install fission 1.16 or higher.
+{{< /notice >}}
 
 | Metric Name | Component | Labels | Description |
 | ------------------- | --------- | ------------------ | -------------------- |
