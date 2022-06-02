@@ -57,7 +57,7 @@ Along with the Prometheus server, it'll also install other components viz. `node
 
 ### Enabling Service Monitors in Fission
 
-You'll need to enable service monitors which will scrape metrics from fission components.
+You'll need to enable service monitors which will scrape metrics from Fission components.
 
 ```bash
 helm upgrade fission fission-charts/fission-all --namespace fission --set serviceMonitor.enabled=true --set serviceMonitor.namespace=monitoring
@@ -71,7 +71,7 @@ The installation creates a Service named `prometheus-grafana`. To access this, y
 kubectl --namespace monitoring port-forward svc/prometheus-grafana 3000:80
 ```
 
-The Grafana can be now accessed on <http://localhost:3000>.
+Grafana dashboard can be now accessed on <http://localhost:3000>.
 
 To log in to the Grafana dashboard, enter `admin` in the `username` field.
 
