@@ -57,7 +57,7 @@ Along with the Prometheus server, it'll also install other components viz. `node
 
 ### Enabling Service Monitors in Fission
 
-You'll to need enable service monitors which will scrape metrics from fission components.
+You'll need to enable service monitors which will scrape metrics from fission components.
 
 ```bash
 helm upgrade fission fission-charts/fission-all --namespace fission --set serviceMonitor.enabled=true --set serviceMonitor.namespace=monitoring
