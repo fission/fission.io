@@ -26,7 +26,7 @@ Fission: Fast and Simple Serverless Functions for Kubernetes
 
 ### SEE ALSO
 
-* [fission archive](/docs/reference/fission-cli/fission_archive/)	 - For managing archives
+* [fission archive](/docs/reference/fission-cli/fission_archive/)	 - Manage archives stored with Fission Storage Service.
 * [fission canary](/docs/reference/fission-cli/fission_canary/)	 - Create, Update and manage canary configs
 * [fission check](/docs/reference/fission-cli/fission_check/)	 - Check the fission installation for potential problems
 * [fission environment](/docs/reference/fission-cli/fission_environment/)	 - Create, update and manage environments

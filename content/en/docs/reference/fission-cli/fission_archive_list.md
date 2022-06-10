@@ -27,5 +27,5 @@ fission archive list [flags]
 
 ### SEE ALSO
 
-* [fission archive](/docs/reference/fission-cli/fission_archive/)	 - For managing archives
+* [fission archive](/docs/reference/fission-cli/fission_archive/)	 - Manage archives stored with Fission Storage Service.
 
