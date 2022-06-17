@@ -3,6 +3,11 @@ title: fission archive get-url
 slug: fission_archive_get-url
 url: /docs/reference/fission-cli/fission_archive_get-url/
 ---
+
+{{% notice info %}}
+Available in releases 1.17 and onwards.
+{{% /notice %}}
+
 ## fission archive get-url
 
 Get url of an uploaded archive
@@ -28,5 +33,4 @@ fission archive get-url [flags]
 
 ### SEE ALSO
 
-* [fission archive](/docs/reference/fission-cli/fission_archive/)	 - Manage archives stored with Fission Storage Service.
-
+* [fission archive](/docs/reference/fission-cli/fission_archive/)  - Manage archives stored with Fission Storage Service.

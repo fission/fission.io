@@ -3,6 +3,11 @@ title: fission archive list
 slug: fission_archive_list
 url: /docs/reference/fission-cli/fission_archive_list/
 ---
+
+{{% notice info %}}
+Available in releases 1.17 and onwards.
+{{% /notice %}}
+
 ## fission archive list
 
 List all uploaded archives
@@ -27,5 +32,4 @@ fission archive list [flags]
 
 ### SEE ALSO
 
-* [fission archive](/docs/reference/fission-cli/fission_archive/)	 - Manage archives stored with Fission Storage Service.
-
+* [fission archive](/docs/reference/fission-cli/fission_archive/)  - Manage archives stored with Fission Storage Service.

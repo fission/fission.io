@@ -3,6 +3,11 @@ title: fission archive delete
 slug: fission_archive_delete
 url: /docs/reference/fission-cli/fission_archive_delete/
 ---
+
+{{% notice info %}}
+Available in releases 1.17 and onwards.
+{{% /notice %}}
+
 ## fission archive delete
 
 Delete an archive
@@ -29,5 +34,4 @@ fission archive delete [flags]
 
 ### SEE ALSO
 
-* [fission archive](/docs/reference/fission-cli/fission_archive/)	 - Manage archives stored with Fission Storage Service.
-
+* [fission archive](/docs/reference/fission-cli/fission_archive/)  - Manage archives stored with Fission Storage Service.
