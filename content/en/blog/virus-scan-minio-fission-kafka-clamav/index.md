@@ -45,9 +45,9 @@ When a new file will be pushed in our MinIO buckets
 
 For this walkthrough, you should have the following prerequisites:
 
-    - MinIO Server and 2 buckets: test-bucket, infected-objects
-    - Apache Kafka and 3 topics: bucketevents, bucketevents-response, bucketevents-error
-    - Fission in Kubernetes environment , [install Fission](https://fission.io/docs/installation/) client CLI.
+- MinIO Server and 2 buckets: test-bucket, infected-objects
+- Apache Kafka and 3 topics: bucketevents, bucketevents-response, bucketevents-error
+- Fission in Kubernetes environment , [install Fission](https://fission.io/docs/installation/) client CLI.
 
 In order to implement what was described you have to follow the steps:
 
