@@ -1,10 +1,11 @@
 +++
 title = "Virus scan MinIO buckets using ClamAV, Fission and Kafka"
-date = "2022-07-29T09:30:34+05:30"
+date = "2022-08-01T09:30:34+05:30"
 description = "Using Fission serverless functions to perform virus scan on MinIO buckets using ClamAV and Kafka"
-categories = ["General"]
+categories = ["Tutorials"]
 type = "blog"
 images = ["images/featured/scan-minio-buckets-fission.png"]
+canonicalUrl="https://medium.com/@andreifer20/virus-scan-minio-buckets-using-clamav-fission-and-kafka-8a1b409c713b"
 +++
 
 All organizations want to protect their systems and have a good strategy in order to stay away from malware or other potential threats.
@@ -36,8 +37,8 @@ Refer to [Fission documentation](/docs/) to learn more about Fission.
 
 This walkthrough will show you how to build a pipeline in order to scan your MiniIO files using asynchronous triggers.
 When a new file will be pushed in our MinIO buckets
-(1) a new notification will be send to the Kafka
-(2) and the trigger will start the function
+(1) a new notification will be sent to the Kafka
+(2) the trigger will start the function
 (3), scanning the file for viruses
 (4). Process of scanning files
 
@@ -68,16 +69,16 @@ Use the mc event add command to add a new bucket notification (when you put new 
 
 ### Step 2 - Create Python code which uses ClamAV
 
-Here I’ve created a Python code which is available in Github.
+Here I’ve created a Python code which is available in GitHub.
 You have to change MinIO credentials in order to connect to it.
 Your objects will be copied inside the container and scanned using clamdscan from ClamAV.
 If the file is infected will be moved to “/tmp/infected-files/” and placed in a special bucket (infected-objects) for deep investigations.
 
 ### Step 3 - Create Fission environment, function and trigger
 
-In a default scenario Fission use image based on language environments (in our case Python), but you can create your own image using Dockerfile.
-After that, you can upload new image in your Docker registry and when you create a new environment you will specified your custom image and secret if it’s necessary.
-Our custom image install ClamAV and what is necessary for scanning files.
+In a default scenario Fission uses image based on language environments (in our case Python), but you can create your own image using Dockerfile.
+After that, you can upload this new image in your Docker registry and when you create a new environment you will specify your custom image and secret if necessary.
+Our custom image installs ClamAV and all the necessary components for scanning files.
 
 Now, let’s create a function with python as environment:
 
@@ -99,16 +100,16 @@ Replace ENDPOINT:PORT with a comma separated list of Kafka brokers
 
 Your function will be deployed as pod in fission-function namespace into Kuberentes cluster.
 Using kubectl logs -f -c python $POD_NAMEyou can check the logs in real time to see what happens there.
-Also you have to take a look at Kafka topics (response or error) in order to know the output of your function.
+Also, you have to take a look at Kafka topics (response or error) in order to know the output of your function.
 
 ## Conclusion
 
-Fission is a versatile framework that can be used with many different programming languages and help us to build FaaS in Kubernetes.
-In this scenario, I used some basic feature of Fission for scanning new S3 object but I totally recommend you to read more regarding Fission.
+Fission is a versatile framework that can be used with different programming languages that help us to build FaaS in Kubernetes.
+In this scenario, I used some basic features of Fission for scanning new S3 object and I'll totally recommend you to read more regarding Fission.
 
 **_Author:_**
 
-**[Andrei Fer](https://www.linkedin.com/in/andrei-fer-4b0b54144)** works as a DevOps for a Public Organisation in Romania.
+**[Andrei Fer](https://www.linkedin.com/in/andrei-fer-4b0b54144)** works as a DevOps for a Public Organization in Romania.
 He is always on the hunt forlatest tools and methodologies.
 He aims to make bad processes better through automation, testing, and education.
 Interested to Learn on the updated Technologies and also keep learning and working on the Automation and Continuous Deployment Process in Agile Technology.
