@@ -11,4 +11,4 @@ echo "Npm install"
 npm install
 
 echo "Running hugo"
-hugo --minify --path-warnings --gc
+hugo --minify --printPathWarnings --gc
