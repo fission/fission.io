@@ -1,0 +1,173 @@
+---
+title: "Fission Environments"
+linkTitle: "Environments"
+description: "Fission Environments - Runtime for different languages"
+images: ["images/og-image-fission.png"]
+---
+
+<div class="container push-down mb-5">
+  <div class="row mb-2">
+    <div class="col-12">
+      <h1 class="font-weight-bold">Environments</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <h5><label class="d-block" for="search">Search</label></h5>
+        <input type="search" placeholder="Search query" class="form-control" 
+          id="search" oninput="updateEnvItems()">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <h5><label class="d-block" for="filter-lang">Filter by language</label></h5>
+        <select class="form-control" id="filter-lang" onchange="updateEnvItems()">
+          <option value="" selected disabled>Loading...</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" id="env-list"></div>
+</div>
+
+<script type="text/javascript">
+  const envs = [
+    {
+      name: 'Node.js',
+      logo: '/images/lang-logo/nodejs-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/nodejs',
+      images: ['node-env', 'node-env-12.16', 'node-builder', 'node-builder-12.16', 'node-env-14',
+        'node-builder-14', 'node-env-debian', 'node-env-16', 'node-builder-16', 'node-env-12',
+        'node-builder-12'],
+    },
+    {
+      name: 'Go',
+      logo: '/images/lang-logo/go-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/go',
+      images: ['go-env-1.13', 'go-env', 'go-builder-1.13', 'go-builder', 'go-env-1.12', 'go-builder-1.12',
+        'go-env-1.16', 'go-builder-1.16', 'go-env-1.14', 'go-builder-1.14', 'go-env-1.17', 'go-build-env',
+        'go-builder-1.17', 'go-env-1.11.4', 'go-builder-1.11.4', 'go-env-1.15', 'go-builder.1.15',
+        'go-env-1.11.4-1.12', 'go-builder-1.11.4-1.12'],
+    },
+    {
+      name: 'Python',
+      logo: '/images/lang-logo/python-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/python',
+      images: ['python-env', 'python-builder', 'python-env-2.7', 'python-build-env', 'python3-env',
+        'python-build-env-2.7', 'python-env-3.9', 'python-env-3.10', 'python-builder-3.8', 'python-env-3.7',
+        'python-builder-3.7', 'python-env-3.8', 'python-builder-3.9', 'python-builder-3.10', 'python2-env'],
+    },
+    {
+      name: 'Perl',
+      logo: '/images/lang-logo/perl-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/perl',
+      images: ['perl-env'],
+    },
+    {
+      name: 'Java',
+      logo: '/images/lang-logo/java-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/jvm',
+      images: ['jvm-env', 'jvm-builder', 'jvm-env-builder'],
+    },
+    {
+      name: 'Java',
+      displayName: 'Java (JVM-Jersey)',
+      logo: '/images/lang-logo/java-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/jvm-jersey',
+      images: ['jvm-jersey-env', 'jvm-jersey-builder', 'jvm-jersey-env-11', 'jvm-jersey-builder-11'],
+    },
+    {
+      name: 'PHP',
+      logo: '/images/lang-logo/php-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/php7',
+      images: ['php-env', 'php-builder'],
+    },
+    {
+      name: '.NET',
+      logo: '/images/lang-logo/dotnet-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/dotnet',
+      images: ['dotnet-env'],
+    },
+    {
+      name: '.NET Core',
+      logo: '/images/lang-logo/dotnetcore-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/dotnet20',
+      images: ['dotnet20-env', 'dotnet20-builder'],
+    },
+    {
+      name: 'Ruby',
+      logo: '/images/lang-logo/ruby-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/ruby',
+      images: ['ruby-env', 'ruby-builder'],
+    },
+    {
+      name: 'TensorFlow',
+      logo: '/images/lang-logo/tensorflow-logo.svg',
+      repo: 'https://github.com/fission/environments/tree/master/tensorflow-serving',
+      images: ['tensorflow-serving-env'],
+    },
+    {
+      name: 'Misc',
+      displayName: 'Binary',
+      repo: 'https://github.com/fission/environments/tree/master/binary',
+      images: ['binary-env', 'binary-builder'],
+    },
+  ];
+
+  let languageOptions = [`<option value="">All</option>`].concat([...new Set(envs.map(env => env.name))]);
+  languageOptions = languageOptions.map((option, index) => index === 0 ? option : 
+    `<option value="${option}">${option}</option>`)
+  document.getElementById("filter-lang").innerHTML = languageOptions.join(' ');
+
+  function updateEnvItems() {
+    const searchQuery = document.getElementById("search").value.trim().toLowerCase();
+    const selectedLanguageFilter = document.getElementById("filter-lang").value;
+
+    const filteredEnvs = selectedLanguageFilter ? 
+      envs.filter(env => env.name === selectedLanguageFilter) : envs;
+
+    const envItems = filteredEnvs.map(env => {
+      const filteredImages = searchQuery ? 
+        env.images.filter(image => image.toLowerCase().includes(searchQuery)) : env.images;
+
+      const images = filteredImages.map(image => 
+        `<h4 class="d-inline-block mx-1">
+          <a href="https://hub.docker.com/r/fission/${image}" class="badge badge-light" target="_blank">
+            ${image}
+          </a>
+        </h4>`
+      );
+
+      return `<div class="col-md-6 col-12 my-2">
+        <div class="card h-100">
+          <div>
+            <div class="d-flex align-items-center p-1" style="background-color: #eee">
+              <div class="p-2" style="width: 80px; height: 50px">
+                <img class="h-100 w-100" src="${env.logo || "/images/lang-logo/misc-logo.svg"}" />
+              </div>
+              <h3 class="my-0 ml-1 mr-2">${env.displayName || env.name}</h3>
+
+              <div style="flex: 1; justify-self: stretch; align-self: stretch"></div>
+
+              ${env.repo ? 
+                `<a class="mr-2" href="${env.repo}" target="_blank">
+                  <img src="/images/github-hp.png" width="30" />
+                </a>` 
+                : ''}
+            </div>
+          </div>
+          <div class="${images.length > 0 ? "mt-1 p-1" : "p-2"}">
+            ${images.length === 0 ? 
+              `No ${env.displayName || env.name} environments match the search filters` : images.join(' ')}
+          </div>
+        </div>
+      </div>`;
+    })
+
+    document.getElementById("env-list").innerHTML = envItems.length > 0 ? 
+      envItems.join(' ') : `<div class="col-12">No environments available</div>`;
+  }
+  updateEnvItems();
+</script>

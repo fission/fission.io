@@ -225,16 +225,16 @@ pre = "<i class='fas fa-blog'></i>"
 weight = 11
 [[menu.main]]
 name = "Environments"
+url = "/environments/"
 pre = "<i class='fas fa-store'></i>"
-url = "https://environments.fission.io/"
 weight = 12
 [[menu.main]]
 name = "GitHub"
-pre = "<i class='fab fa-github'></i>"
 url = "https://github.com/fission"
+pre = "<i class='fab fa-github'></i>"
 weight = 13
 [[menu.main]]
 name = "Slack"
-pre = "<i class='fab fa-slack'></i>"
 url = "/slack"
+pre = "<i class='fab fa-slack'></i>"
 weight = 14

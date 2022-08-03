@@ -293,6 +293,16 @@ input[type="search"]::placeholder {
   margin-top: -50px;
 }
 
+.push-down {
+  margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .push-down {
+    margin-top: 90px;
+  }
+}
+
 .center-text {
   display: flex;
   align-items: center;
