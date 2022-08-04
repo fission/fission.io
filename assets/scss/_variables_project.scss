@@ -442,8 +442,13 @@ input[type="search"]::placeholder {
 	}
 }
 
+.card-hover {
+  transition: .3s background-color ease;
+}
 
-
+.card-hover:hover {
+  background-color: #eee;
+}
 
 .card-badge {
   background: #f2f0fb;
