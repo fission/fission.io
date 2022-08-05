@@ -33,22 +33,10 @@ images: ["images/og-image-fission.png"]
 </div>
 
 <script type="text/javascript">
-  const languageLogos = [
-    { language: 'Python', logo: '/images/lang-logo/python-logo.svg' },
-    { language: 'JavaScript', logo: '/images/lang-logo/nodejs-logo.svg' },
-    { language: 'Go', logo: '/images/lang-logo/go-logo.svg' },
-    { language: 'Java', logo: '/images/lang-logo/java-logo.svg' },
-    { language: '.NET', logo: '/images/lang-logo/dotnet-logo.svg' },
-    { language: 'Perl', logo: '/images/lang-logo/perl-logo.svg' },
-    { language: 'PHP', logo: '/images/lang-logo/php-logo.svg' },
-    { language: 'Ruby', logo: '/images/lang-logo/ruby-logo.svg' },
-    { language: 'TensorFlow', logo: '/images/lang-logo/tensorflow-logo.svg' },
-    { language: 'Misc', logo: '/images/lang-logo/misc-logo.svg' },
-  ];
-
   const examples = [
     {
       "language": "JavaScript",
+      "logo": "/images/lang-logo/nodejs-logo.svg",
       "tags": ["node.js", "javascript"],
       "examples": [
         {
@@ -91,6 +79,7 @@ images: ["images/og-image-fission.png"]
     },
     {
       "language": "Python",
+      "logo": "/images/lang-logo/python-logo.svg",
       "tags": ["python"],
       "examples": [
         {
@@ -169,6 +158,7 @@ images: ["images/og-image-fission.png"]
     },
     {
       "language": "Go",
+      "logo": "/images/lang-logo/go-logo.svg",
       "tags": ["go"],
       "examples": [
         {
@@ -187,6 +177,7 @@ images: ["images/og-image-fission.png"]
     },
     {
       "language": "Java",
+      "logo": "/images/lang-logo/java-logo.svg",
       "tags": ["java"],
       "examples": [
         {
@@ -199,6 +190,7 @@ images: ["images/og-image-fission.png"]
     },
     {
       "language": ".NET",
+      "logo": "/images/lang-logo/dotnet-logo.svg",
       "tags": ["c#", ".net"],
       "examples": [
         {
@@ -229,6 +221,7 @@ images: ["images/og-image-fission.png"]
     },
     {
       "language": "Perl",
+      "logo": "/images/lang-logo/perl-logo.svg",
       "tags": ["perl"],
       "examples": [
         {
@@ -241,6 +234,7 @@ images: ["images/og-image-fission.png"]
     },
     {
       "language": "PHP",
+      "logo": "/images/lang-logo/php-logo.svg",
       "tags": ["php"],
       "examples": [
         {
@@ -271,6 +265,7 @@ images: ["images/og-image-fission.png"]
     },
     {
       "language": "Ruby",
+      "logo": "/images/lang-logo/ruby-logo.svg",
       "tags": ["ruby"],
       "examples": [
         {
@@ -294,7 +289,14 @@ images: ["images/og-image-fission.png"]
       ]
     },
     {
+      "language": "TensorFlow",
+      "logo": "/images/lang-logo/tensorflow-logo.svg",
+      "tags": [],
+      "examples": []
+    },
+    {
       "language": "Misc",
+      "logo": "/images/lang-logo/misc-logo.svg",
       "tags": ["misc"],
       "examples": [
         {
@@ -399,7 +401,7 @@ images: ["images/og-image-fission.png"]
   ];
 
   let languageOptions = [`<option value="">All</option>`].concat(
-    languageLogos.map(l => `<option value="${l.language}">${l.language}</option>`));
+    examples.map(e => `<option value="${e.language}">${e.language}</option>`));
   document.getElementById("filter-lang").innerHTML = languageOptions.join(' ');
 
   function updateExampleItems() {
@@ -421,14 +423,11 @@ images: ["images/og-image-fission.png"]
           example.language === selectedLanguageFilter);
       }
 
-      const languageLogo = languageLogos.find(l => l.language === e.language)?.logo;
-
       const exampleCards = filteredLangExamples.map(example => {
-        const logo = languageLogos.find(l => l.language === example.language)?.logo ||
-          languageLogo;
+        const logo = examples.find(e => e.language === example.language)?.logo || e.logo;
         
-        const tags = e.tags.concat(example.tags).map(tagText => `
-          <span class="badge m-1 badge-pill badge-primary" style="line-height: 1.2">${tagText}</span>`);
+        const tags = e.tags.concat(example.tags).map(tagText => 
+          `<span class="badge m-1 badge-pill badge-primary" style="line-height: 1.2">${tagText}</span>`);
 
         return `<div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
             <a class="card card-hover h-100 p-3" href="${example.link}" 
