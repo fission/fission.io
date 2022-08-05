@@ -2,7 +2,7 @@
   {
     "name": "Node.js",
     "logo": "/images/lang-logo/nodejs-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/nodejs",
+    "repo": "https://github.com/fission/environments/tree/master/nodejs",
     "images": [
       { "main": "node-env", "builder": "node-builder" },
       { "main": "node-env-16", "builder": "node-builder-16" },
@@ -15,7 +15,7 @@
   {
     "name": "Go",
     "logo": "/images/lang-logo/go-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/go",
+    "repo": "https://github.com/fission/environments/tree/master/go",
     "images": [
       { "main": "go-env", "builder": "go-builder" },
       { "main": "go-env-1.17", "builder": "go-builder-1.17" },
@@ -32,7 +32,7 @@
   {
     "name": "Python",
     "logo": "/images/lang-logo/python-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/python",
+    "repo": "https://github.com/fission/environments/tree/master/python",
     "images": [
       { "main": "python3-env", "builder": "python-build-env" },
       { "main": "python-env-3.10", "builder": "python-builder-3.10" },
@@ -46,7 +46,7 @@
   {
     "name": "PHP",
     "logo": "/images/lang-logo/php-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/php7",
+    "repo": "https://github.com/fission/environments/tree/master/php7",
     "images": [
       { "main": "php-env", "builder": "php-builder" }
     ]
@@ -54,7 +54,7 @@
   {
     "name": "Java",
     "logo": "/images/lang-logo/java-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/jvm",
+    "repo": "https://github.com/fission/environments/tree/master/jvm",
     "images": [
       { "main": "jvm-env", "builder": "jvm-builder" },
       { "builder": "jvm-env-builder" }
@@ -64,7 +64,7 @@
     "name": "Java",
     "displayName": "Java (JVM-Jersey)",
     "logo": "/images/lang-logo/java-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/jvm-jersey",
+    "repo": "https://github.com/fission/environments/tree/master/jvm-jersey",
     "images": [
       { "main": "jvm-jersey-env", "builder": "jvm-jersey-builder" },
       { "main": "jvm-jersey-env-11", "builder": "jvm-jersey-builder-11" }
@@ -73,7 +73,7 @@
   {
     "name": ".NET",
     "logo": "/images/lang-logo/dotnet-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/dotnet",
+    "repo": "https://github.com/fission/environments/tree/master/dotnet",
     "images": [
       { "main": "dotnet-env" }
     ]
@@ -81,7 +81,7 @@
   {
     "name": ".NET Core",
     "logo": "/images/lang-logo/dotnetcore-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/dotnet20",
+    "repo": "https://github.com/fission/environments/tree/master/dotnet20",
     "images": [
       { "main": "dotnet20-env", "builder": "dotnet20-builder" }
     ]
@@ -89,7 +89,7 @@
   {
     "name": "Perl",
     "logo": "/images/lang-logo/perl-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/perl",
+    "repo": "https://github.com/fission/environments/tree/master/perl",
     "images": [
       { "main": "perl-env" }
     ]
@@ -97,7 +97,7 @@
   {
     "name": "Ruby",
     "logo": "/images/lang-logo/ruby-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/ruby",
+    "repo": "https://github.com/fission/environments/tree/master/ruby",
     "images": [
       { "main": "ruby-env", "builder": "ruby-builder" }
     ]
@@ -105,7 +105,7 @@
   {
     "name": "TensorFlow",
     "logo": "/images/lang-logo/tensorflow-logo.svg",
-    "repo": "https://hub.docker.com/r/fission/tensorflow-serving",
+    "repo": "https://github.com/fission/environments/tree/master/tensorflow-serving",
     "images": [
       { "main": "tensorflow-serving-env" }
     ]
@@ -113,7 +113,7 @@
   {
     "name": "Misc",
     "displayName": "Binary",
-    "repo": "https://hub.docker.com/r/fission/binary",
+    "repo": "https://github.com/fission/environments/tree/master/binary",
     "images": [
       { "main": "binary-env", "builder": "binary-builder" }
     ]
