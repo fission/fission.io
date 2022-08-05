@@ -293,6 +293,16 @@ input[type="search"]::placeholder {
   margin-top: -50px;
 }
 
+.push-down {
+  margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .push-down {
+    margin-top: 90px;
+  }
+}
+
 .center-text {
   display: flex;
   align-items: center;
@@ -432,8 +442,13 @@ input[type="search"]::placeholder {
 	}
 }
 
+.card-hover {
+  transition: .3s background-color ease;
+}
 
-
+.card-hover:hover {
+  background-color: #eee;
+}
 
 .card-badge {
   background: #f2f0fb;
