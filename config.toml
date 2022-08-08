@@ -214,32 +214,37 @@ priority = 0.5
 
 [menu]
 [[menu.main]]
+name = "Enterprise"
+url = "/enterprise/"
+pre = "<i class='fas fa-briefcase'></i>"
+weight = 10
+[[menu.main]]
 name = "Docs"
 url = "/docs/"
 pre = "<i class='fas fa-book'></i>"
-weight = 10
+weight = 11
 [[menu.main]]
 name = "Blog"
 url = "/blog/"
 pre = "<i class='fas fa-blog'></i>"
-weight = 11
+weight = 12
 [[menu.main]]
 name = "Environments"
 url = "/environments/"
 pre = "<i class='fas fa-store'></i>"
-weight = 12
+weight = 13
 [[menu.main]]
 name = "Examples"
 url = "/examples/"
 pre = "<i class='fas fa-certificate'></i>"
-weight = 13
+weight = 14
 [[menu.main]]
 name = "GitHub"
 url = "https://github.com/fission"
 pre = "<i class='fab fa-github'></i>"
-weight = 14
+weight = 15
 [[menu.main]]
 name = "Slack"
 url = "/slack"
 pre = "<i class='fab fa-slack'></i>"
-weight = 15
+weight = 16
