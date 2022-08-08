@@ -442,6 +442,15 @@ input[type="search"]::placeholder {
 	}
 }
 
+.enterprise-company {
+  background-color: #93939333;
+  transition: .3s background-color ease;
+}
+
+.enterprise-company:hover {
+  background-color: #c0c0c033;
+}
+
 .card-hover {
   transition: .3s background-color ease;
 }
