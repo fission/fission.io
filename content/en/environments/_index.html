@@ -33,7 +33,7 @@ images: ["images/og-image-fission.png"]
 </div>
 
 <script type="text/javascript">
-  const envs = {{< readfile file="static/data/environments.json" >}};
+  const envs = {{< readfile file="/static/data/environments.json" >}};
 
   let languageOptions = [`<option value="">All</option>`].concat([...new Set(envs.map(env => env.name))]);
   languageOptions = languageOptions.map((option, index) => index === 0 ? option : 

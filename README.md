@@ -25,18 +25,20 @@ content/en
 ### Setup
 
 1. Clone and setup
-```sh
-# Clone all submodules
-git submodule update --init --recursive
-# Install NPM dependencies
-npm install
-```
+
+    ```sh
+    # Install NPM dependencies
+    npm install
+    ```
+
 2. Run Hugo server
-```
-$ hugo server
-Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
-Press Ctrl+C to stop
-```
+
+    ```sh
+    $ hugo server
+    Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
+    Press Ctrl+C to stop
+    ```
+
 You can visit [localhost:1313](http://localhost:1313/) in browser to preview website.
 
 ### Making changes

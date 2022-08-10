@@ -5,17 +5,21 @@ publish = "public"
 [context.production.environment]
 HUGO_ENABLEGITINFO = "true"
 HUGO_ENV = "production"
-HUGO_VERSION = "0.88.1"
+HUGO_VERSION = "0.100.1"
+GO_VERSION = "1.18.3"
 
 [context.split1.environment]
 HUGO_ENV = "production"
-HUGO_VERSION = "0.88.1"
+HUGO_VERSION = "0.100.1"
+GO_VERSION = "1.18.3"
 
 [context.deploy-preview.environment]
-HUGO_VERSION = "0.88.1"
+HUGO_VERSION = "0.100.1"
+GO_VERSION = "1.18.3"
 
 [context.branch-deploy.environment]
-HUGO_VERSION = "0.88.1"
+HUGO_VERSION = "0.100.1"
+GO_VERSION = "1.18.3"
 
 [context.next.environment]
 HUGO_ENABLEGITINFO = "true"
@@ -505,3 +509,4 @@ force = true
 from = "/blog/how-to-develop-a-serverless-application-with-fission-part-3/"
 to = "/blog/guestbook-application-with-fission-and-cockroachdb/"
 status = 301
+

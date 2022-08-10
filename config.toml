@@ -16,9 +16,6 @@ baseURL = "https://fission.io/"
 enableRobotsTXT = true
 title = "Fission"
 
-# Hugo allows theme composition (and inheritance). The precedence is from left to right.
-theme = ["docsy"]
-
 # Will give values to .Lastmod etc.
 enableGitInfo = true
 
@@ -248,3 +245,11 @@ name = "Enterprise"
 url = "/enterprise/"
 pre = "<i class='fas fa-briefcase'></i>"
 weight = 16
+
+[module]
+proxy = "direct"
+[[module.imports]]
+path = "github.com/google/docsy"
+[[module.imports]]
+path = "github.com/google/docsy/dependencies"
+
