@@ -22,3 +22,5 @@ To access these metrics, you'll need to install Fission 1.16 or higher.
 | fission_function_overhead_seconds | Router | function_namespace, function_name, path, method, code | The function call delay caused by Fission. |
 | fission_archives_total | StorageSvc | Nil | Number of archives stored |
 | fission_archive_memory_bytes | StorageSvc | Nil | Amount of memory consumed by archives |
+| fission_mqt_subscriptions | MqTrigger | Nil | Total number of subscriptions to mq currently |
+| fission_mqt_messages_processed_total | MqTrigger | trigger_name, trigger_namespace | Total number of messages processed by trigger |
