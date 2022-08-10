@@ -275,4 +275,4 @@ Each of runtime environments is in [fission/environments](https://github.com/fis
 │   └── tensorflow-serving
 ```
 
-You can visualize latest environment version at [environments.fission.io](https://environments.fission.io/)
+You can visualize latest environment version at [environments](/environments/)

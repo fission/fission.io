@@ -25,7 +25,7 @@ The following pre-built environments are currently available for use in Fission:
 | Perl                                | `fission/perl-env`        | -                          | O   | X   | X   |
 
 {{% notice info %}}
-You can get the latest info about the environments at [environment portal](https://environments.fission.io/).
+You can get the latest info about the environments at [environment portal](/environments/).
 {{% /notice %}}
 
 ## Environment Interface Version
