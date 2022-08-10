@@ -33,7 +33,7 @@ images: ["images/og-image-fission.png"]
 </div>
 
 <script type="text/javascript">
-  const examples = {{< readfile file="static/data/examples.json" >}};
+  const examples = {{< readfile file="/static/data/examples.json" >}};
 
   let languageOptions = [`<option value="">All</option>`].concat(
     examples.map(e => `<option value="${e.language}">${e.language}</option>`));
