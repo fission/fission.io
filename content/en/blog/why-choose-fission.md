@@ -35,7 +35,7 @@ Fission provides unmatched extensibility.
 The core of Fission is written in **Go**, it has [Environments](/docs/concepts/#environments) which are the language-specific parts.
 An environment in Fission contains only the adequate code that is required to run a function.
 Fission currently supports **NodeJS, Python, Go, Java, Ruby, PHP**, and **.NET**.
-You can check out all the [Fission supported environments](https://environments.fission.io/).
+You can check out all the [Fission supported environments](/environments/).
 
 {{< figure src="https://fission.io/docs/concepts/assets/trigger-function-environment.png" alt="Environment in Fission" height="500" width="500">}} Functions execute inside an environment.
 
