@@ -40,7 +40,7 @@ We'll install Prometheus and Grafana in a namespace named `monitoring`.
 To create the namespace, run the following command in a terminal:
 
 ```bash
-expose METRICS_NAMESPACE=monitoring
+export METRICS_NAMESPACE=monitoring
 kubectl create namespace $METRICS_NAMESPACE
 ```
 
