@@ -13,8 +13,8 @@ You will also need NATS server setup which is reachable from the Fission Kuberne
 
 ## Installation
 
-If you want to setup NATS Jetstream server on the Kubernetes cluster, you can use the [information here](https://github.com/nats-io/k8s) or you can check the documentation for nats jetstream [docs](https://docs.nats.io/running-a-nats-service/nats-kubernetes).  
-You can also setup NATS jetstream server with this [yaml](https://github.com/fission/keda-connectors/blob/master/nats-jetstream-http-connector/test/jetstream/jetstream-server.yaml) file.(Monitoring is already configured)
+If you want to set up NATS Jetstream server on the Kubernetes cluster, you can use the [information here](https://github.com/nats-io/k8s) or you can check the documentation for nats jetstream [docs](https://docs.nats.io/running-a-nats-service/nats-kubernetes).  
+You can also set up NATS jetstream server with this [yaml](https://github.com/fission/keda-connectors/blob/master/nats-jetstream-http-connector/test/jetstream/jetstream-server.yaml) file.(Monitoring is already configured)
 
 {{% notice info %}}
 NATS jetstream keda connector uses NATS monitoring to scale the deployment, to enable monitoring in nats we need to pass flags as below, you can get more [information here](https://docs.nats.io/nats-server/configuration/monitoring)
@@ -102,22 +102,19 @@ Let's create a message queue trigger which will invoke the consumer func every t
 The response will be sent to `output` stream and in case of consumerfunc invocation fails, the error is written to `erroutput` stream.
 
 ```bash
-fission mqt create --name jetstreamtest --function helloworld --mqtype nats-jetstream --mqtkind keda --topic input.created --resptopic output.response-topic --errortopic erroutput.error-topic --maxretries 3 --metadata stream=input --metadata fissionConsumer=fission_consumer --metadata natsServerMonitoringEndpoint=nats-jetstream.default.svc.cluster.local:8222  --metadata natsServer=nats://nats-jetstream.default.svc.cluster.local:4222  --metadata responseStream=output --metadata errorStream=erroutput --metadata consumer=fission_consumer
+fission mqt create --name jetstreamtest --function helloworld --mqtype nats-jetstream --mqtkind keda --topic input.created --resptopic output.response-topic --errortopic erroutput.error-topic --maxretries 3 --metadata stream=input --metadata natsServerMonitoringEndpoint=nats-jetstream.default.svc.cluster.local:8222 --metadata natsServer=nats://nats-jetstream.default.svc.cluster.local:4222 --metadata consumer=fission_consumer
 ```
 
 Parameter list:
 
-- topic- Subject from which messages are read. It is generally of form - `streamname.subjectname`
-- resptopic- Subject to write responses on success response.  It is generally of form - `response_stream_name.response_subject_name` where streamname should be different then input stream.
-- responseStream- stream to which connector will push messages post successful invocation of the consumer function.
+- topic - Subject from which messages are read. It is generally of form - `streamname.subjectname`
+- resptopic - Subject to write responses on success response.  It is generally of form - `response_stream_name.response_subject_name` where streamname should be different than input stream.
 - errortopic - Subject to write errors on failure.  It is generally of form - `err_response_stream_name.error_subject_name`
-- errorStream- stream to which connector will push messages post non-successful invocation of the consumer function
 - maxretries - Maximum number of times an http endpoint will be retried upon failure.
-- stream- stream from which connector will read messages.
-- fissionConsumer - consumer which fission creates and uses to pull data from stream, proccesses it and pushes it forward to `RESPONSE_TOPIC`
-- natsServerMonitoringEndpoint- Location of the Nats Jetstream Monitoring
+- stream - stream from which connector will read messages.
+- natsServerMonitoringEndpoint - Location of the Nats Jetstream Monitoring
 - natsServer- Location of the Nats Jetstream
-- consumer- consumer is through which our system keeps monitoring the request. And creates resources(like pods) accordingly
+- consumer - consumer is through which our system keeps monitoring the request. And creates resources(like pods) accordingly
 
 ### Testing it out
 
@@ -135,7 +132,7 @@ Order with OrderID:3 has been published
 Successfully sent to request-topic
 ```
 
-There are multiple ways to verify that the consumer function recieved the messages from input stream. Two are mentioned below- 
+There are multiple ways to verify that the consumer function received the messages from input stream. Two are mentioned below- 
 
 - check for logs in the fission `helloworld` function's pod
 
@@ -170,3 +167,7 @@ $ kubectl logs deploy/jetstreamtest
 {"level":"info","ts":1661322333.8208282,"caller":"app/main.go:90","msg":"Done processing message","messsage":"Hello Test2"}
 {"level":"info","ts":1661322333.8217056,"caller":"app/main.go:90","msg":"Done processing message","messsage":"Hello Test3"}
 ```
+
+### Note
+- Jetstream connector creates a push based subscriber to get the data. Make sure the `consumer` provided in `mqt` is of type pull. Also if the consumer is not present connector will itself create the it.
+- The connector needs all the stream mentioned(topic,respTopic,errTopic streams) to be present otherwise it will fail. For this example we have created all these streams in producer function. So before pusblisher publishes the messages it also creates the required stream if not present.
