@@ -169,5 +169,5 @@ $ kubectl logs deploy/jetstreamtest
 ```
 
 ### Note
-- Jetstream connector creates a push based subscriber to get the data. Make sure the `consumer` provided in `mqt` is of type pull. Also if the consumer is not present connector will itself create the it.
+- Jetstream connector creates a push based subscriber to get the data. Make sure the `consumer` provided in `mqt` is of type pull. Also, if the consumer is not present connector will itself create it.
 - The connector needs all the stream mentioned(topic,respTopic,errTopic streams) to be present otherwise it will fail. For this example we have created all these streams in producer function. So before publisher publishes the messages it also creates the required stream if not present.
