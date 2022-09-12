@@ -267,7 +267,7 @@ Hello, world!
 $ fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
 
 # A Go function that prints "hello world"
-$ curl -LO https://raw.githubusercontent.com/fission/examples/main/go/hello%20world/hello.go
+$ curl -LO https://raw.githubusercontent.com/fission/examples/main/go/hello-world/hello.go
 
 # Upload your function code to fission
 $ fission function create --name hello-go --env go --src hello.go --entrypoint Handler
