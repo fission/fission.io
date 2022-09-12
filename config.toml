@@ -108,7 +108,7 @@ privacy_policy = ""
 algolia_docsearch = true
 
 # current release branch - could be rc
-release_branch = "master"
+release_branch = "main"
 # the main version. Never is rc.
 release_version = "v1.16.0"
 
