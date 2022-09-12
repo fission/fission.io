@@ -5,6 +5,10 @@ description: "Keda based Message Queue Trigger for NATS Jetstream"
 weight: 5
 ---
 
+{{< notice info >}}
+NATS Jetstream connector is available in Fission 1.17 or higher.
+{{< /notice >}}
+
 This tutorial will demonstrate how to use a NATS Jetstream trigger to invoke a function.
 We'll assume you have Fission and Kubernetes installed.
 If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
@@ -13,7 +17,7 @@ You will also need NATS server setup which is reachable from the Fission Kuberne
 
 ## Installation
 
-If you want to set up NATS Jetstream server on the Kubernetes cluster, you can use the [information here](https://github.com/nats-io/k8s) or you can check the documentation for nats jetstream [docs](https://docs.nats.io/running-a-nats-service/nats-kubernetes).  
+If you want to set up NATS Jetstream server on the Kubernetes cluster, you can use the [information here](https://github.com/nats-io/k8s) or you can check the documentation for nats jetstream [docs](https://docs.nats.io/running-a-nats-service/nats-kubernetes).
 You can also set up NATS jetstream server with this [yaml](https://github.com/fission/keda-connectors/blob/master/nats-jetstream-http-connector/test/jetstream/jetstream-server.yaml) file.(Monitoring is already configured)
 
 {{% notice info %}}
@@ -62,7 +66,7 @@ Before we dive into details, let's walk through overall flow of event and functi
 ### Producer Function
 
 The producer function is a go program which creates a message and drops into a NATS jetstream stream `input`.
-For brevity all values have been hard coded in the code itself.  
+For brevity all values have been hard coded in the code itself.
 There are different ways of loading this function into cluster. We have created fission function here. 
 <!-- TODO: path of file is to be changed -->
 All the files required are present [here](https://github.com/fission/examples/tree/jetstream-example/miscellaneous/message-queue-trigger/nats-jetstream/producer).
@@ -108,8 +112,8 @@ fission mqt create --name jetstreamtest --function helloworld --mqtype nats-jets
 Parameter list:
 
 - topic - Subject from which messages are read. It is generally of form - `streamname.subjectname`
-- resptopic - Subject to write responses on success response.  It is generally of form - `response_stream_name.response_subject_name` where streamname should be different than input stream.
-- errortopic - Subject to write errors on failure.  It is generally of form - `err_response_stream_name.error_subject_name`
+- resptopic - Subject to write responses on success response. It is generally of form - `response_stream_name.response_subject_name` where streamname should be different than input stream.
+- errortopic - Subject to write errors on failure. It is generally of form - `err_response_stream_name.error_subject_name`
 - maxretries - Maximum number of times an http endpoint will be retried upon failure.
 - stream - stream from which connector will read messages.
 - natsServerMonitoringEndpoint - Location of the Nats Jetstream Monitoring
