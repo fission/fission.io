@@ -35,6 +35,8 @@ Since Fission itself runs in Kubernetes, we'll use the [Prometheus Operator](htt
 
 ### Install Prometheus and Grafana
 
+> This step will install a new Prometheus and Grafana setup using the kube-prometheus-stack Helm chart. If you want to import Fission metrics into your existing setup, you can skip this step and go to the next one: [Enabling Prometheus Service Monitors and Grafana Dashboards in Fission](/docs/usage/observability/prometheus/#enabling-prometheus-service-monitors-and-grafana-dashboards-in-fission)
+
 We'll install Prometheus and Grafana in a namespace named `monitoring`.
 
 To create the namespace, run the following command in a terminal:
@@ -49,18 +51,37 @@ Install Prometheus and Grafana with the release name `fission-metrics`.
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false,prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
 ```
 
 This will install Prometheus and Grafana in the `monitoring` namespace.
 Along with the Prometheus server, it'll also install other components viz. `node-exporter`, `kube-state-metrics` and `alertmanager`.
 
-### Enabling Service Monitors in Fission
+### Enabling Prometheus Service Monitors and Grafana Dashboards in Fission
 
-You'll need to enable service monitors which will scrape metrics from Fission components.
+You'll need to enable service monitors which will scrape metrics from Fission components. You can also import example dashboards provided by the fission chart.
+Save the following yaml file as `values.yaml` or add these lines to your existing custom `values.yaml`
 
-```bash
-helm upgrade fission fission-charts/fission-all --namespace fission --set serviceMonitor.enabled=true --set serviceMonitor.namespace=monitoring
+> Note: For an existing Prometheus setup, change the namespace and additional labels based on the namespace and release name of your kube-prometheus-stack chart respectively.
+```yaml
+serviceMonitor:
+  enabled: true
+  namespace: "monitoring"
+  additionalServiceMonitorLabels:
+    release: "prometheus"
+podMonitor:
+  enabled: true
+  namespace: "monitoring"
+  additionalPodMonitorLabels:
+    release: "prometheus"
+grafana:
+  namespace: "monitoring"
+  dashboards:
+    enable: true
+```
+
+```bash 
+helm upgrade fission fission-charts/fission-all --namespace fission -f values.yaml
 ```
 
 ### Accessing Grafana UI
