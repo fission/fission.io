@@ -134,10 +134,12 @@ There are a few more Fission metrics available which are listed in [Metrics Refe
 
 With Grafana, visuals dashboards can be created to monitor multiple metrics in an organized way.
 
-You can refer to [Fission functions dashboard](https://github.com/fission/examples/blob/main/miscellaneous/dashboards/prometheus-fission-functions.json) that shows log metrics from all the major components of Fission.
+You can refer to the two dashboards in the Fission Helm chart [Fission user dashboard](https://github.com/fission/fission/blob/main/charts/fission-all/dashboards/fission-user-dashboard.json) and [Fission admin dashboard](https://github.com/fission/fission/blob/main/charts/fission-all/dashboards/fission-admin-dashboard.json) that shows metrics from all the major components of Fission.
 
-Once imported, the dashboard will look similar to below image.
+Once imported with the earlier step [Enabling Prometheus Service Monitors and Grafana Dashboards in Fission](/docs/usage/observability/prometheus/#enabling-prometheus-service-monitors-and-grafana-dashboards-in-fission), the dashboards will look similar to images below.
 
-![Prometheus Fission Functions dashboard](../assets/prometheus-grafana.png)
+![Fission user dashboard](../assets/fission-user-dashboard.png)
+
+![Fission admin dashboard](../assets/fission-admin-dashboard.png)
 
 View the list of all [Fission dashboards](https://github.com/fission/examples/tree/main/miscellaneous/dashboards) posted over time.
