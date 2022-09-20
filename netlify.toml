@@ -510,3 +510,8 @@ from = "/blog/how-to-develop-a-serverless-application-with-fission-part-3/"
 to = "/blog/guestbook-application-with-fission-and-cockroachdb/"
 status = 301
 
+[[redirects]]
+force = true
+from = "/docs/releases/v1.17.0-rc1/"
+to = "/docs/releases/v1.17.0/"
+status = 301
