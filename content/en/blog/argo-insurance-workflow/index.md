@@ -5,11 +5,14 @@ author = "Neha Gupta"
 description = "Multiple Fission function orchestration using Argo Workflows"
 categories = ["Tutorials"]
 type = "blog"
-images = ["/images/featured/insurance-workflow-argo.png"]
+images = ["/images/featured/argo-workflows.png"]
 +++
 
 Fission Functions allow user to perform one logical task. To group multiple task together such as one function is dependent on other we can use Argo Workflows.
+
 Argo Workflows is an open source container-native workflow engine with a feature to create DAGs i.e. running task sequentially, in parallel and with dependencies. We will try to develop a simple Insurance Eligibility program which will take different input and calculate insurance installment on basis of the inputs.
+
+{{< figure src="/images/featured/argo-workflows.png" alt="Orchestrate Workflows using Fission and Argo Workflows" height="600" width="1000">}}
 
 ### Understanding the Insurance Calculator
 
@@ -20,20 +23,21 @@ The application/Workflow will take basic information from the user and check the
 * age
 * salary
   
-**Note**: for simplicity we have default values for all parameters defined in the Argo Workflow itself.
+**Note**: for simplicity we have default values for all parameters defined in the Argo Workflow itself. You can use any custom value by changing parameter in [Workflow Yaml file](https://github.com/neha-Gupta1/argo-workflow/blob/main/insurance/insuranceDag.yaml) or by passing parameter to the workflow from CLI which is explained later in this blog.
 
-The different tasks which are performed to calculating the above:
+The different tasks in the workflow are:
 
 * Take first name of the user
 * Take last name of the user
 * Create full name using the above two.
-* Input age and monthly salary.
-* On basis of predefined criteria i.e. ,
-  * if age is below a certain age and yearly salary is above some numbers, user lies in a low risk criteria
+* Input age
+* Get monthly salary.
+* With predefined criteria i.e. ,
+  * if user's age is below a certain number(30 yrs) and yearly salary is above some numbers(1200000), user lies in a low risk criteria
   * otherwise he/she falls in high risk criteria. And the installments varies accordingly.
 * We print the above calculated output to the user.
 
-{{< figure src="/images/featured/insurance-workflow-argo.png" alt="Developing Insurance calculator DAG using Argo Workflows" height="400" width="600">}}
+{{< figure src="insurance-workflow-argo.png" alt="Developing Insurance calculator DAG using Argo Workflows" >}}
 
 ## Pre Requisites
 
@@ -67,7 +71,9 @@ Learn more at https://argoproj.github.io/argo-workflows/workflow-pod-security-co
 
 ```
 
-The successful run of workflow will verify our successful installation
+The successful run of workflow will verify our successful installation.
+
+**Note** We will be using Argo Workflows HTTP agent which requires some custom roles. You can refer to [Argo Workflows quick-start Manifests](https://github.com/argoproj/argo-workflows/blob/master/manifests/quick-start/base/agent-role.yaml) and [workflow RBAC](https://argoproj.github.io/argo-workflows/workflow-rbac/) to create the role on basis of which version of Argo Workflows you will be using.
 
 We are ready to build our Insurance Installment calculator now.
 
@@ -103,7 +109,7 @@ You can refer to [Fission Function](https://github.com/neha-Gupta1/argo-workflow
 
 `sudo chmod 755 insurance/fission-functions/spec.sh`
 
-or which runs the below mentioned tasks,
+it runs the below-mentioned tasks,
 
 ```bash
 fission function create --name set-first-name --env go --src fission-function/postFirstName.go --entrypoint PostFirstNameHandler
@@ -156,7 +162,11 @@ postsalary                           [GET]  /setmonthlysalary       set-salary  
 
 ### Running the application
 
-The above function helped us in creating independent logics. Now we are going to club them together and create a workflow using Argo Workflows. This workflow takes its decision on basis of input provided.
+The above functions helped us in creating independent logics. Now we are going to club them together and create a workflow using Argo Workflows. This workflow takes its decision on the basis of inputs provided.
+
+#### Running application with default inputs
+
+We will try to first run our application with the default inputs:
 
 ```bash
 argo submit --watch insurance/insuranceDag.yaml 
@@ -206,11 +216,89 @@ hello-argo-4n4pm-761537852:           \____\______/
 hello-argo-4n4pm-761537852: time="2022-09-20T05:28:20.770Z" level=info msg="sub-process exited" argo=true error="<nil>"
 ```
 
-**Note** `hello-argo-4n4pm` should be replaced by the Workflow name.
+**Note** `hello-argo-4n4pm` should be replaced by the Workflow name in the above command.
+
+#### Running application with custom inputs
+
+We can provide any custom input to the workflow by passing input file from the command line.
+For this workflow our input file will look something similar to,
+
+```json
+{
+	"first_name": "name",
+	"last_name": "surname",
+	"age": 56,
+	"salary": 1500
+}
+```
+
+Save the above file as input.json in insurance folder and now let's run the workflow with given input,
+
+```bash
+argo submit --watch -f insurance/input.json  insurance/insuranceDag.yaml 
+
+Name:                insurance-argo-s79p7
+Namespace:           fission
+ServiceAccount:      unset (will run with the default ServiceAccount)
+Status:              Running
+Conditions:          
+ PodRunning          False
+Created:             Wed Sep 21 17:14:50 +0530 (1 minute ago)
+Started:             Wed Sep 21 17:14:50 +0530 (1 minute ago)
+Duration:            1 minute 4 seconds
+Progress:            7/7
+ResourcesDuration:   8s*(1 cpu),8s*(100Mi memory)
+Parameters:          
+  age:               56
+  first_name:        name
+  last_name:         surname
+  salary:            1500
+
+STEP                       TEMPLATE              PODNAME                          DURATION  MESSAGE
+ ● insurance-argo-s79p7    insurance                                                                                                               
+ ├─✔ getage                getage                                                                                                                  
+ ├─✔ getmonthlysalary      getmonthlysalary                                                                                                        
+ ├─✔ postfirstname         postfirstname                                                                                                           
+ ├─✔ postlastname          postlastname                                                                                                            
+ ├─✔ getfullname           getfullname                                                                                                             
+ ├─✔ echolowriskresult     echo                  insurance-argo-s79p7-3888718883  9s                                                               
+ ├─✔ gethighriskinsurance  gethighriskinsurance                                                                                                    
+ └─○ getlowriskinsurance   getlowriskinsurance                                              when '(1500*12 > 1200000) || (56<30)' evaluated false  
+
+This workflow does not have security context set. You can run your workflow pods more securely by setting it.
+Learn more at https://argoproj.github.io/argo-workflows/workflow-pod-security-context/
+
+```
+
+```bash
+
+argo logs -f insurance-argo-gf8dx 
+
+insurance-argo-gf8dx-2121782614:  ________________________________________ 
+insurance-argo-gf8dx-2121782614: / Hello name surname !! as per your age: \
+insurance-argo-gf8dx-2121782614: | 56 We can give you an insurance with   |
+insurance-argo-gf8dx-2121782614: \ assured money 75000                    /
+insurance-argo-gf8dx-2121782614:  ---------------------------------------- 
+insurance-argo-gf8dx-2121782614:     \
+insurance-argo-gf8dx-2121782614:      \
+insurance-argo-gf8dx-2121782614:       \     
+insurance-argo-gf8dx-2121782614:                     ##        .            
+insurance-argo-gf8dx-2121782614:               ## ## ##       ==            
+insurance-argo-gf8dx-2121782614:            ## ## ## ##      ===            
+insurance-argo-gf8dx-2121782614:        /""""""""""""""""___/ ===        
+insurance-argo-gf8dx-2121782614:   ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~   
+insurance-argo-gf8dx-2121782614:        \______ o          __/            
+insurance-argo-gf8dx-2121782614:         \    \        __/             
+insurance-argo-gf8dx-2121782614:           \____\______/   
+insurance-argo-gf8dx-2121782614: time="2022-09-21T11:49:24.809Z" level=info msg="sub-process exited" argo=true error="<nil>"
+
+```
 
 ## Conclusion
 
-In this post we tried to orchestrate multiple Fission functions. We saw that functions were running independently or were dependent on output of one or more tasks/stages. We were making decisions on basis of input received. We also have few parallel and other sequential tasks running. This Argo Workflows can be further used to create enormous scenarios such as adding Fission's connector to create workflows or using Argo Workflow's for loop. This will increase the capabilities of Fission. As it can now have bigger flows.
+In this post we tried to orchestrate multiple Fission functions. We saw that functions were running independently or were dependent on output of one or more tasks/stages. We were making decisions on basis of input received. We also have few parallel and other sequential tasks running. 
+
+This Argo Workflows can be further used to create enormous scenarios such as adding Fission's connector to create workflows or using Argo Workflows functionalities like `retry` and `for loop`. This will increase the capabilities of Fission. As it can now have bigger flows.
 
 In case you still have any questions or a specific scenario, feel free to reach out to us. We would be happy to help.
 
@@ -222,4 +310,4 @@ More examples can be found in our [examples directory on GitHub](https://github.
 
 **_Author:_**
 
-[Neha Gupta](www.linkedin.com/in/neha-gupta-g16)  **|**   - [InfraCloud Technologies](http://infracloud.io/)
+[Neha Gupta](www.linkedin.com/in/neha-gupta-g16)  **|**  Software Engineer - [InfraCloud Technologies](http://infracloud.io/)
