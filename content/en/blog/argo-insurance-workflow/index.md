@@ -1,39 +1,40 @@
 +++
-title = "Fission Functions with ArgoWorkflow"
-date = "2022-04-14T11:35:34+05:30"
+title = "Fission Function Orchestration with Argo Workflows"
+date = "2022-09-21T10:15:00+05:30"
 author = "Neha Gupta"
-description = "Create your workflow with Fission and Argo"
+description = "Multiple Fission function orchestration using Argo Workflows"
 categories = ["Tutorials"]
 type = "blog"
 images = ["images/featured/fission-zapier-featured.png"]
 +++
 
-Fission Function allow user to perform one logical task. To group multiple task together such as one function is dependent on other we can use Argo Workflows. Argo Workflows is an open source container-native workflow engine with a feature to create DAGs i.e running task sequentially, parallely and with dependencies. We will try to develop a simple Insurance Eligibility programe which will take different input and calculate insurance instalment on basis of the inputs.
+Fission Functions allow user to perform one logical task. To group multiple task together such as one function is dependent on other we can use Argo Workflows.
+Argo Workflows is an open source container-native workflow engine with a feature to create DAGs i.e. running task sequentially, in parallel and with dependencies. We will try to develop a simple Insurance Eligibility program which will take different input and calculate insurance installment on basis of the inputs.
 
 ### Understanding the Insurance Calculator
 
 The small application/Workflow will take basic information from the user and check the eligibility for the Insurance. Below are the input and different tasks which are performed to calculating the above:
 
-* Take firstname of the user
-* Take lastname of the user
-* Create fullname using the above two.
-* Input age and montly salary.
+* Take first name of the user
+* Take last name of the user
+* Create full name using the above two.
+* Input age and monthly salary.
 * On basis of predefined criteria i.e. ,
-  * if age is below a certain age and yearly salary is above some numbers user lies in a low risk criteria
+  * if age is below a certain age and yearly salary is above some numbers, user lies in a low risk criteria
   * otherwise he/she falls in high risk criteria. And the installments varies accordingly.
 * We print the above calculated output to the user.
 
-{{< figure src="/images/featured/insurance-workflow-argo.png" alt="Developing Insurance calculator DAG using Argo" height="400" width="600">}}
+{{< figure src="/images/featured/insurance-workflow-argo.png" alt="Developing Insurance calculator DAG using Argo Workflows" height="400" width="600">}}
 
 ## Pre Requisites
 
 ### Fission
 
-You should have Fission running on your system. You can refer to our [Fission Installation](/docs/installation) guide for more infromation.
+You should have Fission running on your system. You can refer to our [Fission Installation](/docs/installation) guide for more information.
 
-### ArgoWorkflow
+### Argo Workflows
 
-For installing latest version ArgoWorkflow, you can refer to [ArgoWorkflow Installation](https://argoproj.github.io/argo-workflows/quick-start/)  
+For installing the latest version Argo Workflows, you can refer to [Argo Workflows Installation](https://argoproj.github.io/argo-workflows/quick-start/)  
 
 We are ready to build our Insurance Installment calculator now.
 
@@ -43,7 +44,7 @@ We have to create all the functions which would be helping us with the calculati
 
 `sudo chmod 755 insurance/fission-functions/spec.sh`
 
-Verifing the Fission function and Trigger creation,
+Verifying the Fission function and Trigger creation,
 
 ```bash
 $ fission fn list
@@ -72,7 +73,7 @@ postsalary                           [GET]  /setmonthlysalary       set-salary  
 
 ### Running the application
 
-The above function helped us in creating independent logics. Now we are going to club them together and create a workflow using Argo. This workflow takes its decision on basis of input provided.
+The above function helped us in creating independent logics. Now we are going to club them together and create a workflow using Argo Workflows. This workflow takes its decision on basis of input provided.
 
 ```bash
 argo submit --watch insurance/insuranceDag.yaml 
