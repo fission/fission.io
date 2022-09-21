@@ -5,7 +5,7 @@ author = "Neha Gupta"
 description = "Multiple Fission function orchestration using Argo Workflows"
 categories = ["Tutorials"]
 type = "blog"
-images = ["images/featured/fission-zapier-featured.png"]
+images = ["/images/featured/insurance-workflow-argo.png"]
 +++
 
 Fission Functions allow user to perform one logical task. To group multiple task together such as one function is dependent on other we can use Argo Workflows.
@@ -13,7 +13,16 @@ Argo Workflows is an open source container-native workflow engine with a feature
 
 ### Understanding the Insurance Calculator
 
-The small application/Workflow will take basic information from the user and check the eligibility for the Insurance. Below are the input and different tasks which are performed to calculating the above:
+The application/Workflow will take basic information from the user and check their eligibility for Insurance. Below are the input user needs to provide:
+
+* first_name
+* last_name
+* age
+* salary
+  
+**Note**: for simplicity we have default values for all parameters defined in the Argo Workflow itself.
+
+The different tasks which are performed to calculating the above:
 
 * Take first name of the user
 * Take last name of the user
@@ -35,6 +44,30 @@ You should have Fission running on your system. You can refer to our [Fission In
 ### Argo Workflows
 
 For installing the latest version Argo Workflows, you can refer to [Argo Workflows Installation](https://argoproj.github.io/argo-workflows/quick-start/)  
+
+Verify the Argo Workflows installation by running an example workflow,
+
+```bash
+$ argo submit -n argo --watch https://raw.githubusercontent.com/argoproj/argo-workflows/master/examples/hello-world.yaml
+
+Name:                hello-world-wqxqz
+Namespace:           argo
+ServiceAccount:      unset (will run with the default ServiceAccount)
+Status:              Running
+Created:             Wed Sep 21 15:16:48 +0530 (10 seconds ago)
+Started:             Wed Sep 21 15:16:48 +0530 (10 seconds ago)
+Duration:            10 seconds
+Progress:            0/1
+
+STEP                  TEMPLATE  PODNAME            DURATION  MESSAGE
+ ◷ hello-world-wqxqz  whalesay  hello-world-wqxqz  10s         
+
+This workflow does not have security context set. You can run your workflow pods more securely by setting it.
+Learn more at https://argoproj.github.io/argo-workflows/workflow-pod-security-context/
+
+```
+
+The successful run of workflow will verify our successful installation
 
 We are ready to build our Insurance Installment calculator now.
 
@@ -95,7 +128,7 @@ fission function create --name highriskinsurance --env go --src fission-function
 fission httptrigger create --name gethighriskinsurance --url /getHighRiskEligibility --method GET --function highriskinsurance
 ```
 
-Verifying the Fission function and Trigger creation,
+Verify that all the required functions and triggers are created:
 
 ```bash
 $ fission fn list
@@ -173,10 +206,20 @@ hello-argo-4n4pm-761537852:           \____\______/
 hello-argo-4n4pm-761537852: time="2022-09-20T05:28:20.770Z" level=info msg="sub-process exited" argo=true error="<nil>"
 ```
 
-`hello-argo-4n4pm` should be replaced by the Workflow name.
+**Note** `hello-argo-4n4pm` should be replaced by the Workflow name.
 
 ## Conclusion
 
 In this post we tried to orchestrate multiple Fission functions. We saw that functions were running independently or were dependent on output of one or more tasks/stages. We were making decisions on basis of input received. We also have few parallel and other sequential tasks running. This Argo Workflows can be further used to create enormous scenarios such as adding Fission's connector to create workflows or using Argo Workflow's for loop. This will increase the capabilities of Fission. As it can now have bigger flows.
 
 In case you still have any questions or a specific scenario, feel free to reach out to us. We would be happy to help.
+
+## Want more?
+
+More examples can be found in our [examples directory on GitHub](https://github.com/fission/examples/). Follow **[Fission on Twitter](https://www.twitter.com/fissionio)** for more updates!
+
+---
+
+**_Author:_**
+
+[Neha Gupta](www.linkedin.com/in/neha-gupta-g16)  **|**   - [InfraCloud Technologies](http://infracloud.io/)
