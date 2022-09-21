@@ -1,49 +1,101 @@
 +++
-title = "Fission Functions with ArgoWorkflow"
-date = "2022-04-14T11:35:34+05:30"
+title = "Fission Function Orchestration with Argo Workflows"
+date = "2022-09-21T10:15:00+05:30"
 author = "Neha Gupta"
-description = "Create your workflow with Fission and Argo"
+description = "Multiple Fission function orchestration using Argo Workflows"
 categories = ["Tutorials"]
 type = "blog"
 images = ["images/featured/fission-zapier-featured.png"]
 +++
 
-Fission Function allow user to perform one logical task. To group multiple task together such as one function is dependent on other we can use Argo Workflows. Argo Workflows is an open source container-native workflow engine with a feature to create DAGs i.e running task sequentially, parallely and with dependencies. We will try to develop a simple Insurance Eligibility programe which will take different input and calculate insurance instalment on basis of the inputs.
+Fission Functions allow user to perform one logical task. To group multiple task together such as one function is dependent on other we can use Argo Workflows.
+Argo Workflows is an open source container-native workflow engine with a feature to create DAGs i.e. running task sequentially, in parallel and with dependencies. We will try to develop a simple Insurance Eligibility program which will take different input and calculate insurance installment on basis of the inputs.
 
 ### Understanding the Insurance Calculator
 
 The small application/Workflow will take basic information from the user and check the eligibility for the Insurance. Below are the input and different tasks which are performed to calculating the above:
 
-* Take firstname of the user
-* Take lastname of the user
-* Create fullname using the above two.
-* Input age and montly salary.
+* Take first name of the user
+* Take last name of the user
+* Create full name using the above two.
+* Input age and monthly salary.
 * On basis of predefined criteria i.e. ,
-  * if age is below a certain age and yearly salary is above some numbers user lies in a low risk criteria
+  * if age is below a certain age and yearly salary is above some numbers, user lies in a low risk criteria
   * otherwise he/she falls in high risk criteria. And the installments varies accordingly.
 * We print the above calculated output to the user.
 
-{{< figure src="/images/featured/insurance-workflow-argo.png" alt="Developing Insurance calculator DAG using Argo" height="400" width="600">}}
+{{< figure src="/images/featured/insurance-workflow-argo.png" alt="Developing Insurance calculator DAG using Argo Workflows" height="400" width="600">}}
 
 ## Pre Requisites
 
 ### Fission
 
-You should have Fission running on your system. You can refer to our [Fission Installation](/docs/installation) guide for more infromation.
+You should have Fission running on your system. You can refer to our [Fission Installation](/docs/installation) guide for more information.
 
-### ArgoWorkflow
+### Argo Workflows
 
-For installing latest version ArgoWorkflow, you can refer to [ArgoWorkflow Installation](https://argoproj.github.io/argo-workflows/quick-start/)  
+For installing the latest version Argo Workflows, you can refer to [Argo Workflows Installation](https://argoproj.github.io/argo-workflows/quick-start/)  
 
 We are ready to build our Insurance Installment calculator now.
 
 ### Creating Fission functions and triggers
 
-We have to create all the functions which would be helping us with the calculation. You can refer to [Fission Function](https://github.com/neha-Gupta1/argo-workflow/tree/main/insurance/fission-functions) folder for all the functions required for this application. Clone the above folder and run below command -
+We have to create all the functions which would be helping us with the calculation. The functions are handlers which can be present in any language. Here we have them in go-lang. `set-first-name` function looks like,
+
+```go
+
+type firstname struct {
+	FirstName string `json:"first_name"`
+}
+
+// Handler is the entry point for this fission function
+func PostFirstNameHandler(w http.ResponseWriter, r *http.Request) { 
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Error reading request body",
+			http.StatusInternalServerError)
+	}
+	firstname := firstname{}
+	json.Unmarshal(body, &firstname)
+	fmt.Println(firstname.FirstName)
+	_, err = w.Write([]byte(firstname.FirstName))
+	if err != nil {
+		http.Error(w, "Error writing response", http.StatusInternalServerError)
+	}
+}
+
+```
+
+You can refer to [Fission Function](https://github.com/neha-Gupta1/argo-workflow/tree/main/insurance/fission-functions) folder for all the functions required for this application. Clone the above folder and run below command -
 
 `sudo chmod 755 insurance/fission-functions/spec.sh`
 
-Verifing the Fission function and Trigger creation,
+or which runs the below mentioned tasks,
+
+```bash
+fission function create --name set-first-name --env go --src fission-function/postFirstName.go --entrypoint PostFirstNameHandler
+fission httptrigger create --name postfirstname --url /postfirstname --method GET --function set-first-name
+
+fission function create --name set-last-name --env go --src fission-function/postLastName.go --entrypoint PostLastNameHandler
+fission httptrigger create --name postlastname --url /postlastname --method GET --function set-last-name
+
+fission function create --name get-full-name --env go --src fission-functions/getFullName.go --entrypoint GetFullNameHandler
+fission httptrigger create --name getfullname --url /getfullnamehandler --method GET --function get-full-name
+
+fission function create --name set-age --env go --src fission-functions/getAge.go --entrypoint PostAgeHandler
+fission httptrigger create --name postage --url /setage --method GET --function set-age
+
+fission function create --name set-salary --env go --src fission-functions/getMonthlySalary.go --entrypoint PostSalaryHandler
+fission httptrigger create --name postsalary --url /setmonthlysalary --method GET --function set-salary
+
+fission function create --name lowriskinsurance --env go --src fission-functions/calculateEligibililty.go --entrypoint GetLowRiskInsuranceHandler
+fission httptrigger create --name getlowriskinsurance --url /getLowRiskEligibility --method GET --function lowriskinsurance
+
+fission function create --name highriskinsurance --env go --src fission-functions/calculateEligibililty.go --entrypoint GetHighRiskInsuranceHandler
+fission httptrigger create --name gethighriskinsurance --url /getHighRiskEligibility --method GET --function highriskinsurance
+```
+
+Verifying the Fission function and Trigger creation,
 
 ```bash
 $ fission fn list
@@ -60,7 +112,6 @@ set-salary        go     poolmgr      0        0        0      0      0         
 ```bash
 $ fission httptrigger list
 NAME                                 METHOD URL                     FUNCTION(s)       INGRESS HOST PATH                    TLS ANNOTATIONS
-65222407-76ed-43b2-97d9-160d5bc61c36 [GET]  /hello                  hello             false   *    /hello                      
 getfullname                          [GET]  /getfullnamehandler     get-full-name     false   *    /getfullnamehandler         
 gethighriskinsurance                 [GET]  /getHighRiskEligibility highriskinsurance false   *    /getHighRiskEligibility     
 getlowriskinsurance                  [GET]  /getLowRiskEligibility  lowriskinsurance  false   *    /getLowRiskEligibility      
@@ -72,7 +123,7 @@ postsalary                           [GET]  /setmonthlysalary       set-salary  
 
 ### Running the application
 
-The above function helped us in creating independent logics. Now we are going to club them together and create a workflow using Argo. This workflow takes its decision on basis of input provided.
+The above function helped us in creating independent logics. Now we are going to club them together and create a workflow using Argo Workflows. This workflow takes its decision on basis of input provided.
 
 ```bash
 argo submit --watch insurance/insuranceDag.yaml 
@@ -123,3 +174,9 @@ hello-argo-4n4pm-761537852: time="2022-09-20T05:28:20.770Z" level=info msg="sub-
 ```
 
 `hello-argo-4n4pm` should be replaced by the Workflow name.
+
+## Conclusion
+
+In this post we tried to orchestrate multiple Fission functions. We saw that functions were running independently or were dependent on output of one or more tasks/stages. We were making decisions on basis of input received. We also have few parallel and other sequential tasks running. This Argo Workflows can be further used to create enormous scenarios such as adding Fission's connector to create workflows or using Argo Workflow's for loop. This will increase the capabilities of Fission. As it can now have bigger flows.
+
+In case you still have any questions or a specific scenario, feel free to reach out to us. We would be happy to help.
