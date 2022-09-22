@@ -241,8 +241,8 @@ url = "/slack"
 pre = "<i class='fab fa-slack'></i>"
 weight = 15
 [[menu.main]]
-name = "Enterprise"
-url = "/enterprise/"
+name = "Support"
+url = "/support/"
 pre = "<i class='fas fa-briefcase'></i>"
 weight = 16
 
