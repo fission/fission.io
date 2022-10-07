@@ -87,11 +87,13 @@ skaffold run -p kind
 - If you want your new changes to reflect after skaffold deploy,
 
 ```console
-skaffold delete
-kubectl delete ns fission-function
 make skaffold-prebuild # This builds all Go binaries required for Fission
 skaffold run -p kind
 ```
+{{< notice info >}}
+Skaffold no longer uses the `--force` option which was causing issues with re-deploying after changes.
+For any changes requiring pod restart, please restart the pods manually.
+{{< /notice >}}
 
 ## Validating Installation
 
