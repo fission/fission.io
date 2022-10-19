@@ -15,7 +15,7 @@ fission spec validate [flags]
 
 ```
       --specdir string      Directory to store specs, defaults to ./specs
-      --specignore string   File containing specs to be ingored inside --specdir, defaults to .specignore
+      --specignore string   File containing specs to be ignored inside --specdir, defaults to .specignore
       --allowconflicts      If true, spec apply will be forced even if conflicting resources exist
   -h, --help                help for validate
 ```
@@ -24,6 +24,7 @@ fission spec validate [flags]
 
 ```
       --kube-context string   Kubernetes context to be used for the execution of Fission commands
+  -n, --namespace string      -n |:|: If present, the namespace scope for this CLI request
       --server string         Server URL
   -v, --verbosity int         -v |:|: CLI verbosity (0 is quiet, 1 is the default, 2 is verbose) (default 1)
 ```
