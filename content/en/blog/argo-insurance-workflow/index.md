@@ -310,4 +310,4 @@ More examples can be found in our [examples directory on GitHub](https://github.
 
 **_Author:_**
 
-[Neha Gupta](www.linkedin.com/in/neha-gupta-g16)  **|**  Software Engineer - [InfraCloud Technologies](http://infracloud.io/)
+[Neha Gupta](https://www.linkedin.com/in/neha-gupta-g16)  **|**  Software Engineer - [InfraCloud Technologies](http://infracloud.io/)
