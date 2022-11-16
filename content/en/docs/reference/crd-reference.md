@@ -13,6 +13,8 @@ description: >
 ## fission.io/v1
 
 
+Package v1 contains API Schema definitions for the fission.io v1 API group
+
 ### Resource Types
 - [CanaryConfig](#canaryconfig)
 - [Environment](#environment)
@@ -545,8 +547,6 @@ MessageQueueType refers to Type of message queue
 
 _Appears in:_
 - [MessageQueueTriggerSpec](#messagequeuetriggerspec)
-
-
 
 
 

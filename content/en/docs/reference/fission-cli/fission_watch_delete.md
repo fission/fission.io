@@ -14,8 +14,9 @@ fission watch delete [flags]
 ### Options
 
 ```
-      --function string   Function name
+      --name string       Watch name
       --ignorenotfound    Treat "resource not found" as a successful delete.
+      --function string   Function name
   -h, --help              help for delete
 ```
 
