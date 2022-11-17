@@ -14,14 +14,15 @@ fission function log [flags]
 ### Options
 
 ```
-      --name string       Function name
-  -f, --follow            -f |:|: Specify if the logs should be streamed
-  -r, --reverse           -r |:|: Specify the log reverse query base on time, it will be invalid if the 'follow' flag is specified
-      --recordcount int   Get N most recent log records (default 20)
-  -d, --detail            -d |:|: Display detailed information
-      --pod string        Function pod name (use the latest pod name if unspecified)
-      --dbtype string     Log database type, e.g. influxdb (currently only influxdb is supported) (default "influxdb")
-  -h, --help              help for log
+      --name string            Function name
+  -f, --follow                 -f |:|: Specify if the logs should be streamed
+  -r, --reverse                -r |:|: Specify the log reverse query base on time, it will be invalid if the 'follow' flag is specified. valid for dbtype as influxdb
+      --recordcount int        Get N most recent log records (default 20)
+  -d, --detail                 -d |:|: Display detailed information
+      --pod string             Function pod name (use the latest pod name if unspecified)
+      --dbtype string          Log database type, e.g. influxdb (currently influxdb and kubernetes logs are supported) (default "kubernetes")
+      --pod-namespace string   Namespace in which function's pod are created. If not specified, function's namespace is used. Note: version <1.18 used fission-function as pod's default ns.
+  -h, --help                   help for log
 ```
 
 ### Options inherited from parent commands
