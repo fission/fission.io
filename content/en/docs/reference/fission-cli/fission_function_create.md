@@ -46,8 +46,6 @@ fission function create [flags]
       --minscale int                Minimum number of pods (Uses resource inputs to configure HPA) (default 1)
       --maxscale int                Maximum number of pods (Uses resource inputs to configure HPA) (default 1)
       --targetcpu int               Target average CPU usage percentage across pods for scaling (default 80)
-      --fnNamespace string          --fns |:|: Namespace for function object (default "default")
-      --envNamespace string         --envns |:|: Namespace for environment object (default "default")
       --spec                        Save to the spec directory instead of creating on cluster
       --dry                         View the generated specs
   -h, --help                        help for create
@@ -57,6 +55,7 @@ fission function create [flags]
 
 ```
       --kube-context string   Kubernetes context to be used for the execution of Fission commands
+  -n, --namespace string      -n |:|: If present, the namespace scope for this CLI request
       --server string         Server URL
   -v, --verbosity int         -v |:|: CLI verbosity (0 is quiet, 1 is the default, 2 is verbose) (default 1)
 ```

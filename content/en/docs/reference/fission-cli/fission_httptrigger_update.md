@@ -23,7 +23,6 @@ fission httptrigger update [flags]
       --ingressannotation stringArray   Annotation for Ingress: --ingressannotation key=value (the format of annotation depends on what ingress controller you used)
       --ingresstls string               Name of the Secret contains TLS key and crt for Ingress (the usability of TLS features depends on what ingress controller you used)
       --weight ints                     Weight for each function supplied with --function flag, in the same order. Used for canary deployment
-      --triggerNamespace string         --triggerns |:|: Namespace for trigger object (default "default")
       --prefix string                   Prefix with which functions are exposed. NOTE: Prefix takes precedence over URL/RelativeURL [DEPRECATED for 'fn create', use 'route create' instead]
       --keepprefix                      Keep the prefix in the URL while forwarding request to the function
   -h, --help                            help for update
@@ -33,6 +32,7 @@ fission httptrigger update [flags]
 
 ```
       --kube-context string   Kubernetes context to be used for the execution of Fission commands
+  -n, --namespace string      -n |:|: If present, the namespace scope for this CLI request
       --server string         Server URL
   -v, --verbosity int         -v |:|: CLI verbosity (0 is quiet, 1 is the default, 2 is verbose) (default 1)
 ```
