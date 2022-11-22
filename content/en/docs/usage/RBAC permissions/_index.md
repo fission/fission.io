@@ -7,7 +7,7 @@ weight: 60
 
 **NOTE**: RBAC permission in Fisson CLI is available from Fission version-1.18.0-rc1
 
-Fission CLI supports Kubernetes RBAC through which we can decide specific action the user can perform. Users can create their own account and provide them the permission which fits according to user role.
+Fission CLI supports Kubernetes RBAC through which we can decide specific action the user can perform. Fission Admin can create user's account and provide them with the permission that fits the user role.
 
 ## Setup & pre-requisites for RBAC permission in Fission CLI
 
