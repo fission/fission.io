@@ -1,22 +1,36 @@
 ---
-title: "Adding RBAC Permissions"
+title: "RBAC Permissions for Fission CLI"
 linkTitle: RBAC permissions
 draft: false
 weight: 60
 ---
 
-Fission supports Kubernetes RBAC through which we can decide specific action the user can perform. By default all task in Fission are performed by `default` service account. But user can create their own account and provide them the permission which fits according to user role.
+Fission CLI supports Kubernetes RBAC through which we can decide specific action the user can perform. Users can create their own account and provide them the permission which fits according to user role.
 
-## Setup & pre-requisites
+**NOTE**: RBAC permission in Fisson CLI is available from Fission version-1.18.0-rc1
+
+## Setup & pre-requisites for RBAC permission in Fission CLI
 
 You will need a Kubernetes cluster with Fission installed (Please check [installation page]({{% ref "../../installation/" %}}) for details).
-You have a account named - fission-user
+You should have a account - in this tutorial we have named it as - fission-user
 
-## Creating Role
+## Creating Role for Fission CLI User
 
 User can perform mutliple actions using Fission CLI. And below is the clusterrole which allows user to perform all task which Fission CLI provides.
 
-```fission-user-role.yaml```
+In the below file comments describe the use of each permission in format-
+
+` # <fission CLI command1> <subcommand1>,<subcommand2>; <fission CLI command 1> <subcommand1>,<subcommand2>; `
+
+eg,
+
+`# function- create,delete` means the resource permission is required for Fission CLI in,
+
+- `fission function create` &
+- `fission function delete`
+  commands
+
+```fission-user-role.yaml``` file
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -24,6 +38,8 @@ kind: ClusterRole
 metadata:
   name: fission-user
 rules:
+# Function - create,update, run-container,update-container
+# Spec -apply, destroy
 - apiGroups:
   - ""
   resources:
@@ -31,6 +47,8 @@ rules:
   - secrets
   verbs:
   - get
+
+# functions - log, pod 
 - apiGroups:
   - ""
   resources:
@@ -45,6 +63,12 @@ rules:
   - services
   verbs:
   - list
+
+# Fission -version
+# function - test, create, update
+# archive - download, geturl, list, upload, delete
+# package - create, update
+# timetrigger - create, update, test
 - apiGroups:
   - ""
   resources:
@@ -56,20 +80,88 @@ rules:
 - apiGroups:
   - fission.io
   resources:
-  - canaryconfigs
+  - canaryconfigs 
+  verbs:
+  - list # canary -list
+  - get # canary - get, update
+  - create # canary - create
+  - update # canary - update
+  - delete #canary - delete
+
+- apiGroups:
+  - fission.io
+  resources:
   - environments
+  verbs:
+  - list # environments -list, create;spec-list,apply,destroy ;fission dump
+  - get # environments - get, update, pod; function - create
+  - create # environments - create;spec-apply,destroy
+  - update # environments - update;spec-apply,destroy
+  - delete # environments - delete;spec-apply,destroy
+
+- apiGroups:
+  - fission.io
+  resources:
   - functions
-  - httptriggers
-  - kuberneteswatchtriggers
-  - messagequeuetriggers
+  verbs:
+  - list #  function- list, update; environement - delete;package-list, update, delete;spec-list,apply,destroy ;fission dump
+  - get # function- get, create, getmeta, log, pod, run-container, update-container, update; httptrigger- create, update; mqtrigger - create, update
+  - create # function - create, run-container; spec-apply,destroy
+  - update # function- update-container, update; package-update;spec-apply,destroy
+  - delete # function -delete; spec-apply,destroy
+
+- apiGroups:
+  - fission.io
+  resources:
   - packages
+  verbs:
+  - list # canary -list; package-delete,list; spec-list,apply,destroy; fission dump
+  - get # function - create, get,update; package-delete,get,info,rebuild,update; spec-apply,destroy
+  - create # canary - create;function-create; package-create;spec-apply,destroy
+  - update # canary - update; function - update; package- rebuild,update;spec-apply,destroy
+  - delete #canary - delete;package-delete;spec-apply,destroy
+
+- apiGroups:
+  - fission.io
+  resources:
+  - httptriggers
+  verbs:
+  - list # httptrigger- create,delete,list,update; spec-list,apply,destroy; fission dump
+  - get # canary - get; httptrigger- create,get,list,update, 
+  - create # function -create;httptrigger- create; spec-apply,destroy
+  - update # httptrigger- update; spec-apply,destroy
+  - delete # httptrigger-delete; spec-apply,destroy
+
+- apiGroups:
+  - fission.io
+  resources:
+  - kuberneteswatchtriggers
+  verbs:
+  - list # watch -list; spec-list,apply,destroy; fission dump
+  - create # watch - create; spec-apply,destroy
+  - delete # watch - delete; spec-apply,destroy
+
+- apiGroups:
+  - fission.io
+  resources:
+  - messagequeuetriggers
+  verbs:
+  - list # mqtrigger -list; spec-list, apply, destroy; fission dump
+  - get # mqtrigger - get, update
+  - create # mqtrigger - create; spec-apply,destroy
+  - update # mqtrigger - update; spec-apply,destroy
+  - delete # mqtrigger - delete; spec-apply,destroy
+
+- apiGroups:
+  - fission.io
+  resources:
   - timetriggers
   verbs:
-  - list
-  - get
-  - create
-  - update
-  - delete
+  - list # timetrigger -list; spec-list, apply, destroy; fission dump
+  - get # timetrigger - get, update; spec-list, apply, destroy
+  - create # timetrigger - create; spec-list, apply, destroy
+  - update # timetrigger - update; spec-list, apply, destroy
+  - delete #timetrigger - delete; spec-list, apply, destroy
 ```
 
 We also need to create corresponding rolebinding to create binding for the account and user.
@@ -92,7 +184,7 @@ roleRef:
 
 ```
 
-## Example
+## Implementing Role on Fission CLI User
 
 Lets create a role using above mentioned `fission-user-role.yaml`
 
@@ -125,7 +217,7 @@ kubectl config use-context fission-user
 Switched to context "fission-user".
 ```
 
-## Testing
+## Testing Fission CLI commands using fission-user
 
 With the above setting Fission CLI will use fission-user to perform all actions. Let's create an environment and a Fission function using [create function]({{% ref "../function/functions/" %}})-
 
@@ -141,4 +233,4 @@ function 'hello' created
 
 ## Conclusion
 
-Depending on the users we can create different Cluster Roles and assign it to users.
+The above mentioned `fission-user-role.yaml` file clearly mentions which commands uses what permission. Depending on the users we can create different Cluster Roles and assign it to users and provide specific accesses to them.
