@@ -4,6 +4,11 @@ weight: 2
 description: >
   Accept REST API requests and create Fission resources
 ---
+
+{{< notice info >}}
+Controller is deprecated from version 1.18. You can still enable it using - `controller.enabled` flag in helm charts.
+{{< /notice >}}
+
 Controller is the component that the client talks to.
 It contains CRUD APIs for functions, triggers, environments, Kubernetes event watches, etc. and proxy APIs to internal 3rd-party services.
 

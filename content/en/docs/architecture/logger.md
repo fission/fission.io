@@ -5,8 +5,19 @@ description: >
   Record and persist function logs
 ---
 
+Fission Function logs can be retrieved in two ways-
+
+- Logs from Kubernetes Pods
+- Logs from InfluxDB
+  
 Logger is deployed as <a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/" target="_blank">DaemonSet</a> to help to forward function logs to a centralized database service for log persistence.
-Currently, only InfluxDB is supported to store logs.
+
+## Logs using Kubernetes Pods
+
+1. Fission fetches all pods which are running the function
+2. Logs from all pods are combined and displayed on standard output
+
+## Logs using InfluxDB
 
 {{< img "../assets/logger.png" "Fig.1 Logger" "45em" "1" >}}
 
