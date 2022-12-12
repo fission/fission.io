@@ -243,7 +243,7 @@ To install the operator, run:
 
 ```sh
 kubectl create namespace observability
-kubectl create -n observability -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.29.1/jaeger-operator.yaml
+kubectl create -n observability -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.39.0/jaeger-operator.yaml
 ```
 
 Note that you'll need to download and customize the Role Bindings if you are using a namespace other than observability.
