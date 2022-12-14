@@ -22,6 +22,7 @@ fission function log [flags]
       --pod string             Function pod name (use the latest pod name if unspecified)
       --dbtype string          Log database type, e.g. influxdb (currently influxdb and kubernetes logs are supported) (default "kubernetes")
       --pod-namespace string   Namespace in which function's pod are created. If not specified, function's namespace is used. Note: version <1.18 used fission-function as pod's default ns.
+      --all-pods               Get all pod's logs in the function.
   -h, --help                   help for log
 ```
 
