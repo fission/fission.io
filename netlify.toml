@@ -5,20 +5,20 @@ publish = "public"
 [context.production.environment]
 HUGO_ENABLEGITINFO = "true"
 HUGO_ENV = "production"
-HUGO_VERSION = "0.105.0"
+HUGO_VERSION = "0.108.0"
 GO_VERSION = "1.19.3"
 
 [context.split1.environment]
 HUGO_ENV = "production"
-HUGO_VERSION = "0.105.0"
+HUGO_VERSION = "0.108.0"
 GO_VERSION = "1.19.3"
 
 [context.deploy-preview.environment]
-HUGO_VERSION = "0.105.0"
+HUGO_VERSION = "0.108.0"
 GO_VERSION = "1.19.3"
 
 [context.branch-deploy.environment]
-HUGO_VERSION = "0.105.0"
+HUGO_VERSION = "0.108.0"
 GO_VERSION = "1.19.3"
 
 [context.next.environment]
@@ -514,6 +514,12 @@ status = 301
 force = true
 from = "/docs/releases/v1.17.0-rc1/"
 to = "/docs/releases/v1.17.0/"
+status = 301
+
+[[redirects]]
+force = true
+from = "/docs/releases/v1.18.0-rc1/"
+to = "/docs/releases/v1.18.0-rc2/"
 status = 301
 
 [[redirects]]
