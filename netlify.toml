@@ -518,8 +518,8 @@ status = 301
 
 [[redirects]]
 force = true
-from = "/docs/releases/v1.18.0-rc1/"
-to = "/docs/releases/v1.18.0-rc2/"
+from = "/docs/releases/v1.18.0-rc2/"
+to = "/docs/releases/v1.18.0/"
 status = 301
 
 [[redirects]]
