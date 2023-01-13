@@ -33,6 +33,7 @@ fission function run-container [flags]
       --minscale int             Minimum number of pods (Uses resource inputs to configure HPA) (default 1)
       --maxscale int             Maximum number of pods (Uses resource inputs to configure HPA) (default 1)
       --targetcpu int            Target average CPU usage percentage across pods for scaling (default 80)
+      --imagepullsecret string   Secret for Kubernetes to pull an image from a private registry
       --spec                     Save to the spec directory instead of creating on cluster
       --dry                      View the generated specs
   -h, --help                     help for run-container
