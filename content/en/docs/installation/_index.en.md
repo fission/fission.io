@@ -55,6 +55,12 @@ Refer [1.15 release notes]({{< ref "v1.15.0.md" >}}) for more details.
 If you are upgrading Fission, do check [upgrade guide]({{< ref "upgrade.md" >}})
 {{< /notice >}}
 
+{{< notice warning >}}
+With 1.18 release, the namespaces `fission-function` and `fission-builder` will no longer be created. Instead, all resources will be created in the same namespace for all namespaces.
+
+Refer [1.18 release notes]({{< ref "v1.18.0.md" >}}) for more details.
+{{< /notice >}}
+
 {{< notice info>}}
 serviceType, routerServiceType can be `NodePort` or `LoadBalancer` for external access to Fission in below steps.
 You can use `ClusterIP` if you want to access Fission from within the cluster.
