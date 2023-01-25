@@ -221,6 +221,32 @@ this windows executable: [fission.exe](https://github.com/fission/fission/releas
 {{< /tab >}}
 {{< /tabs >}}
 
+
+## Verify fission installation
+Once you are done with fission installation, run these commands to make sure fission is installed successfully and all core components of fission are working properly.
+
+To check fission is installed successfully, run this command and verify both client and server version should be same. 
+
+```shell
+fission version
+```
+
+To check fission core components are working properly, run this command.
+
+```shell
+fission check
+```
+
+{{% notice info %}}
+If you have enabled authentication while installing fission, mentioned above commands won't show proper result. You need to generate token to make it work.
+
+See [How to generate auth token](https://fission.io/docs/installation/authentication/#generating-auth-token), if authentication is enabled.
+{{% /notice %}}
+
+{{< notice warning >}}
+If any of these commands failed to run or not showing result properly, please consider re-intalling of fission.
+{{< /notice >}}
+
 ## Run an example
 
 Finally, you're ready to use Fission!
