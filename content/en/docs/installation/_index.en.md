@@ -228,13 +228,35 @@ Once you are done with fission installation, run these commands to make sure fis
 To check fission is installed successfully, run this command and verify both client and server version should be same. 
 
 ```shell
-fission version
+$ fission version
+client:
+  fission/core:
+    BuildDate: "2023-01-25T04:56:25Z"
+    GitCommit: deb3523
+    Version: {{% release-version %}}
+server:
+  fission/core:
+    BuildDate: "2023-01-25T04:53:33Z"
+    GitCommit: deb3523
+    Version: {{% release-version %}}
+
 ```
 
 To check fission core components are working properly, run this command.
 
 ```shell
-fission check
+$ fission check
+fission-services
+--------------------
+√ executor is running fine
+√ router is running fine
+√ storagesvc is running fine
+√ webhook is running fine
+
+fission-version
+--------------------
+√ fission is up-to-date
+
 ```
 
 {{% notice info %}}
@@ -242,10 +264,6 @@ If you have enabled authentication while installing fission, mentioned above com
 
 See [How to generate auth token](https://fission.io/docs/installation/authentication/#generating-auth-token), if authentication is enabled.
 {{% /notice %}}
-
-{{< notice warning >}}
-If any of these commands failed to run or not showing result properly, please consider re-intalling of fission.
-{{< /notice >}}
 
 ## Run an example
 
