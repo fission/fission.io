@@ -523,7 +523,7 @@ So what's the reasonable resource setting for a function? It really depends on w
 Here's a tip, use `kubectl top` to get actual resource consumption of pod when doing benchmarking. Then you will know what's the best setting for a Go function.
 
 ```bash
-$ kubectl -n fission-function top pod -l functionName=g1
+$ kubectl top pod -l functionName=g1
 NAME                                                              CPU(cores)   MEMORY(bytes)
 go-1ef65ed0-d5eb-11e8-91e8-080027114863-9x7y4xmh-569bfdd9bhmlrf   112m           6Mi
 ```

@@ -51,7 +51,7 @@ This is because the HPA does not get actual consumption of pods and the value re
 This can be fixed by installing the metric server.
 
 ```bash
-$ kubectl get hpa -nfission-function
+$ kubectl get hpa
 NAME                                    REFERENCE                                          TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
 newdeploy-helloscale-default-ql0uqiwp   Deployment/newdeploy-helloscale-default-ql0uqiwp   <unknown>/50%   1         6         1          20h
 ```
@@ -93,7 +93,7 @@ docker-for-desktop   662m         16%    1510Mi          79%
 You will also notice that HPA has picked up the values from pod and now you can do autoscaling!
 
 ```bash
-$ kubectl get hpa -nfission-function
+$ kubectl get hpa
 NAME                                    REFERENCE                                          TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
 newdeploy-helloscale-default-gkxdkl8y   Deployment/newdeploy-helloscale-default-gkxdkl8y   20%/50%   1         6         1          48s
 ```

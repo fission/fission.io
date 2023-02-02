@@ -98,7 +98,7 @@ Replace ENDPOINT:PORT with a comma separated list of Kafka brokers
 
 ### Step 4 - Check the logs and Fission behaviour
 
-Your function will be deployed as pod in fission-function namespace into Kuberentes cluster.
+Your function will be deployed as pod in default namespace into Kuberentes cluster.
 Using kubectl logs -f -c python $POD_NAMEyou can check the logs in real time to see what happens there.
 Also, you have to take a look at Kafka topics (response or error) in order to know the output of your function.
 

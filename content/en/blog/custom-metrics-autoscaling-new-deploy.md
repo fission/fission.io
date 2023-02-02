@@ -263,7 +263,7 @@ kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1/namespaces/kafka/pods/%2A/
 
 ## Testing
 
-Run a producer function to send 10000 messages to the topic `request-topic` and check the namespace `fission-function` where the new deploy pods will be created or destroyed according to the metric value.
+Run a producer function to send 10000 messages to the topic `request-topic` and check the namespace `default` where the new deploy pods will be created or destroyed according to the metric value.
 
 ## Conclusion
 

@@ -35,7 +35,7 @@ Builder Container compiles function source code into executable binary/files and
 
 In a nutshell, the builder Manager manages the builds of function source code.
 
-Once an environment that contains a builder image is created, the builder manager will then create the Kubernetes service and deployment under the `fission-builder` namespace to start the environment builder. And once a package that contains a source archive is created, the builder manager talks to the environment builder to build the function’s source archive into a deploy archive for function deployment.
+Once an environment that contains a builder image is created, the builder manager will then create the Kubernetes service and deployment under the `default` namespace to start the environment builder. And once a package that contains a source archive is created, the builder manager talks to the environment builder to build the function’s source archive into a deploy archive for function deployment.
 
 ### Build Status
 

@@ -97,11 +97,11 @@ Let’s create a **Go** environment using the following command:
 
 	fission env create --name go --image fission/go-env --builder fission/go-builder
 
->**NOTE**: _Since you are creating a new environment, it may take a few extra seconds before the Go environment pods are up and running in the fission-function namespace._
+>**NOTE**: _Since you are creating a new environment, it may take a few extra seconds before the Go environment pods are up and running in the default namespace._
 
 To verify if the pods are up and running, be sure to run this command:
 
-	$ kubectl get pods -n fission-function | grep go
+	$ kubectl get pods | grep go
 
 >_(The status of the pods should be "Running")_
 

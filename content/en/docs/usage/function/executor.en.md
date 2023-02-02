@@ -27,7 +27,7 @@ We may want to adjust the size of pools based on our need (e.g. resource efficie
 ```bash
 $ fission env create --name python --version 3 --poolsize 1 --image fission/python-env:latest
 
-$ kubectl -n fission-function get pod -l environmentName=test
+$ kubectl get pod -l environmentName=test
 ```
 
 Now, you shall see only one pod for the environment we just created.
@@ -196,7 +196,7 @@ This behavior is governed by the frequency at which the controller watches (whic
 More details can be found [here](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-cooldowndelay)
 
 ```bash
-$ kubectl -n fission-function get hpa -w
+$ kubectl get hpa -w
 
 NAME             REFERENCE                   TARGETS      MINPODS   MAXPODS   REPLICAS   AGE
 hello-qoxmothj   Deployment/hello-qoxmothj   5% / 50%     1         6         1          3m

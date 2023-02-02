@@ -146,13 +146,13 @@ There are multiple ways to verify that the consumer function received the messag
 ```sh
 $ fission fn pod --name=helloworld
 NAME                                         NAMESPACE         READY  STATUS   IP            EXECUTORTYPE  MANAGED  
-poolmgr-go-default-6312601-6d6b85ff4f-b8m7g  fission-function  2/2    Running  10.244.0.188  poolmgr       false 
+poolmgr-go-default-6312601-6d6b85ff4f-b8m7g  default  2/2    Running  10.244.0.188  poolmgr       false 
 ```
 
 or
 
 ```sh
-$ kubectl -n fission-function get pod -l functionName=helloworld
+$ kubectl get pod -l functionName=helloworld
 NAME                                          READY   STATUS        RESTARTS   AGE
 poolmgr-go-default-6312601-6d6b85ff4f-b8m7g   2/2     Terminating   0          30m
 ```
@@ -160,7 +160,7 @@ poolmgr-go-default-6312601-6d6b85ff4f-b8m7g   2/2     Terminating   0          3
 Sample output:
 
 ```text
-$ kubectl -n fission-function logs -f -c go poolmgr-go-default-6312601-6d6b85ff4f-b8m7g 
+$ kubectl logs -f -c go poolmgr-go-default-6312601-6d6b85ff4f-b8m7g 
 2022/08/24 06:16:17 listening on 8888 ...
 2022/08/24 06:42:23 specializing ...
 2022/08/24 06:42:23 loading plugin from /userfunc/deployarchive/helloworld-eb3f240a-d6bb-4728-b806-f426ce0e255a-vyh8tf-oa1sgs
