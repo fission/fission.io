@@ -328,10 +328,10 @@ poolmgr-go-default-3304406-8695f6fdd8-5jcx4 go 2022/01/21 06:55:27 Received mess
 
 ## Debugging
 
-For debugging, you can check the logs of the pods created in the `fission` and `fission-function` namespace.
+For debugging, you can check the logs of the pods created in the `fission` and `default` namespace.
 
-Typically, all function pods would be created in the `fission-function` namespace.
-Based on the environment name, the pods would be created in the `fission-function` namespace.
+Typically, all function pods would be created in the `default` namespace.
+Based on the environment name, the pods would be created in the `default` namespace.
 You can check consumer and producer function logs.
 
 Try out the [Sample app](#sample-app) to see it in action.

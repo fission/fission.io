@@ -229,10 +229,10 @@ $ fission route create --function hellopy --url /hellopy
 ```
 
 Once we create the function, the build process is started.
-You can check logs of the builder in fission-builder namespace:
+You can check logs of the builder in default namespace:
 
 ```bash
-$ kubectl -n fission-builder logs -f py3-4214348-59555d9bd8-ks7m4 builder
+$ kubectl logs -f py3-4214348-59555d9bd8-ks7m4 builder
 
 2018/02/16 11:44:21 Builder received request: {demo-src-pkg-zip-ninf-djtswo ./build.sh}
 2018/02/16 11:44:21 Starting build...

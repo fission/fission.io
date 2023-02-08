@@ -78,7 +78,7 @@ spec:
 Once we apply fission specs and run the function - you will notice that the pods go only on nodes with taints that match the toleration:
 
 ```bash
-$ kubectl -n fission-function get pod -o wide
+$ kubectl get pod -o wide
 NAME                                                 READY     STATUS    RESTARTS   AGE       IP             NODE
 newdeploy-pyfunc-default-kgsuik0l-66cd755675-jgjj6   2/2       Running   0          51s       10.16.177.16   gke-fission-dev-default-pool-87c8b616-549c
 poolmgr-python-default-okhvkdsv-57b866b774-hbz7q     2/2       Running   0          49s       10.16.176.34   gke-fission-dev-default-pool-87c8b616-5q2c

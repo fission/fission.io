@@ -99,7 +99,7 @@ executor-97c7fc96d-9tclp                                 2/2       Running      
 Also all function pods now have 3 containers - the function container, fetcher and now additionally the the istio-proxy container and we can see the istio-proxy logs for function containers.
 
 ```bash
-$ kubectl get pods -n fission-function
+$ kubectl get pods
 NAME                                                READY     STATUS    RESTARTS   AGE
 newdeploy-hello-default-mmrlkoog-557678fdcd-gw7tz   3/3       Running   2          9m
 poolmgr-node-default-esibbicv-65488fbc4d-2hdzc      3/3       Running   0          9m

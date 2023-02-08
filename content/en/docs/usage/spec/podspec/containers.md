@@ -37,7 +37,7 @@ spec:
 We can see that the init container runs first, before the actual function containers run:
 
 ```bash
-$ kubectl -n fission-function get pod
+$ kubectl get pod
 NAME                                               READY     STATUS            RESTARTS   AGE
 poolmgr-python-default-9eik2gxd-6fdc8d9696-hkkgn   0/2       Init:0/1          0          10s
 poolmgr-python-default-9eik2gxd-6fdc8d9696-lpmgl   0/2       PodInitializing   0          10s
@@ -47,7 +47,7 @@ poolmgr-python-default-9eik2gxd-6fdc8d9696-tkmdc   0/2       PodInitializing   0
 And the init container here is simply printing the file which was mounted and we can verify the same by looking at logs of the init container:
 
 ```bash
-$ kubectl -n fission-function logs -f poolmgr-python-default-9eik2gxd-6fdc8d9696-lpmgl -c init-py
+$ kubectl logs -f poolmgr-python-default-9eik2gxd-6fdc8d9696-lpmgl -c init-py
 environmentName="python"
 environmentNamespace="default"
 environmentUid="68e3f909-3e86-11e9-9378-42010aa00057"

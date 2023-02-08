@@ -216,7 +216,7 @@ fission package create --name fissionoptel-pkg --sourcearchive sample.zip --env 
 
 > Note: The package creation process can take a long time especially while building `grpcio`, so plesae be patient.
 > You can check the progress of this using `stern`.
-> In a new terminal window, execute `stern '.*' -n fission-builder` to see the status of package creation.
+> In a new terminal window, execute `stern '.*'` to see the status of package creation.
 
 Create Fission function using the package created above:
 

@@ -32,7 +32,7 @@ spec:
 Now, you shall see the environment variable in container:
 
 ```sh
-$ kubectl -n fission-function exec -it <pod> -c fetcher sh
+$ kubectl exec -it <pod> -c fetcher sh
 / # env
 LOG_LEVEL=info
 ```
@@ -42,7 +42,7 @@ LOG_LEVEL=info
 Let's create a ConfigMap called `my-configmap`.
 
 ```bash
-$ kubectl -n fission-function create configmap my-configmap --from-literal=TEST_KEY="TESTVALUE"
+$ kubectl create configmap my-configmap --from-literal=TEST_KEY="TESTVALUE"
 ```
 
 And add PodSpec with `configMapKeyRef` to environment spec file.
@@ -65,7 +65,7 @@ spec:
 ```
 
 ```sh
-$ kubectl -n fission-function exec -it <pod> -c fetcher sh
+$ kubectl exec -it <pod> -c fetcher sh
 / # env
 TEST_KEY=TESTVALUE
 ```

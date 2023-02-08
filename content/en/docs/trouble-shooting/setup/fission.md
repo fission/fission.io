@@ -81,7 +81,7 @@ Runtime is a container contains necessary language environment to run user funct
 You can filter out function pods you're interesting in and dump logs as follows.
 
 ```bash
-$ kubectl -n fission-function get pod -l functionName=<fn-name>
+$ kubectl get pod -l functionName=<fn-name>
 ```
 
 You can also add additional labels to filter out pods.
@@ -96,15 +96,15 @@ Here are some labels you can use.
 If you also want to filter out function pod in specific state like `RUNNING`, try:
 
 ```bash
-$ kubectl -n fission-function get pod -l functionName=<fn-name> \
+$ kubectl get pod -l functionName=<fn-name> \
     --field-selector status.phase=Running
 ```
 
 Dump logs from containers:
 
 ```bash
-$ kubectl -n fission-function describe pod -f <pod>
-$ kubectl -n fission-function logs -f <pod> -c <container>
+$ kubectl describe pod -f <pod>
+$ kubectl logs -f <pod> -c <container>
 ```
 
 #### Builder Pods
@@ -147,9 +147,9 @@ github.com/fission/fission/examples/go/go-module-example\n./main.go:4:2: importe
 To dump builder logs, you can do:
 
 ```bash
-$ kubectl -n fission-builder get pod -l envName=<env-name>
-$ kubectl -n fission-builder describe pod -f <pod>
-$ kubectl -n fission-builder logs -f <pod> -c <container>
+$ kubectl get pod -l envName=<env-name>
+$ kubectl describe pod -f <pod>
+$ kubectl logs -f <pod> -c <container>
 ```
 
 ### Dump Logs for Further Help

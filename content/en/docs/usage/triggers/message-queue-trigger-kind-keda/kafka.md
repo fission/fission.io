@@ -273,10 +273,10 @@ There are a couple of ways you can verify that the consumer is called:
 
 ## Debugging
 
-For debugging, you can check the logs of the pods created in the `fission` and `fission-function` namespace.
+For debugging, you can check the logs of the pods created in the `fission` and `default` namespace.
 
-Typically, all function pods would be created in the `fission-function` namespace.
-Based on the environment name, the pods would be created in the `fission-function` namespace.
+Typically, all function pods would be created in the `default` namespace.
+Based on the environment name, the pods would be created in the `default` namespace.
 You can check consumer and producer function logs.
 
 ## Introducing an error

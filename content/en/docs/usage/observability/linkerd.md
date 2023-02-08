@@ -56,7 +56,7 @@ linkerd dashboard &
 
 ![Linkerd dashboard](../assets/linkerd-dashboard.png)
 
-- Under namespaces, select fission-function and check the existing deployments
+- Under namespaces, select default and check the existing deployments
 
 ![Linkerd before mesh](../assets/linkerd-before.png)
 
@@ -66,7 +66,7 @@ linkerd dashboard &
 Linkerd injects a side car proxy to add the deployment to it's data plane. We can do this at namespace level so that all deployments in a namespace are meshed.
 
 ```
-kubectl get -n  fission-function deploy -o yaml \
+kubectl get deploy -o yaml \
 | linkerd inject - \
 | kubectl apply -f -
 ```

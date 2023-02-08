@@ -104,7 +104,7 @@ For instance, the below code snippet with create a new Python environment with a
 
 ```bash
 $ fission env create --name python --version **3** --poolsize **1** --image fission/python-env:latest
-$ kubectl -n fission-function get pod -l environmentName**=**test
+$ kubectl get pod -l environmentName**=**test
 ```
 
 To give you greater control over resource usages for all functions in the same environment, you can also set CPU and memory flags.
