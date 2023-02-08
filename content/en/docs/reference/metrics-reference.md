@@ -24,3 +24,4 @@ To access these metrics, you'll need to install Fission 1.16 or higher.
 | fission_archive_memory_bytes | StorageSvc | Nil | Amount of memory consumed by archives |
 | fission_mqt_subscriptions | MqTrigger | Nil | Total number of subscriptions to mq currently |
 | fission_mqt_messages_processed_total | MqTrigger | trigger_name, trigger_namespace | Total number of messages processed by trigger |
+| fission_mqt_message_lag | MqTrigger | trigger_name, trigger_namespace, topic, partition | Total number of messages lag per topic and partition |
