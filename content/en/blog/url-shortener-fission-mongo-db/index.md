@@ -29,7 +29,7 @@ So let's get started!
 
 MongoDB is a popular NoSQL database which stores data in document-based format.
 Data is stored in **collections** which is similar to tables in a relational database.
-Each collection has multiple **documents** which is a single unit of data and it stored like JSON.
+Each collection has multiple **documents** which is a single unit of data, and it stored like JSON.
 
 MongoDB Atlas is a managed cloud-based offering that eliminats the need to manage the infrastructure.
 In order to get this working, you'll need a MongoDB Atlas account.
@@ -79,7 +79,7 @@ You can refer to our [Fission Installation](https://fission.io/docs/installation
 
 #### Source Package Setup
 
-The code used for building a serverless URL shortener with MongoDB Atlas and Fission can be found in this urlshortener repo.
+The code used for building a serverless URL shortener with MongoDB Atlas and Fission can be found in [this URL Shortener repo](https://github.com/fission/examples/tree/main/python/urlshortener)).
 
 We have two folders, `frontend` that will have the frontend related code, and `backend` that will have backend and database related code.
 Below is how the folders will look.
@@ -92,7 +92,7 @@ This repo contains the following files and folders:
 
 ## Steps to use Fission functions with MongoDB Atlas
 
-Clone this repo and perform the following steps.
+Clone the [URL Shortener repo](https://github.com/fission/examples/tree/main/python/urlshortener) and perform the following steps.
 
 > Note: Make sure to update the MongoDB connection string in `shortenurl.py` with your MongoDB credentials.
 
@@ -145,7 +145,7 @@ frontend  python    poolmgr      0        0        0      0      0         0    
 ```
 
 Now that our functions are deployed, we need a route to connect to it from our localhost.
-We will setup two HTTP routes, one each for `frontend` and `backend` by using the following commands:
+We will set up two HTTP routes, one each for `frontend` and `backend` by using the following commands:
 
 ```bash
 fission route create --name frontend --method POST --method GET --url /main --function frontend
@@ -176,7 +176,7 @@ Find the IP address of **router** and open that in a new window.
 Services and Ingresses page
 {{< /imgproc >}}
 
-You'll see a blank window at first, this is because we have configured our frontend to respond to requests at `/main`, hence add this to the IP address and you should see the location.
+You'll see a blank window at first, this is because we have configured our frontend to respond to requests at `/main`, hence add this to the IP address, and you should see the location.
 
 {{< imgproc url-shortener-fission-1.png Fit "800X800" >}}
 Running the URL shortener app
