@@ -5,7 +5,7 @@ author = "Atulpriya Sharma"
 description = "Building a Serverless URL Shortener with MongoDB Atlas. Learn to use MongoDB Atlas with Fission serverless functions."
 categories = ["Tutorials"]
 type = "blog"
-images = ["images/featured/postgresql-with-fission-functions.png"]
+images = ["images/featured/fission-mongoDB-featured.png"]
 +++
 
 A few weeks ago, I delivered a talk on [Demystifying Serverless at the MongDB meetup](https://www.mongodb.com/community/forums/t/hyderabad-mug-demystifying-serverless-mern-stack/209473) here in Hyderabad.
@@ -22,6 +22,8 @@ If a short URL exists, it will fetch it from the collection else it will create 
 This application is written in **Python** & **Flask**.
 
 So let's get started!
+
+{{< figure src="/images/featured/fission-mongoDB-featured.png" alt="Building a Serverless URL Shortener with MongoDB Atlas and Fission" height="600" width="1000">}}
 
 ## Pre Requisites
 
