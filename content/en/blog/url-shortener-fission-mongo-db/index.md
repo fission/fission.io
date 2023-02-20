@@ -1,6 +1,6 @@
 +++
 title = "Building a Serverless URL Shortener with MongoDB Atlas and Fission"
-date = "2023-02-13T11:30:34+05:30"
+date = "2023-02-20T09:30:34+05:30"
 author = "Atulpriya Sharma"
 description = "Building a Serverless URL Shortener with MongoDB Atlas. Learn to use MongoDB Atlas with Fission serverless functions."
 categories = ["Tutorials"]
