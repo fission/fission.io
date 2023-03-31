@@ -24,7 +24,7 @@ fission environment update [flags]
       --maxcpu int                Maximum CPU to be assigned to pod (In millicore, minimum 1)
       --minmemory int             Minimum memory to be assigned to pod (In megabyte)
       --maxmemory int             Maximum memory to be assigned to pod (In megabyte)
-      --graceperiod int           --period |:|: Grace time (in seconds) for pod to perform connection draining before termination (default value will be used if 0 is given)
+      --graceperiod int           --period |:|: Grace time (in seconds) for pod to perform connection draining before termination (only non-negative values considered)
       --keeparchive               Keep the archive instead of extracting it into a directory (mainly for the JVM environment because .jar is one kind of zip archive)
       --runtime-env stringArray   Environment variable to be set in the runtime container
       --externalnetwork           Allow pod to access external network (only works when istio feature is enabled)
