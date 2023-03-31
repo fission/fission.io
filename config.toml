@@ -110,7 +110,7 @@ algolia_docsearch = true
 # current release branch - could be rc
 release_branch = "main"
 # the main version. Never is rc.
-release_version = "v1.19.0-rc1"
+release_version = "v1.18.0"
 
 slackurl = "/slack"
 
