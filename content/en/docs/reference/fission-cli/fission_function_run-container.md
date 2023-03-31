@@ -23,7 +23,7 @@ fission function run-container [flags]
       --secret stringArray       Function access to secret, should be present in the same namespace as the function. You can provide multiple secrets using multiple --secrets flags. In the case of fn update the secrets will be replaced by the provided list of secrets.
       --fntimeout int            --ft |:|: Maximum time for a request to wait for the response from the function (default 60)
       --idletimeout int          The length of time (in seconds) that a function is idle before pod(s) are eligible for recycling (default 120)
-      --graceperiod int          Grace time (in seconds) for pod to perform connection draining before termination (default value will be used if negative value is given)
+      --graceperiod int          Grace time (in seconds) for pod to perform connection draining before termination (only non-negative values considered)
       --labels string            Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
       --annotation stringArray   Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
       --mincpu int               Minimum CPU to be assigned to pod (In millicore, minimum 1)

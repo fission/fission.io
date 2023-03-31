@@ -23,7 +23,7 @@ fission environment create [flags]
       --maxcpu int                Maximum CPU to be assigned to pod (In millicore, minimum 1)
       --minmemory int             Minimum memory to be assigned to pod (In megabyte)
       --maxmemory int             Maximum memory to be assigned to pod (In megabyte)
-      --graceperiod int           --period |:|: Grace time (in seconds) for pod to perform connection draining before termination (default value will be used if 0 is given)
+      --graceperiod int           --period |:|: Grace time (in seconds) for pod to perform connection draining before termination (only non-negative values considered)
       --version int               Environment API version (1 means v1 interface) (default 1)
       --imagepullsecret string    Secret for Kubernetes to pull an image from a private registry
       --keeparchive               Keep the archive instead of extracting it into a directory (mainly for the JVM environment because .jar is one kind of zip archive)
