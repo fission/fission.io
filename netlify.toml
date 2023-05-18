@@ -524,6 +524,12 @@ status = 301
 
 [[redirects]]
 force = true
+from = "/docs/releases/v1.19.0-rc1/"
+to = "/docs/releases/v1.19.0/"
+status = 301
+
+[[redirects]]
+force = true
 from = "/enterprise/"
 to = "/support/"
 status = 301
