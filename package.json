@@ -4,7 +4,7 @@
   "description": "Fission.io dependencies",
   "main": "index.js",
   "devDependencies": {
-    "autoprefixer": "^10.4.8",
+    "autoprefixer": "^10.4.16",
     "postcss": "^8.4.16",
     "postcss-cli": "^8.3.1"
   },
