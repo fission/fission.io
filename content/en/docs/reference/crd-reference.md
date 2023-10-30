@@ -29,7 +29,7 @@ Package v1 contains API Schema definitions for the fission.io v1 API group
 
 #### AllowedFunctionsPerContainer
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 AllowedFunctionsPerContainer defaults to 'single'. Related to Fission Workflows
 
@@ -49,15 +49,15 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `type` _[ArchiveType](#archivetype)_ | Type defines how the package is specified: literal or URL. Available value:  - literal  - url |
-| `literal` _integer array_ | Literal contents of the package. Can be used for encoding packages below TODO (256 KB?) size. |
+| `type` _[ArchiveType](#archivetype)_ | Type defines how the package is specified: literal or URL. Available value: - literal - url |
+| `literal` _[byte](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#byte-v1-meta) array_ | Literal contents of the package. Can be used for encoding packages below TODO (256 KB?) size. |
 | `url` _string_ | URL references a package. |
 | `checksum` _[Checksum](#checksum)_ | Checksum ensures the integrity of packages referenced by URL. Ignored for literals. |
 
 
 #### ArchiveType
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 ArchiveType is either literal or URL, indicating whether the package is specified in the Archive struct or externally.
 
@@ -70,7 +70,7 @@ _Appears in:_
 
 #### BuildStatus
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 BuildStatus indicates the current build status of a package.
 
@@ -166,7 +166,7 @@ _Appears in:_
 
 #### ChecksumType
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 ChecksumType specifies the checksum algorithm, such as sha256, used for a checksum.
 
@@ -235,10 +235,7 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `version` _integer_ | Version is the Environment API version 
- Version "1" allows user to run code snippet in a file, and it's supported by most of the environments except tensorflow-serving. 
- Version "2" supports downloading and compiling user function if source archive is not empty. 
- Version "3" is almost the same with v2, but you're able to control the size of pre-warm pool of the environment. |
+| `version` _integer_ | Version is the Environment API version <br /><br /> Version "1" allows user to run code snippet in a file, and it's supported by most of the environments except tensorflow-serving. <br /><br /> Version "2" supports downloading and compiling user function if source archive is not empty. <br /><br /> Version "3" is almost the same with v2, but you're able to control the size of pre-warm pool of the environment. |
 | `runtime` _[Runtime](#runtime)_ | Runtime is configuration for running function, like container image etc. |
 | `builder` _[Builder](#builder)_ | (Optional) Builder is configuration for builder manager to launch environment builder to build source code into deployable binary. |
 | `allowedFunctionsPerContainer` _[AllowedFunctionsPerContainer](#allowedfunctionspercontainer)_ | (Optional) defaults to 'single'. Fission workflow uses 'infinite' to load multiple functions in one function pod. Available value: - single - infinite |
@@ -263,19 +260,18 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `ExecutorType` _[ExecutorType](#executortype)_ | ExecutorType is the executor type of function used. Defaults to "poolmgr". 
- Available value:  - poolmgr  - newdeploy  - container |
+| `ExecutorType` _[ExecutorType](#executortype)_ | ExecutorType is the executor type of function used. Defaults to "poolmgr". <br /><br /> Available value: - poolmgr - newdeploy - container |
 | `MinScale` _integer_ | This is only for newdeploy to set up minimum replicas of deployment. |
 | `MaxScale` _integer_ | This is only for newdeploy to set up maximum replicas of deployment. |
 | `TargetCPUPercent` _integer_ | Deprecated: use hpaMetrics instead. This is only for executor type newdeploy and container to set up target CPU utilization of HPA. Applicable for executor type newdeploy and container. |
 | `SpecializationTimeout` _integer_ | This is the timeout setting for executor to wait for pod specialization. |
-| `hpaMetrics` _[MetricSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#metricspec-v2beta2-autoscaling) array_ | hpaMetrics is the list of metrics used to determine the desired replica count of the Deployment created for the function. Applicable for executor type newdeploy and container. |
-| `hpaBehavior` _[HorizontalPodAutoscalerBehavior](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#horizontalpodautoscalerbehavior-v2beta2-autoscaling)_ | hpaBehavior is the behavior of HPA when scaling in up/down direction. Applicable for executor type newdeploy and container. |
+| `hpaMetrics` _[MetricSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#metricspec-v2-autoscaling) array_ | hpaMetrics is the list of metrics used to determine the desired replica count of the Deployment created for the function. Applicable for executor type newdeploy and container. |
+| `hpaBehavior` _[HorizontalPodAutoscalerBehavior](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#horizontalpodautoscalerbehavior-v2-autoscaling)_ | hpaBehavior is the behavior of HPA when scaling in up/down direction. Applicable for executor type newdeploy and container. |
 
 
 #### ExecutorType
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 ExecutorType is the primary executor for an environment
 
@@ -286,7 +282,7 @@ _Appears in:_
 
 #### FailureType
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 FailureType refers to the type of failure
 
@@ -325,9 +321,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `packageref` _[PackageRef](#packageref)_ | Package reference |
-| `functionName` _string_ | FunctionName specifies a specific function within the package. This allows functions to share packages, by having different functions within the same package. 
- Fission itself does not interpret this path. It is passed verbatim to build and runtime environments. 
- This is optional: if unspecified, the environment has a default name. |
+| `functionName` _string_ | FunctionName specifies a specific function within the package. This allows functions to share packages, by having different functions within the same package. <br /><br /> Fission itself does not interpret this path. It is passed verbatim to build and runtime environments. <br /><br /> This is optional: if unspecified, the environment has a default name. |
 
 
 #### FunctionReference
@@ -344,14 +338,14 @@ _Appears in:_
 
 | Field | Description |
 | --- | --- |
-| `type` _[FunctionReferenceType](#functionreferencetype)_ | Type indicates whether this function reference is by name or selector. For now, the only supported reference type is by "name".  Future reference types:   * Function by label or annotation   * Branch or tag of a versioned function   * A "rolling upgrade" from one version of a function to another Available value: - name - function-weights |
+| `type` _[FunctionReferenceType](#functionreferencetype)_ | Type indicates whether this function reference is by name or selector. For now, the only supported reference type is by "name".  Future reference types: * Function by label or annotation * Branch or tag of a versioned function * A "rolling upgrade" from one version of a function to another Available value: - name - function-weights |
 | `name` _string_ | Name of the function. |
 | `functionweights` _object (keys:string, values:integer)_ | Function Reference by weight. this map contains function name as key and its weight as the value. This is for canary upgrade purpose. |
 
 
 #### FunctionReferenceType
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 FunctionReferenceType refers to type of Function
 
@@ -382,6 +376,7 @@ _Appears in:_
 | `concurrency` _integer_ | Maximum number of pods to be specialized which will serve requests This is optional. If not specified default value will be taken as 500 |
 | `requestsPerPod` _integer_ | RequestsPerPod indicates the maximum number of concurrent requests that can be served by a specialized pod This is optional. If not specified default value will be taken as 1 |
 | `onceOnly` _boolean_ | OnceOnly specifies if specialized pod will serve exactly one request in its lifetime and would be garbage collected after serving that one request This is optional. If not specified default value will be taken as false |
+| `retainPods` _integer_ | RetainPods specifies the number of specialized pods that should be retained after serving requests This is optional. If not specified default value will be taken as 0 |
 | `podspec` _[PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core)_ | Podspec specifies podspec to use for executor type container based functions Different arguments mentioned for container based function are populated inside a pod. |
 
 
@@ -541,7 +536,7 @@ _Appears in:_
 
 #### MessageQueueType
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 MessageQueueType refers to Type of message queue
 
@@ -632,10 +627,8 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `image` _string_ | Image for containing the language runtime. |
-| `container` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#container-v1-core)_ | (Optional) Container allows the modification of the deployed runtime container using the Kubernetes Container spec. Fission overrides the following fields: - Name - Image; set to the Runtime.Image - TerminationMessagePath - ImagePullPolicy 
- You can set either PodSpec or Container, but not both. kubebuilder:validation:XPreserveUnknownFields=true |
-| `podspec` _[PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core)_ | (Optional) Podspec allows modification of deployed runtime pod with Kubernetes PodSpec The merging logic is briefly described below and detailed MergePodSpec function - Volumes mounts and env variables for function and fetcher container are appended - All additional containers and init containers are appended - Volume definitions are appended - Lists such as tolerations, ImagePullSecrets, HostAliases are appended - Structs are merged and variables from pod spec take precedence 
- You can set either PodSpec or Container, but not both. |
+| `container` _[Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#container-v1-core)_ | (Optional) Container allows the modification of the deployed runtime container using the Kubernetes Container spec. Fission overrides the following fields: - Name - Image; set to the Runtime.Image - TerminationMessagePath - ImagePullPolicy <br /><br /> You can set either PodSpec or Container, but not both. kubebuilder:validation:XPreserveUnknownFields=true |
+| `podspec` _[PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core)_ | (Optional) Podspec allows modification of deployed runtime pod with Kubernetes PodSpec The merging logic is briefly described below and detailed MergePodSpec function - Volumes mounts and env variables for function and fetcher container are appended - All additional containers and init containers are appended - Volume definitions are appended - Lists such as tolerations, ImagePullSecrets, HostAliases are appended - Structs are merged and variables from pod spec take precedence <br /><br /> You can set either PodSpec or Container, but not both. |
 
 
 #### SecretReference
@@ -655,7 +648,7 @@ _Appears in:_
 
 #### StrategyType
 
-_Underlying type:_ `string`
+_Underlying type:_ _string_
 
 StrategyType is the strategy to be used for function execution
 
@@ -696,6 +689,17 @@ _Appears in:_
 | `cron` _string_ | Cron schedule |
 | `functionref` _[FunctionReference](#functionreference)_ | The reference to function |
 
+
+
+
+#### ValidationErrorType
+
+_Underlying type:_ _integer_
+
+
+
+_Appears in:_
+- [ValidationError](#validationerror)
 
 
 

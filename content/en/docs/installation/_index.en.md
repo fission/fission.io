@@ -56,7 +56,7 @@ If you are upgrading Fission, do check [upgrade guide]({{< ref "upgrade.md" >}})
 {{< /notice >}}
 
 {{< notice warning >}}
-With 1.18 release, the namespaces `fission-function` and `fission-builder` will no longer be created. Instead, all resources will be created in the same namespace for all namespaces.
+With 1.18 release, fission watches functions created in `defaultNamespace` mentioned helm chart value. If you want to watch additional namespaces, you can mention them via `additionalFissionNamespaces` helm chart value.
 
 Refer [1.18 release notes]({{< ref "v1.18.0.md" >}}) for more details.
 {{< /notice >}}
@@ -273,7 +273,19 @@ Finally, you're ready to use Fission!
 It might take one or two mintues for fission to start running. check the status using `kubectl get pods -n fission`. 
 {{% /notice %}}
 
+{{% notice info %}}
+Ensure that functions are created within the specified namespaces: either the `defaultNamespace` or any listed in `additionalFissionNamespaces` from the Helm chart values.
+
+To verify the namespaces the executor is monitoring, inspect the `FISSION_RESOURCE_NAMESPACES` environment variable using the following command:
+`kubectl get deployment executor -n fission -o yaml | grep -A 2 FISSION`
+{{% /notice %}}
+
+{{% notice info %}}
+You can pass `--namespace` or `-n` flag to `fission` CLI to specify the namespace for the function or environment.
+{{% /notice %}}
+
 {{< tabs "Run Fission Function" >}}
+
 {{< tab "Node.js function" >}}
 
 ```sh

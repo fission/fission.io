@@ -29,6 +29,7 @@ fission function update [flags]
       --onceonly                    --yolo |:|: Specifies if specialized pod will serve exactly one request in its lifetime
       --labels string               Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
       --annotation stringArray      Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
+      --retainpods int              Number of pods to retain after pods specialization.
       --code string                 URL or local path for single file source code
       --sourcearchive stringArray   --source |:|: --src |:|: URL or local paths for source archive
       --deployarchive stringArray   --deploy |:|: URL or local paths for binary archive
