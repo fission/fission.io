@@ -27,7 +27,7 @@ content/en
 1. Clone and setup
 
     ```sh
-    # Install NPM dependencies
+    # Install NPM dependencies with Node LTS version
     npm install
     ```
 
