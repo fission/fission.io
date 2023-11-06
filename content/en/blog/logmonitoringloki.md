@@ -50,9 +50,9 @@ There are different ways and configurations to [install the complete stack](http
 From a terminal, run the following commands to add the Loki repo and then install Loki
 
 ```
-helm repo add loki https://grafana.github.io/loki/charts
+helm repo add grafana https://grafana.github.io/helm-charts/
 helm repo update
-helm upgrade --install loki loki/loki-stack
+helm upgrade --install loki grafana/loki-stack 
 ```
 
 This will install Loki in the default namespace. Check if there're pods running for Loki and Promtail. This also creates a Service. Note the ClusterIP of this service which will be needed further.
@@ -63,9 +63,9 @@ This will install Loki in the default namespace. Check if there're pods running 
 Similarly, to install Grafana, run the following commands from a terminal.
 
 ```
-helm repo add stable https://kubernetes-charts.storage.googleapis.com
+helm repo add grafana https://grafana.github.io/helm-charts/
 helm repo update
-helm upgrade --install grafana stable/grafana -n grafana
+helm upgrade --install grafana grafana/grafana --create-namespace -n grafana
 ```
 
 This will install Grafana in the `grafana` namespace
@@ -77,14 +77,19 @@ The installation above creates a Service in `grafana` namespace. To access this,
 - Create an [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) for this service
 - Use Kubernetes port forwarding
     ```
-    export POD_NAME=$(kubectl get pods --namespace grafana -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
-    kubectl --namespace grafana port-forward $POD_NAME 3000
+    kubectl port-forward svc/grafana -n grafana 3000:80
     ```
-  
+## Fetching Credentials of Grafana
+Default user is “admin”
+For password, run the below command
+```
+kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode
+```
+
 ## Adding Loki as a data source in Grafana
 
 Clicking on the Settings icon in the left pane will bring up a menu, click on `Data Sources`. Clicking on `Add Data Source` and select Loki.
-Under HTTP, in the URL field, put the ClusterIP noted in the pereceding section followed by 3100 which is the default port of Loki. For example, if the ClusterIP is `http://10.108.230.242` the value to put is `http://10.108.230.242:3100`. Click on `Save and Test` and there should be a notification of the data source added successfully.
+Under HTTP, in the URL field, put the service URL followed by 3100 which is the default port of Loki. For example, If the Loki is installed in default namespace , we can enter 'http://loki.default:3100'. Click on `Save and Test` and there should be a notification of the data source added successfully.
 
 # Running Log Queries
 
@@ -92,13 +97,13 @@ From the options in left pane, navigate to `Explore`. Here you can run log queri
 
 You can run queries for Fission components such as:
 - All logs from Fission Router
-    `{svc="router"}`
+    `{app="router"}`
 - All logs from Fission Router that have "error" in the statement.
-    `{svc="router"} |= "error"`
+    `{app="router"} |= "error"`
 
 Loki is great for performing metrics over the logs, for example:
 - Count of all logs in Fission Router with "error" over span of 5 mins 
-    `count_over_time({svc="router"} |= "error" [5m])`
+    `count_over_time({app="router"} |= "error" [5m])`
 
 
 # Fission Logs Dashboard
