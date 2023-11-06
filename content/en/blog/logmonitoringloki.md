@@ -97,13 +97,13 @@ From the options in left pane, navigate to `Explore`. Here you can run log queri
 
 You can run queries for Fission components such as:
 - All logs from Fission Router
-    `{svc="router"}`
+    `{app="router"}`
 - All logs from Fission Router that have "error" in the statement.
-    `{svc="router"} |= "error"`
+    `{app="router"} |= "error"`
 
 Loki is great for performing metrics over the logs, for example:
 - Count of all logs in Fission Router with "error" over span of 5 mins 
-    `count_over_time({svc="router"} |= "error" [5m])`
+    `count_over_time({app="router"} |= "error" [5m])`
 
 
 # Fission Logs Dashboard
