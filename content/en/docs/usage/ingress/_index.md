@@ -114,7 +114,7 @@ Now let's create a route which we will expose over ingress controller.
 We will create a route with `createingress` flag enabled:
 
 ```bash
-$ fission route create --url /hello --function hello --createingress
+$ fission route create --url /hello --function hello --createingress --ingressannotation "kubernetes.io/ingress.class=nginx"
 trigger '301b3cb0-5ac1-4211-a1ed-2b0ad9143e34' created
 
 $ fission route list
