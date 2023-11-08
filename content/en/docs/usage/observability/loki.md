@@ -47,12 +47,12 @@ From a terminal, run the following commands to add the Loki repo and then instal
 $ helm repo add grafana https://grafana.github.io/helm-charts
 $ helm repo update
 $ helm upgrade -n monitoring --create-namespace --install loki-grafana grafana/loki-stack \
---set grafana.enabled="true" \
+--set grafana.enabled="false" \
 --set promtail.enabled="false"
 ```
 
-This will install Loki & Grafana in the monitoring namespace.
-Check if there're pods running for Loki and Grafana.
+This will install Loki in the monitoring namespace.
+Check if there're pods running for Loki.
 
 
 #### Install Promtail
@@ -64,7 +64,11 @@ Create a values.yaml file. This configuration will allow Promtail to tail and fo
 ```bash
 cat > promtail-config.yaml <<EOF
 config:
-  lokiAddress: http://loki:3100/loki/api/v1/push
+  clients:
+    - url: http://loki:3100/loki/api/v1/push
+  extraRelabelConfigs: 
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
   snippets:
     common:
       - action: replace
@@ -123,19 +127,32 @@ We can access the Promtail UI at `localhost:3101` to see all of the pods logs be
 $ kubectl --namespace monitoring port-forward $(kubectl  --namespace monitoring get pod -l app.kubernetes.io/instance=promtail -o name) 3101:3101
 ```
 
-#### Accessing Grafana UI
+## Install Grafana
 
-If you've followed the above steps, `loki-stack` creates a grafana Service in the `monitoring` namespace.
-To access this, you can use Kubernetes port forwarding.
+Similarly, to install Grafana, run the following commands from a terminal.
 
-```bash
-$ kubectl --namespace monitoring port-forward svc/fission-logs-grafana 3000:80
+```
+helm repo add grafana https://grafana.github.io/helm-charts/
+helm repo update
+helm upgrade --install grafana grafana/grafana --create-namespace -n grafana
 ```
 
-You'll need to obtain a username and password to access the UI. 
-The username is `admin` and the password can be obtained from inside the kubernetes cluster.
-```bash
-$ kubectl --namespace monitoring get secrets loki-grafana -o go-template --template='{{index .data "admin-password"}}' | base64 -d
+This will install Grafana in the `grafana` namespace
+
+
+## Accessing Grafana UI
+
+The installation above creates a Service in `grafana` namespace. To access this, you can
+- Create an [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) for this service
+- Use Kubernetes port forwarding
+    ```
+    kubectl port-forward svc/grafana -n grafana 3000:80
+    ```
+## Fetching Credentials of Grafana
+Default user is “admin”
+For password, run the below command
+```
+kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode
 ```
 
 #### Adding Loki as a data source in Grafana
