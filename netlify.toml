@@ -533,3 +533,9 @@ force = true
 from = "/enterprise/"
 to = "/support/"
 status = 301
+
+[[redirects]]
+force = true
+from = "/docs/releases/v1.20.0-rc1/"
+to = "/docs/releases/v1.20.0-rc2/"
+status = 301
