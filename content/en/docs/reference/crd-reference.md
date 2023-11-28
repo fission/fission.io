@@ -518,7 +518,7 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `functionref` _[FunctionReference](#functionreference)_ | The reference to a function for message queue trigger to invoke with when receiving messages from subscribed topic. |
-| `messageQueueType` _[MessageQueueType](#messagequeuetype)_ | Type of message queue (NATS, Kafka, AzureQueue) |
+| `messageQueueType` _[MessageQueueType](#messagequeuetype)_ | Type of message queue |
 | `topic` _string_ | Subscribed topic |
 | `respTopic` _string_ | Topic for message queue trigger to sent response from function. |
 | `errorTopic` _string_ | Topic to collect error response sent from function |
