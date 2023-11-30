@@ -539,3 +539,23 @@ force = true
 from = "/docs/releases/v1.20.0-rc1/"
 to = "/docs/releases/v1.20.0-rc2/"
 status = 301
+
+[[redirects]]
+force = true
+from = "/docs/releases/v1.20.0-rc2/"
+to = "/docs/releases/v1.20.0/"
+
+[[redirects]]
+force = true
+from = "/docs/usage/triggers/message-queue-trigger/"
+to = "/docs/usage/triggers/message-queue-trigger-kind-keda/"
+
+[[redirects]]
+force = true
+from = "/docs/usage/triggers/message-queue-trigger/nats-streaming/"
+to = "/docs/usage/triggers/message-queue-trigger-kind-keda/nats-streaming/"
+
+[[redirects]]
+force = true
+from = "/docs/usage/triggers/message-queue-trigger/kafka/"
+to = "/docs/usage/triggers/message-queue-trigger-kind-keda/kafka/"

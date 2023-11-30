@@ -29,11 +29,11 @@ You don't need to set this if you're simply running `fission function test --nam
 {{% /notice %}}
 
 {{% notice warning %}}
-Fission CLI uses value in `FISSION_ROUTER` if it's not empty instead of using local port-forward mechanism.</br>
+Fission CLI uses value in `FISSION_ROUTER_URL` if it's not empty instead of using local port-forward mechanism.</br>
 You need to ensure that the IP address in it is **accessible** from the public network.
 {{% /notice %}}
 
-It's convenient to set the `FISSION_ROUTER` environment variable to the **externally-visible** address of the Fission router.
+It's convenient to set the `FISSION_ROUTER_URL` environment variable to the **externally-visible** address of the Fission router.
 
 ### Clusters Only Support NodePort
 
