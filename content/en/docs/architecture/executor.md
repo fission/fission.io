@@ -7,7 +7,7 @@ description: >
 
 Executor is the component to spin up function pods for functions.
 When [Router](/docs/architecture/router) receives requests to a function, it checks whether a function service record exists in its cache.
-If cache misses, the function service record was found or expired, it asks Executor to provide a new one.
+If cache misses, the function service record was not found or expired, it asks Executor to provide a new one.
 Executor then retrieves function information from Kubernetes CRD and invokes one of the executor types to spin up function pods.
 Once the function pods are up, a function service record that contains the address of a service/pod will be returned.
 Router side caching of function service is not applicable in case of poolmanager strategy, instead request directly goes to executor.
