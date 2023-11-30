@@ -5,6 +5,7 @@ description: >
   Accept REST API requests and create Fission resources
 ---
 
+
 {{< notice info >}}
 Controller is deprecated from version 1.18.0. You can still enable it using - `controller.enabled` flag in helm charts.
 {{< /notice >}}
