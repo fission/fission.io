@@ -547,6 +547,11 @@ to = "/docs/releases/v1.20.0/"
 
 [[redirects]]
 force = true
+from = "/docs/releases/v1.20.0/"
+to = "/docs/releases/v1.20.1/"
+
+[[redirects]]
+force = true
 from = "/docs/usage/triggers/message-queue-trigger/"
 to = "/docs/usage/triggers/message-queue-trigger-kind-keda/"
 
