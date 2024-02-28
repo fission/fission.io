@@ -139,14 +139,10 @@ helm install --version {{% release-version %}} --namespace $FISSION_NAMESPACE fi
 
 This method uses `kubectl apply` to install Fission.
 You can edit the YAML file before applying it to your cluster, if you want to change anything in it.
-Create namespace for fission installation.
 
-```sh
-kubectl create namespace fission
-```
 
 {{% notice info %}}
-If you want to install in another namespace, please consider to use `helm` or generate yaml for first with `helm template` command.
+Fission is the recommended namespace to install fissionIf you want to install in another namespace, please consider to use `helm` or generate yaml for first with `helm template` command.
 {{% /notice %}}
 
 Choose _one_ of the following commands to run:
@@ -160,6 +156,7 @@ export FISSION_NAMESPACE="fission"
 kubectl create namespace $FISSION_NAMESPACE
 kubectl config set-context --current --namespace=$FISSION_NAMESPACE
 kubectl apply -f https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-all-{{% release-version %}}.yaml
+kubectl config set-context --current --namespace=default #to change context to default namespace after installation
 ```
 
 {{< /tab >}}
@@ -171,6 +168,7 @@ export FISSION_NAMESPACE="fission"
 kubectl create namespace $FISSION_NAMESPACE
 kubectl config set-context --current --namespace=$FISSION_NAMESPACE
 kubectl apply -f https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-all-{{% release-version %}}-minikube.yaml
+kubectl config set-context --current --namespace=default #to change context to default namespace after installation
 ```
 
 {{< /tab >}}
@@ -182,6 +180,7 @@ export FISSION_NAMESPACE="fission"
 kubectl create namespace $FISSION_NAMESPACE
 kubectl config set-context --current --namespace=$FISSION_NAMESPACE
 kubectl apply -f https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-core-{{% release-version %}}-openshift.yaml
+kubectl config set-context --current --namespace=default #to change context to default namespace after installation
 ```
 
 {{< /tab >}}
