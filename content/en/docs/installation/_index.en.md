@@ -142,7 +142,7 @@ You can edit the YAML file before applying it to your cluster, if you want to ch
 
 
 {{% notice info %}}
-Fission is the recommended namespace to install fission. If you want to install in another namespace, please consider to use `helm` or generate yaml for first with `helm template` command.
+'fission' is the recommended namespace to install fission. If you want to install in another namespace, please consider to use `helm` or generate yaml for first with `helm template` command.
 {{% /notice %}}
 
 Choose _one_ of the following commands to run:
