@@ -5,14 +5,14 @@ description: >
   Installation guide for offline on-premise.  
 ---
 
-There are certain use cases where the Kubernetes cluster might be in a environment with restricted internet or no internet access at all due to business or compliance reasons.
+There are certain use cases where the Kubernetes cluster might be in an environment with restricted internet or no internet access at all due to business or compliance reasons.
 
 This guide explains the way to deploy and use a Fission instance in such a cluster.
 It is assumed that the CI/CD tooling which deploys to Kubernetes will have internet access, but not the Kubernetes cluster itself.
 
 ## Cloning Fission Images
 
-Before installing Fission you will need to make container images available in a container registry which is accessible to Kubernetes cluster.
+Before installing Fission you will need to make container images available in a container registry which is accessible to the Kubernetes cluster.
 You can download and retag them or export and import image tar files based on your setup.
 
 For Fission to be installed you will need following images:
@@ -25,7 +25,7 @@ fluent/fluent-bit
 busybox
 ```
 
-In addition you will need to import environment images which will be used by functions. For example if you are only going to use python and node environments then you will need to import following images:
+In addition, you will need to import environment images which will be used by functions. For example, if you are only going to use python and node environments then you will need to import the following images:
 
 ```text
 fission/python-env
