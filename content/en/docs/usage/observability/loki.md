@@ -159,7 +159,7 @@ kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-passwor
 
 Clicking on the Settings icon in the left pane will bring up a menu, click on `Data Sources`.
 Clicking on `Add Data Source` and select Loki.
-Under HTTP, in the URL field put `http://loki.monitoring.svc.local.cluster:3100`
+Under HTTP, in the URL field put `http://loki.monitoring.svc.cluster.local:3100`
 
 Click on `Save and Test` and there should be a notification of the data source added successfully.
 
