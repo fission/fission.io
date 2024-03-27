@@ -180,7 +180,7 @@ fission httptrigger create --url /job-status --function job-status --method POST
 Invoke the function with a POST HTTP request with the appropriate JSON body and you will see the response "Successfully saved job status for job ID: 1234"
 
 ```bash
-curl -XPOST HTTP://$FISSION_ROUTER/job-status -d '{"job_id" : "1234", "job_status": "Passed"}'
+curl -XPOST HTTP://$FISSION_ROUTER/job-status -d '{"job_id" : "1234", "job_status": "Passed"}' -H 'Content-Type: application/json'
 ```
 
 Next lets see an example of writing a function which extracts a request body in the Plain Text format
