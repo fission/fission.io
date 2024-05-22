@@ -24,7 +24,7 @@ fission environment create [flags]
       --minmemory int             Minimum memory to be assigned to pod (In megabyte)
       --maxmemory int             Maximum memory to be assigned to pod (In megabyte)
       --graceperiod int           --period |:|: Grace time (in seconds) for pod to perform connection draining before termination (only non-negative values considered)
-      --version int               Environment API version (1 means v1 interface) (default 1)
+      --version int               Environment API version (1 means v1 interface) (default 3)
       --imagepullsecret string    Secret for Kubernetes to pull an image from a private registry
       --keeparchive               Keep the archive instead of extracting it into a directory (mainly for the JVM environment because .jar is one kind of zip archive)
       --externalnetwork           Allow pod to access external network (only works when istio feature is enabled)
