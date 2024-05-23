@@ -6,7 +6,7 @@ weight: 62
 
 This tutorial sets up Fission with [Istio](https://istio.io/) - a service mesh for Kubernetes.
 The tutorial was tried on GKE but should work on any equivalent setup.
-We will assume that you already have a Kubernetes cluster setp and working.
+We will assume that you already have a Kubernetes cluster setup and working.
 
 #### Set up Istio
 
