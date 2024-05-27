@@ -27,7 +27,7 @@ fission mqtrigger update [flags]
       --maxreplicacount int    Maximum number of replicas of consumers to scale up to (default 100)
       --metadata stringArray   Metadata needed for connecting to source system in format: --metadata key1=value1 --metadata key2=value2
       --secret string          Name of secret object
-      --mqtkind string         Kind of Message Queue Trigger, e.g. keda (default "keda")
+      --mqtkind string         Kind of Message Queue Trigger, e.g. fission, keda (default "keda")
   -h, --help                   help for update
 ```
 
