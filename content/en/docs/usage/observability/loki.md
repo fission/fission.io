@@ -41,14 +41,43 @@ For this case, we'll use Helm.
 
 #### Install Grafana and Loki
 
-From a terminal, run the following commands to add the Loki repo and then install Loki
+Create a values.yaml file. We are installing [monolithic Loki](https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/). Check Loki's [deployment modes](https://grafana.com/docs/loki/latest/get-started/deployment-modes/).
+
+```bash
+cat > loki-config.yaml <<EOF
+deploymentMode: SingleBinary
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: 'filesystem'
+  schemaConfig:
+    configs:
+    - from: "2024-01-01"
+      store: tsdb
+      index:
+        prefix: loki_index_
+        period: 24h
+      object_store: filesystem # we're storing on filesystem so there's no real persistence here.
+      schema: v13
+singleBinary:
+  replicas: 1
+read:
+  replicas: 0
+backend:
+  replicas: 0
+write:
+  replicas: 0
+EOF
+```
+
+From a terminal, run the following commands to add the Loki repo and then install Loki.
 
 ```bash
 $ helm repo add grafana https://grafana.github.io/helm-charts
 $ helm repo update
-$ helm upgrade -n monitoring --create-namespace --install loki-grafana grafana/loki-stack \
---set grafana.enabled="false" \
---set promtail.enabled="false"
+$ helm upgrade -n monitoring --create-namespace --install loki grafana/loki -f loki-config.yaml
 ```
 
 This will install Loki in the monitoring namespace.
@@ -65,7 +94,7 @@ Create a values.yaml file. This configuration will allow Promtail to tail and fo
 cat > promtail-config.yaml <<EOF
 config:
   clients:
-    - url: http://loki:3100/loki/api/v1/push
+    - url: http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push
   extraRelabelConfigs: 
       - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
@@ -80,7 +109,7 @@ config:
           - __meta_kubernetes_namespace
         target_label: namespace
       - action: replace
-        replacement: $1
+        replacement: \$1
         separator: /
         source_labels:
           - namespace
@@ -95,14 +124,14 @@ config:
           - __meta_kubernetes_pod_container_name
         target_label: container
       - action: replace
-        replacement: /var/log/pods/*$1/*.log
+        replacement: /var/log/pods/*\$1/*.log
         separator: /
         source_labels:
           - __meta_kubernetes_pod_uid
           - __meta_kubernetes_pod_container_name
         target_label: __path__
       - action: replace
-        replacement: /var/log/pods/*$1/*.log
+        replacement: /var/log/pods/*\$1/*.log
         regex: true/(.*)
         separator: /
         source_labels:
@@ -124,7 +153,7 @@ Check if there're is a promtail pod running.
 
 We can access the Promtail UI at `localhost:3101` to see all of the pods logs being tailed along with the labels assigned to them.
 ```bash
-$ kubectl --namespace monitoring port-forward $(kubectl  --namespace monitoring get pod -l app.kubernetes.io/instance=promtail -o name) 3101:3101
+$ kubectl --namespace monitoring port-forward $(kubectl  --namespace monitoring get daemonset -l app.kubernetes.io/instance=promtail -o name) 3101:3101
 ```
 
 ## Install Grafana
@@ -159,7 +188,7 @@ kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-passwor
 
 Clicking on the Settings icon in the left pane will bring up a menu, click on `Data Sources`.
 Clicking on `Add Data Source` and select Loki.
-Under HTTP, in the URL field put `http://loki.monitoring.svc.cluster.local:3100`
+Under HTTP, in the URL field put `http://loki-gateway.monitoring.svc.cluster.local`
 
 Click on `Save and Test` and there should be a notification of the data source added successfully.
 
