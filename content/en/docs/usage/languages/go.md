@@ -32,18 +32,18 @@ Please use the `fission release version` as image tag instead of `latest` when a
 $ fission environment create --name go --image fission/go-env:<release-version> --builder fission/go-builder:<release-version> --version 3
 
 # Example
-$ fission environment create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+$ fission environment create --name go --image fission/go-env-1.22 --builder fission/go-builder-1.22
 ```
 
-You can find all images and image tags at following table.
+You can find all images and image tags at following table. To get an overall overview of all available images, please have a look at our [Docker Hub page](https://hub.docker.com/u/fission).
 
 #### Go environment image list
 
 | Go Version | Image | Builder Image |
 |------------|------------|-----------|
-| 1.14 | [fission/go-env-1.14](https://hub.docker.com/r/fission/go-env-1.14/tags) | [fission/go-builder-1.14](https://hub.docker.com/r/fission/go-builder-1.14/tags) |
-| 1.15 | [fission/go-env-1.15](https://hub.docker.com/r/fission/go-env-1.15/tags) | [fission/go-builder-1.15](https://hub.docker.com/r/fission/go-builder-1.15/tags) |
-| 1.16 | [fission/go-env-1.16](https://hub.docker.com/r/fission/go-env-1.16/tags) | [fission/go-builder-1.16](https://hub.docker.com/r/fission/go-builder-1.16/tags) |
+| 1.22 | [fission/go-env-1.22](https://hub.docker.com/r/fission/go-env-1.22/tags) | [fission/go-builder-1.22](https://hub.docker.com/r/fission/go-builder-1.22/tags) |
+| 1.21 | [fission/go-env-1.21](https://hub.docker.com/r/fission/go-env-1.21/tags) | [fission/go-builder-1.21](https://hub.docker.com/r/fission/go-builder-1.21/tags) |
+| 1.20 | [fission/go-env-1.20](https://hub.docker.com/r/fission/go-env-1.20/tags) | [fission/go-builder-1.20](https://hub.docker.com/r/fission/go-builder-1.20/tags) |
 
 ### Write a simple function in Go
 
