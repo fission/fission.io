@@ -264,7 +264,7 @@ Let's create a message queue trigger which will invoke the consumer function eve
 The response will be sent to `response-topic` queue and in case of consumer function invocation fails, the error is written to `error-topic` queue.
 
 ```bash
-fission mqt create --spec --name rabbitmq-test --function rabbitmq-consumer --mqtype rabbitmq --mqtkind keda \
+fission mqt create --name rabbitmq-test --function rabbitmq-consumer --mqtype rabbitmq --mqtkind keda \
     --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 \
     --metadata queueName=request-topic --metadata topic=request-topic  --cooldownperiod=30 \
     --pollinginterval=5 --secret keda-rabbitmq-secret
