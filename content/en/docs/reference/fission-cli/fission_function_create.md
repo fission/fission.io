@@ -24,9 +24,9 @@ fission function create [flags]
       --specializationtimeout int   --st |:|: Timeout for executor to wait for function pod creation (default 120)
       --fntimeout int               --ft |:|: Maximum time for a request to wait for the response from the function (default 60)
       --idletimeout int             The length of time (in seconds) that a function is idle before pod(s) are eligible for recycling (default 120)
-      --concurrency int             --con |:|: Maximum number of pods specialized concurrently to serve requests (default 500)
-      --requestsperpod int          --rpp |:|: Maximum number of concurrent requests that can be served by a specialized pod (default 1)
-      --onceonly                    --yolo |:|: Specifies if specialized pod will serve exactly one request in its lifetime
+      --concurrency poolmgr         --con |:|: Maximum number of pods specialized concurrently to serve requests (Only valid for executortype; poolmgr) (default 500)
+      --requestsperpod poolmgr      --rpp |:|: Maximum number of concurrent requests that can be served by a specialized pod (Only valid for executortype; poolmgr) (default 1)
+      --onceonly poolmgr            --yolo |:|: Specifies if specialized pod will serve exactly one request in its lifetime (Only valid for executortype; poolmgr)
       --labels string               Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
       --annotation stringArray      Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
       --retainpods int              Number of pods to retain after pods specialization.
