@@ -45,6 +45,10 @@ You can skip the following and head over [Fission installation](#install-fission
 
 ## Install Fission
 
+{{< notice warning >}}
+With 1.20.3 release, support for architecture `armv7` has been removed. Now Fission supports `arm64` and `amd64` architectures only.
+{{< /notice >}}
+
 ### With Helm
 
 {{< notice warning >}}
