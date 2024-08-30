@@ -9,6 +9,10 @@ description: >
 To access these metrics, you'll need to install Fission 1.16 or higher.
 {{< /notice >}}
 
+{{< notice info >}}
+To access `fission_mqt_inprocess` and `fission_mqt_status` metrics, you'll need to install Fission 1.20.3 or higher.
+{{< /notice >}}
+
 | Metric Name | Component | Labels | Description |
 | ------------------- | --------- | ------------------ | -------------------- |
 | http_requests_total | General   | path, method, code | Number of requests by path, method and status code |
@@ -25,3 +29,5 @@ To access these metrics, you'll need to install Fission 1.16 or higher.
 | fission_mqt_subscriptions | MqTrigger | Nil | Total number of subscriptions to mq currently |
 | fission_mqt_messages_processed_total | MqTrigger | trigger_name, trigger_namespace | Total number of messages processed by trigger |
 | fission_mqt_message_lag | MqTrigger | trigger_name, trigger_namespace, topic, partition | Total number of messages lag per topic and partition |
+| fission_mqt_inprocess | MqTrigger | Nil | Total number of MQTs in active processing |
+| fission_mqt_status | MqTrigger | trigger_name, trigger_namespace | Status of an individual trigger 1 if processing otherwise 0 |
