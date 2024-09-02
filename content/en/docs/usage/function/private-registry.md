@@ -17,7 +17,7 @@ Then, specify the secret when creating the environment.
 For example, if we want to create a nodejs environment and use secret `docker-secret` as credential.  
 
 ```bash
-$ fission environment create --name nodejs --image fission/node-env \
+$ fission environment create --name nodejs --image ghcr.io/fission/node-env \
     --imagepullsecret "docker-secret"
 ```
 

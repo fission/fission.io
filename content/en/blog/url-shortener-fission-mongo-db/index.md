@@ -103,7 +103,7 @@ For this voting app, we will create `python environment`, `packages`, `fission f
 Create a Python environment
 
 ```bash
-fission environment create --name python --image fission/python-env --builder fission/python-builder:latest
+fission environment create --name python --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder:latest
 ```
 
 Once the environment is ready, we create two Fission packages for `backend` and `frontend`
@@ -214,7 +214,7 @@ You can open a terminal and key in the all the following commands at once.
 
 ``` yaml
 fission spec init
-fission environment create --name python --image fission/python-env --builder fission/python-builder:latest --spec
+fission environment create --name python --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder:latest --spec
 fission package create --name frontend-pkg --sourcearchive frontend.zip --env python --buildcmd "./build.sh" --spec
 fission package create --name backend-pkg --sourcearchive backend.zip --env python --buildcmd "./build.sh" --spec
 fission fn create --name frontend --pkg frontend-pkg --entrypoint "app.main" --spec
@@ -227,7 +227,7 @@ This will create a `specs` folder with specs for each resource that is required 
 
 ``` bash
 fission spec init
-fission environment create --name python --image fission/python-env --builder fission/python-builder:latest --spec
+fission environment create --name python --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder:latest --spec
 fission package create --name frontend-pkg --sourcearchive frontend.zip --env python --buildcmd "./build.sh" --spec
 fission package create --name backend-pkg --sourcearchive backend.zip --env python --buildcmd "./build.sh" --spec
 fission fn create --name frontend --pkg frontend-pkg --entrypoint "app.main" --spec

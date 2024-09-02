@@ -311,7 +311,7 @@ For this test we will be using a simple NodeJS based function.
 
 ```sh
 # create an environment
-fission env create --name nodejs --image fission/node-env
+fission env create --name nodejs --image ghcr.io/fission/node-env
 
 # get hello world function
 curl https://raw.githubusercontent.com/fission/examples/main/nodejs/hello.js > hello.js

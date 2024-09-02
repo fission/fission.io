@@ -89,7 +89,7 @@ Create an environment and a function:
 
 ```bash
 # create python env
-$ fission env create --name python --image fission/python-env
+$ fission env create --name python --image ghcr.io/fission/python-env
 
 # create function named "leaker"
 $ fission fn create --name leaker --env python --code leaker.py --secret my-secret --configmap my-configmap

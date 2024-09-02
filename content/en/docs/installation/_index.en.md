@@ -234,13 +234,13 @@ To check fission is installed successfully, run this command and verify both cli
 $ fission version
 client:
   fission/core:
-    BuildDate: "2023-01-25T04:56:25Z"
-    GitCommit: deb3523
+    BuildDate: "2024-09-02T09:32:57Z"
+    GitCommit: cf55fbec
     Version: {{% release-version %}}
 server:
   fission/core:
-    BuildDate: "2023-01-25T04:53:33Z"
-    GitCommit: deb3523
+    BuildDate: "2024-09-02T09:32:57Z"
+    GitCommit: cf55fbec
     Version: {{% release-version %}}
 
 ```

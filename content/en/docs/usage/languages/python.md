@@ -26,7 +26,7 @@ An environment is the language-specific part of Fission.
 It has a container image in which your function will run.
 
 ```bash
-fission environment create --name python --image fission/python-env
+fission environment create --name python --image ghcr.io/fission/python-env
 ```
 
 > **Note**: If your function references external libraries, non-standard Python modules or has additional OS dependencies, you will need to create a **custom image** for your Python environment. You can skip to [working with dependencies](#working-with-dependencies) section to understand more.
@@ -205,7 +205,7 @@ Fission supports _builders_, which are language-specific containers that know ho
 To use a builder with your environment, create the environment with the --builder flag:
 
 ```sh
-fission env create --name python --image fission/python-env --builder fission/python-builder
+fission env create --name python --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder
 ```
 
 #### A function with dependencies

@@ -28,8 +28,8 @@ busybox
 In addition, you will need to import environment images which will be used by functions. For example, if you are only going to use python and node environments then you will need to import the following images:
 
 ```text
-fission/python-env
-fission/node-env
+ghcr.io/fission/python-env
+ghcr.io/fission/node-env
 ```
 
 ## Deploying Fission

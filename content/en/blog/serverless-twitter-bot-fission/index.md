@@ -122,7 +122,7 @@ Deploy the secret using `kubectl apply -f secrets.yaml`
 Create a Python environment
 
 ```bash
-fission environment create --name python --image fission/python-env --builder fission/python-builder:latest
+fission environment create --name python --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder:latest
 ```
 
 Create a zip archive as sample.zip archive by executing package.sh script

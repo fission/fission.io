@@ -72,7 +72,7 @@ In following sections we will create a function and enable traffic outside the c
 We will create an environment, a function and test that it works:
 
 ```bash
-$ fission env create --name nodejs --image fission/node-env
+$ fission env create --name nodejs --image ghcr.io/fission/node-env
 environment 'nodejs' created
 
 $ cat hello.js

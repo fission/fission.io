@@ -211,7 +211,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 Let's create the environment and function:
 
 ```bash
-fission environment create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+fission environment create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
 fission fn create --name helloworld --env go --src hello.go --entrypoint Handler
 ```
 

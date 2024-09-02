@@ -177,7 +177,7 @@ For this voting app, we will create `python environment`, `packages`, `fission f
 Creating the Python environment:
 
 ``` bash
-fission env create --name pythonsrc --image username/python-postgres --builder fission/python-builder:latest
+fission env create --name pythonsrc --image username/python-postgres --builder ghcr.io/fission/python-builder:latest
 ```
 
 Once the environment is ready, we create two Fission packages for `backend` and `frontend`
@@ -268,7 +268,7 @@ You can open a terminal and key in the all the following commands at once.
 
 ``` yaml
 fission spec init
-fission env create --name pythonsrc --image python-postgres --builder fission/python-builder:latest --spec
+fission env create --name pythonsrc --image python-postgres --builder ghcr.io/fission/python-builder:latest --spec
 fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
 fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
 fission route create --name backend --method POST --url /castvote --function backend --spec
@@ -281,7 +281,7 @@ This will create a `specs` folder with specs for each resource that is required 
 
 ``` bash
 fission spec init
-fission env create --name pythonsrc --image atulinfracloud/python-postgres --builder fission/python-builder:latest --spec
+fission env create --name pythonsrc --image atulinfracloud/python-postgres --builder ghcr.io/fission/python-builder:latest --spec
 fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
 fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
 fission route create --name backend --method POST --url /castvote --function backend --spec

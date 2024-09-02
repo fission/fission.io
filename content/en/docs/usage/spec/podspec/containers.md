@@ -19,7 +19,7 @@ spec:
     podspec:
       initContainers:
       - name: init-py
-        image: fission/python-env
+        image: ghcr.io/fission/python-env
         command: ['sh', '-c', 'cat /etc/infopod/labels']
         volumeMounts:
           - name: infopod
@@ -65,13 +65,13 @@ You can also **add a sidecar** to the function container with PodSpec:
       # A container which will be merged with for pool manager
       Containers:
       - name: nodep
-        image: fission/node-env
+        image: ghcr.io/fission/node-env
         volumeMounts:
           - name: funcvol
             mountPath: /etc/funcdata
             readOnly: true
       # A additional container in the pods
       - name: yanode
-        image: fission/node-env
+        image: ghcr.io/fission/node-env
         command: ['sh', '-c', 'sleep 36000000000']
 ```

@@ -84,7 +84,7 @@ If there are connection errors reaching the Jaeger collector endpoint then you w
 Now that we are set up, let’s create a simple function and test the tracing! Follow the commands below to create a simple hello world function:
 
 ```
-$ fission env create --name nodejs --image fission/node-env 
+$ fission env create --name nodejs --image ghcr.io/fission/node-env
 environment 'nodejs' created
 
 $ fission fn create --name hellojs -env nodejs --code hello.js 

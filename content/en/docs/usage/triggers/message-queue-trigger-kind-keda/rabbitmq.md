@@ -217,7 +217,7 @@ Create a zip archive of `producer` folder using `zip -j producer.zip producer/*`
 Let's create the environment, package and function:
 
 ```bash
-fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+fission env create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
 fission package create --src producer.zip --env go --name rabbitmq-producer
 fission fn create --spec --name rabbitmq-producer --env go --pkg rabbitmq-producer \
     --entrypoint Handler --secret keda-rabbitmq-secret
@@ -282,7 +282,7 @@ Read our giude on how to use [Fission spec](https://fission.io/docs/usage/spec/)
 
 ```bash
 fission spec init
-fission env create --spec --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+fission env create --spec --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
 fission package create --spec --src producer.zip --env go --name rabbitmq-producer
 fission package create --spec --src consumer.zip --env go --name rabbitmq-consumer
 fission fn create --spec --name rabbitmq-producer --env go --pkg rabbitmq-producer \

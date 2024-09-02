@@ -25,7 +25,7 @@ An environment is the language-specific part of Fission.
 It has a container image in which your function will run.
 
 ```bash
-fission environment create --name nodejs --image fission/node-env
+fission environment create --name nodejs --image ghcr.io/fission/node-env
 ```
 
 ### Write a simple function in Nodejs
@@ -336,13 +336,13 @@ This section describes ways in which this can be achieved.
 
 ##### Example of using the nodejs builder image
 
-fission docker hub has a nodejs builder image `fission/node-builder`.
+fission docker hub has a nodejs builder image `ghcr.io/fission/node-builder`.
 Here's an example of using this image.
 
 First, create an environment with runtime image and builder image as follows:
 
 ```bash
-fission environment create --name nodejs --image fission/node-env --builder fission/node-builder
+fission environment create --name nodejs --image ghcr.io/fission/node-env --builder ghcr.io/fission/node-builder
 ```
 
 Next, create a file `momentExample.js` with the following content.

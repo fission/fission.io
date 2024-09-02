@@ -87,7 +87,7 @@ Windows:
 2. You're ready to use Fission!
 
   # Create an environment
-  $ fission env create --name nodejs --image fission/node-env
+  $ fission env create --name nodejs --image ghcr.io/fission/node-env
 
   # Get a hello world
   $ curl https://raw.githubusercontent.com/fission/examples/main/nodejs/hello.js > hello.js

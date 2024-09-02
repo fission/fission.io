@@ -21,12 +21,12 @@ metadata:
 spec:
   builder:
     command: build
-    image: fission/python-builder
+    image: ghcr.io/fission/python-builder
   keeparchive: false
   poolsize: 3
   resources: {}
   runtime:
-    image: fission/python-env
+    image: ghcr.io/fission/python-env
   terminationGracePeriod: 360
   version: 2
 {{< /highlight  >}}
@@ -47,7 +47,7 @@ metadata:
 spec:
   builder:
     command: build
-    image: fission/python-builder
+    image: ghcr.io/fission/python-builder
     container: 
       command: ["sleep", "1"]
     podspec:
@@ -60,7 +60,7 @@ spec:
   poolsize: 3
   resources: {}
   runtime:
-    image: fission/python-env
+    image: ghcr.io/fission/python-env
     terminationGracePeriod: 360
   version: 2
 {{< /highlight  >}}
@@ -148,7 +148,7 @@ metadata:
 spec:
   builder:
     command: build
-    image: fission/python-builder
+    image: ghcr.io/fission/python-builder
     container: 
       command: ["sleep", "1"]
     podspec:
@@ -166,7 +166,7 @@ spec:
   poolsize: 3
   resources: {}
   runtime:
-    image: fission/python-env
+    image: ghcr.io/fission/python-env
     terminationGracePeriod: 360
   version: 2
 {{< /highlight >}}

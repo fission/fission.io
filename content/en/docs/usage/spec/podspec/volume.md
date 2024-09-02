@@ -20,7 +20,7 @@ spec:
     # A container which will be merged with for pool manager
     containers:
     - name: nodep
-      image: fission/node-env
+      image: ghcr.io/fission/node-env
       volumeMounts:
         - name: funcvol
           mountPath: /etc/funcdata

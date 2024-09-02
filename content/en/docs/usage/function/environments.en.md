@@ -13,7 +13,7 @@ You can also specify the number of initially pre-warmed pods, which is called th
 
 ```bash
 $ fission env create --name node \
-                     --image fission/node-env \
+                     --image ghcr.io/fission/node-env \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
                      --poolsize 4
@@ -30,8 +30,8 @@ For more details on builder and packages, check out examples in [Functions]({{% 
 
 ```bash
 $ fission env create --name python \
-                     --image fission/python-env:latest \
-                     --builder fission/python-builder:latest
+                     --image ghcr.io/fission/python-env:latest \
+                     --builder ghcr.io/fission/python-builder:latest
 ```
 
 ## Viewing environment information

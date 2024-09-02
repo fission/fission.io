@@ -74,7 +74,7 @@ All the files required are present [here](https://github.com/fission/examples/tr
 Steps for deploying producer function:
 
 ```sh
-fission environment create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+fission environment create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
 fission fn create --name producer --env go --src "producer/*" --entrypoint Handler 
 ```
 

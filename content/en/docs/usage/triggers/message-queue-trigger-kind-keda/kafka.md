@@ -175,7 +175,7 @@ $ go mod init
 $ go mod tidy
 $ zip -qr kafka.zip *
 
-$ fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+$ fission env create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
 $ fission package create --env go --src kafka.zip
 $ fission fn create --name producer --env go --pkg kafka-zip-s2pj --entrypoint Handler
 $ fission package info --name kafka-zip-s2pj
@@ -204,7 +204,7 @@ module.exports = async function (context) {
 Let's create the environment and function:
 
 ```shell
-fission env create --name nodeenv --image fission/node-env
+fission env create --name nodeenv --image ghcr.io/fission/node-env
 fission fn create --name consumer --env nodeenv --code consumer.js
 ```
 

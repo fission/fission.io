@@ -103,7 +103,7 @@ You can control the default pool size based on your needs. You can do so by sett
 For instance, the below code snippet with create a new Python environment with a poolsize of 1.
 
 ```bash
-$ fission env create --name python --version **3** --poolsize **1** --image fission/python-env:latest
+$ fission env create --name python --version **3** --poolsize **1** --image ghcr.io/fission/python-env:latest
 $ kubectl get pod -l environmentName**=**test
 ```
 
@@ -112,7 +112,7 @@ To give you greater control over resource usages for all functions in the same e
 The below snippet limits the min/max cpu to 100 m/200 m, and min/max memory to 128Mi/256Mi respectively. *(The CPU limit is in miliCPU)*
 
 ```bash
-$ fission env create --name python --version **3** --poolsize **1** --image fission/python-env \
+$ fission env create --name python --version **3** --poolsize **1** --image ghcr.io/fission/python-env \
     --mincpu **100** --maxcpu **200** --minmemory **128** --maxmemory **256**
 ```
 
