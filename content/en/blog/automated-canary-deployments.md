@@ -55,7 +55,7 @@ $ curl -LO https://raw.githubusercontent.com/fission/fission/master/demos/canary
 Next, create the environment and functions on your Fission cluster:
 
 ```sh
-$ fission env create --name nodejs --image fission/node-env
+$ fission env create --name nodejs --image ghcr.io/fission/node-env
 
 $ fission fn create --name func-v1 --env nodejs --code func-v1.js
 

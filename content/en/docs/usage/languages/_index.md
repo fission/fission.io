@@ -13,12 +13,12 @@ The following pre-built environments are currently available for use in Fission:
 
 | Environment                         | Image                     | Builder Image              | v1  | v2  | v3  |
 |-------------------------------------|---------------------------|----------------------------|-----|-----|-----|
-| NodeJS                              | `fission/node-env`        | `fission/node-builder`     | O   | O   | O   |
-| Python 3                            | `fission/python-env`      | `fission/python-builder`   | O   | O   | O   |
+| NodeJS                              | `ghcr.io/fission/node-env`        | `ghcr.io/fission/node-builder`     | O   | O   | O   |
+| Python 3                            | `ghcr.io/fission/python-env`      | `ghcr.io/fission/python-builder`   | O   | O   | O   |
 | Go                                  | see [here]({{% ref "go.md" %}}#add-the-go-environment-to-your-cluster) for more info | | O   | O   | O   |
 | JVM (Java)                          | `fission/jvm-env`         | `fission/jvm-builder`      | O   | O   | O   |
 | Ruby                                | `fission/ruby-env`        | `fission/ruby-builder`     | O   | O   | O   |
-| Binary (for executables or scripts) | `fission/binary-env`      | `fission/binary-builder`   | O   | O   | O   |
+| Binary (for executables or scripts) | `ghcr.io/fission/binary-env`      | `ghcr.io/fission/binary-builder`   | O   | O   | O   |
 | PHP 7                               | `fission/php-env`         | `fission/php-builder`      | O   | O   | O   |
 | .NET 2.0                            | `fission/dotnet20-env`    | `fission/dotnet20-builder` | O   | O   | O   |
 | .NET                                | `fission/dotnet-env`      | -                          | O   | X   | X   |
@@ -67,5 +67,5 @@ If you want to adjust size of environment pre-warmed pool, use v3.
 For example, to create a go env with version 3 environment interface.
 
 ```sh
-fission environment create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16  --version 3
+fission environment create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23  --version 3
 ```

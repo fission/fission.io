@@ -28,7 +28,7 @@ node "gke-fission-dev-default-pool-87c8b616-t5q1" tainted
 First, we create a nodejs environment spec file.
 
 ```bash
-$ fission env create --spec --name nodejs --image fission/node-env --builder fission/node-builder
+$ fission env create --spec --name nodejs --image ghcr.io/fission/node-env --builder ghcr.io/fission/node-builder
 ```
 
 Let's add PodSpec and toleration for "reservation=fission" to `.spec.runtime`:
@@ -59,13 +59,13 @@ metadata:
 spec:
   builder:
     command: build
-    image: fission/node-builder
+    image: ghcr.io/fission/node-builder
   imagepullsecret: ""
   keeparchive: false
   poolsize: 3
   resources: {}
   runtime:
-    image: fission/node-env
+    image: ghcr.io/fission/node-env
     podspec:
       tolerations:
       - key: "reservation"

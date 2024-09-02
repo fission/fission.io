@@ -141,7 +141,7 @@ We'll be using the [specs](/docs/usage/spec/) feature of fission since we'll nee
 
 ```bash
 fission spec init
-fission env create --name nodeenv --image fission/node-env --spec
+fission env create --name nodeenv --image ghcr.io/fission/node-env --spec
 fission fn create --name consumer --env nodejs --code consumer.js --executortype newdeploy --minscale 1 --maxscale 3 --mincpu 100 --maxcpu 200 --minmemory 128 --maxmemory 256 --targetcpu 0 --spec
 fission mqt create --name kafkatest --function consumer --mqtkind fission --mqtype kafka --topic request-topic  --resptopic response-topic  --errortopic error-topic --spec
 ```

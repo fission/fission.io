@@ -20,7 +20,7 @@ You need to install Fission and Linkerd in the cluster.
 - Create a Fission environment:
 
 ```
-fission env create --name node --image fission/node-env
+fission env create --name node --image ghcr.io/fission/node-env
 ```
 
 - Create a file with function code:

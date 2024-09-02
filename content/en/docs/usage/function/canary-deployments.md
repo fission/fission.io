@@ -67,7 +67,7 @@ If it is under the configured failure threshold of 10%, then the percentage traf
 1. Create an environment:
 
   ```bash
-  $ fission env create --name nodejs --image fission/node-env
+  $ fission env create --name nodejs --image ghcr.io/fission/node-env
   ```
 
 2. Create fission functions:

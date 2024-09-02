@@ -13,7 +13,7 @@ Before creating a function, you'll need an environment; read [environments]({{% 
 Let's create an environment for our function.
 
 ```bash
-$ fission env create --name node --image fission/node-env
+$ fission env create --name node --image ghcr.io/fission/node-env
 ```
 
 Let's create a simple code snippet in NodeJS which will output the string `"Hello, world!"`:
@@ -206,8 +206,8 @@ $ chmod +x build.sh
 You first need to create an environment with environment image and python-builder image specified:
 
 ```bash
-$ fission env create --name python --image fission/python-env:latest \
-                     --builder fission/python-builder:latest \
+$ fission env create --name python --image ghcr.io/fission/python-env:latest \
+                     --builder ghcr.io/fission/python-builder:latest \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
                      --poolsize 2

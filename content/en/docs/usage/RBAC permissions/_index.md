@@ -224,7 +224,7 @@ Switched to context "fission-user".
 With the above setting Fission CLI will use fission-user to perform all actions. Let's create an environment and a Fission function using [create function]({{% ref "../function/functions/" %}})-
 
 ``` bash
-$ fission env create --name node --image fission/node-env -n default
+$ fission env create --name node --image ghcr.io/fission/node-env -n default
 poolsize setting default to 3
 environment 'node' created
 

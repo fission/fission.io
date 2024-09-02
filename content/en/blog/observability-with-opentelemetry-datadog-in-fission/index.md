@@ -194,7 +194,7 @@ docker push username/python-opentelemetry:latest
 Create Fission environment:
 
 ```bash
-fission env create --name pythonoptel --image username/python-opentelemetry --builder fission/python-builder:latest
+fission env create --name pythonoptel --image username/python-opentelemetry --builder ghcr.io/fission/python-builder:latest
 ```
 
 Create source package.
@@ -233,7 +233,7 @@ With this our custom Python environment is ready along with our Fission function
 
 ```bash
 fission spec init
-fission env create --name pythonoptel --image atulinfracloud/python-opentelemetry  --builder fission/python-builder:latest --spec
+fission env create --name pythonoptel --image atulinfracloud/python-opentelemetry  --builder ghcr.io/fission/python-builder:latest --spec
 fission package create --name fissionoptel-pkg --sourcearchive sample.zip --env pythonoptel --buildcmd "./build.sh" --spec
 fission fn create --name optel --pkg fissionoptel-pkg --entrypoint "sample.main" --spec
 ```

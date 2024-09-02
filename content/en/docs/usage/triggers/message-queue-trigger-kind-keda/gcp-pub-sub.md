@@ -114,7 +114,7 @@ Create a zip archive of `publisher` folder using `zip -j pub.zip pub/*`
 Let's create the environment, package and function:
 
 ```bash
-fission env create --name python-gcp --image fission/python-env --builder fission/python-builder
+fission env create --name python-gcp --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder
 fission fn create --name producer --env python-gcp --src pub/pub.py  --entrypoint main --src pub/requirements.txt
 ```
 
@@ -164,9 +164,9 @@ Read our giude on how to use [Fission spec](https://fission.io/docs/usage/spec/)
 
 ```bash
 fission spec init
-fission env create --name python-gcp --image fission/python-env --builder fission/python-builder --spec
+fission env create --name python-gcp --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder --spec
 fission fn create --name producer --env python-gcp --src pub/pub.py  --entrypoint main --src pub/requirements.txt --spec
-fission env create --name nodeenv --image fission/node-env --spec
+fission env create --name nodeenv --image ghcr.io/fission/node-env --spec
 fission fn create --name consumer --env nodeenv --code consumer.js --spec
 fission mqt create --name gcptest --function consumer --mqtype gcp-pubsub --mqtkind keda \
     --topic request-topic-sub --resptopic response-topic --errortopic error-topic --maxretries 3 \

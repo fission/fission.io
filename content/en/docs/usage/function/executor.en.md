@@ -25,7 +25,7 @@ When an environment is created, poolmgr creates a pool of generic pods with **de
 We may want to adjust the size of pools based on our need (e.g. resource efficiency), for some [historic reason](https://github.com/fission/fission/issues/506) fission now only supports to adjust pool size by giving `--version 3` flag when creating an environment.
 
 ```bash
-$ fission env create --name python --version 3 --poolsize 1 --image fission/python-env:latest
+$ fission env create --name python --version 3 --poolsize 1 --image ghcr.io/fission/python-env:latest
 
 $ kubectl get pod -l environmentName=test
 ```
@@ -40,12 +40,12 @@ If you want to set resource requests/limits for all functions use the same envir
 For example, we want to limit an environment's min/max cpu to 100m/200m and min/max memory to 128Mi/256Mi.
 
 ```bash
-$ fission env create --name python --version 3 --poolsize 1 --image fission/python-env \
+$ fission env create --name python --version 3 --poolsize 1 --image ghcr.io/fission/python-env \
     --mincpu 100 --maxcpu 200 --minmemory 128 --maxmemory 256
 
 $ fission env list
 NAME     UID               IMAGE              POOLSIZE MINCPU MAXCPU MINMEMORY MAXMEMORY EXTNET GRACETIME
-python   73e4e8a3-db49-... fission/python-env 1        100m   200m   128Mi     256Mi     false  360
+python   73e4e8a3-db49-... ghcr.io/fission/python-env 1        100m   200m   128Mi     256Mi     false  360
 ```
 
 Functions created in Pool Manager can have the following features:

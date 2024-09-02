@@ -86,7 +86,7 @@ $ fission spec init --deployid xxxx-yyyy-zzzz
 ### Setup a Python environment
 
 ```bash
-$ fission env create --spec --name python --image fission/python-env --builder fission/python-builder
+$ fission env create --spec --name python --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder
 ```
 
 This command creates a YAML file under specs called `specs/env-python.yaml`.

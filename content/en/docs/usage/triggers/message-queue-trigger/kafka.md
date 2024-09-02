@@ -134,7 +134,7 @@ module.exports = async function (context) {
 Let's create the environment and function:
 
 ```bash
-fission env create --name nodeenv --image fission/node-env
+fission env create --name nodeenv --image ghcr.io/fission/node-env
 fission fn create --name consumerfunc --env nodeenv --code hellokafka.js
 ```
 

@@ -30,7 +30,7 @@ module.exports = async function(context) {
         body: "Hello, Fission!\n"
     };
 }
-$ fission env create --name node --image fission/node-env --spec
+$ fission env create --name node --image ghcr.io/fission/node-env --spec
 $ fission fn create --name hellonode --env node --code hello.js --spec
 ```
 

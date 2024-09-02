@@ -123,7 +123,7 @@ fission spec init
 ```
 fission env create \
  --name=nodejs \
- --image=fission/node-env:latest \
+ --image=ghcr.io/fission/node-env:latest \
  --spec
 ```
 
@@ -155,7 +155,7 @@ fission httptrigger create \
 ```
 fission env create \
  --name=python \
- --image=fission/python-env:latest \
+ --image=ghcr.io/fission/python-env:latest \
  --spec
 ```
 
@@ -224,7 +224,7 @@ If you run into any issues, please feel free to reach out at Fission [slack][13]
 * [Gaurav Gahlot][10]  **|**  [Fission Contributor][11]  **|**  Software Engineer - [InfraCloud Technologies][12]
 
 [1]: https://datatracker.ietf.org/doc/html/rfc6455
-[2]: https://hub.docker.com/r/fission/node-env/tags?page=1&ordering=last_updated
+[2]: https://github.com/fission/environments/pkgs/container/node-env
 [3]: https://github.com/fission/examples/blob/main/miscellaneous/websocket/broadcast.js
 [4]: https://fission.io/docs/usage/triggers/http-trigger/
 [5]: https://fission.io/docs/installation/

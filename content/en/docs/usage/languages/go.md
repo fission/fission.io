@@ -29,10 +29,10 @@ Please use the `fission release version` as image tag instead of `latest` when a
 **(Remember, the image tag of runtime and builder should always be the same.)**
 
 ```bash
-$ fission environment create --name go --image fission/go-env:<release-version> --builder fission/go-builder:<release-version> --version 3
+$ fission environment create --name go --image ghcr.io/fission/go-env:<release-version> --builder ghcr.io/fission/go-builder:<release-version> --version 3
 
 # Example
-$ fission environment create --name go --image fission/go-env-1.22 --builder fission/go-builder-1.22
+$ fission environment create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
 ```
 
 You can find all images and image tags at following table. To get an overall overview of all available images, please have a look at our [Docker Hub page](https://hub.docker.com/u/fission).
@@ -41,9 +41,7 @@ You can find all images and image tags at following table. To get an overall ove
 
 | Go Version | Image | Builder Image |
 |------------|------------|-----------|
-| 1.22 | [fission/go-env-1.22](https://hub.docker.com/r/fission/go-env-1.22/tags) | [fission/go-builder-1.22](https://hub.docker.com/r/fission/go-builder-1.22/tags) |
-| 1.21 | [fission/go-env-1.21](https://hub.docker.com/r/fission/go-env-1.21/tags) | [fission/go-builder-1.21](https://hub.docker.com/r/fission/go-builder-1.21/tags) |
-| 1.20 | [fission/go-env-1.20](https://hub.docker.com/r/fission/go-env-1.20/tags) | [fission/go-builder-1.20](https://hub.docker.com/r/fission/go-builder-1.20/tags) |
+| 1.23 | [ghcr.io/fission/go-env-1.23](https://github.com/fission/environments/pkgs/container/go-env-1.23/versions?filters%5Bversion_type%5D=tagged) | [ghcr.io/fission/go-builder-1.23](https://github.com/fission/environments/pkgs/container/go-builder-1.23/versions?filters%5Bversion_type%5D=tagged) |
 
 ### Write a simple function in Go
 
@@ -320,7 +318,7 @@ See full image list [here](#go-environment-image-list)
 
 #### Go module support
 
-Please use image version equal or after `fission/go-env-1.16`.
+Please use image version equal or after `ghcr.io/fission/go-env-1.23`.
 
 Initialize your project
 
