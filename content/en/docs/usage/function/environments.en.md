@@ -30,8 +30,8 @@ For more details on builder and packages, check out examples in [Functions]({{% 
 
 ```bash
 $ fission env create --name python \
-                     --image ghcr.io/fission/python-env:latest \
-                     --builder ghcr.io/fission/python-builder:latest
+                     --image ghcr.io/fission/python-env \
+                     --builder ghcr.io/fission/python-builder
 ```
 
 ## Viewing environment information

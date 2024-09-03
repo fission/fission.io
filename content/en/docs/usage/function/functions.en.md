@@ -206,8 +206,8 @@ $ chmod +x build.sh
 You first need to create an environment with environment image and python-builder image specified:
 
 ```bash
-$ fission env create --name python --image ghcr.io/fission/python-env:latest \
-                     --builder ghcr.io/fission/python-builder:latest \
+$ fission env create --name python --image ghcr.io/fission/python-env \
+                     --builder ghcr.io/fission/python-builder \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
                      --poolsize 2

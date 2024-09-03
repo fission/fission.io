@@ -41,19 +41,11 @@ images: ["images/og-image-fission.png"]
   document.getElementById("filter-lang").innerHTML = languageOptions.join(' ');
 
   function getBadge(imageName) {
-    if (imageName.includes("node") || imageName.includes("python") || imageName.includes("go") || imageName.includes("binary")) {
-      return `<h4 class="d-inline-block mx-1 my-0">
-        <a href="https://github.com/fission/environments/pkgs/container/${imageName}" class="badge badge-light text-wrap" target="_blank">
-          ${imageName}
-        </a>
-      </h4>`
-    } else {
-      return `<h4 class="d-inline-block mx-1 my-0">
-        <a href="https://hub.docker.com/r/fission/${imageName}" class="badge badge-light text-wrap" target="_blank">
-          ${imageName}
-        </a>
-      </h4>`
-    }
+    return `<h4 class="d-inline-block mx-1 my-0">
+      <a href="https://github.com/fission/environments/pkgs/container/${imageName}" class="badge badge-light text-wrap" target="_blank">
+        ${imageName}
+      </a>
+    </h4>`
   }
 
   function updateEnvItems() {

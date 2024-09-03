@@ -123,7 +123,7 @@ fission spec init
 ```
 fission env create \
  --name=nodejs \
- --image=ghcr.io/fission/node-env:latest \
+ --image=ghcr.io/fission/node-env \
  --spec
 ```
 
@@ -155,7 +155,7 @@ fission httptrigger create \
 ```
 fission env create \
  --name=python \
- --image=ghcr.io/fission/python-env:latest \
+ --image=ghcr.io/fission/python-env \
  --spec
 ```
 

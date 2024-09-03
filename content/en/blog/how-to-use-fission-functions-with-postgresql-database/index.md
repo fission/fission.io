@@ -122,13 +122,13 @@ After this create a docker image and push it to your Docker hub repository.
 Building the docker image for our custom Python environment. *(Replace the username with your actual username on Docker Hub.)*
 
 ``` bash
-docker build -t username/python-postgres:latest --build-arg PY_BASE_IMG=3.7-alpine -f Dockerfile .
+docker build -t username/python-postgres --build-arg PY_BASE_IMG=3.7-alpine -f Dockerfile .
 ```
 
 Pushing the docker image to Docker Hub registry:
 
 ``` bash
-docker push username/python-postgres:latest
+docker push username/python-postgres
 ```
 
 #### Source Package Setup
@@ -177,7 +177,7 @@ For this voting app, we will create `python environment`, `packages`, `fission f
 Creating the Python environment:
 
 ``` bash
-fission env create --name pythonsrc --image username/python-postgres --builder ghcr.io/fission/python-builder:latest
+fission env create --name pythonsrc --image username/python-postgres --builder ghcr.io/fission/python-builder
 ```
 
 Once the environment is ready, we create two Fission packages for `backend` and `frontend`
@@ -268,7 +268,7 @@ You can open a terminal and key in the all the following commands at once.
 
 ``` yaml
 fission spec init
-fission env create --name pythonsrc --image python-postgres --builder ghcr.io/fission/python-builder:latest --spec
+fission env create --name pythonsrc --image python-postgres --builder ghcr.io/fission/python-builder --spec
 fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
 fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
 fission route create --name backend --method POST --url /castvote --function backend --spec
@@ -281,7 +281,7 @@ This will create a `specs` folder with specs for each resource that is required 
 
 ``` bash
 fission spec init
-fission env create --name pythonsrc --image atulinfracloud/python-postgres --builder ghcr.io/fission/python-builder:latest --spec
+fission env create --name pythonsrc --image atulinfracloud/python-postgres --builder ghcr.io/fission/python-builder --spec
 fission package create --name backend-pkg --sourcearchive backend.zip --env pythonsrc --buildcmd "./build.sh" --spec
 fission fn create --name backend --pkg backend-pkg --entrypoint "backend.main" --spec
 fission route create --name backend --method POST --url /castvote --function backend --spec
