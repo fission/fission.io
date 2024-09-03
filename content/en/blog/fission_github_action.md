@@ -95,7 +95,7 @@ In the logs below, we can see that Fission Action applied the specs and the envi
 ```
 ### STARTED FissionCD 15:16:50Z
 
-Pulling image: gcr.io/github-actions-images/action-runner:latest
+Pulling image: gcr.io/github-actions-images/action-runner
 latest: Pulling from github-actions-images/action-runner
 169185f82c45: Pulling fs layer
 0ccde4b6b241: Pulling fs layer

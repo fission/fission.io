@@ -40,7 +40,7 @@ $ helm install --namespace $FISSION_NAMESPACE --set enableIstio=true --name isti
 Let's first create the environment for nodejs function we want to create:
 
 ```bash
-$ fission env create --name nodejs --image ghcr.io/fission/node-env:latest
+$ fission env create --name nodejs --image ghcr.io/fission/node-env
 ```
 
 Let's create a simple function with Node.js environment and a simple hello world example below:

@@ -179,13 +179,13 @@ It should look like this: `RUN apk add --update --no-cache gcc python3-dev build
 Building the docker image for our custom Python environment. *(Replace the username with your actual username on Docker Hub.)*
 
 ``` dockerfile
-docker build -t username/python-opentelemetry:latest --build-arg PY_BASE_IMG=3.7-alpine -f Dockerfile .
+docker build -t username/python-opentelemetry --build-arg PY_BASE_IMG=3.7-alpine -f Dockerfile .
 ```
 
 Pushing the docker image to Docker Hub registry:
 
 ``` dockerfile
-docker push username/python-opentelemetry:latest
+docker push username/python-opentelemetry
 ```
 
 
@@ -194,7 +194,7 @@ docker push username/python-opentelemetry:latest
 Create Fission environment:
 
 ```bash
-fission env create --name pythonoptel --image username/python-opentelemetry --builder ghcr.io/fission/python-builder:latest
+fission env create --name pythonoptel --image username/python-opentelemetry --builder ghcr.io/fission/python-builder
 ```
 
 Create source package.
@@ -233,7 +233,7 @@ With this our custom Python environment is ready along with our Fission function
 
 ```bash
 fission spec init
-fission env create --name pythonoptel --image atulinfracloud/python-opentelemetry  --builder ghcr.io/fission/python-builder:latest --spec
+fission env create --name pythonoptel --image atulinfracloud/python-opentelemetry  --builder ghcr.io/fission/python-builder --spec
 fission package create --name fissionoptel-pkg --sourcearchive sample.zip --env pythonoptel --buildcmd "./build.sh" --spec
 fission fn create --name optel --pkg fissionoptel-pkg --entrypoint "sample.main" --spec
 ```

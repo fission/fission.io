@@ -84,8 +84,8 @@ All the files required are present [here](https://github.com/fission/keda-connec
 Steps for deploying producer function:
 
 ```sh
-docker build . -t producer:latest
-kind load docker-image producer:latest --name kind
+docker build . -t producer
+kind load docker-image producer --name kind
 kubectl apply -f deployment.yaml //replicas is set to 0 when deployed
 ```
 
@@ -167,7 +167,7 @@ spec:
         app: nats-pub
     spec:
       containers:
-        - image: producer:latest
+        - image: producer
           imagePullPolicy: Never
           name: producer
 ```

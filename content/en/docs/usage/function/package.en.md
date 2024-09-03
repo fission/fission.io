@@ -9,8 +9,8 @@ weight: 35
 Before you create a package, you need to create an environment with an associated builder image:
 
 ```bash
-$ fission env create --name pythonsrc --image ghcr.io/fission/python-env:latest \
-                     --builder ghcr.io/fission/python-builder:latest \
+$ fission env create --name pythonsrc --image ghcr.io/fission/python-env \
+                     --builder ghcr.io/fission/python-builder \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
                      --poolsize 2
@@ -124,8 +124,8 @@ b: {c: 3, d: 4}
 Before you create a package you need to create an environment with the builder image:
 
 ```bash
-$ fission env create --name pythondeploy --image ghcr.io/fission/python-env:latest \
-                     --builder ghcr.io/fission/python-builder:latest \
+$ fission env create --name pythondeploy --image ghcr.io/fission/python-env \
+                     --builder ghcr.io/fission/python-builder \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
                      --poolsize 2

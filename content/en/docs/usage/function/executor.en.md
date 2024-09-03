@@ -25,7 +25,7 @@ When an environment is created, poolmgr creates a pool of generic pods with **de
 We may want to adjust the size of pools based on our need (e.g. resource efficiency), for some [historic reason](https://github.com/fission/fission/issues/506) fission now only supports to adjust pool size by giving `--version 3` flag when creating an environment.
 
 ```bash
-$ fission env create --name python --version 3 --poolsize 1 --image ghcr.io/fission/python-env:latest
+$ fission env create --name python --version 3 --poolsize 1 --image ghcr.io/fission/python-env
 
 $ kubectl get pod -l environmentName=test
 ```
