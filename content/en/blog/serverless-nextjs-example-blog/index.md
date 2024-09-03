@@ -152,7 +152,7 @@ Fission specs provides a declarative way to describe objects to be created in Fi
 # Initialize specs directory, create specs/ directory at root of the app
 fission spec init
 # Create a spec for Node.js environment
-fission env create --spec --name nodejs --image fission/node-env-16
+fission env create --spec --name nodejs --image ghcr.io/fission/node-env
 # Define package for our Next.js application with zip created above
 fission package create --spec --deploy nextjs-source.zip --env nodejs --name nextjs-source
 # Define function and entrypoint for our Next.js application

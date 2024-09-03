@@ -24,7 +24,7 @@ An environment is the language-specific part of Fission.
 It has a container image in which your function will run.
 
 ``` sh
-fission environment create --name java --image fission/jvm-env --builder fission/jvm-builder
+fission environment create --name java --image ghcr.io/fission/jvm-env --builder ghcr.io/fission/jvm-builder
 ```
 
 ### Write a simple function in Java
@@ -184,7 +184,7 @@ For JVM environment you need to pass `--keeparchive` so that the jar file built 
 You also need to use version 2 or higher of environment.
 
 ```sh
-fission env create --name java --image fission/jvm-env --builder fission/jvm-builder --keeparchive --version 2
+fission env create --name java --image ghcr.io/fission/jvm-env --builder ghcr.io/fission/jvm-builder --keeparchive --version 2
 ```
 
 Next create a package with the builder environment by providing the source package.
@@ -285,7 +285,7 @@ You can specify CPU and memory when you create an environment as shown below.
 The min and max for resources correspond to resource request and resource limits of Kubernetes pods.
 
 ``` sh
-$ fission env create --name java --image fission/jvm-env --builder fission/jvm-builder --keeparchive --version 2 \
+$ fission env create --name java --image ghcr.io/fission/jvm-env --builder ghcr.io/fission/jvm-builder --keeparchive --version 2 \
                      --mincpu 100 --maxcpu 500 --minmemory 128 --maxmemory 512
 ```
 
@@ -322,7 +322,7 @@ spec:
   resources: {}
   runtime:
     functionendpointport: 0
-    image: fission/jvm-env
+    image: ghcr.io/fission/jvm-env
     loadendpointpath: ""
     loadendpointport: 0
     container:

@@ -161,7 +161,7 @@ helm install my-release --values cockroachdb.yaml cockroachdb/cockroachdb
 Create the `go` environment
 
 ```bash
-fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+fission env create --name go --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
 ```
 
 Create a `sourcepackage` from the `rest-api` folder.
@@ -202,7 +202,7 @@ The entire installation can be done using a single block of `fission spec` comma
 
 ```bash
 fission spec init
-fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16 --spec
+fission env create --name go --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder --spec
 fission pkg create --name restapi-go-pkg --sourcearchive restapi-go-pkg.zip --env go --spec
 fission fn create --name restapi-delete --executortype newdeploy --maxscale 3 --env go --pkg restapi-go-pkg --entrypoint MessageDeleteHandler --spec
 fission fn create --name restapi-update --executortype newdeploy --maxscale 3 --env go --pkg restapi-go-pkg --entrypoint MessageUpdateHandler --spec

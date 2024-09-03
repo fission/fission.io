@@ -100,7 +100,7 @@ def main():
 ```
 
 ```bash
-$ fission env create --name pythonv1 --image fission/python-env:0.9.2 --version 1 --period 5
+$ fission env create --name pythonv1 --image ghcr.io/fission/python-env --version 1 --period 5
 
 # With flag --method and --url, we can create a function and an HTTP trigger at the same time. 
 $ fission fn create --name reqpayload --env pythonv1 \

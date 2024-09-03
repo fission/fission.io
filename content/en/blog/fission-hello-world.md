@@ -95,7 +95,7 @@ In order to create a function, you’ll need to first create an _environment_, w
 
 Let’s create a **Go** environment using the following command:
 
-	fission env create --name go --image fission/go-env --builder fission/go-builder
+	fission env create --name go --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
 
 >**NOTE**: _Since you are creating a new environment, it may take a few extra seconds before the Go environment pods are up and running in the default namespace._
 

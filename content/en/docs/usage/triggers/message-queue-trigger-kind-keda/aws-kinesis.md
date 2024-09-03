@@ -111,7 +111,7 @@ Following commands will create a environment, package and function.
 Verify that build for package succeeded before proceeding.
 
 ```sh
-$ fission env create --name goenv --image fission/go-env --builder fission/go-builder
+$ fission env create --name goenv --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
 $ zip -qr kinesis.zip *
 $ fission package create --env goenv --src kinesis.zip
 Package 'kinesis-zip-cy16' created

@@ -103,7 +103,7 @@ $ go mod init
 $ go mod tidy
 $ zip -qr sqs.zip *
 
-$ fission env create --name goenv --image fission/go-env --builder fission/go-builder
+$ fission env create --name goenv --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
 $ fission package create --env goenv --src sqs.zip
 $ fission fn create --name producerfunc --env goenv --pkg sqs-zip-xpoi --entrypoint Handler
 $ fission package info --name sqs-zip-xpoi
