@@ -255,7 +255,7 @@ $ go mod init github.com/kafkatest/producer
 
 $ go mod tidy
 $ cd .. && zip -j producer.zip producer/*
-$ fission env create --spec --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+$ fission env create --spec --name go --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
 $ fission package create --spec --src producer.zip --env go --name kafka-producer
 $ fission fn create --spec --name kafka-producer --env go --pkg kafka-producer \
     --entrypoint Handler --secret keda-kafka-secrets --configmap keda-kafka-configmap

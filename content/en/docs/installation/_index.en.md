@@ -293,7 +293,7 @@ You can pass `--namespace` or `-n` flag to `fission` CLI to specify the namespac
 
 ```sh
 # Add the stock NodeJS env to your Fission deployment
-$ fission env create --name nodejs --image fission/node-env
+$ fission env create --name nodejs --image ghcr.io/fission/node-env
 
 # A javascript function that prints "hello world"
 $ curl -LO https://raw.githubusercontent.com/fission/examples/main/nodejs/hello.js
@@ -311,7 +311,7 @@ Hello, world!
 
 ```sh
 # Add the stock Python env to your Fission deployment
-$ fission env create --name python --image fission/python-env
+$ fission env create --name python --image ghcr.io/fission/python-env
 
 # A Python function that prints "hello world"
 $ curl -LO https://raw.githubusercontent.com/fission/examples/main/python/hello.py
@@ -329,7 +329,7 @@ Hello, world!
 
 ```sh
 # Add the stock Go env to your Fission deployment
-$ fission env create --name go --image fission/go-env-1.16 --builder fission/go-builder-1.16
+$ fission env create --name go --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
 
 # A Go function that prints "hello world"
 $ curl -LO https://raw.githubusercontent.com/fission/examples/main/go/hello-world/hello.go
@@ -351,7 +351,7 @@ Hello, world!
 
 ```sh
 # Add the stock Java env to your Fission deployment
-$ fission environment create --name java --image fission/jvm-env --builder fission/jvm-builder --keeparchive --version 3
+$ fission environment create --name java --image ghcr.io/fission/jvm-env --builder ghcr.io/fission/jvm-builder --keeparchive --version 3
 
 # A Java function that prints "hello world"
 $ mkdir -p src/main/java/io/fission/

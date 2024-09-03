@@ -98,7 +98,7 @@ Hello, world!
 
 ```sh
 # Add the stock Java env to your Fission deployment
-$ fission environment create --name java --image fission/jvm-env --builder fission/jvm-builder --keeparchive --version 3
+$ fission environment create --name java --image ghcr.io/fission/jvm-env --builder ghcr.io/fission/jvm-builder --keeparchive --version 3
 
 # A Java function that prints "hello world"
 $ mkdir -p src/main/java/io/fission/

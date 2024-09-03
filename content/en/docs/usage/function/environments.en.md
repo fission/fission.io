@@ -41,11 +41,11 @@ You can list the environments or view information of an individual environment:
 ```bash
 $ fission env list
 NAME UID                                  IMAGE                  POOLSIZE MINCPU MAXCPU MINMEMORY MAXMEMORY
-node ac84d62e-001f-11e8-85c9-42010aa00010 fission/node-env:0.4.0 4        40m    80m    64Mi      128Mi
+node ac84d62e-001f-11e8-85c9-42010aa00010 ghcr.io/fission/node-env 4        40m    80m    64Mi      128Mi
 
 $ fission env get --name node
 NAME UID                                  IMAGE
-node ac84d62e-001f-11e8-85c9-42010aa00010 fission/node-env:0.4.0
+node ac84d62e-001f-11e8-85c9-42010aa00010 ghcr.io/fission/node-env
 
 $ kubectl get environment.fission.io -o yaml
 # Full YAML of Fission environment object

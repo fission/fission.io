@@ -16,13 +16,13 @@ The following pre-built environments are currently available for use in Fission:
 | NodeJS                              | `ghcr.io/fission/node-env`        | `ghcr.io/fission/node-builder`     | O   | O   | O   |
 | Python 3                            | `ghcr.io/fission/python-env`      | `ghcr.io/fission/python-builder`   | O   | O   | O   |
 | Go                                  | see [here]({{% ref "go.md" %}}#add-the-go-environment-to-your-cluster) for more info | | O   | O   | O   |
-| JVM (Java)                          | `fission/jvm-env`         | `fission/jvm-builder`      | O   | O   | O   |
-| Ruby                                | `fission/ruby-env`        | `fission/ruby-builder`     | O   | O   | O   |
+| JVM (Java)                          | `ghcr.io/fission/jvm-env`         | `ghcr.io/fission/jvm-builder`      | O   | O   | O   |
+| Ruby                                | `ghcr.io/fission/ruby-env`        | `ghcr.io/fission/ruby-builder`     | O   | O   | O   |
 | Binary (for executables or scripts) | `ghcr.io/fission/binary-env`      | `ghcr.io/fission/binary-builder`   | O   | O   | O   |
-| PHP 7                               | `fission/php-env`         | `fission/php-builder`      | O   | O   | O   |
-| .NET 2.0                            | `fission/dotnet20-env`    | `fission/dotnet20-builder` | O   | O   | O   |
-| .NET                                | `fission/dotnet-env`      | -                          | O   | X   | X   |
-| Perl                                | `fission/perl-env`        | -                          | O   | X   | X   |
+| PHP 7                               | `ghcr.io/fission/php-env`         | `ghcr.io/fission/php-builder`      | O   | O   | O   |
+| .NET 2.0                            | `ghcr.io/fission/dotnet20-env`    | `ghcr.io/fission/dotnet20-builder` | O   | O   | O   |
+| .NET                                | `ghcr.io/fission/dotnet-env`      | -                          | O   | X   | X   |
+| Perl                                | `ghcr.io/fission/perl-env`        | -                          | O   | X   | X   |
 
 {{% notice info %}}
 You can get the latest info about the environments at [environment portal](/environments/).

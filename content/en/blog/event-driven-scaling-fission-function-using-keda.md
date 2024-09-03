@@ -173,7 +173,7 @@ require github.com/Shopify/sarama v1.29.0
 
 Let’s create the environment and function
 ```
-$ fission environment create --name go --image fission/go-env-1.15 --builder fission/go-builder-1.15
+$ fission environment create --name go --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
 $ fission fn create --name producer --env go --src producer.go --src go.mod --entrypoint Handler 
 ```
 
