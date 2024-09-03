@@ -226,7 +226,7 @@ $ kubectl get pods -w
 ```
 Let’s subscribe to our response-topic to see the response return by consumer function invocations. Open another terminal and execute the following:
 ```
-$ kubectl run kafka-consumer -ti --image=strimzi/kafka:latest-kafka-2.5.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-brokers.my-kafka-project.svc:9092 --topic response-topic
+$ kubectl run kafka-consumer -ti --image=strimzi/kafka-kafka-2.5.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-brokers.my-kafka-project.svc:9092 --topic response-topic
 ```
 
 Since everything is in place, let’s invoke our producer function in another terminal
