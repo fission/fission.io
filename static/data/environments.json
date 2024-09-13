@@ -44,6 +44,17 @@
         ]
     },
     {
+        "name": "Python (FastAPI)",
+        "logo": "/images/lang-logo/python-logo.svg",
+        "repo": "https://github.com/fission/environments/tree/master/python-fastapi",
+        "images": [
+            {
+                "main": "python-fastapi-env",
+                "builder": "python-fastapi-builder"
+            }
+        ]
+    },
+    {
         "name": "PHP",
         "logo": "/images/lang-logo/php-logo.svg",
         "repo": "https://github.com/fission/environments/tree/master/php7",
@@ -71,8 +82,8 @@
         "repo": "https://github.com/fission/environments/tree/master/jvm-jersey",
         "images": [
             {
-                "main": "jvm-jersey-env-11",
-                "builder": "jvm-jersey-builder-11"
+                "main": "jvm-jersey-env-22",
+                "builder": "jvm-jersey-builder-22"
             }
         ]
     },
