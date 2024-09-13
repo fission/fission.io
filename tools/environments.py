@@ -5,6 +5,7 @@ env_dict = {
     'JVM Jersey Environment': 'Java (JVM-Jersey)',
     'Ruby Environment': 'Ruby',
     'Python Environment': 'Python',
+    'Python FastAPI Environment': 'Python (FastAPI)',
     'Fission Binary Environment': 'Misc',
     'PHP Environment': 'PHP',
     'Dotnet 2 Environment': '.NET Core',
@@ -29,7 +30,6 @@ def create_env_string(src_envs, dst_envs):
             num_envs = len(src_env)
             for i in range(0, num_envs):
                 if name == env_dict[src_env[i]['name']]:
-                    print(name)
                     if 'image' in src_env[i] and 'builder' in src_env[i]:
                         data_list.append({
                             "main": src_env[i]['image'],
