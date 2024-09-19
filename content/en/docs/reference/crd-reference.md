@@ -794,6 +794,8 @@ _Appears in:_
 | --- | --- | --- | --- |
 | `cron` _string_ | Cron schedule |  |  |
 | `functionref` _[FunctionReference](#functionreference)_ | The reference to function |  |  |
+| `method` _string_ | HTTP Method for trigger, ex : GET, POST, PUT, DELETE, HEAD (default: "POST") | POST |  |
+| `subpath` _string_ | Subpath to trigger a specific route if function<br />internally supports routing, (default: "/") | / |  |
 
 
 

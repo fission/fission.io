@@ -17,6 +17,8 @@ fission timetrigger update [flags]
       --name string       Time Trigger name
       --function string   Function name
       --cron string       Time trigger cron spec with each asterisk representing respectively second, minute, hour, the day of the month, month and day of the week. Also supports readable formats like '@every 5m', '@hourly'
+      --method string     HTTP Methods: GET,POST,PUT,DELETE,HEAD.
+      --subpath string    Sub Path to check if function internally supports routing
   -h, --help              help for update
 ```
 
