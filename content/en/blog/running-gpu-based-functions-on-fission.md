@@ -106,7 +106,7 @@ $ fission env create --name python --image ghcr.io/soharab-ic/python-pytorch-env
 ```
 
 - The `fission env create` command will create two deployments. One deployment named `poolmgr-python-default-*` for environment and another for builder named `python-*`.
-- Edit the environment deployment and add GPU resources to `python` environment container. Update the `nodeSelector` for schedulling pods on a node with GPU resources.
+- Edit the environment deployment and add GPU resources to `python` environment container. Update the `nodeSelector` for scheduling pods on a node with GPU resources.
 ```bash
 resources:
   limits:
@@ -200,7 +200,7 @@ Using the source archive created in previous step, you can create a package in F
 $ fission package create --name sentiment-pkg --sourcearchive sentiment-src-pkg.zip --env python --buildcmd "./build.sh"
 Package 'sentiment-pkg' created
 ```
-Since we are working with a source package, we provided the build command. Once you create the package, the build process will start and you can see the build logs with the fission package info command. Wait for the package build to succeeed:
+Since we are working with a source package, we provided the build command. Once you create the package, the build process will start, and you can see the build logs with the fission package info command. Wait for the package build to succeed:
 ```bash
 $ fission pkg info --name sentiment-pkg
 ```
