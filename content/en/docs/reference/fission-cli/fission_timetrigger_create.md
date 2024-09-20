@@ -17,6 +17,8 @@ fission timetrigger create [flags]
       --name string       Time Trigger name
       --function string   Function name
       --cron string       Time trigger cron spec with each asterisk representing respectively second, minute, hour, the day of the month, month and day of the week. Also supports readable formats like '@every 5m', '@hourly'
+      --method string     HTTP Methods: GET,POST,PUT,DELETE,HEAD.
+      --subpath string    Sub Path to check if function internally supports routing
       --spec              Save to the spec directory instead of creating on cluster
       --dry               View the generated specs
   -h, --help              help for create
