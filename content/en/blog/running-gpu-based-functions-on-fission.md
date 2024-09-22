@@ -11,20 +11,31 @@ images = ["/images/featured/serverless-developer.png"]
 Fission provides you with a serverless framework that you can deploy on your Kubernetes clusters.
 There are various use cases where you can use Fission, and today we'll show you how to deploy a GPU based function in Fission.
 
+## GPU based Functions on Fission
+We will create Fission's environment and builder images with all the depedncies installed for running a GPU based function. Then we will verify the GPU availability inside environment container by running a simple function.
+
+We will also create a package using [sentiment analysis](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) model from huggingface and then create a function using this package. Finally, we will run some test for this function.
+
+So let’s get started!
+
 ## Pre Requisites
 ### Nvidia GPU
 ### Fission
 Before you start working on this demo, you need to ensure that you have Fission installed and running on a Kubernetes cluster. You can refer to our [Fission Installation](https://fission.io/docs/installation/) guide for more.
 
 ## Steps
-- Create a `python-pytorch` env and builder images using Fission [python-env](https://github.com/fission/environments/tree/master/python) and [nvidia-pytorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) container image as base image.
-- Create and test GPU based functions.
+- Create a Python based environment and builder image for use with Fission with all pre-requisites for Nvidia GPU and Pytorch installed.
+- Test the environment and builder image.
+- Create a package using [sentiment analysis](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) model from huggingface.
+- Create a function and test the above package.
 
 ### Create environment and builder images
 We will use [Pytorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch) container image provided by Nvidia and build our Python environment on top of this image. This container image contains the complete source of the version of PyTorch in /opt/pytorch. It is prebuilt and installed in the default Python environment (/usr/local/lib/python3.10/dist-packages/torch) in the container image. The container also includes [Cuda 12.6](https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel-24-08.html#rel-24-08).
 
 > Note: `nvcr.io/nvidia/pytorch:24.08-py3` image size is ~10GB so creating env and builder images will take some time.
 #### Create environment image
+We will build the environmnet using our current [python](https://github.com/fission/environments/blob/master/python) environment's source code and dependencies.
+
 - Replace the [Dockerfile](https://github.com/fission/environments/blob/master/python/Dockerfile) in [Python environments repository](https://github.com/fission/environments/tree/master/python) with following contents:
 
 ```bash
@@ -85,7 +96,7 @@ $ docker images | grep python-pytorch-builder
 USER/python-pytorch-builder               latest            3fa2801dcb1d   2 days ago      20.5GB
 ```
 
-### Push the images to a Container Registry
+#### Push the images to a Container Registry
 - You can push the images to a container registry like GHCR or use them locally.
 ```bash
 $ docker push REGISTRY/USER/python-pytorch-env
@@ -98,13 +109,19 @@ $ docker pull ghcr.io/soharab-ic/python-pytorch-env:latest
 $ docker pull ghcr.io/soharab-ic/python-pytorch-builder:latest
 ```
 
-### Create and test GPU based functions
+### Test the Environment and Builder image
+In this step, we will do following things:
+- Create a environmnt in Fission using newly created environment and builder image.
+- Edit the environment deployment and add GPU resources and nodeSelector to make environment pod schedule on GPU nodes.
+- Create a function and verify the GPU availability inside the environment container.
 
+#### Create Environment
 - Create Python environment using `python-pytorch-env` and `python-pytorch-builder` images.
 ```bash
 $ fission env create --name python --image ghcr.io/soharab-ic/python-pytorch-env --builder ghcr.io/soharab-ic/python-pytorch-builder --poolsize 1
 ```
 
+#### Edit the Environment Deployment
 - The `fission env create` command will create two deployments. One deployment named `poolmgr-python-default-*` for environment and another for builder named `python-*`.
 - Edit the environment deployment and add GPU resources to `python` environment container. Update the `nodeSelector` for scheduling pods on a node with GPU resources.
 ```bash
@@ -120,8 +137,7 @@ nodeSelector:
 ```
 - After edit, make sure that pods are schduled on GPU nodes and respective environment container spec have gpu resources.
 
-#### Create a function to verify if GPU is available in environment pod
-
+#### Create a function to verify if GPU is available inside environment container
 - Create a `cuda.py` file and add following contents:
 ```bash
 import torch
@@ -143,9 +159,10 @@ $ fission fn create --name cuda --env python --code cuda.py
 $ fission fn test --name cuda
 Cuda is available: NVIDIA GeForce RTX 4090
 ```
+Now, our environment pods are scheduled on GPU nodes and GPU is available inside environment container for further use.
 
-#### Create a function to run a pretrained sentiment analysis model
-We will use the [sentiment analysis](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) model from huggingface and create a simple python function. The function will have dependency on `transformers` and `numpy` modules. The tree structure of directory and contents of the file would look like:
+### Create a Package
+Fission environment is created and GPU is available for use with Fission function. Let's create a package using [sentiment analysis](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) model from huggingface. Provided a sentence, the sentiment analysis model will tell us the sentiment associated with sentence is either `POSITIVE` or `NEGATIVE`. The package will have dependency on `transformers` and `numpy` modules. The tree structure of directory and contents of the file would look like:
 
 ```bash
 sentiment/
@@ -159,17 +176,25 @@ And the file contents:
 ```bash
 import torch
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
+from flask import request
 
 def main():
+    if request.method != "POST":
+        return "Method Not Allowed\n", 405
+
+    sentence = request.get_data(as_text=True)
+    if sentence == "":
+        return "Please provide a sentence for the analysis.\n", 400
+
     tokenizer = DistilBertTokenizer.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
     model = DistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased-finetuned-sst-2-english")
-
-    inputs = tokenizer("Hello, my dog is cute", return_tensors="pt")
+    inputs = tokenizer(sentence, return_tensors="pt")
     with torch.no_grad():
         logits = model(**inputs).logits
 
     predicted_class_id = logits.argmax().item()
-    return "Result: " + model.config.id2label[predicted_class_id]
+    return "Sentiment: " + model.config.id2label[predicted_class_id] + "\n"
+
 ```
 - requirements.txt
 ```bash
@@ -190,12 +215,12 @@ $ chmod +x build.sh
 - Archive these files:
 ```bash
 $ zip -jr sentiment-src-pkg.zip sentiment/
-  adding: sentiment.py (deflated 49%)
+  adding: sentiment.py (deflated 51%)
   adding: requirements.txt (stored 0%)
   adding: build.sh (deflated 24%)
   adding: __init__.py (stored 0%)
 ```
-Using the source archive created in previous step, you can create a package in Fission:
+Using the source archive created in previous step, let's create a package in Fission:
 ```bash
 $ fission package create --name sentiment-pkg --sourcearchive sentiment-src-pkg.zip --env python --buildcmd "./build.sh"
 Package 'sentiment-pkg' created
@@ -204,17 +229,26 @@ Since we are working with a source package, we provided the build command. Once 
 ```bash
 $ fission pkg info --name sentiment-pkg
 ```
-Using the package above you can create the function. Since this package is already associated with a source archive, an environment and a build command, you don’t need to provide these while creating a function from this package.
 
+### Create a function and test the package
+Using the package in previous step, you can create a function. Since this package is already associated with a source archive, an environment and a build command, you don’t need to provide these while creating a function from this package.
+
+#### Create the function
 The only additional thing you’ll need to provide is the Function’s entrypoint:
 ```bash
 $ fission fn create --name sentiment-fn --pkg sentiment-pkg --entrypoint "sentiment.main"
 function 'sentiment-fn' created
 ```
-Run the function:
+
+#### Test the function
+The function will accept HTTP Post request with body. Provide the sentence, you want to analyze in the request body.
+
+Test the function:
 ```bash
-$ fission fn test --name sentiment-fn
-Result: POSITIVE
+$ fission fn test --name sentiment-fn --method POST --body "I am happy"
+Sentiment: POSITIVE
+$ fission fn test --name sentiment-fn --method POST --body "I am not happy"
+Sentiment: NEGATIVE
 ```
 
 ## Conclusion
