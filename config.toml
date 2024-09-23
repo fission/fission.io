@@ -89,6 +89,7 @@ id = ""
 
 [languages]
 [languages.en]
+[languages.en.params]
 description = "Fast Serverless Functions for Kubernetes"
 languageName = "English"
 title = "Fission"
