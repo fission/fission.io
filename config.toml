@@ -106,7 +106,7 @@ privacy_policy = ""
 
 # Google Custom Search Engine ID. Remove or comment out to disable search.
 # gcs_engine_id = "c632b781ffe71b197"
-algolia_docsearch = true
+# algolia_docsearch = true
 
 # current release branch - could be rc
 release_branch = "main"
@@ -209,6 +209,11 @@ url = "https://github.com/fission/fission"
 changefreq = "monthly"
 filename = "sitemap.xml"
 priority = 0.5
+
+[params.search.algolia]
+appId = "MSV5TDX060"
+apiKey = "d814136dbb3b955516468a309c4b425e"
+indexName = "fission"
 
 [menu]
 [[menu.main]]
