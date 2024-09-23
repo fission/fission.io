@@ -42,7 +42,7 @@ images: ["images/og-image-fission.png"]
 
   function getBadge(imageName) {
     return `<h4 class="d-inline-block mx-1 my-0">
-      <a href="https://github.com/fission/environments/pkgs/container/${imageName}" class="badge badge-light text-wrap" target="_blank">
+      <a href="https://github.com/fission/environments/pkgs/container/${imageName}" class="badge text-bg-light text-wrap" target="_blank">
         ${imageName}
       </a>
     </h4>`
@@ -63,9 +63,9 @@ images: ["images/og-image-fission.png"]
       const images = filteredImages.map(image => {
         if (image.main && image.builder) {
           return `<div class="d-flex my-2 align-items-center">
-            <div class="text-right col p-0">${getBadge(image.main)}</div>
+            <div class="text-end col p-0">${getBadge(image.main)}</div>
             <span class="fa fa-exchange-alt text-center"></span>
-            <div class="text-left col p-0">${getBadge(image.builder)}</div>
+            <div class="text-start col p-0">${getBadge(image.builder)}</div>
           </div>`
         } else {
           return `<div class="text-center m-2">${getBadge(image.main || image.builder)}</div>`;
