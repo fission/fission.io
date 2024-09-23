@@ -8,7 +8,8 @@
             {{- if $cover }} td-navbar-cover {{- end }}" data-bs-theme="dark">
 <div class="container-fluid flex-column flex-md-row">
   <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
-    {{- /**/ -}}
+	<img src="/images/fission-white-logo.png" height="40" class="d-inline-block align-top" alt="">
+    <!-- {{- /**/ -}}
     <span class="navbar-brand__logo navbar-logo">
       {{- if ne .Site.Params.ui.navbar_logo false -}}
         {{ with resources.Get "icons/logo.svg" -}}
@@ -20,7 +21,7 @@
     <span class="navbar-brand__name">
       {{- .Site.Title -}}
     </span>
-    {{- /**/ -}}
+    {{- /**/ -}} -->
   </a>
   <div class="td-navbar-nav-scroll ms-md-auto" id="main_navbar">
     <ul class="navbar-nav">
