@@ -54,7 +54,7 @@ Fission function need an environment to run the function code. For running GPU b
 Following are the steps to create a environment with GPU support and run a GPU based function.
 
 - We would a Python based environment runtime and builder images with all the dependencies installed for running a GPU based function. Eg. Pytorch, Cuda, etc.
-- Verify the enviroment and builder images are functional and can utilize the GPU resources.
+- Verify the environment and builder images are functional and can utilize the GPU resources.
 - Create a function package using [sentiment analysis model from huggingface](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) and then create a function using this package.
 - Run the function and verify sentiment analysis for a given sentence.
 
