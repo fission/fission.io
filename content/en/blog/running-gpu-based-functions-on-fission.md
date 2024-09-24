@@ -34,7 +34,7 @@ We will use [Pytorch](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pyto
 
 > Note: `nvcr.io/nvidia/pytorch:24.08-py3` image size is ~10GB so creating env and builder images will take some time.
 #### Create environment image
-We will build the environmnet using our current [python](https://github.com/fission/environments/blob/master/python) environment's source code and dependencies.
+We will build the environment using our current [python](https://github.com/fission/environments/blob/master/python) environment's source code and dependencies.
 
 - Replace the [Dockerfile](https://github.com/fission/environments/blob/master/python/Dockerfile) in [Python environments repository](https://github.com/fission/environments/tree/master/python) with following contents:
 
@@ -111,7 +111,7 @@ $ docker pull ghcr.io/soharab-ic/python-pytorch-builder:latest
 
 ### Test the Environment and Builder image
 In this step, we will do following things:
-- Create a environmnt in Fission using newly created environment and builder image.
+- Create an environmnt in Fission using newly created environment and builder image.
 - Edit the environment deployment and add GPU resources and nodeSelector to make environment pod schedule on GPU nodes.
 - Create a function and verify the GPU availability inside the environment container.
 
