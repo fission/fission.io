@@ -19,7 +19,7 @@ In this guide, we will show you how to set up a GPU-enabled Fission environment 
 GPUs are efficient for SIMD (Single Instruction, Multiple Data) computations, which are commonly used in deep learning and matrix operations.
 Many serverless workloads need to perform these operations, and GPUs can help you run them more efficiently.
 
-Fission users have been using Fission for ML model deployment and various use cases, some of organizations are using Fission for production workloads and need to run GPU-based functions to meet their performance requirements.
+Fission users have been using Fission for ML model deployment and various use cases, some of the organizations are using Fission for production workloads and need to run GPU-based functions to meet their performance requirements.
 
 ## Pre Requisites
 
@@ -33,7 +33,7 @@ Please refer to [Kubernetes GPU Support](https://kubernetes.io/docs/tasks/manage
 
 Nvidia GPU operator helps in managing GPU resources in Kubernetes cluster. It provides a way to configure and manage GPUs in Kubernetes.
 You can refer to [Guide to NVIDIA GPU Operator in Kubernetes](https://www.infracloud.io/blogs/guide-to-nvidia-gpu-operator-in-kubernetes/).
-You should have see nodes with gpu label in your cluster.
+You should have seen nodes with gpu label in your cluster.
 
 ```bash
 $ kubectl get node -l nvidia.com/gpu.present=true
@@ -51,9 +51,9 @@ Before you start working on this demo, you need to ensure that you have Fission 
 
 Fission function need an environment to run the function code. For running GPU based functions, we need to create an environment which can leverage the GPU resources.
 
-Following are the steps to create a environment with GPU support and run a GPU based function.
+Following are the steps to create an environment with GPU support and run a GPU based function.
 
-- We would a Python based environment runtime and builder images with all the dependencies installed for running a GPU based function. Eg. Pytorch, Cuda, etc.
+- We would create a Python based environment runtime and builder images with all the dependencies installed for running a GPU based function. E.g. Pytorch, Cuda, etc.
 - Verify the environment and builder images are functional and can utilize the GPU resources.
 - Create a function package using [sentiment analysis model from huggingface](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english) and then create a function using this package.
 - Run the function and verify sentiment analysis for a given sentence.
@@ -171,22 +171,14 @@ In this step, we will do following things:
   ```
 
 - The `fission env create` command will create two deployments. One deployment named `poolmgr-python-default-*` for environment and another for builder named `python-*`.
-- Edit the environment deployment and add GPU resources to `python` environment container.
+- Patch the environment deployment to add GPU resources to `python` environment container and set `nodeSelector` to schedule pods on a GPU node using `kubectl patch` command.
 
-  ```yaml
-  resources:
-    limits:
-      nvidia.com/gpu: "1"
-    requests:
-      nvidia.com/gpu: "1"
+  ```bash
+  kubectl patch deployment poolmgr-python-default-5560759 -p '{"spec": {"template": {"spec":{"containers":[{"name":"python","resources": {"limits": {"nvidia.com/gpu": "1"}, "requests": {"nvidia.com/gpu": "1"}}}]}}}}'
+  kubectl patch deployment poolmgr-python-default-5560759 -p '{"spec": {"template": {"spec": {"nodeSelector": {"kubernetes.io/hostname": "infracloud03"}}}}}'
   ```
 
-  ```yaml
-  nodeSelector:
-    kubernetes.io/hostname: gpu-node03
-  ```
-
-- After edit, make sure that pods are schduled on GPU nodes and respective environment container spec have gpu resources.
+- After patch, make sure that pods are schduled on GPU nodes and respective environment container spec have gpu resources.
 
 #### Check Cuda device with a Fission Function
 
@@ -329,7 +321,7 @@ Sentiment: NEGATIVE
 
 ## Conclusion
 
-This tutorial shows how to setup a GPU based environment and run a GPU based function on Fission.
+This tutorial shows how to set up a GPU based environment and run a GPU based function on Fission.
 Similar steps can be followed to deploy other models and use cases with GPU acceleration.
 We will soon be adding more examples with different models and use cases.
 
