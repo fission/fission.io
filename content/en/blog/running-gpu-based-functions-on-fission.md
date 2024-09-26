@@ -31,7 +31,7 @@ Please refer to [Kubernetes GPU Support](https://kubernetes.io/docs/tasks/manage
 
 ### Nvidia GPU Operator
 
-Nvidia GPU operator helps in managing GPU resources in Kubernetes cluster. It provides a way to configure and manage GPUs in Kubernetes.
+[Nvidia GPU operator](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/getting-started.html) helps in managing GPU resources in Kubernetes cluster. It provides a way to configure and manage GPUs in Kubernetes.
 You can refer to [Guide to NVIDIA GPU Operator in Kubernetes](https://www.infracloud.io/blogs/guide-to-nvidia-gpu-operator-in-kubernetes/).
 You should have seen nodes with gpu label in your cluster.
 
