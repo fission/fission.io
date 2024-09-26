@@ -5,7 +5,6 @@ author = "Md Soharab Ansari"
 description = "Do you want to run GPU based serverless functions on Fission?"
 categories = ["Tutorials"]
 type = "blog"
-images = ["/images/featured/serverless-developer.png"]
 +++
 
 With new advancements in AI, more people want to use GPU-based functions in serverless environments. Fission is a serverless framework that you can easily deploy on your Kubernetes clusters.
