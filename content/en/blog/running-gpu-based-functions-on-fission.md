@@ -159,7 +159,7 @@ We will build the environment using our current [python](https://github.com/fiss
 In this step, we will do following things:
 
 - Create an environmnt in Fission using newly created environment and builder image.
-- Edit the environment deployment and add GPU resources and nodeSelector to make environment pod schedule on GPU nodes.
+- Patch the environment spec and add GPU resources to the environment.
 - Create a function and verify the GPU availability inside the environment container.
 
 #### Fission Environment creation
@@ -170,15 +170,13 @@ In this step, we will do following things:
   fission env create --name python --image ghcr.io/soharab-ic/python-pytorch-env --builder ghcr.io/soharab-ic/python-pytorch-builder --poolsize 1
   ```
 
-- The `fission env create` command will create two deployments. One deployment named `poolmgr-python-default-*` for environment and another for builder named `python-*`.
-- Patch the environment deployment to add GPU resources to `python` environment container and set `nodeSelector` to schedule pods on a GPU node using `kubectl patch` command.
+- Patch the environment spec and add GPU resources to `python` environment using `kubectl patch` command.
 
   ```bash
-  kubectl patch deployment poolmgr-python-default-5560759 -p '{"spec": {"template": {"spec":{"containers":[{"name":"python","resources": {"limits": {"nvidia.com/gpu": "1"}, "requests": {"nvidia.com/gpu": "1"}}}]}}}}'
-  kubectl patch deployment poolmgr-python-default-5560759 -p '{"spec": {"template": {"spec": {"nodeSelector": {"kubernetes.io/hostname": "infracloud03"}}}}}'
+  kubectl patch environment python --type='json' -p='[{"op": "replace", "path": "/spec/resources", "value": {"limits": {"nvidia.com/gpu": "1"}, "requests": {"nvidia.com/gpu": "1"}}}]'
   ```
 
-- After patch, make sure that pods are schduled on GPU nodes and respective environment container spec have gpu resources.
+- After patch, make sure that respective environment pods have gpu resources.
 
 #### Check Cuda device with a Fission Function
 
@@ -208,7 +206,7 @@ In this step, we will do following things:
   Cuda is available: NVIDIA GeForce RTX 4090
   ```
 
-Now, our environment pods are scheduled on GPU nodes and GPU is available inside environment container for further use.
+Now, our environment pods have GPU available inside environment container for further use.
 
 ### Deploy Sentiment Analysis Model
 
