@@ -1,6 +1,6 @@
 +++
 title = "Running GPU based Functions on Fission"
-date = "2024-09-19T13:20:34+05:30"
+date = "2024-09-26T13:20:34+05:30"
 author = "Md Soharab Ansari"
 description = "Do you want to run GPU based serverless functions on Fission?"
 categories = ["Tutorials"]
