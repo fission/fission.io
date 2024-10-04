@@ -73,6 +73,10 @@ externally.
 _Appears in:_
 - [Archive](#archive)
 
+| Field | Description |
+| --- | --- |
+| `literal` | ArchiveTypeLiteral means the package contents are specified in the Literal field of<br />resource itself.<br /> |
+| `url` | ArchiveTypeUrl means the package contents are at the specified URL.<br /> |
 
 
 
@@ -200,6 +204,9 @@ sha256, used for a checksum.
 _Appears in:_
 - [Checksum](#checksum)
 
+| Field | Description |
+| --- | --- |
+| `sha256` |  |
 
 
 #### ConfigMapReference
@@ -327,6 +334,11 @@ ExecutorType is the primary executor for an environment
 _Appears in:_
 - [ExecutionStrategy](#executionstrategy)
 
+| Field | Description |
+| --- | --- |
+| `poolmgr` |  |
+| `newdeploy` |  |
+| `container` |  |
 
 
 #### FailureType
@@ -340,6 +352,9 @@ FailureType refers to the type of failure
 _Appears in:_
 - [CanaryConfigSpec](#canaryconfigspec)
 
+| Field | Description |
+| --- | --- |
+| `status-code` | failure type currently supported is http status code. This could be extended<br />in the future.<br /> |
 
 
 #### Function

@@ -65,6 +65,11 @@ With 1.18 release, fission watches functions created in `defaultNamespace` menti
 Refer [1.18 release notes]({{< ref "v1.18.0.md" >}}) for more details.
 {{< /notice >}}
 
+{{< notice warning >}}
+`builderNamespace` and `functionNamespace` parameters are deprecated and will be removed in future fission releases.
+`disableOwnerReference` flag is temporary addition and would be removed in future fission releases.
+{{< /notice >}}
+
 {{< notice info>}}
 serviceType, routerServiceType can be `NodePort` or `LoadBalancer` for external access to Fission in below steps.
 You can use `ClusterIP` if you want to access Fission from within the cluster.
