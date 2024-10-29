@@ -9,10 +9,10 @@ If you want to completely uninstall Fission from your cluster, the following com
 This might be required in situations where in you want to uninstall the current version and [install Fission](/docs/installation/) as a fresh instance.
 
 ```bash
-helm uninstall <release name>
+helm uninstall <release name> -n <release namespace>
 ```
 
-> Get the release name by running `helm list` and replace with the actual `<release name>`
+> Get the release name by running `helm list -A` and replace with the actual `<release name>` and `<release namespace>`
 
 The above command will *only delete the installed services*. Custom resources that were created by Fission will need to be **manually deleted**.
 

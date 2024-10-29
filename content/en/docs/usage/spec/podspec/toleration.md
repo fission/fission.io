@@ -30,8 +30,32 @@ First, we create a nodejs environment spec file.
 ```bash
 $ fission env create --spec --name nodejs --image ghcr.io/fission/node-env --builder ghcr.io/fission/node-builder
 ```
+```yaml
+apiVersion: fission.io/v1
+kind: Environment
+metadata:
+  creationTimestamp: null
+  name: nodejs
+spec:
+  builder:
+    command: build
+    container:
+      name: ""
+      resources: {}
+    image: ghcr.io/fission/node-builder
+  imagepullsecret: ""
+  keeparchive: false
+  poolsize: 3
+  resources: {}
+  runtime:
+    container:
+      name: ""
+      resources: {}
+    image: ghcr.io/fission/node-env
+  version: 3
+```
 
-Let's add PodSpec and toleration for "reservation=fission" to `.spec.runtime`:
+Let's add PodSpec and toleration for "reservation=fission" to `.spec.runtime`. Runtime container name should be same as environment name:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -39,7 +63,14 @@ kind: Environment
 ...
 spec:
   runtime:
+    container:
+      name: "nodejs"
+      resources: {}
+    image: ghcr.io/fission/node-env
     podspec:
+      containers:
+      - name: "nodejs"
+        resources: {}
       tolerations:
       - key: "reservation"
         operator: "Equal"
@@ -47,7 +78,7 @@ spec:
         effect: "NoSchedule"
 ```
 
-You should env have an environment spec file like this:
+You should have an environment spec file like this:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -65,14 +96,20 @@ spec:
   poolsize: 3
   resources: {}
   runtime:
+    container:
+      name: "nodejs"
+      resources: {}
     image: ghcr.io/fission/node-env
     podspec:
+      containers:
+      - name: "nodejs"
+        resources: {}
       tolerations:
       - key: "reservation"
         operator: "Equal"
         value: "fission"
         effect: "NoSchedule"
-  version: 2
+  version: 3
 ```
 
 Once we apply fission specs and run the function - you will notice that the pods go only on nodes with taints that match the toleration:
