@@ -32,7 +32,7 @@ Place to load and execute the user function
 Compile the source code into a runnable function
 
 ### [Builder Pod](builder-pod)
-Place to load and execute the user function
+Place to load and create the user function
 
 ### [StorageSvc](storagesvc)
 Home for source and deployment archives
