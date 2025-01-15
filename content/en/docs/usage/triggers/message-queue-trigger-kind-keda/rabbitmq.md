@@ -159,7 +159,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
     conn, err := amqp.Dial(string(host))
     if err != nil {
-        w.Write([]byte(fmt.Sprintf("Failed to connecto rabbitmq %s", err)))
+        w.Write([]byte(fmt.Sprintf("Failed to connect rabbitmq %s", err)))
         return
     }
     defer conn.Close()
