@@ -17,7 +17,7 @@ If you already have Helm, [skip ahead to the fission install](#install-fission).
 If you don't have a Kubernetes cluster, [here's a official guide to set one up](https://kubernetes.io/docs/setup/).
 
 {{< notice info >}}
-Fission requires Kubernetes 1.25 or higher
+Fission requires Kubernetes 1.27 or higher
 {{< /notice >}}
 
 ### Kubectl
