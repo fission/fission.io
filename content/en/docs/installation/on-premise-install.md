@@ -39,7 +39,7 @@ ghcr.io/fission/node-env
 If Kubernetes cluster has Helm installed then you can download the charts of appropriate versions from [charts repo](https://github.com/fission/fission-charts). You can then install the chart by passing the tar file or by extracting the chart into a directory. The key here is to update the image references in values.yaml to images in your internal docker registry.
 
 ```bash
-$ helm install ./fission-all-{{% release-version %}}.tgz
+$ helm install ./fission-all-{{% chart-version %}}.tgz
 ```
 
 On an on premise environment where a LoadBalancer can not be provisioned, the services should be exposed with type "NodePort" instead of default LoadBalancer.

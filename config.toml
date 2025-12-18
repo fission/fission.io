@@ -112,6 +112,7 @@ privacy_policy = ""
 release_branch = "main"
 # the main version. Never is rc.
 release_version = "v1.22.0"
+chart_version = "1.22.1"
 
 slackurl = "/slack"
 
