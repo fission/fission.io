@@ -37,16 +37,22 @@ go version    # local Go
 hugo version  # local Hugo (extended build expected)
 ```
 
-### 2. Look up the latest versions
+### 2. Look up the right versions
 
 ```bash
 # Docsy + dependencies — go module proxy is authoritative
 curl -s https://proxy.golang.org/github.com/google/docsy/@latest
 curl -s https://proxy.golang.org/github.com/google/docsy/dependencies/@latest
-
-# Latest Hugo release
-curl -sL https://api.github.com/repos/gohugoio/hugo/releases/latest | grep '"tag_name"'
 ```
+
+**Hugo: pin to whatever Docsy itself targets, NOT the absolute latest Hugo release.**
+Docsy's `package.json` carries a `hugo_version` field that records the Hugo version that release was tested against:
+
+```bash
+gh api "repos/google/docsy/contents/package.json?ref=v<docsy-version>" --jq .content | base64 -d | grep -A1 hugo_version
+```
+
+Bumping Hugo past that pin risks breakage. Specifically: Hugo 0.158+ wraps the PostCSS pipeline in Node's experimental Permission Model with a restricted filesystem scope, which breaks browserslist's parent-directory search and hangs/fails `hugo --minify`. Docsy v0.15.0 pins `hugo_version: "0.157.0"` (the last pre-permission-model release) for exactly this reason.
 
 Note: `docsy/dependencies` moves rarely — pinned at `v0.7.2` since 2023.
 Don't assume it has an update just because the main Docsy module does.
@@ -83,10 +89,11 @@ Easy to miss: the same pair is repeated 4× — use a single multi-line `Edit` c
 ### 6. Verify the build locally
 
 ```bash
-hugo --gc --quiet && echo OK
+./build.sh   # the full production command — matches what Netlify runs
 ```
 
-Exit 0 with no output = clean.
+**Don't shortcut with `hugo --gc --quiet`.** It bypasses `--minify`, which is what triggers the PostCSS pipeline (and any Hugo/Docsy/Node-permission-model interactions). Always run the same flags Netlify will run: `hugo --minify --printPathWarnings --gc`.
+
 If templates broke on a Docsy major bump, read the Docsy release notes — partials/shortcodes occasionally rename.
 
 ### 7. Review and commit
@@ -104,6 +111,8 @@ If `public/` or `resources/_gen/` show up they're build artifacts — `.gitignor
 | Mistake | Symptom | Fix |
 |---|---|---|
 | Ran `go mod tidy` after `go get` | `go.mod` requires section is empty | Re-run `hugo mod get` for each module |
+| Pinned Hugo to the absolute latest release | `hugo --minify` hangs or errors with `ERR_ACCESS_DENIED` / "Access to this API has been restricted" from Node | Pin to whatever Docsy's `package.json` `hugo_version` field says |
+| Verified with `hugo --gc --quiet` only | "Looked clean locally" but Netlify fails | Run `./build.sh` — it uses `--minify` which is what exercises the PostCSS pipeline |
 | Bumped `GO_VERSION` in only one context | Production deploys on old Go, previews on new (or vice versa) | Update all 4 contexts |
 | Bumped `HUGO_VERSION` in netlify but not the `go.mod` `go` directive | Local build uses different toolchain than CI | Keep them aligned |
 | Used `go get` instead of `hugo mod get` | Works, but doesn't refresh Hugo's module cache the same way | Prefer `hugo mod get` |
