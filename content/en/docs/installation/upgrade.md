@@ -33,6 +33,35 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 
 _See [configuration](#configuration) below._
 
+## Upgrade to 1.23.x release
+
+v1.23.0 enables HMAC-signed internal authentication between Fission control-plane services by default.
+This introduces two changes operators should plan for before upgrading.
+
+### Public router no longer serves `/fission-function/<ns>/<name>`
+
+The router now binds two listeners — a public one (port `8888`, unchanged for user `HTTPTrigger` traffic) and a new internal one (port `8889`, hosting `/fission-function/<ns>/<name>`).
+This closes [GHSA-3g33-6vg6-27m8](https://github.com/fission/fission/security/advisories/GHSA-3g33-6vg6-27m8): function-invocation routes are no longer reachable from the public listener.
+
+**Any external tooling that today curls `/fission-function/...` against the public router URL (typically through an Ingress) will get `404` after upgrade.**
+Audit before upgrading and migrate any such caller to use a proper `HTTPTrigger`, or route through the internal Service (in-cluster only).
+
+### KEDA message-queue triggers and the connector signing gap
+
+`internalAuth.enabled` defaults to `true` in v1.23.0.
+Upstream `fission/kafka-http-connector` (and the other Fission KEDA connector images) do not yet sign their `/fission-function/...` invocations, so KEDA-driven message-queue triggers will receive `401` from the new router internal listener.
+
+If your installation uses KEDA-backed `MessageQueueTrigger` resources, **set `internalAuth.enabled=false` at upgrade time** until signing-aware KEDA connector images ship:
+
+```sh
+helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all \
+  --set internalAuth.enabled=false
+```
+
+With `enabled=false`, every signer/verifier short-circuits to pass-through and the cluster falls back to `NetworkPolicy` + namespace isolation alone — matching pre-1.23 in-cluster behaviour.
+
+See [Internal Service Authentication](/docs/installation/internal-auth/) for the full toggle matrix, secret rotation, and longer-term mitigation.
+
 ## Upgrade to 1.15.x release from 1.14.x release
 
 With 1.15.x release, following changes are made:
