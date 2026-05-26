@@ -5,10 +5,11 @@
 {{ $baseURL := urls.Parse $.Site.Params.Baseurl -}}
 
 <nav class="td-navbar js-navbar-scroll
-            {{- if $cover }} td-navbar-cover {{- end }}" data-bs-theme="dark">
+            {{- if $cover }} td-navbar-cover {{- end }}
+            {{- if .IsHome }} td-navbar-home {{- end }}" data-bs-theme="dark">
 <div class="container-fluid flex-column flex-md-row">
   <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
-	<img src="/images/fission-white-logo.png" height="40" class="d-inline-block align-top" alt="">
+	<img src="/images/fission-white-logo.png" height="32" class="d-inline-block align-top" alt="">
     <!-- {{- /**/ -}}
     <span class="navbar-brand__logo navbar-logo">
       {{- if ne .Site.Params.ui.navbar_logo false -}}
