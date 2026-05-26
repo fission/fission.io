@@ -1,26 +1,23 @@
 ---
-title: fission timetrigger list
-slug: fission_timetrigger_list
-url: /docs/reference/fission-cli/fission_timetrigger_list/
+title: fission timetrigger wait
+slug: fission_timetrigger_wait
+url: /docs/reference/fission-cli/fission_timetrigger_wait/
 ---
-## fission timetrigger list
+## fission timetrigger wait
 
-List time triggers
-
-### Synopsis
-
-List all time triggers in a namespace if specified, else, list time triggers across all namespaces
+Wait for a time trigger to reach a status condition
 
 ```
-fission timetrigger list [flags]
+fission timetrigger wait [flags]
 ```
 
 ### Options
 
 ```
-  -A, --all-namespaces   -A |:|: Fetch resources from all namespaces
-  -o, --output string    -o |:|: Output format: wide, json or yaml (default: table)
-  -h, --help             help for list
+      --name string        Time Trigger name
+      --for string         Condition to wait for, e.g. condition=Ready or condition=Ready=False
+      --timeout duration   Maximum time to wait for the condition before giving up (default 1m0s)
+  -h, --help               help for wait
 ```
 
 ### Options inherited from parent commands

@@ -14,8 +14,9 @@ fission canary get [flags]
 ### Options
 
 ```
-      --name string   Name for the canary config
-  -h, --help          help for get
+      --name string     Name for the canary config
+  -o, --output string   -o |:|: Output format: wide, json or yaml (default: table)
+  -h, --help            help for get
 ```
 
 ### Options inherited from parent commands

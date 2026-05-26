@@ -170,6 +170,7 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `status` _string_ |  |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ | Conditions represent the latest observations of the canary's state. |  |  |
 
 
 #### Checksum
@@ -244,6 +245,7 @@ Environment is environment for building and running user functions.
 | `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[EnvironmentSpec](#environmentspec)_ |  |  |  |
+| `status` _[EnvironmentStatus](#environmentstatus)_ |  |  |  |
 
 
 #### EnvironmentReference
@@ -287,6 +289,23 @@ _Appears in:_
 | `terminationGracePeriod` _integer_ | The grace time for pod to perform connection draining before termination. The unit is in seconds.<br />(Optional) defaults to 360 seconds |  |  |
 | `keeparchive` _boolean_ | KeepArchive is used by fetcher to determine if the extracted archive<br />or unarchived file should be placed, which is then used by specialize handler.<br />(This is mainly for the JVM environment because .jar is one kind of zip archive.) |  |  |
 | `imagepullsecret` _string_ | ImagePullSecret is the secret for Kubernetes to pull an image from a<br />private registry. |  |  |
+
+
+#### EnvironmentStatus
+
+
+
+EnvironmentStatus describes the observed state of an Environment.
+
+
+
+_Appears in:_
+- [Environment](#environment)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `observedGeneration` _integer_ |  |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ |  |  |  |
 
 
 #### ExecutionStrategy
@@ -373,6 +392,7 @@ Function is function runs within environment runtime with given package and secr
 | `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[FunctionSpec](#functionspec)_ |  |  |  |
+| `status` _[FunctionStatus](#functionstatus)_ |  |  |  |
 
 
 #### FunctionPackageRef
@@ -454,6 +474,23 @@ _Appears in:_
 | `podspec` _[PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#podspec-v1-core)_ | Podspec specifies podspec to use for executor type container based functions<br />Different arguments mentioned for container based function are populated inside a pod. |  |  |
 
 
+#### FunctionStatus
+
+
+
+FunctionStatus describes the observed state of a Function.
+
+
+
+_Appears in:_
+- [Function](#function)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `observedGeneration` _integer_ | ObservedGeneration reflects the .metadata.generation that the<br />controller observed when it last updated the status. |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ | Conditions represent the latest observations of the function's state. |  |  |
+
+
 #### HTTPTrigger
 
 
@@ -472,6 +509,32 @@ HTTPTrigger is the trigger invokes user functions when receiving HTTP requests.
 | `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[HTTPTriggerSpec](#httptriggerspec)_ |  |  |  |
+| `status` _[HTTPTriggerStatus](#httptriggerstatus)_ |  |  |  |
+
+
+#### HTTPTriggerCorsConfig
+
+
+
+HTTPTriggerCorsConfig is the per-HTTPTrigger CORS allowlist.
+It is consumed by the router public listener to attach a CORS
+middleware to the trigger's route. Triggers without a CorsConfig
+receive no Access-Control-* response headers and therefore deny
+cross-origin browser reads at the Same-Origin Policy layer.
+
+
+
+_Appears in:_
+- [HTTPTriggerSpec](#httptriggerspec)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `allowOrigins` _string array_ | AllowOrigins is the list of allowed origins (scheme + host +<br />port). Use ["*"] to allow any origin. Mixing "*" with<br />AllowCredentials=true is a configuration error and is<br />rejected by validation; browsers refuse the response in that<br />combination. |  |  |
+| `allowMethods` _string array_ | AllowMethods is the list of HTTP methods echoed in the<br />Access-Control-Allow-Methods preflight response. When empty<br />the trigger's existing Methods field is used. |  |  |
+| `allowHeaders` _string array_ | AllowHeaders is the list of request headers the browser is<br />allowed to send, echoed in Access-Control-Allow-Headers. |  |  |
+| `exposeHeaders` _string array_ | ExposeHeaders is the list of response headers exposed to<br />the browser, set in Access-Control-Expose-Headers. |  |  |
+| `allowCredentials` _boolean_ | AllowCredentials sets Access-Control-Allow-Credentials.<br />When true, AllowOrigins MUST NOT contain "*". |  |  |
+| `maxAge` _string_ | MaxAge is the preflight cache lifetime as parsed by<br />time.ParseDuration. Empty means the header is omitted. |  |  |
 
 
 #### HTTPTriggerSpec
@@ -496,6 +559,24 @@ _Appears in:_
 | `functionref` _[FunctionReference](#functionreference)_ | FunctionReference is a reference to the target function. |  |  |
 | `createingress` _boolean_ | If CreateIngress is true, router will create an ingress definition. |  |  |
 | `ingressconfig` _[IngressConfig](#ingressconfig)_ | IngressConfig for router to set up Ingress. |  |  |
+| `corsConfig` _[HTTPTriggerCorsConfig](#httptriggercorsconfig)_ | CorsConfig configures CORS response headers for browser<br />callers of this trigger. When nil, the router emits no<br />Access-Control-* headers and the browser's Same-Origin<br />Policy enforces cluster isolation from cross-origin pages<br />(the deny-by-default behaviour). Set this field to<br />allowlist specific origins for SPAs that legitimately<br />call this trigger cross-origin. |  |  |
+
+
+#### HTTPTriggerStatus
+
+
+
+HTTPTriggerStatus describes the observed state of an HTTPTrigger.
+
+
+
+_Appears in:_
+- [HTTPTrigger](#httptrigger)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `observedGeneration` _integer_ |  |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ |  |  |  |
 
 
 #### IngressConfig
@@ -559,6 +640,7 @@ KubernetesWatchTrigger watches kubernetes resource events and invokes functions.
 | `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[KubernetesWatchTriggerSpec](#kuberneteswatchtriggerspec)_ |  |  |  |
+| `status` _[KubernetesWatchTriggerStatus](#kuberneteswatchtriggerstatus)_ |  |  |  |
 
 
 #### KubernetesWatchTriggerSpec
@@ -580,6 +662,23 @@ _Appears in:_
 | `functionref` _[FunctionReference](#functionreference)_ | The reference to a function for kubewatcher to invoke with<br />when receiving events. |  |  |
 
 
+#### KubernetesWatchTriggerStatus
+
+
+
+KubernetesWatchTriggerStatus describes the observed state of a KubernetesWatchTrigger.
+
+
+
+_Appears in:_
+- [KubernetesWatchTrigger](#kuberneteswatchtrigger)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `observedGeneration` _integer_ |  |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ |  |  |  |
+
+
 #### MessageQueueTrigger
 
 
@@ -598,6 +697,7 @@ MessageQueueTrigger invokes functions when messages arrive to certain topic that
 | `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[MessageQueueTriggerSpec](#messagequeuetriggerspec)_ |  |  |  |
+| `status` _[MessageQueueTriggerStatus](#messagequeuetriggerstatus)_ |  |  |  |
 
 
 #### MessageQueueTriggerSpec
@@ -629,6 +729,23 @@ _Appears in:_
 | `secret` _string_ | Secret name |  |  |
 | `mqtkind` _string_ | Kind of Message Queue Trigger to be created, by default its fission |  |  |
 | `podspec` _[PodSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#podspec-v1-core)_ | (Optional) Podspec allows modification of deployed runtime pod with Kubernetes PodSpec<br />The merging logic is briefly described below and detailed MergePodSpec function<br />- Volumes mounts and env variables for function and fetcher container are appended<br />- All additional containers and init containers are appended<br />- Volume definitions are appended<br />- Lists such as tolerations, ImagePullSecrets, HostAliases are appended<br />- Structs are merged and variables from pod spec take precedence |  |  |
+
+
+#### MessageQueueTriggerStatus
+
+
+
+MessageQueueTriggerStatus describes the observed state of a MessageQueueTrigger.
+
+
+
+_Appears in:_
+- [MessageQueueTrigger](#messagequeuetrigger)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `observedGeneration` _integer_ |  |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ |  |  |  |
 
 
 #### MessageQueueType
@@ -718,6 +835,7 @@ _Appears in:_
 | `buildstatus` _[BuildStatus](#buildstatus)_ | BuildStatus is the package build status. | pending |  |
 | `buildlog` _string_ | BuildLog stores build log during the compilation. |  |  |
 | `lastUpdateTimestamp` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta)_ | LastUpdateTimestamp will store the timestamp the package was last updated<br />metav1.Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.<br />https://github.com/kubernetes/apimachinery/blob/44bd77c24ef93cd3a5eb6fef64e514025d10d44e/pkg/apis/meta/v1/time.go#L26-L35 |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ | Conditions represent the latest observations of the package's state. |  |  |
 
 
 
@@ -788,6 +906,7 @@ TimeTrigger invokes functions based on given cron schedule.
 | `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
 | `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
 | `spec` _[TimeTriggerSpec](#timetriggerspec)_ |  |  |  |
+| `status` _[TimeTriggerStatus](#timetriggerstatus)_ |  |  |  |
 
 
 #### TimeTriggerSpec
@@ -808,6 +927,23 @@ _Appears in:_
 | `functionref` _[FunctionReference](#functionreference)_ | The reference to function |  |  |
 | `method` _string_ | HTTP Method for trigger, ex : GET, POST, PUT, DELETE, HEAD (default: "POST") | POST |  |
 | `subpath` _string_ | Subpath to trigger a specific route if function<br />internally supports routing, (default: "/") | / |  |
+
+
+#### TimeTriggerStatus
+
+
+
+TimeTriggerStatus describes the observed state of a TimeTrigger.
+
+
+
+_Appears in:_
+- [TimeTrigger](#timetrigger)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `observedGeneration` _integer_ |  |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ |  |  |  |
 
 
 

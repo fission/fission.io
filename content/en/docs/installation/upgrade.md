@@ -33,6 +33,14 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 
 _See [configuration](#configuration) below._
 
+## Upgrade to 1.24.x release
+
+v1.24.0 is a security-hardening release.
+The admission webhooks now reject cross-namespace references and dangerous PodSpec fields, deny cross-origin browser requests by default, and stop mounting the `fission-builder` ServiceAccount token into user builder containers.
+Specs that rely on the rejected primitives will fail admission after upgrade, so review them first.
+
+See the [v1.24.0 release notes](/docs/releases/v1.24.0/#upgrade-notes) for the full list of breaking changes and the action each one requires.
+
 ## Upgrade to 1.23.x release
 
 v1.23.0 enables HMAC-signed internal authentication between Fission control-plane services by default.

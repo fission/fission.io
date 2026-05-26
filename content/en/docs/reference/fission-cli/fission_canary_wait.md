@@ -1,26 +1,23 @@
 ---
-title: fission canary list
-slug: fission_canary_list
-url: /docs/reference/fission-cli/fission_canary_list/
+title: fission canary wait
+slug: fission_canary_wait
+url: /docs/reference/fission-cli/fission_canary_wait/
 ---
-## fission canary list
+## fission canary wait
 
-List canary configs
-
-### Synopsis
-
-List all canary configs in a namespace if specified, else, list canary configs across all namespaces
+Wait for a canary config to reach a status condition
 
 ```
-fission canary list [flags]
+fission canary wait [flags]
 ```
 
 ### Options
 
 ```
-  -A, --all-namespaces   -A |:|: Fetch resources from all namespaces
-  -o, --output string    -o |:|: Output format: wide, json or yaml (default: table)
-  -h, --help             help for list
+      --name string        Name for the canary config
+      --for string         Condition to wait for, e.g. condition=Ready or condition=Ready=False
+      --timeout duration   Maximum time to wait for the condition before giving up (default 1m0s)
+  -h, --help               help for wait
 ```
 
 ### Options inherited from parent commands

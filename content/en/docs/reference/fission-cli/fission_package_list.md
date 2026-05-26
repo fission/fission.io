@@ -21,6 +21,7 @@ fission package list [flags]
       --orphan           Orphan packages that are not referenced by any function
       --status string    Filter packages by status
   -A, --all-namespaces   -A |:|: Fetch resources from all namespaces
+  -o, --output string    -o |:|: Output format: wide, json or yaml (default: table)
   -h, --help             help for list
 ```
 

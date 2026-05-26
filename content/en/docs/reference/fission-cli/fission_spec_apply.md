@@ -23,6 +23,7 @@ fission spec apply [flags]
       --commitlabel         Apply commit label to the resources
       --allowconflicts      If true, spec apply will be forced even if conflicting resources exist
       --force-namespace     --force |:|: If true, resources will be created in namespace provided by (--namespace flag ) even if spec file contains some other namespace
+      --dry-run             Preview what apply would create/update/delete without changing the cluster
   -h, --help                help for apply
 ```
 

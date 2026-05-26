@@ -19,6 +19,7 @@ fission environment list [flags]
 
 ```
   -A, --all-namespaces   -A |:|: Fetch resources from all namespaces
+  -o, --output string    -o |:|: Output format: wide, json or yaml (default: table)
   -h, --help             help for list
 ```
 

@@ -1,22 +1,23 @@
 ---
-title: fission package info
-slug: fission_package_info
-url: /docs/reference/fission-cli/fission_package_info/
+title: fission package wait
+slug: fission_package_wait
+url: /docs/reference/fission-cli/fission_package_wait/
 ---
-## fission package info
+## fission package wait
 
-Show package information
+Wait for a package to reach a status condition
 
 ```
-fission package info [flags]
+fission package wait [flags]
 ```
 
 ### Options
 
 ```
-      --name string     Package name
-  -o, --output string   -o |:|: Output format: wide, json or yaml (default: table)
-  -h, --help            help for info
+      --name string        Package name
+      --for string         Condition to wait for, e.g. condition=Ready or condition=Ready=False
+      --timeout duration   Maximum time to wait for the condition before giving up (default 1m0s)
+  -h, --help               help for wait
 ```
 
 ### Options inherited from parent commands

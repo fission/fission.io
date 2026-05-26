@@ -28,4 +28,5 @@ Create, update and manage message queue triggers
 * [fission mqtrigger delete](/docs/reference/fission-cli/fission_mqtrigger_delete/)	 - Delete a message queue trigger
 * [fission mqtrigger list](/docs/reference/fission-cli/fission_mqtrigger_list/)	 - List message queue triggers
 * [fission mqtrigger update](/docs/reference/fission-cli/fission_mqtrigger_update/)	 - Update a message queue trigger
+* [fission mqtrigger wait](/docs/reference/fission-cli/fission_mqtrigger_wait/)	 - Wait for a message queue trigger to reach a status condition
 

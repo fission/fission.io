@@ -29,4 +29,5 @@ Create, Update and manage canary configs
 * [fission canary get](/docs/reference/fission-cli/fission_canary_get/)	 - View parameters in a canary config
 * [fission canary list](/docs/reference/fission-cli/fission_canary_list/)	 - List canary configs
 * [fission canary update](/docs/reference/fission-cli/fission_canary_update/)	 - Update parameters of a canary config
+* [fission canary wait](/docs/reference/fission-cli/fission_canary_wait/)	 - Wait for a canary config to reach a status condition
 

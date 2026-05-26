@@ -29,4 +29,5 @@ Create, update and manage HTTP triggers
 * [fission httptrigger get](/docs/reference/fission-cli/fission_httptrigger_get/)	 - Get HTTP trigger details
 * [fission httptrigger list](/docs/reference/fission-cli/fission_httptrigger_list/)	 - List HTTP triggers
 * [fission httptrigger update](/docs/reference/fission-cli/fission_httptrigger_update/)	 - Update an HTTP trigger
+* [fission httptrigger wait](/docs/reference/fission-cli/fission_httptrigger_wait/)	 - Wait for an HTTP trigger to reach a status condition
 
