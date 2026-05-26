@@ -1,22 +1,23 @@
 ---
-title: fission httptrigger get
-slug: fission_httptrigger_get
-url: /docs/reference/fission-cli/fission_httptrigger_get/
+title: fission httptrigger wait
+slug: fission_httptrigger_wait
+url: /docs/reference/fission-cli/fission_httptrigger_wait/
 ---
-## fission httptrigger get
+## fission httptrigger wait
 
-Get HTTP trigger details
+Wait for an HTTP trigger to reach a status condition
 
 ```
-fission httptrigger get [flags]
+fission httptrigger wait [flags]
 ```
 
 ### Options
 
 ```
-      --name string     HTTP trigger name
-  -o, --output string   -o |:|: Output format: wide, json or yaml (default: table)
-  -h, --help            help for get
+      --name string        HTTP trigger name
+      --for string         Condition to wait for, e.g. condition=Ready or condition=Ready=False
+      --timeout duration   Maximum time to wait for the condition before giving up (default 1m0s)
+  -h, --help               help for wait
 ```
 
 ### Options inherited from parent commands

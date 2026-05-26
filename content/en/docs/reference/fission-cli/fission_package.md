@@ -32,4 +32,5 @@ Create, update and manage packages
 * [fission package list](/docs/reference/fission-cli/fission_package_list/)	 - List packages
 * [fission package rebuild](/docs/reference/fission-cli/fission_package_rebuild/)	 - Rebuild a failed package
 * [fission package update](/docs/reference/fission-cli/fission_package_update/)	 - Update a package
+* [fission package wait](/docs/reference/fission-cli/fission_package_wait/)	 - Wait for a package to reach a status condition
 

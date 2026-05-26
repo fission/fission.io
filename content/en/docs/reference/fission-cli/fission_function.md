@@ -35,4 +35,5 @@ Create, update and manage functions
 * [fission function test](/docs/reference/fission-cli/fission_function_test/)	 - Test a function
 * [fission function update](/docs/reference/fission-cli/fission_function_update/)	 - Update a function
 * [fission function update-container](/docs/reference/fission-cli/fission_function_update-container/)	 - Alpha: Update a function running a container
+* [fission function wait](/docs/reference/fission-cli/fission_function_wait/)	 - Wait for a function to reach a status condition
 

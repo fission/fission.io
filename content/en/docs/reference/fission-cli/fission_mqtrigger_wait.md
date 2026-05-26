@@ -1,26 +1,23 @@
 ---
-title: fission mqtrigger list
-slug: fission_mqtrigger_list
-url: /docs/reference/fission-cli/fission_mqtrigger_list/
+title: fission mqtrigger wait
+slug: fission_mqtrigger_wait
+url: /docs/reference/fission-cli/fission_mqtrigger_wait/
 ---
-## fission mqtrigger list
+## fission mqtrigger wait
 
-List message queue triggers
-
-### Synopsis
-
-List all message queue triggers in a namespace if specified, else, list message queue triggers across all namespaces
+Wait for a message queue trigger to reach a status condition
 
 ```
-fission mqtrigger list [flags]
+fission mqtrigger wait [flags]
 ```
 
 ### Options
 
 ```
-  -A, --all-namespaces   -A |:|: Fetch resources from all namespaces
-  -o, --output string    -o |:|: Output format: wide, json or yaml (default: table)
-  -h, --help             help for list
+      --name string        Message queue trigger name
+      --for string         Condition to wait for, e.g. condition=Ready or condition=Ready=False
+      --timeout duration   Maximum time to wait for the condition before giving up (default 1m0s)
+  -h, --help               help for wait
 ```
 
 ### Options inherited from parent commands

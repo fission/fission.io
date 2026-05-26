@@ -27,4 +27,5 @@ Create, update and manage kube watcher
 * [fission watch create](/docs/reference/fission-cli/fission_watch_create/)	 - Create a kube watcher
 * [fission watch delete](/docs/reference/fission-cli/fission_watch_delete/)	 - Delete a kube watcher
 * [fission watch list](/docs/reference/fission-cli/fission_watch_list/)	 - List kube watchers
+* [fission watch wait](/docs/reference/fission-cli/fission_watch_wait/)	 - Wait for a kube watcher to reach a status condition
 

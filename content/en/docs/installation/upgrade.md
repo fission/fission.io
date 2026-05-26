@@ -33,6 +33,52 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 
 _See [configuration](#configuration) below._
 
+## Upgrade to 1.24.x release
+
+v1.24.0 is a security-hardening release.
+The admission webhooks (with controller-side guards as defence in depth) now reject several primitives that earlier versions silently accepted.
+Functions, packages, environments, and triggers that depend on them will be **rejected at admission** after upgrade, so audit your specs before rolling out.
+
+### Cross-namespace references are rejected
+
+A `Function`, `Package`, or `KubernetesWatchTrigger` that points at a resource in a *different* namespace is now refused:
+
+- `Function.spec.environment.namespace` and `Function.spec.package.packageref.namespace` must equal the function's own namespace (or be empty).
+- `Package.spec.environment.namespace` must equal the package's own namespace (or be empty).
+- `KubernetesWatchTrigger.spec.namespace` must equal the trigger's own namespace (or be empty).
+
+Empty values are unchanged — controllers continue to default them to the object's own namespace.
+This closes a set of confused-deputy advisories where a low-privilege subject could make a cluster-wide controller act against another tenant's namespace.
+
+### `KubernetesWatchTrigger` empty namespace now means "own namespace"
+
+Previously an empty `spec.namespace` meant *watch all namespaces* (client-go's `""` semantics), which was itself a cross-tenant leak.
+It now coerces to the trigger's own namespace.
+If you relied on cluster-wide watch, create one `KubernetesWatchTrigger` per target namespace with `spec.namespace` set explicitly (each must equal the trigger's own namespace).
+
+### Dangerous PodSpec fields are rejected
+
+`Environment` and `Function` now reject a denylist of node-escape primitives in their PodSpec: `hostNetwork`, `hostPID`, `hostIPC`, hostPath volumes, container `privileged` / `allowPrivilegeEscalation`, dangerous Linux capabilities (`SYS_ADMIN`, `NET_ADMIN`, `SYS_PTRACE`, …), and `serviceAccountName` override.
+The `Environment` runtime/builder container `securityContext` is validated the same way.
+Benign customization — `image`, `command`, `args`, `env`, `volumes`, `resources`, `nodeSelector`, and capabilities like `NET_BIND_SERVICE` — flows through unchanged.
+
+`MessageQueueTrigger` goes further: its `spec.podspec` is now reduced to an allowlist of `nodeSelector`, `tolerations`, `affinity`, `runtimeClassName`, and per-container `resources`.
+All other fields are dropped (or rejected by the webhook).
+MQT-referenced Secret values are no longer copied into the connector pod template; they resolve via `secretKeyRef` at pod start instead.
+
+If any of your specs set these fields, remove them (or move the privileged workload out of Fission's tenant-facing CRDs) before upgrading.
+
+### Cross-origin browser requests are denied by default
+
+All Fission HTTP listeners now emit `X-Content-Type-Options: nosniff` and deny cross-origin browser preflights on internal listeners.
+User `HTTPTrigger` traffic is unchanged by default.
+If a single-page app legitimately calls a trigger cross-origin, opt in per trigger with the new `HTTPTrigger.spec.corsConfig` allowlist rather than handling CORS inside the function.
+
+### fission-builder ServiceAccount token no longer mounted
+
+Following the fission-fetcher change in v1.23.0, the `fission-builder` ServiceAccount token is no longer mounted into user builder containers.
+No action is required unless your build commands depended on that token being present.
+
 ## Upgrade to 1.23.x release
 
 v1.23.0 enables HMAC-signed internal authentication between Fission control-plane services by default.

@@ -29,4 +29,5 @@ Create, update and manage time triggers
 * [fission timetrigger list](/docs/reference/fission-cli/fission_timetrigger_list/)	 - List time triggers
 * [fission timetrigger showschedule](/docs/reference/fission-cli/fission_timetrigger_showschedule/)	 - Show schedule for cron spec
 * [fission timetrigger update](/docs/reference/fission-cli/fission_timetrigger_update/)	 - Update a time trigger
+* [fission timetrigger wait](/docs/reference/fission-cli/fission_timetrigger_wait/)	 - Wait for a time trigger to reach a status condition
 

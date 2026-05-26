@@ -1,22 +1,23 @@
 ---
-title: fission function getmeta
-slug: fission_function_getmeta
-url: /docs/reference/fission-cli/fission_function_getmeta/
+title: fission function wait
+slug: fission_function_wait
+url: /docs/reference/fission-cli/fission_function_wait/
 ---
-## fission function getmeta
+## fission function wait
 
-Get function metadata
+Wait for a function to reach a status condition
 
 ```
-fission function getmeta [flags]
+fission function wait [flags]
 ```
 
 ### Options
 
 ```
-      --name string     Function name
-  -o, --output string   -o |:|: Output format: wide, json or yaml (default: table)
-  -h, --help            help for getmeta
+      --name string        Function name
+      --for string         Condition to wait for, e.g. condition=Ready or condition=Ready=False
+      --timeout duration   Maximum time to wait for the condition before giving up (default 1m0s)
+  -h, --help               help for wait
 ```
 
 ### Options inherited from parent commands

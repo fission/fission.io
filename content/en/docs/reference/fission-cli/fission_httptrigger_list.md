@@ -20,6 +20,7 @@ fission httptrigger list [flags]
 ```
       --function string   Name of the function for trigger(s)
   -A, --all-namespaces    -A |:|: Fetch resources from all namespaces
+  -o, --output string     -o |:|: Output format: wide, json or yaml (default: table)
   -h, --help              help for list
 ```
 

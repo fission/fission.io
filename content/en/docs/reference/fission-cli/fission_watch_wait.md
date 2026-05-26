@@ -1,26 +1,23 @@
 ---
-title: fission watch list
-slug: fission_watch_list
-url: /docs/reference/fission-cli/fission_watch_list/
+title: fission watch wait
+slug: fission_watch_wait
+url: /docs/reference/fission-cli/fission_watch_wait/
 ---
-## fission watch list
+## fission watch wait
 
-List kube watchers
-
-### Synopsis
-
-List all kube watchers in a namespace if specified, else, list kube watchers across all namespaces
+Wait for a kube watcher to reach a status condition
 
 ```
-fission watch list [flags]
+fission watch wait [flags]
 ```
 
 ### Options
 
 ```
-  -A, --all-namespaces   -A |:|: Fetch resources from all namespaces
-  -o, --output string    -o |:|: Output format: wide, json or yaml (default: table)
-  -h, --help             help for list
+      --name string        Watch name
+      --for string         Condition to wait for, e.g. condition=Ready or condition=Ready=False
+      --timeout duration   Maximum time to wait for the condition before giving up (default 1m0s)
+  -h, --help               help for wait
 ```
 
 ### Options inherited from parent commands
