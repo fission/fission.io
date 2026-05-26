@@ -71,7 +71,7 @@ weight: <previous_newest - 1>
 
 Section template (copy the most recent release page as the model):
 
-- **Upgrade Notes** — a `{{< notice warning >}}` block, only if there are breaking/behavioral changes. Summarize them as bullets and link to the upgrade-guide anchor (see step 4).
+- **Upgrade Notes** — only if there are breaking/behavioral changes. A short `{{< notice warning >}}` lead-in, then a `### ` subsection per breaking change spelling out *what changed and the action the operator must take*. **This page is the canonical home for the per-release upgrade detail** — don't push it into the upgrade guide (see step 4).
 - **Deprecations/Removals** — Kubernetes-version support statement, removed fields/routes, dropped tokens, etc.
 - **Highlights** — author 3–6 bullets from the PR titles + GHSA/PR bodies. Group the security work; name the user-facing features.
 - **Fixes** — notable bug fixes and the chart-version line.
@@ -80,16 +80,20 @@ Section template (copy the most recent release page as the model):
 - **Full Changelog** — `https://github.com/fission/fission/compare/vPREV...vX.Y.Z`.
 - **References** — upgrade guide, related docs, environments, CRD spec, releases.
 
-### 4. Upgrade-guide notes (breaking changes only)
+### 4. Upgrade-guide pointer (breaking changes only)
 
-In `content/en/docs/installation/upgrade.md`, add `## Upgrade to X.Y.x release` **immediately before the previous version's section** (the file is newest-first under the "latest" block).
-Explain each breaking change and what the operator must do (one sentence per line).
-
-Cross-link the release page's Upgrade Notes to it. Hugo's anchor for `## Upgrade to X.Y.x release` is `upgrade-to-XYx-release` (e.g. `1.24.x` → `upgrade-to-124x-release`):
+Keep `content/en/docs/installation/upgrade.md` **compact** — the per-version detail lives in the release-notes Upgrade Notes (step 3), not here.
+Add a short `## Upgrade to X.Y.x release` section **immediately before the previous version's section** (the file is newest-first under the "latest" block): two or three sentences on the nature of the release, then a link to the release notes for the specifics.
 
 ```markdown
-See the [Upgrade Guide](/docs/installation/upgrade/#upgrade-to-12Yx-release) ...
+## Upgrade to X.Y.x release
+
+vX.Y.0 is a security-hardening release. ... Specs that rely on the rejected primitives will fail admission after upgrade, so review them first.
+
+See the [vX.Y.0 release notes](/docs/releases/vX.Y.Z/#upgrade-notes) for the full list of breaking changes and the action each one requires.
 ```
+
+The release page's Upgrade Notes should link back to the general guide (`/docs/installation/upgrade/`) for the routine CRD/CLI/chart steps. Don't duplicate the breaking-change detail in both places.
 
 ### 5. Reference docs (CLI/CRD), if changed
 
