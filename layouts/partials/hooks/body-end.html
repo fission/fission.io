@@ -9,3 +9,14 @@ docsearch({
 });
 </script>
 {{ end }}
+
+{{/* Homepage: turn the transparent hero navbar solid once the user scrolls. */}}
+<script>
+(function () {
+  var nav = document.querySelector('.td-navbar-home');
+  if (!nav) return;
+  function onScroll() { nav.classList.toggle('scrolled', window.scrollY > 24); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+</script>

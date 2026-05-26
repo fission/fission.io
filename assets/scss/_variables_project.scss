@@ -240,15 +240,67 @@ input[type="search"]::placeholder {
   margin: 20px auto;
 }
 
+// Top navbar — slimmer and cohesive with the hero.
+// Deep-purple bar (not a black slab) that flows into the hero, no seam line below.
 .td-navbar {
+	background: #2a1866 !important;
+	border-bottom: none !important;
+	min-height: 3.25rem !important;
+	padding-top: 0.4rem !important;
+	padding-bottom: 0.4rem !important;
+
+	.navbar-brand img {
+		height: 32px !important;
+	}
+
 	.nav-link {
 		font-weight: normal !important;
-		color: #f4f4f4 !important;
-		border-bottom: 1px solid transparent;
+		color: #e6e2f5 !important;
+		padding-top: 0.4rem;
+		padding-bottom: 0.4rem;
+		border-bottom: 2px solid transparent;
+		transition: color .15s ease, border-color .15s ease;
+
+		i {
+			opacity: .7;
+			margin-right: .4rem;
+			font-size: .9em;
+			transition: opacity .15s ease;
+		}
+
 		&:hover {
 			color: #fff !important;
-			border-bottom: 1px solid #E361FD;
+			border-bottom: 2px solid #E361FD;
+			i { opacity: 1; }
 		}
+
+		&.active {
+			color: #fff !important;
+			border-bottom: 2px solid #E361FD;
+			i { opacity: 1; }
+		}
+	}
+}
+
+// Homepage only: navbar floats transparent over the hero and turns solid on
+// scroll. Limited to >=992px, where the hero has enough top padding (130px) to
+// sit behind the fixed bar without the title being covered. Below that the
+// default solid bar above applies.
+@media (min-width: 992px) {
+	.td-navbar.td-navbar-home {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 1030;
+		background: transparent !important;
+		box-shadow: none !important;
+		transition: background-color .3s ease, box-shadow .3s ease;
+	}
+
+	.td-navbar.td-navbar-home.scrolled {
+		background: #2a1866 !important;
+		box-shadow: 0 2px 14px rgba(20, 8, 60, .35) !important;
 	}
 }
 
