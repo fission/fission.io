@@ -1,12 +1,37 @@
-{{ with .Site.Params.algolia_docsearch }}
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@alpha"></script>
-<script type="text/javascript">
-docsearch({
-  container: '#docsearch',
-  appId: 'MSV5TDX060',
-  indexName: 'fission',
-  apiKey: '301e59c1356fb69977837ee36681babe',
-});
+{{/*
+  Search consistency fix. Docsy's algolia init loops over a fixed list of
+  container ids (#docsearch-0, #docsearch-1) and DocSearch throws when one is
+  absent, aborting the loop. On pages without a sidebar (home, environments,
+  examples, support) only the navbar container exists, so it never initializes
+  and the search box appears only on docs/blog — shifting the top bar between
+  pages. This re-initializes any DocSearch container Docsy left empty so the
+  navbar search shows consistently everywhere.
+*/}}
+{{ with .Site.Params.search.algolia }}
+<script>
+(function () {
+  function initOrphanSearch() {
+    if (typeof docsearch === 'undefined') return;
+    document.querySelectorAll('.td-search--algolia').forEach(function (el) {
+      if (el.children.length) return; // already initialized by Docsy
+      try {
+        docsearch({
+          container: el,
+          appId: {{ .appId | jsonify }},
+          apiKey: {{ .apiKey | jsonify }},
+          indexName: {{ .indexName | jsonify }},
+        });
+      } catch (e) {
+        console.warn('DocSearch init failed for', el, e);
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOrphanSearch);
+  } else {
+    initOrphanSearch();
+  }
+})();
 </script>
 {{ end }}
 
