@@ -1,15 +1,3 @@
-{{ with .Site.Params.algolia_docsearch }}
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@docsearch/js@alpha"></script>
-<script type="text/javascript">
-docsearch({
-  container: '#docsearch',
-  appId: 'MSV5TDX060',
-  indexName: 'fission',
-  apiKey: '301e59c1356fb69977837ee36681babe',
-});
-</script>
-{{ end }}
-
 {{/*
   Search consistency fix. Docsy's algolia init loops over a fixed list of
   container ids (#docsearch-0, #docsearch-1) and DocSearch throws when one is
@@ -33,7 +21,9 @@ docsearch({
           apiKey: {{ .apiKey | jsonify }},
           indexName: {{ .indexName | jsonify }},
         });
-      } catch (e) { /* container not ready; ignore */ }
+      } catch (e) {
+        console.warn('DocSearch init failed for', el, e);
+      }
     });
   }
   if (document.readyState === 'loading') {
