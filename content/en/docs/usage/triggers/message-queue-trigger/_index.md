@@ -5,9 +5,10 @@ weight: 4
 draft: true
 ---
 
-{{% alert title="Note" color="warning" %}}
-Message Queue Trigger with kind Fission is removed from 1.20 release, we suggest using [MQ Trigger with Keda](/docs/usage/triggers/message-queue-trigger-kind-keda/) instead.
-{{% /alert %}}
+{{% notice warning %}}
+This page is legacy.
+The Fission-kind message queue trigger was removed in the 1.20 release — use the [KEDA-based message queue trigger]({{% ref "../message-queue-trigger-kind-keda/_index.md" %}}) instead.
+{{% /notice %}}
 
 ## How Message Queue Trigger Works
 

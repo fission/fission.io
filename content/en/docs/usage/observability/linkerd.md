@@ -3,10 +3,10 @@ title: "Observability with Linkerd"
 weight: 20
 ---
 
-## Oberservability with Linkerd
+## Observability with Linkerd
 
-[Linkerd](https://linkerd.io) is a simple and flexible service mesh which can work out of the box with Fission. 
-In this post, we'll take a look at how it can provide metrics for the functions deployed and for Fission.
+**[Linkerd](https://linkerd.io) is a lightweight service mesh that works out of the box with Fission** and adds request-level metrics to your functions and to Fission itself.
+This guide walks you through meshing function and Fission pods so you can view success rate, request rate, and latency in Linkerd's dashboard.
 
 ### Prerequisites
 

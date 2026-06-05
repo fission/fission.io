@@ -63,7 +63,7 @@ You can also **add a sidecar** to the function container with PodSpec:
 ```yaml
     podspec:
       # A container which will be merged with for pool manager
-      Containers:
+      containers:
       - name: nodep
         image: ghcr.io/fission/node-env
         volumeMounts:

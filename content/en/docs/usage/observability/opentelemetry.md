@@ -5,13 +5,11 @@ weight: 11
 
 ## Tracing in Fission
 
-Up to `1.14.1` release, Fission supports collecting traces to an OpenTracing Jaeger-formatted trace collection endpoint.
-Tracing provides insight into what Fission is doing, and how it is doing it.
-OpenTelemetry provides a new tracing system that is more flexible and powerful.
-As we add support OpenTelemetry, OpenTracing will be marked deprecated and removed. OpenTelemtry is backward compatible with OpenTracing.
+**Tracing gives you a request-level view of how a call flows through Fission's components** — router, executor, function pod — and how long each step takes.
 
-If you are starting fresh with Fission, we recommend using OpenTelemetry.
-This is primarily because OpenTelemetry makes robust, portable telemetry a built-in feature of cloud-native software. OpenTelemetry provides a single set of APIs, libraries, agents, and collector services to capture distributed traces and metrics from your application.
+Fission instruments its components with [OpenTelemetry](https://opentelemetry.io/) and exports spans over OTLP to any compatible backend.
+Earlier releases used OpenTracing/Jaeger directly; that path has been replaced by OpenTelemetry, which is the only tracing system Fission ships today.
+Because OpenTelemetry speaks OTLP, you can still send traces to Jaeger (shown below) or to any vendor that accepts OTLP.
 
 ## OpenTelemetry
 
@@ -21,19 +19,19 @@ It supports a variety of popular open-source projects including Jaeger and Prome
 
 ## Fission Opentelemetry Integration
 
-If you are have OpenTelemetry installed, you can use it to collect traces and metrics from Fission.
+If you have OpenTelemetry installed, you can use it to collect traces and metrics from Fission.
 
-`openTelemetry` section in helm chart will be used to configure OpenTelemetry sdk used by different Fission components.
-Fission chart will pass different environment variables to pod to configure OpenTelemetry based on the configuration.
+The `openTelemetry` section in the Helm chart configures the OpenTelemetry SDK used by the Fission components.
+The chart translates each value into a standard `OTEL_*` environment variable that is injected into every component pod, and these variables are propagated to function pods as well.
 
-| Option | Description |
-| ------ | ----------- |
-| `openTelemetry.otlpCollectorEndpoint` | Collector endpoint for OpenTelemetry |
-| `openTelemetry.otlpInsecure` | Secure endpoint for the collector with true/false |
-| `openTelemetry.otlpHeaders` | Key-value pairs to be used as headers associated with gRPC or HTTP requests |
-| `openTelemetry.tracesSampler` | Sampler for traces |
-| `openTelemetry.tracesSamplingRate` | Argument for sampler|
-| `openTelemetry.propagators` | Propagator to generate trace id header |
+| Helm value | Environment variable | Description |
+| ---------- | -------------------- | ----------- |
+| `openTelemetry.otlpCollectorEndpoint` | `OTEL_EXPORTER_OTLP_ENDPOINT` | Collector endpoint for OpenTelemetry (host:port). Tracing is disabled when this is empty. |
+| `openTelemetry.otlpInsecure` | `OTEL_EXPORTER_OTLP_INSECURE` | `true`/`false`; whether to skip TLS for the collector connection |
+| `openTelemetry.otlpHeaders` | `OTEL_EXPORTER_OTLP_HEADERS` | Comma-separated key-value pairs sent as headers on gRPC/HTTP export requests |
+| `openTelemetry.tracesSampler` | `OTEL_TRACES_SAMPLER` | Sampler for traces |
+| `openTelemetry.tracesSamplingRate` | `OTEL_TRACES_SAMPLER_ARG` | Argument for the sampler |
+| `openTelemetry.propagators` | `OTEL_PROPAGATORS` | Propagator(s) used to generate and read the trace-id header |
 
 If you have not configured collector endpoint, you won't be able to visualize traces.
 Based on sampler configuration, you can observed `trace_id` in Fission component logs.
@@ -179,7 +177,7 @@ spec:
       component: otel-collector
   minReadySeconds: 5
   progressDeadlineSeconds: 120
-  replicas: 1 #TODO - adjust this to your own requirements
+  replicas: 1 # increase for higher trace throughput or collector high availability
   template:
     metadata:
       annotations:

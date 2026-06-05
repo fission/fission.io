@@ -4,9 +4,15 @@ draft: false
 weight: 62
 ---
 
-This tutorial sets up Fission with [Istio](https://istio.io/) - a service mesh for Kubernetes.
-The tutorial was tried on GKE but should work on any equivalent setup.
-We will assume that you already have a Kubernetes cluster setup and working.
+This tutorial sets up Fission with [Istio](https://istio.io/), a service mesh for Kubernetes.
+It was originally tried on GKE but should work on any equivalent setup.
+We assume you already have a working Kubernetes cluster.
+
+{{% notice info %}}
+The command output below was captured on an older Fission and Istio release, so version strings and the exact set of pods will differ on a current install.
+For example, recent Fission releases no longer run a standalone `controller` pod.
+Treat the listings as illustrative of the sidecar-injection behavior rather than exact expected output.
+{{% /notice %}}
 
 #### Set up Istio
 

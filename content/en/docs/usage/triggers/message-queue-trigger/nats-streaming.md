@@ -1,7 +1,13 @@
 ---
 title: "Fission NATS Streaming"
 weight: 2
+draft: true
 ---
+
+{{% notice warning %}}
+This page covers the legacy Fission-kind NATS Streaming trigger, which was removed in the 1.20 release.
+Use the [KEDA-based NATS Streaming trigger]({{% ref "../message-queue-trigger-kind-keda/nats-streaming.md" %}}) instead.
+{{% /notice %}}
 
 {{% notice info %}}
 Fission uses [**NATS Streaming**](https://github.com/nats-io/nats-streaming-server) instead of pure [NATS](https://nats.io/) as the default message queue service.</br>

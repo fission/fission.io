@@ -4,7 +4,8 @@ draft: false
 weight: 2
 ---
 
-This section walks through working with functions, for controlling execution of functions please refer to [Controlling Function Execution]({{% ref "executor.en.md" %}})
+This page walks you through the everyday function workflow: create a function, route HTTP traffic to it, test it, update its code, and inspect it.
+To choose how a function runs and scales, see [Controlling Function Execution]({{% ref "executor.en.md" %}}).
 
 #### Create a function
 
@@ -52,9 +53,12 @@ $ curl http://${FISSION_ROUTER}/hello
 Hello, world!
 ```
 
->> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
+{{% notice info %}}
+To add authentication to your function calls, refer to the [Fission Authentication]({{% ref "/docs/installation/authentication.md" %}}) guide.
+{{% /notice %}}
 
-You can also create a function with executor type "newdeploy" and provide the minimum and maximum number of instances of the function.
+You can also create a function with the `newdeploy` executor type and set the minimum and maximum number of function instances.
+See [Controlling Function Execution]({{% ref "executor.en.md" %}}) for how each executor type scales.
 
 ```bash
 $ fission fn create --name hello2 --code hello.js --env node --minscale 1 --maxscale 5  --executortype newdeploy
@@ -103,19 +107,16 @@ $ curl http://${FISSION_ROUTER}/hello
 Hello, Fission!
 ```
 
->> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
-
 #### Test and debug function
 
-You can run a function using the test command. If the function call succeeds, it will output the function's response:
+You can run a function using the test command.
+If the function call succeeds, it will output the function's response:
 
 ```bash
 $ fission fn test --name hello
 
 Hello, Fission!
 ```
-
->> To add authentication to your function calls, refer to our [Fission Authentication](/docs/installation/authentication) guide.
 
 But if there is an error in the function's execution (it returns HTTP >= 300), then the logs of function execution are displayed:
 

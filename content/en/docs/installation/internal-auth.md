@@ -5,8 +5,8 @@ description: >
   HMAC-signed authentication for Fission's internal control-plane RPCs
 ---
 
-Starting with [v1.23.0](/docs/releases/v1.23.0/), Fission ships **application-layer HMAC authentication** for the internal HTTP channels between its control-plane services.
-This is distinct from the end-user [function-invocation authentication](/docs/installation/authentication/) (JWT, opt-in): internal auth protects in-cluster RPCs and is **enabled by default**.
+Starting with [v1.23.0]({{% ref "../releases/v1.23.0.md" %}}), Fission ships **application-layer HMAC authentication** for the internal HTTP channels between its control-plane services.
+This is distinct from the end-user [function-invocation authentication]({{% ref "authentication.md" %}}) (JWT, opt-in): internal auth protects in-cluster RPCs and is **enabled by default**.
 
 ## What it protects
 
@@ -14,10 +14,10 @@ Five internal channels now require signed requests when `internalAuth.enabled=tr
 
 | Service | Server endpoint(s) | Callers |
 |---|---|---|
-| `storagesvc` | `/v1/archive` | controllers uploading function archives |
-| `fetcher` (per-pod sidecar) | `/fetch`, `/upload`, `/clean`, `/specialize` | buildermgr, executor |
+| `storagesvc` | `/v1/archive` | buildermgr and fetcher uploading function archives |
+| `fetcher` (per-pod sidecar) | `/fetch`, `/specialize`, `/upload` | buildermgr, executor |
 | `builder` (per-pod) | `/build` | buildermgr |
-| `executor` | `/v2/getServiceForFunction`, `/v2/tap`, `/v2/error`, … | router, kubewatcher, timer, mqt-fission-kafka, canaryconfig |
+| `executor` | `/v2/getServiceForFunction`, `/v2/tapService`, `/v2/unTapService`, … | router |
 | `router-internal` (port `8889`) | `/fission-function/<ns>/<name>` | executor, kubewatcher, timer, mqt-fission-kafka |
 
 Each pair derives a per-service key via HKDF from a single chart-managed master secret, so one toggle gates all five channels atomically.
@@ -26,7 +26,7 @@ Each pair derives a per-service key via HKDF from a single chart-managed master 
 
 The router now binds **two listeners**:
 
-- **Public listener** (port `8888`) — serves user `HTTPTrigger` paths, `/router-healthz`, `/_version`, and (when enabled) the JWT-based [function-invocation auth](/docs/installation/authentication/).
+- **Public listener** (port `8888`) — serves user `HTTPTrigger` paths, `/router-healthz`, `/_version`, and (when enabled) the JWT-based [function-invocation auth]({{% ref "authentication.md" %}}).
 - **Internal listener** (port `8889`) — serves `/fission-function/<ns>/<name>` only, gated by `NetworkPolicy` plus HMAC verification.
 
 **`/fission-function/<ns>/<name>` no longer exists on the public listener.** This closes [GHSA-3g33-6vg6-27m8](https://github.com/fission/fission/security/advisories/GHSA-3g33-6vg6-27m8) — previously anyone reachable to the public router URL (e.g. via Ingress) could invoke any function by guessing its name, bypassing all `HTTPTrigger` host/path/method gates.
@@ -44,7 +44,7 @@ helm install fission fission-charts/fission-all -n fission --create-namespace
 
 The chart materialises a `Secret/fission-internal-auth` with an auto-generated 32-byte master key.
 The same value is preserved across `helm upgrade` runs.
-Every controller, executor, router, and dynamically-created builder/function pod mounts the master via environment variable; each signer/verifier pair derives its own per-service key.
+Every Fission control-plane component (storagesvc, executor, router, buildermgr, and the rest) and every dynamically-created builder/function pod mounts the master via environment variable; each signer/verifier pair derives its own per-service key.
 
 ## Bring your own master secret
 
@@ -119,7 +119,7 @@ Operators have two options until signing-aware KEDA images ship:
 ### `ROUTER_INTERNAL_URL`
 
 Services that publish to the router internal listener (`kubewatcher`, `timer`, `mqt-fission-kafka`, `mqt-keda`) now read `ROUTER_INTERNAL_URL`.
-The chart sets it to `http://router.fission.svc:8889` by default.
+The chart sets it to `http://router-internal.<namespace>:<router.internalPort>` (port `8889` by default) using the dedicated `router-internal` Service.
 If you customise the router `Service` name, namespace, or `router.internalPort`, set this env override accordingly.
 
 ## Reference

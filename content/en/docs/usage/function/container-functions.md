@@ -4,10 +4,14 @@ draft: false
 weight: 46
 ---
 
-Note: Support for containers in **alpha**, we plan to improve experience over coming releases.
-Your feedback is most appreciated to improve it.
+{{% notice info %}}
+Support for running containers as functions is in **alpha**.
+We plan to improve the experience over the coming releases, and your feedback is most welcome.
+{{% /notice %}}
 
-With 1.14 release, Fission allows you to run your existing container as a function.
+Fission can run an existing container image as a function using the `container` executor type.
+This is useful when you already have a containerized HTTP service and want to invoke it through Fission's router and triggers.
+For how this executor compares to `poolmgr` and `newdeploy`, see [Controlling Function Execution]({{% ref "executor.en.md" %}}).
 
 #### Running container image with Fission
 
@@ -33,7 +37,9 @@ $ fission fn test --name cn-hello
 Hello Kubernetes!
 ```
 
-We have added `spec.podspec` in Function Spec which captures container function details. Know more about options for running container with Functions,
+The container details live in `spec.podspec` of the Function spec.
+A function with the `container` executor type must include a pod spec; the API server rejects it otherwise.
+To explore the available fields:
 
 ```sh
 kubectl explain functions.spec.podspec
@@ -99,7 +105,11 @@ You can refer it source for the application [here](https://github.com/fission/ex
 
 ### Command options
 
-You can also use alias, `fission fn runc` instead of `fission function run-container` OR
-`fission fn updatec` instead of `fission fn updatec`.
+The CLI provides short aliases: use `fission fn runc` for `fission function run-container`, and `fission fn updatec` for `fission function update-container`.
 
-Please check command help for more options while creating container based functions.
+Run `fission fn run-container --help` to see all options for creating container-based functions.
+
+#### Related
+
+* [Controlling Function Execution]({{% ref "executor.en.md" %}}) — choosing and tuning executor types.
+* [Create a function]({{% ref "functions.en.md" %}}) — the standard source-based function workflow.

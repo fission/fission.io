@@ -2,31 +2,35 @@
 title: "Kubernetes"
 weight: 1
 description: >
-  Troubleshoot your Kubernetes cluster setup 
+  Diagnose cluster-level problems that affect Fission: DNS, kubeconfig, persistent volumes, and autoscaling.
 ---
 
-In this section, we will cover how to troubleshoot the problems related to Kubernetes cluster setup.
+This page covers problems that originate in the Kubernetes cluster rather than in Fission, but which stop Fission from working.
+If `fission check` reports services as unhealthy, or the CLI cannot reach the cluster at all, work through the sections below.
+For Helm, CRD, and webhook problems, see [Troubleshoot your Fission setup]({{% ref "/docs/trouble-shooting/setup/fission.md" %}}).
 
-## Check In-Cluster Dns Service
+## In-cluster DNS
 
-Fission utilizes in-cluster DNS to talk to other components, it's important to ensure that the in-cluster DNS service is available.
+Fission components address each other by Kubernetes service name, so in-cluster DNS must be working.
+A DNS outage typically shows up as components failing to reach each other and `fission check` reporting services as not running.
 
-First, check that we have running DNS pod(s).
+First, confirm the cluster DNS pods are running:
 
 ```bash
-$ kubectl -n kube-system get pod|grep dns
+$ kubectl -n kube-system get pod | grep dns
 coredns-fb8b8dccf-bjxmj                  1/1     Running   1          65m
 ```
 
-Create a pod and use `nslookup` to check availability of DNS service.
+Then resolve a Fission service from inside the cluster.
+Look up the service, then run `nslookup` from a throwaway pod:
 
 ```bash
 $ kubectl -n fission get svc
-NAME                                       TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
-executor                                   ClusterIP      10.103.121.81    <none>        80/TCP         2d
+NAME       TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+executor   ClusterIP   10.103.121.81   <none>        80/TCP    2d
 
-$ kubectl -n fission run busybox --image=busybox --restart=Never --tty -it
-/ # nslookup executor
+$ kubectl -n fission run busybox --image=busybox --restart=Never --rm -it -- \
+    nslookup executor
 Server:   10.96.0.10
 Address:  10.96.0.10:53
 
@@ -34,76 +38,65 @@ Name:     executor.fission.svc.cluster.local
 Address:  10.103.121.81
 ```
 
-The DNS service will return an address which matches the address shown in the previous command.
+The resolved address should match the `CLUSTER-IP` from the previous command.
 
-For more debugging DNS resolution, see [here](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/).
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `fission check` reports services down, but pods are `Running` | In-cluster DNS resolution is broken. | Verify CoreDNS pods are `Running`; run the `nslookup` test above. |
+| Component log shows a lookup failure resolving another service | DNS pods are down or the cluster DNS service is unreachable. | Restore CoreDNS, then re-run `fission check`. |
 
-## KubeConfig for Connecting to Cluster
+For deeper DNS debugging, see the [Kubernetes DNS resolution guide](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/).
 
-Make sure that `~/.kube/config` exists or assign the correct value to `KUBECONFIG`.
+## Connecting to the cluster (kubeconfig)
 
-```bash
-# https://github.com/fission/fission/issues/1133
-Fatal error: Error getting controller pod for port-forwarding
-```
+The Fission CLI talks directly to the Kubernetes API server, so it needs a valid kubeconfig.
+If the CLI cannot connect, it cannot read Fission resources or port-forward to components.
 
-If you run the cluster on cloud provider, follow the platform steps to add token to `~/.kube/config` for connecting kubernetes cluster:
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| CLI cannot reach the cluster | `~/.kube/config` is missing or `KUBECONFIG` is wrong. | Confirm `~/.kube/config` exists or set `KUBECONFIG` to the correct file; verify with `kubectl get nodes`. |
+| `error upgrading connection` during port-forward | The target pod was not found, is restarting, or RBAC denies port-forward. | Check the pod status (`kubectl -n fission get pods`) and your permissions, then retry. |
 
-* GKE: <https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl>
-* AWS: <https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html>
-* Azure: <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough#connect-to-the-cluster>
+If you run a managed cluster, follow your provider's steps to add credentials to `~/.kube/config`:
 
-## Error Upgrading Connection
+- GKE: <https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl>
+- EKS: <https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html>
+- AKS: <https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli#connect-to-the-cluster>
 
-Please check the pod status & log when CLI prompts `error upgrading connection` error.
+## Persistent volumes
 
-```bash
-Fatal error: Error forwarding to port 51204: error upgrading connection:
-unable to upgrade connection: pod not found ("controller-b87cd7857-8n75g_fission")
-```
+The storage service needs a persistent volume when persistence is enabled (the default), unless you use an external object store such as S3.
+Without dynamic provisioning, its PersistentVolumeClaim stays `Pending` and the pod never starts.
 
-## Dynamic Volume Provisioning
-
-Package storage and Prometheus services need persistent volume to store data.
-See [here](https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/) to learn how to set up dynamic volume provisioning.
-And you should be able to list `pvc` and `pv` as follows after setting up.
+After provisioning is configured, you should be able to list bound claims and volumes:
 
 ```bash
 $ kubectl -n fission get pvc
-NAME                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-bald-otter-prometheus-alertmanager   Bound    pvc-733972f7-c2f2-11e9-9a83-025000000001   2Gi        RWO            hostpath       75m
-bald-otter-prometheus-server         Bound    pvc-733cad91-c2f2-11e9-9a83-025000000001   8Gi        RWO            hostpath       75m
-fission-storage-pvc                  Bound    pvc-733ec058-c2f2-11e9-9a83-025000000001   8Gi        RWO            hostpath       75m
-
-$ kubectl -n fission get pv
-NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                        STORAGECLASS   REASON   AGE
-pvc-733972f7-c2f2-11e9-9a83-025000000001   2Gi        RWO            Delete           Bound    fission/bald-otter-prometheus-alertmanager   hostpath                75m
-pvc-733cad91-c2f2-11e9-9a83-025000000001   8Gi        RWO            Delete           Bound    fission/bald-otter-prometheus-server         hostpath                75m
-pvc-733ec058-c2f2-11e9-9a83-025000000001   8Gi        RWO            Delete           Bound    fission/fission-storage-pvc                  hostpath                75m
+NAME                  STATUS   VOLUME       CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+fission-storage-pvc   Bound    pvc-733e...  8Gi        RWO            hostpath       75m
 ```
 
-If the underlying platform the cluster running on doesn't support persistent volume, you can set `helm` variable as follows.
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `storagesvc` pod stuck `Pending` | Its PVC is unbound — no default StorageClass or no dynamic provisioner. | Configure [dynamic provisioning](https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/), or disable persistence (below). |
+
+If the platform cannot provide persistent volumes, disable persistence at install time:
 
 ```bash
-helm install --namespace fission --set persistence.enabled=false .....
+$ helm install fission fission-charts/fission-all --namespace fission \
+    --set persistence.enabled=false
 ```
 
-## Function Doesn't Scale
+## Autoscaling prerequisites
 
-Fission relies on Kubernetes autoscaling mechanism to scale replicas of function when workloads increase.
-To enable it, you have to enable/install the metric server in your cluster.
+Fission scales function replicas through the Kubernetes Horizontal Pod Autoscaler, which needs the metrics server installed and serving metrics.
 
-```bash
-# minikube
-$ minikube addons enable metrics-server
-```
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| Functions do not scale under load | The metrics server is not installed. | Install the [metrics server](https://github.com/kubernetes-sigs/metrics-server); on minikube run `minikube addons enable metrics-server`. |
+| HPA `TARGETS` shows `<unknown>` | The metrics server was just installed and has not collected data yet. | Wait a few minutes; if it persists, verify the metrics server is healthy. |
 
-If you're not running on other platforms, see [metric-server](https://github.com/kubernetes-incubator/metrics-server).
-
-## HPA with Unknown Status
-
-You may see `<unknown>` status as follows.
-It's because it takes some time for metric-server to collect enough information to calculate the right number of replicas after installing metric server.
+An HPA with unknown targets looks like this right after install:
 
 ```bash
 $ kubectl get hpa
@@ -111,4 +104,15 @@ NAME         REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICA
 php-apache   Deployment/php-apache   <unknown>/50%   1         10        1          3m3s
 ```
 
-You can follow this [guide](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/) to verify the metric-server installation.
+Follow the [HPA walkthrough](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/) to verify the metrics server.
+
+{{% notice info %}}
+Message-queue triggers scale through [KEDA](https://keda.sh) (v2.20), not the HPA metrics path.
+If a `mqtrigger` does not scale, confirm KEDA is installed and reconciling its `ScaledObject` — that is separate from the metrics server above.
+{{% /notice %}}
+
+## Related
+
+- [Troubleshooting overview]({{% ref "/docs/trouble-shooting/_index.en.md" %}})
+- [Troubleshoot your Fission setup]({{% ref "/docs/trouble-shooting/setup/fission.md" %}})
+- [Installation guide]({{% ref "/docs/installation/_index.en.md" %}})

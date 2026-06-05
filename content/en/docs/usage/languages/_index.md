@@ -2,70 +2,81 @@
 title: "Languages (Environment)"
 weight: 50
 description: >
-  Tutorial for supported language
+  Supported language runtimes and how environments provide them
 ---
 
-Environments provide a runtime which is used to execute the functions.
+An **environment is the language-specific runtime in which your function executes.**
+
+Every Fission function references exactly one environment.
+The environment supplies a container image with the language runtime, a small web server that loads your code, and (optionally) a builder image that compiles source and fetches dependencies.
+This page lists the runtimes Fission ships, explains the environment interface versions, and links to per-language guides.
 
 ## Supported language images
 
-The following pre-built environments are currently available for use in Fission:
+The following pre-built environments are published to `ghcr.io/fission/<name>` and maintained in the [fission/environments](https://github.com/fission/environments) repository.
+Each environment has a runtime image (`*-env`) and, where dependency building is supported, a builder image (`*-builder`).
 
-| Environment                         | Image                     | Builder Image              | v1  | v2  | v3  |
-|-------------------------------------|---------------------------|----------------------------|-----|-----|-----|
-| NodeJS                              | `ghcr.io/fission/node-env`        | `ghcr.io/fission/node-builder`     | O   | O   | O   |
-| Python 3                            | `ghcr.io/fission/python-env`      | `ghcr.io/fission/python-builder`   | O   | O   | O   |
-| Go                                  | see [here]({{% ref "go.md" %}}#add-the-go-environment-to-your-cluster) for more info | | O   | O   | O   |
-| JVM (Java)                          | `ghcr.io/fission/jvm-env`         | `ghcr.io/fission/jvm-builder`      | O   | O   | O   |
-| Ruby                                | `ghcr.io/fission/ruby-env`        | `ghcr.io/fission/ruby-builder`     | O   | O   | O   |
-| Binary (for executables or scripts) | `ghcr.io/fission/binary-env`      | `ghcr.io/fission/binary-builder`   | O   | O   | O   |
-| PHP 7                               | `ghcr.io/fission/php-env`         | `ghcr.io/fission/php-builder`      | O   | O   | O   |
-| .NET 2.0                            | `ghcr.io/fission/dotnet20-env`    | `ghcr.io/fission/dotnet20-builder` | O   | O   | O   |
-| .NET                                | `ghcr.io/fission/dotnet-env`      | -                          | O   | X   | X   |
-| Perl                                | `ghcr.io/fission/perl-env`        | -                          | O   | X   | X   |
+| Language | Runtime image | Builder image | Guide |
+|----------|---------------|---------------|-------|
+| Node.js | `ghcr.io/fission/node-env` | `ghcr.io/fission/node-builder` | [Node.js]({{% ref "nodejs.md" %}}) |
+| Python | `ghcr.io/fission/python-env` | `ghcr.io/fission/python-builder` | [Python]({{% ref "python.md" %}}) |
+| Go | `ghcr.io/fission/go-env` | `ghcr.io/fission/go-builder` | [Go]({{% ref "go.md" %}}) |
+| Java (JVM) | `ghcr.io/fission/jvm-env` | `ghcr.io/fission/jvm-builder` | [Java]({{% ref "java.md" %}}) |
+| Ruby | `ghcr.io/fission/ruby-env` | `ghcr.io/fission/ruby-builder` | [environments repo](https://github.com/fission/environments/tree/master/ruby) |
+| PHP | `ghcr.io/fission/php-env` | `ghcr.io/fission/php-builder` | [environments repo](https://github.com/fission/environments/tree/master/php7) |
+| Binary / Bash | `ghcr.io/fission/binary-env` | `ghcr.io/fission/binary-builder` | [environments repo](https://github.com/fission/environments/tree/master/binary) |
+| Perl | `ghcr.io/fission/perl-env` | _none_ | [environments repo](https://github.com/fission/environments/tree/master/perl) |
+| .NET | `ghcr.io/fission/dotnet-env` | _none_ | [environments repo](https://github.com/fission/environments/tree/master/dotnet) |
+| .NET Core | `ghcr.io/fission/dotnet20-env` | `ghcr.io/fission/dotnet20-builder` | [environments repo](https://github.com/fission/environments/tree/master/dotnet20) |
+| TensorFlow Serving | `ghcr.io/fission/tensorflow-serving-env` | _none_ | [environments repo](https://github.com/fission/environments/tree/master/tensorflow-serving) |
 
 {{% notice info %}}
-You can get the latest info about the environments at [environment portal](/environments/).
+The [environment portal](/environments/) lists every published image and its available tags, generated from the [fission/environments](https://github.com/fission/environments) repository.
+You can also bring your own runtime by packaging any container that speaks the [Fission environment interface](https://github.com/fission/environments).
 {{% /notice %}}
 
-## Environment Interface Version
+## Environment interface versions
 
-Currently, Fission support three environment interface version: v1, v2 and v3.
+Fission supports three environment interface versions: v1, v2, and v3.
+The interface version controls how your code is loaded and whether builders and pool tuning are available.
 
-- v1
-  - Support loading function from a **single file**. (Mainly for interpreted languages like Python and JavaScript.)
-  - You are **NOT** allowed to specify which entrypoint to load in if there are multiple entrypoint in the file.
+### v1
 
----
+- Loads a function from a **single file**, which suits interpreted languages such as Python and JavaScript.
+- Does **not** let you choose an entrypoint when the file defines several.
 
-- v2 (**Recommend**)
-  - The function code can be placed in a directory or having multiple entry points in a single file.  
-  - **Load function by specific entry point**. (For the v2 interface, the function may not work if no entry point is provided.)
-  - Support downloading necessary dependencies and source code compilation. (Optional)
+### v2 (recommended)
 
----
+- The function code can live in a directory, or a single file can expose multiple entrypoints.
+- **Loads a function by a specific entrypoint**, so you must provide one.
+- Supports downloading dependencies and compiling source through a builder (optional).
 
-- v3 (**Recommend**)
-  - All features in v2 interface.
-  - Pre-warmed pool size adjustment.
+### v3 (recommended)
 
-### Which Interface Version Should I Choose
+- Includes everything in v2.
+- Lets you tune the pre-warmed pool size per environment.
 
-If all source code and dependencies can be put into a single and non-compiled file, v1 interface would be enough.
+### Which interface version should I choose
 
-If the function requires third party dependencies during the runtime or the function is written in compiled language, you should choose v2 interface in order to load function from a directory/binary with specific entry point.
+If all source code and dependencies fit into a single, non-compiled file, the v1 interface is enough.
 
-If you want to adjust size of environment pre-warmed pool, use v3.
+If your function needs third-party dependencies at runtime, or is written in a compiled language, choose v2 so you can load from a directory or binary with a specific entrypoint.
 
-## Using Specific Environment Interface Version
+If you also want to tune the size of the environment's pre-warmed pool, use v3.
 
-```sh
-  # add version option to fission environment create command
-  --version=3
+## Selecting an interface version
+
+Pass the `--version` flag to `fission environment create`:
+
+```bash
+fission environment create --name go \
+  --image ghcr.io/fission/go-env-1.23 \
+  --builder ghcr.io/fission/go-builder-1.23 \
+  --version 3
 ```
 
-For example, to create a go env with version 3 environment interface.
+## Related
 
-```sh
-fission environment create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23  --version 3
-```
+- [Functions]({{% ref "../function/_index.en.md" %}}) — create and invoke functions once an environment exists.
+- [Environment portal](/environments/) — browse every published runtime and builder image.
+- [fission/environments](https://github.com/fission/environments) — build or extend your own runtime.

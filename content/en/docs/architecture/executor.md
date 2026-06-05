@@ -2,124 +2,130 @@
 title: "Executor"
 weight: 3
 description: >
-  Component to spin up function pods
+  Spins up and manages the pods that run your functions
 ---
 
-Executor is the component to spin up function pods for functions.
-When [Router](/docs/architecture/router) receives requests to a function, it checks whether a function service record exists in its cache.
-If cache misses, the function service record was found or expired, it asks Executor to provide a new one.
-Executor then retrieves function information from Kubernetes CRD and invokes one of the executor types to spin up function pods.
-Once the function pods are up, a function service record that contains the address of a service/pod will be returned.
-Router side caching of function service is not applicable in case of poolmanager strategy, instead request directly goes to executor.
+**The executor turns a function reference into a running, network-addressable pod.**
 
-Fission now supports two different executor types:
+When the [router]({{% ref "/docs/architecture/router.md" %}}) needs to serve a function and has no cached address, it calls the executor's `GetServiceForFunction` endpoint.
+The executor reads the `Function` and `Environment` resources from the Kubernetes API, picks the executor type configured on the function, and drives one of three strategies to deliver a ready address.
+It returns a function service record holding the pod or Service address, which the router then uses to forward the request.
 
-* [PoolManager](#poolmanager)
-* [New Deployment](#new-deployment)
+{{% notice info %}}
+The executor is a core component installed by default and served by the `fission-bundle` binary as the `executor` service.
+{{% /notice %}}
 
-These two executor types have different strategies to launch, specialize, and manage pod(s).
-You should choose one of the executor types wisely based on the scenario.
+## Executor types
 
-{{< img "../assets/executor.png" "Fig.1 Executor" "40em" "1" >}}
+Fission ships exactly three executor types, each with its own strategy for launching, specializing, and managing pods.
+You choose one per function based on your latency and cost requirements.
 
-1. Router asks the service address of a function.
-2. Executor retrieves function information from CRD, and invokes one of executor type to get the address. 
-
-## Executor Type
+| Executor type | Strategy | Best for |
+|:--------------|:---------|:---------|
+| `poolmgr` | Specializes a pod from a pre-warmed generic pool | Short-lived functions needing fast cold starts |
+| `newdeploy` | Creates a Deployment, Service, and HPA per function | Functions serving sustained or spiky traffic |
+| `container` | Runs your own prebuilt container image as the function | Custom runtimes packaged as a container image |
 
 ### PoolManager
 
-PoolManager manages **pools of generic containers** and function containers.
+PoolManager (`poolmgr`) maintains pools of generic, "warm" pods per environment.
+It watches `Environment` resources and eagerly creates a pool of generic pods for each one; the pool size is configurable per environment.
+Resource requirements are specified at the environment level and are inherited by specialized function pods.
 
-It watches the environment CRD changes and eagerly creates `generic pools for environments`.
-The pool size of initial "warm" containers can be configured based on user needs.
-**Resource requirements are specified at environment level and are inherited by specialized function pods**.
+On a request, PoolManager picks a generic pod from the pool, relabels it out of the pool, copies the function package in via the in-pod fetcher, and calls the environment container's specialize endpoint to load the function.
+The pod is now specific to that function and serves subsequent requests for it.
+If the function stays idle past its threshold, the pod is reaped and a fresh pod is specialized from the pool on the next request.
 
-The environment container runs in a pod with the `fetcher` container.
-Fetcher is a straightforward utility that downloads a URL sent to it and saves it at a configured location (shared volume).
-
-The implementation chooses a generic pod from the pool, relabels it to "orphan".
-The PoolManager invokes fetcher to copy the function into the pod and hit the specialize endpoint on the environment container.
-This causes the function to be loaded.
-The pod is now specific to that function and is used for subsequent requests for that function.
-If there are no more requests for a certain idle duration, then this pod is cleaned up.
-If a new requests come after the earlier specialized pod was cleaned up, then a new pod is specialised from the pool and used for execution.
-
-PoolManager is great for functions that are **short-living** and requires a **short cold start time** [1].
-
-In previous versions, PoolManager had certain limitations.
-It used to select only one pod per function, which is not suitable if you want to serve more requests in parallel.
-To overcome this limitation, the `concurrency` field is introduced to control the maximum number of concurrent pod specialization(default 5) to serve requests.
-
-[1] The cold start time depends on the package size of the function.
-If it's a snippet of code, the cold start time usually is less than 100ms.
-
-{{< img "../assets/poolmanager.png" "Fig.2 PoolManager" "50em" "1" >}}
-
-1. PoolManager watches environment changes.
-2. It creates/deletes the pool when an environment is created/deleted.
-3. Router asks the service address of a function.
-4. Executor retrieves function information from CRD
-5. Invoke PoolManager to spin up function pod.
-6. PoolManager selects a generic pod from the warm pool.
-7. Specialize the selected generic pod to make it a function pod.
-8. The service address is returned to the Router. In this case, the address is the IP of the pod.
-9. Router redirects requests to the address just returned.
+PoolManager gives fast cold starts because pods are pre-created; for tiny code snippets a cold start is typically well under 100ms (it grows with package size).
+A `concurrency` field (default 500) caps how many pods may serve a single function in parallel, so a function is no longer limited to one pod.
 
 ### New-Deployment
 
-New-Deployment executor (referred to as NewDeploy) creates `a Kubernetes Deployment` along with `a Service and HorizontalPodAutoscaler(HPA)` for function execution.
+The New-Deployment executor (`newdeploy`) creates a Kubernetes Deployment, a Service, and a HorizontalPodAutoscaler for each function.
+The Service load-balances requests across the function's pods, and the HPA scales replicas based on CPU utilization, making this type suitable for functions that handle sustained or spiky traffic.
+Resource requirements can be specified at the function level and override those from the environment.
 
-NewDeploy creates **a Kubernetes Deployment along with a Service and HorizontalPodAutoscaler(HPA)** for function execution and make it suitable for functions that handle massive traffic.
+The fetcher in a `newdeploy` pod self-specializes at pod startup: it downloads the package and loads the function as the pod comes up, rather than waiting for a separate specialize call.
 
-This enables autoscaling of function pods and load balancing the requests between pods.
-**Resource requirements can be specified at the function level and these requirements override those specified in the environment.**
+This raises cold-start latency relative to `poolmgr`, but you can trade that away by setting a minimum scale greater than zero.
+A non-zero `minscale` keeps that many pods ready at all times, so invocations incur no specialization delay and idle pods are not reaped.
 
-NewDeploy will scale the replicas of a function deployment to the minimum feasible scale setting, if the minimum scale setting of a function is greater than 0.
-The 'fetcher' inside the pod uses a URL in the JSON payload, which is attached as a parameter to start fetcher, to download the function package instead of waiting for calls from NewDeploy.
+### Container
 
-When a function experiences a traffic spike, the service helps to distribute the requests to pods belonging to the function for better workload distribution and lower latency.
-Also, the HPA scales the replicas of the deployment based on the conditions set by the user.
-If there are no requests for certain duration then the idle pods are cleaned up.
+The container executor (`container`) runs a prebuilt container image you supply as the function, instead of specializing a generic environment pod.
+It creates a Deployment, Service, and HPA like `newdeploy`, but the pod runs your image directly with no fetcher or environment specialization step.
+A function using this type must provide a pod spec; the API server enforces that with a CEL validation rule.
 
-This approach though increases the cold time of a function, but also makes NewDeploy suitable for functions designed to **serve massive traffic**.
+## Cold-start flow
 
-For requests where latency requirements are stringent, a minscale greater than zero can be set.
-This essentially keeps a minscale number of pods ready when you create a function.
-When the function is invoked, there is no delay since the pod is already created.
-Also minscale ensures that the pods are not cleaned up even if the function is idle.
-This is great for functions where lower latency is more important than saving resource consumption when functions are idle.
+This is the path the first request to an unwarmed function takes through a `poolmgr` environment.
 
-{{< img "../assets/newdeploy.png" "Fig.3 NewDeploy" "50em" "1" >}}
+```mermaid
+sequenceDiagram
+  participant Router
+  participant Executor
+  participant PoolMgr as PoolManager
+  participant K8s as Kubernetes API
+  participant Fetcher
+  participant Env as Env Container
+  Router->>Executor: GetServiceForFunction
+  Executor->>PoolMgr: GetFuncSvc (read Function + Environment)
+  PoolMgr->>K8s: select warm pod from pool, relabel
+  PoolMgr->>Fetcher: copy function package into pod
+  Fetcher->>Env: POST /specialize (load function)
+  Env-->>PoolMgr: specialized, ready
+  PoolMgr-->>Executor: function service record (pod address)
+  Executor-->>Router: ready address
+```
 
-1. Router asks the service address of a function.
-2. Executor retrieves function information from CRD
-3. Invoke NewDeploy to spin up function pods.
-4. NewDeploy creates three Kubernetes resources: Deployment, Service, HPA.
-5. The Service's address is returned to the Router.
-6. Router redirects requests to the address just returned.
-7. Service load balance requests to pods.
+## Reconcilers, self-healing, and cleanup
+
+In {{< release-version >}} the executor's controllers were consolidated onto controller-runtime reconcilers (RFC-0004), collapsing the previous nine reconcilers down to three.
+
+- **Single Function reconciler.**
+One Function-centric reconciler resolves each function's executor type and dispatches create, update, and delete to the owning type.
+It uses `.For(Function)` plus `.Watches(...)` to react to a function's real dependencies (Environment, ConfigMap, Secret, and the Deployment, Service, and HPA it manages) instead of running separate per-type reconcilers.
+- **Self-healing workloads.**
+Owner-reference garbage collection cannot cross namespaces, and a function's workloads often live in a namespace distinct from the `Function` resource.
+The reconciler therefore watches its managed objects via function-identifying labels and recreates any backing object that is deleted out of band.
+- **Cleanup finalizers.**
+A `fission.io/function-cleanup` finalizer ensures the executor tears down a function's workloads through the owning type's delete path **before** the `Function` resource is collected, closing a long-standing leak where a missed delete event could orphan cross-namespace workloads.
+The finalizer is gated by the chart-wide `finalizerEnabled` toggle (default on); turning it off drains any existing finalizer safely.
 
 ## The latency vs. idle-cost tradeoff
 
-The executors allow you as a user to decide between latency and a small idle cost trade-off.
-Depending on the need you can choose one of the combinations which is optimal for your use case.
-In future, a more intelligent dispatch mechanism will enable more complex combinations of executors.
+The executors let you trade request latency against the cost of keeping pods warm.
+Pick the combination that fits your workload.
 
-| Executor Type | Min Scale | Latency | Idle cost                                      |
-|:--------------|:---------:|:-------:|:-----------------------------------------------|
-| Newdeploy     | 0         | High    | Very low, pods get cleaned up after idle time  |
-| Newdeploy     | > 0       | Low     | Medium, min scale number of pods are always up |
-| Poolmgr       | 0         | Low     | Low, pool of pods are always up                |
+| Executor type | Min scale | Latency | Idle cost |
+|:--------------|:---------:|:-------:|:----------|
+| `newdeploy` | 0 | High | Very low; pods are reaped after the idle threshold |
+| `newdeploy` | > 0 | Low | Medium; min-scale pods stay up |
+| `poolmgr` | 0 | Low | Low; a pool of generic pods stays warm |
 
 ## Autoscaling
 
-The new deployment based executor provides autoscaling for functions based on CPU usage.
-In future custom metrics will be also supported for scaling the functions.
-You can set the initial and maximum CPU for a function and target CPU at which autoscaling will be triggered.
-Autoscaling is useful for workloads where you expect intermittent spikes in workloads.
-It also enables optimal the usage of resources to execute functions, by using a baseline capacity with minimum scale and ability to burst up to maximum scale based on spikes in demand.
+The `newdeploy` and `container` executors autoscale function pods via a HorizontalPodAutoscaler driven by CPU usage.
+You set the minimum and maximum scale and the target CPU percentage at which scaling triggers.
+This is useful for workloads with intermittent spikes: a baseline of `minscale` pods absorbs steady load while the HPA bursts up to `maxscale` on demand, then scales back down.
+
+## Configuration knobs
+
+You set executor deployment options through the Helm chart's `executor` values (`charts/fission-all/values.yaml`):
+
+| Value | Default | Purpose |
+|:------|:--------|:--------|
+| `executor.replicas` | `1` | Number of executor pods. |
+| `executor.podDisruptionBudget.enabled` | `false` | Protect executor availability during voluntary disruptions; only meaningful with `replicas > 1`. |
+| `finalizerEnabled` | `true` | Chart-wide toggle for the function-cleanup finalizer. |
 
 {{% notice info %}}
-Refer to our documentation on [Controlling Function Execution]({{% ref "../usage/function/executor.en.md" %}}) to learn more about **executor type**.
+Run more than one executor replica only with leader election enabled.
+See [Controlling Function Execution]({{% ref "../usage/function/executor.en.md" %}}) to learn how to choose and tune an executor type per function.
 {{% /notice %}}
+
+## Related
+
+- [Router]({{% ref "/docs/architecture/router.md" %}}) - asks the executor for function service addresses.
+- [Function Pod]({{% ref "/docs/architecture/function-pod.md" %}}) - the pod anatomy and specialization flow the executor drives.
+- [Environments]({{% ref "../usage/function/environments.en.md" %}}) - define the runtimes that PoolManager pre-warms.

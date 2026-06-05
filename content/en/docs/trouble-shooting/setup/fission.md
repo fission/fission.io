@@ -2,162 +2,115 @@
 title: "Troubleshoot Fission Setup"
 weight: 2
 description: >
-  Troubleshoot your Fission setup 
+  Diagnose and fix problems installing or upgrading Fission: Helm, CRDs, and the admission webhook.
 ---
 
-In this section, we will cover how to troubleshoot your functions and collect information to troubleshoot problems related to Fission.
+This page covers problems that surface while installing or upgrading Fission itself with Helm — failed releases, CRD mismatches, and admission-webhook certificate errors.
+For problems with a running function, build, or trigger, see [Troubleshooting]({{% ref "/docs/trouble-shooting/_index.en.md" %}}).
+For cluster-level problems (DNS, kubeconfig, volumes), see [Troubleshoot your Kubernetes cluster]({{% ref "/docs/trouble-shooting/setup/kubernetes.md" %}}).
 
-### Fission Services Check
+## First, confirm the install is healthy
 
-From v1.16.0, Fission CLI supports environment check that allows you to check the status of Kubernetes environment and Fission services with a single `check` command.
-
-Check the status of Kubernetes cluster before installing Fission
-
-```bash
-$ fission check --pre
-
-kubernetes
---------------------
-√ kubernetes version is compatible
-
-```
-
-After Fission is installed, check if all the Fission services are running and healthy
+After a Helm install or upgrade, run the health check before debugging anything else:
 
 ```bash
 $ fission check
-
-fission-services
---------------------
-√ controller is running fine
-√ executor is running fine
-√ router is running fine
-× storagesvc deployment is not running
-
-fission-version
---------------------
-√ fission is up-to-date
-
 ```
 
-*The above output shows when any of the Fission services is not running as expected.*
+If every service reports *running fine* and Fission is *up-to-date*, your control plane is healthy and the problem is likely in a function, package, or trigger rather than the install.
 
-Refer to the following sections for further analysis.
-
-### Check Pods Status and Logs
-
-If the Fission installation doesn't work for you, you can follow guides below to troubleshoot.
-
-#### Core Components
-
-All core component should stay in `RUNNING` state.
-If the pod is not in RUNNING state or the `RESTARTS` counts keep increasing, you can get some useful information with commands.
-
-In most cases, `Events` shows common errors like wrong image name, and can help you to locate common problems.
+If a service is missing or restarting, inspect its pod:
 
 ```bash
-$ kubectl -n fission describe pod -f <pod>
+$ kubectl -n fission get pods
+$ kubectl -n fission describe pod <pod>
+$ kubectl -n fission logs <pod>
 ```
 
-If Events doesn't provide any information, you then need to dump component logs
+{{% notice info %}}
+Fission's CRDs are versioned with the `fission.io/v1` API group and are installed and upgraded **separately from the Helm chart**.
+The chart does not update CRDs on `helm upgrade`, so a large share of upgrade problems trace back to a CRD that was never updated to match the new server.
+See [CRD upgrade issues](#crd-upgrade-issues) below.
+{{% /notice %}}
+
+## Helm install issues
+
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `helm install` fails with "namespace not found" | The target namespace does not exist; the chart does not create it. | Create it first: `kubectl create namespace fission`, then install into it. |
+| `helm install` fails because CRDs are missing | Fission CRDs were never applied; the chart expects them to already exist. | Apply the CRDs before installing the chart (see below), then re-run `helm install`. |
+| Release already exists | A previous install (possibly failed) left a release of the same name. | `helm list -n fission` to find it, then `helm uninstall <name> -n fission` or `helm upgrade` instead. |
+| Pods stuck `Pending` | No schedulable nodes or unsatisfiable resource requests. | `kubectl -n fission describe pod <pod>` and read `Events`; add capacity or lower requests. |
+| `storagesvc` stuck `Pending`, PVC unbound | No default StorageClass / no dynamic provisioning. | Provision storage, or disable persistence — see [Dynamic Volume Provisioning]({{% ref "/docs/trouble-shooting/setup/kubernetes.md" %}}). |
+
+The supported install sequence creates the namespace, applies the CRDs, then installs the chart:
 
 ```bash
-$ kubectl -n fission logs -f <pod>
+$ export FISSION_NAMESPACE="fission"
+$ kubectl create namespace $FISSION_NAMESPACE
+$ kubectl create -k "github.com/fission/fission/crds/v1?ref={{< release-version >}}"
+$ helm install fission fission-charts/fission-all --namespace $FISSION_NAMESPACE \
+    --version {{< chart-version >}}
 ```
 
-For example, here is log from executor which shows that in-Cluster DNS problem (port 53).
+{{% notice info %}}
+Fission requires Kubernetes 1.32 or newer.
+If `fission check --pre` reports the Kubernetes version is not compatible, upgrade the cluster before installing.
+{{% /notice %}}
+
+See the full [installation guide]({{% ref "/docs/installation/_index.en.md" %}}) for prerequisites and options.
+
+## CRD upgrade issues
+
+CRDs are applied with `kubectl` against `github.com/fission/fission/crds/v1` and are **not** touched by `helm upgrade`.
+When you upgrade Fission, update the CRDs to the matching version in the same step.
+
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| New fields rejected on `fission ... create`/`apply` after upgrade | CRDs are older than the upgraded server and lack the new schema. | Update the CRDs to the new version (`kubectl replace`, below), then retry. |
+| `helm upgrade` succeeded but new behaviour is missing | CRDs were not updated, so new validation/status fields are absent. | Apply the CRDs for the target version. |
+| `CustomResourceDefinition ... already exists` on `kubectl create` | CRDs were previously installed. | Use `kubectl replace` instead of `kubectl create`. |
+
+Update CRDs to the version you are upgrading to:
 
 ```bash
-error posting to getting service for function: Post http://executor.fission/v2/getServiceForFunction:
-dial tcp: lookup executor.fission on 127.0.0.53:53: read udp 127.0.0.1:59676->127.0.0.53:53: read: connection refused
+$ kubectl replace -k "github.com/fission/fission/crds/v1?ref={{< release-version >}}"
 ```
 
-#### Function Pods
+{{% notice info %}}
+In {{< release-version >}}, the CRDs carry status subresources with conditions, and the API server enforces CEL (Common Expression Language) validation rules — for example, executor-type and scale constraints.
+Some validations that previously lived in admission webhooks (HTTPTrigger, TimeTrigger, and CanaryConfig) now run as CEL rules in the CRDs, so keeping CRDs in sync with the server is more important than before.
+{{% /notice %}}
 
-A function pod consists with two containers: `Fetcher` and `Runtime`.
-Fetcher fetches user function into function pod during specialization stage.
-Runtime is a container contains necessary language environment to run user function.
+Follow the [upgrade guide]({{% ref "/docs/installation/upgrade.md" %}}) for version-specific notes before upgrading.
 
-You can filter out function pods you're interesting in and dump logs as follows.
+## Webhook certificate issues
+
+Fission ships an admission webhook that validates Function, Package, Environment, KubernetesWatchTrigger, and MessageQueueTrigger resources.
+Its `failurePolicy` is `Fail`, so when the API server cannot reach the webhook — or the TLS handshake fails — the API server **rejects** creates and updates of those resources.
+
+By default the chart generates a self-signed CA and serving certificate for the webhook.
+You can instead supply your own certificate material (`webhook.caBundlePEM`, `webhook.crtPEM`, `webhook.keyPEM`) or let cert-manager issue it (`webhook.certManager.enabled`).
+
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `create`/`update` of a function, package, or environment fails with a webhook / x509 / certificate error | The CA bundle on the webhook configuration no longer matches the serving certificate the webhook pod presents. | Reinstall or upgrade the chart so the CA bundle and serving cert are regenerated together, or supply matching `webhook.caBundlePEM`/`crtPEM`/`keyPEM` values. |
+| `create`/`update` hangs then fails with "connection refused" / "context deadline exceeded" to the webhook service | The webhook pod is not running or not ready; with `failurePolicy: Fail` the request is denied. | `kubectl -n fission get pods -l svc=webhook-service` and `kubectl -n fission logs <webhook-pod>`; restore the pod, then retry. |
+| `webhook.certManager.enabled=true` but requests still fail | cert-manager is not installed or has not issued the `Certificate` yet. | Confirm cert-manager is running and the webhook `Certificate` is `Ready` before relying on it. |
+
+Confirm the webhook is healthy:
 
 ```bash
-$ kubectl get pod -l functionName=<fn-name>
+$ kubectl -n fission get pods -l svc=webhook-service
+$ kubectl -n fission logs <webhook-pod>
+$ fission check
 ```
 
-You can also add additional labels to filter out pods.
-Here are some labels you can use.
+A healthy `fission check` reports `webhook is running fine`.
 
-| Label           | Possible Value    | Example                |
-|-----------------|-------------------|------------------------|
-| environmentName | environment name  | environmentName=go     |
-| functionName    | function name     | functionName=hello     |
-| executorType    | poolmgr/newdeploy | executorType=newdeploy |
+## Related
 
-If you also want to filter out function pod in specific state like `RUNNING`, try:
-
-```bash
-$ kubectl get pod -l functionName=<fn-name> \
-    --field-selector status.phase=Running
-```
-
-Dump logs from containers:
-
-```bash
-$ kubectl describe pod -f <pod>
-$ kubectl logs -f <pod> -c <container>
-```
-
-#### Builder Pods
-
-The builder pods is similar to function pod but for building user function source code into a deployable package.
-
-```bash
-$ fission pkg create --env go --src go.zip
-Package 'go-zip-5obh' created
-
-$ fission pkg list
-NAME          BUILD_STATUS ENV
-go-zip-5obh   running      go
-```
-
-Your function won't work until the package function used turns into `succeeded` state.
-If a package shows state other than succeeded you can retrieve build logs with commands as follows. 
-
-```bash
-$ fission pkg list
-NAME          BUILD_STATUS ENV
-go-zip-a7ns   failed       go
-
-$ fission pkg info --name go-zip-a7ns
-Name:        go-zip-a7ns
-Environment: go
-Status:      failed
-Build Logs:
-Error building deployment package: Internal error - {"artifactFilename":"go-zip-a7ns-tu8wfl-bkkmcd",
-"buildLogs":"Building in directory /usr/src/go-zip-a7ns-tu8wfl\n++ basename /packages/go-zip-a7ns-tu8wfl\n+ 
-srcDir=/usr/src/go-zip-a7ns-tu8wfl\n+ trap 'rm -rf /usr/src/go-zip-a7ns-tu8wfl' EXIT\n+ '[' -d /packages/go-zip-a7ns-tu8wfl ']'
-\n+ echo 'Building in directory /usr/src/go-zip-a7ns-tu8wfl'\n+ ln -sf /packages/go-zip-a7ns-tu8wfl 
-/usr/src/go-zip-a7ns-tu8wfl\n+ cd /usr/src/go-zip-a7ns-tu8wfl\n+ '[' -f go.mod ']'\n+ '[' '!' -z 1.12.7 ']'\n+ 
-version_ge 1.12.7 1.12\n++ head -n 1\n++ sort -rV\n++ tr ' ' '\\n'\n++ echo 1.12.7 1.12\n+ test 1.12.7 == 1.12.7\n+ 
-go mod download\n+ go build -buildmode=plugin -i -o /packages/go-zip-a7ns-tu8wfl-bkkmcd .\n# 
-github.com/fission/fission/examples/go/go-module-example\n./main.go:4:2: imported and not used: 
-\"fmt\"\n+ rm -rf /usr/src/go-zip-a7ns-tu8wfl\nerror building source package: error waiting for cmd \"build\": exit status 2\n"}
-```
-
-To dump builder logs, you can do:
-
-```bash
-$ kubectl get pod -l envName=<env-name>
-$ kubectl describe pod -f <pod>
-$ kubectl logs -f <pod> -c <container>
-```
-
-### Dump Logs for Further Help
-
-If steps above cannot help you to solve the problem, you can run `support` command to dump logs.
-
-```bash
-$ fission support dump
-```
-
-Then, you can open issue on [GitHub](https://github.com/fission/fission/issues) and upload the dump file for others to help.
+- [Troubleshooting overview]({{% ref "/docs/trouble-shooting/_index.en.md" %}})
+- [Troubleshoot your Kubernetes cluster]({{% ref "/docs/trouble-shooting/setup/kubernetes.md" %}})
+- [Installation guide]({{% ref "/docs/installation/_index.en.md" %}})
+- [Upgrade guide]({{% ref "/docs/installation/upgrade.md" %}})

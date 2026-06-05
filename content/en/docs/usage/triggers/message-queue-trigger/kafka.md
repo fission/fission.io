@@ -1,9 +1,14 @@
 ---
 title: "Fission Kafka"
 description: "MQTrigger based for Kafka with kind Fission"
-draft: false
+draft: true
 weight: 77
 ---
+
+{{% notice warning %}}
+This page covers the legacy Fission-kind Kafka trigger, which was removed in the 1.20 release.
+Use the [KEDA-based Kafka trigger]({{% ref "../message-queue-trigger-kind-keda/kafka.md" %}}) instead.
+{{% /notice %}}
 
 This tutorial will demonstrate how to use a Kafka trigger to invoke a function.
 We'll assume you have Fission and Kubernetes installed with Kafka MQ integration installed.

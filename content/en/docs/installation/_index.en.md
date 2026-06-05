@@ -1,7 +1,7 @@
 ---
 title: "Installing Fission"
 linkTitle: Installation
-weight: 1
+weight: 4
 description: >
   Installation guide for Fission installation
 ---
@@ -16,9 +16,10 @@ If you already have Helm, [skip ahead to the fission install](#install-fission).
 
 If you don't have a Kubernetes cluster, [here's a official guide to set one up](https://kubernetes.io/docs/setup/).
 
-{{< notice info >}}
-Fission requires Kubernetes 1.27 or higher
-{{< /notice >}}
+{{% notice info %}}
+Fission {{< release-version >}} requires Kubernetes **1.32 or higher**.
+The Helm chart enforces this through its `kubeVersion` constraint and the runtime `fission check` floor.
+{{% /notice %}}
 
 ### Kubectl
 
@@ -38,51 +39,48 @@ If you cannot use Helm, there is an alternative installation method possible; se
 
 To install helm, first you'll need the helm CLI. Visit [here](https://helm.sh/docs/intro/install/) to see how to install it.
 
-{{< notice info >}}
-Helm v2 is deprecated, Fission can be installed via Helm v3.
-You can skip the following and head over [Fission installation](#install-fission) if you're using Helm **v3**.
-{{< /notice >}}
+{{% notice info %}}
+Fission is installed with Helm **v3**.
+If you already have Helm v3, skip ahead to [Install Fission](#install-fission).
+{{% /notice %}}
 
 ## Install Fission
 
-{{< notice warning >}}
-With 1.20.3 release, support for architecture `armv7` has been removed. Now Fission supports `arm64` and `amd64` architectures only.
-{{< /notice >}}
+{{% notice warning %}}
+Fission supports the `arm64` and `amd64` architectures only.
+Support for `armv7` was removed in the 1.20.3 release.
+{{% /notice %}}
 
 ### With Helm
 
-{{< notice warning >}}
-With 1.15 release, `fission-core` is removed. Please use `fission-all` chart for migration.
+{{% notice warning %}}
+The `fission-core` chart was removed in the 1.15 release; use the `fission-all` chart instead.
+See the [1.15 release notes]({{% ref "../releases/v1.15.0.md" %}}) for details, and the [Upgrade Guide]({{% ref "upgrade.md" %}}) if you are upgrading.
+{{% /notice %}}
 
-Refer [1.15 release notes]({{< ref "v1.15.0.md" >}}) for more details.
+{{% notice warning %}}
+Since the 1.18 release, Fission watches functions created in the `defaultNamespace` Helm chart value.
+To watch additional namespaces, list them in the `additionalFissionNamespaces` Helm chart value.
+See the [1.18 release notes]({{% ref "../releases/v1.18.0.md" %}}) for details.
+{{% /notice %}}
 
-If you are upgrading Fission, do check [upgrade guide]({{< ref "upgrade.md" >}})
-{{< /notice >}}
+{{% notice warning %}}
+The `builderNamespace` and `functionNamespace` parameters are deprecated and will be removed in a future Fission release.
+{{% /notice %}}
 
-{{< notice warning >}}
-With 1.18 release, fission watches functions created in `defaultNamespace` mentioned helm chart value. If you want to watch additional namespaces, you can mention them via `additionalFissionNamespaces` helm chart value.
+{{% notice info %}}
+`serviceType` and `routerServiceType` can be `NodePort` or `LoadBalancer` for external access to Fission in the steps below.
+Use `ClusterIP` if you only need to reach Fission from within the cluster.
 
-Refer [1.18 release notes]({{< ref "v1.18.0.md" >}}) for more details.
-{{< /notice >}}
-
-{{< notice warning >}}
-`builderNamespace` and `functionNamespace` parameters are deprecated and will be removed in future fission releases.
-`disableOwnerReference` flag is temporary addition and would be removed in future fission releases.
-{{< /notice >}}
-
-{{< notice info>}}
-serviceType, routerServiceType can be `NodePort` or `LoadBalancer` for external access to Fission in below steps.
-You can use `ClusterIP` if you want to access Fission from within the cluster.
-
-See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). 
-To see all configurable options with detailed comments:
+See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing).
+To list all configurable options with detailed comments:
 
 ```shell
 helm show values fission-charts/fission-all
 ```
 
-Checkout [Fission on ArtifactHub](https://artifacthub.io/packages/helm/fission-charts/fission-all) for chart supported values.
-{{< /notice >}}
+See [Fission on ArtifactHub](https://artifacthub.io/packages/helm/fission-charts/fission-all) for the supported chart values.
+{{% /notice %}}
 
 {{< tabs "fission-install" >}}
 {{< tab "GKE, AKS, EKS" >}}
@@ -138,7 +136,7 @@ helm repo update
 helm install --version {{% chart-version %}} --namespace $FISSION_NAMESPACE fission \
     --set logger.enableSecurityContext=true \
     fission-charts/fission-all
-``````
+```
 
 {{< /tab >}}
 {{< /tabs >}}
@@ -188,7 +186,7 @@ kubectl create -k "github.com/fission/fission/crds/v1?ref={{% release-version %}
 export FISSION_NAMESPACE="fission"
 kubectl create namespace $FISSION_NAMESPACE
 kubectl config set-context --current --namespace=$FISSION_NAMESPACE
-kubectl apply -f https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-core-{{% release-version %}}-openshift.yaml
+kubectl apply -f https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-all-{{% release-version %}}-openshift.yaml
 kubectl config set-context --current --namespace=default #to change context to default namespace after installation
 ```
 
@@ -199,10 +197,19 @@ kubectl config set-context --current --namespace=default #to change context to d
 
 Fission CLI helps you to operate Fission. Checkout [Fission CLI reference]({{< ref "fission-cli" >}}) for more.
 
+{{% notice info %}}
+Pick the asset that matches your CPU architecture: use `arm64` on Apple Silicon Macs and ARM Linux, `amd64` on Intel/AMD.
+{{% /notice %}}
+
 {{< tabs "fission-cli-install" >}}
 {{< tab "MacOS" >}}
 
 ```bash
+# Apple Silicon (M1/M2/M3)
+curl -Lo fission https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-{{% release-version %}}-darwin-arm64 \
+    && chmod +x fission && sudo mv fission /usr/local/bin/
+
+# Intel
 curl -Lo fission https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-{{% release-version %}}-darwin-amd64 \
     && chmod +x fission && sudo mv fission /usr/local/bin/
 ```
@@ -211,7 +218,12 @@ curl -Lo fission https://github.com/fission/fission/releases/download/{{% releas
 {{< tab "Linux" >}}
 
 ```bash
+# amd64
 curl -Lo fission https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-{{% release-version %}}-linux-amd64 \
+    && chmod +x fission && sudo mv fission /usr/local/bin/
+
+# arm64
+curl -Lo fission https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-{{% release-version %}}-linux-arm64 \
     && chmod +x fission && sudo mv fission /usr/local/bin/
 ```
 
@@ -270,7 +282,7 @@ fission-version
 {{% notice info %}}
 If you have enabled authentication while installing fission, mentioned above commands won't show proper result. You need to generate token to make it work.
 
-See [How to generate auth token](https://fission.io/docs/installation/authentication/#generating-auth-token), if authentication is enabled.
+See [How to generate auth token]({{% ref "authentication.md" %}}#generating-auth-token), if authentication is enabled.
 {{% /notice %}}
 
 ## Run an example

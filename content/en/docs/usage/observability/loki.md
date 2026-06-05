@@ -5,9 +5,10 @@ weight: 20
 
 ## Logs in Fission
 
-Fission has a few core services running and these core services handle user functions. The logs from both are useful in debugging the functions.
+**Both Fission's core services and your function pods emit logs**, and aggregating them makes debugging far easier.
 
-A good log monitoring solution can be useful to make full use of these logs.
+Fission runs several core components that route, build, and execute your functions.
+The logs from the components and from the function pods together tell the full story of a request, so a good log-aggregation backend is worth setting up.
 
 ## Grafana Loki
 
@@ -148,8 +149,8 @@ EOF
 $ helm upgrade -n monitoring --install promtail grafana/promtail -f promtail-config.yaml
 ```
 
-This will install Prom in the `monitoring` namespace!
-Check if there're is a promtail pod running.
+This will install Promtail in the `monitoring` namespace.
+Check that a Promtail pod is running.
 
 We can access the Promtail UI at `localhost:3101` to see all of the pods logs being tailed along with the labels assigned to them.
 ```bash

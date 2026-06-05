@@ -5,8 +5,8 @@ weight: 10
 
 ## Metrics in Fission
 
-Fission exposes metrics in the Prometheus standard, which can be readily scraped and used using a Prometheus server and visualized using Grafana.
-The metrics help monitor the state of the Functions as well as the Fission components.
+**Fission exposes Prometheus-format metrics from every component and function pod**, which a Prometheus server scrapes and Grafana visualizes.
+These metrics let you monitor the health of both your functions and the Fission components themselves — call counts, error rates, cold starts, and request overhead.
 
 ### Prometheus
 
@@ -122,13 +122,13 @@ Calls for a specific function can be queried using
 fission_function_calls_total{name="foo"}
 ```
 
-To track the duration of a specific function
+To track the router-side overhead Fission adds to a specific function
 
 ```text
-fission_function_duration_seconds{name="hello"}
+fission_function_overhead_seconds{name="hello"}
 ```
 
-There are a few more Fission metrics available which are listed in [Metrics Reference](/docs/reference/metrics-reference)
+There are a few more Fission metrics available which are listed in [Metrics Reference](/docs/reference/metrics-reference).
 
 ## Fission Dashboard
 

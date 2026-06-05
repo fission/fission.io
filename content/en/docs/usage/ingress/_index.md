@@ -116,7 +116,14 @@ We will create a route with `createingress` flag enabled:
 ```bash
 $ fission route create --url /hello --function hello --createingress --ingressannotation "kubernetes.io/ingress.class=nginx"
 trigger '301b3cb0-5ac1-4211-a1ed-2b0ad9143e34' created
+```
 
+{{% notice info %}}
+The `kubernetes.io/ingress.class` annotation is deprecated in modern Kubernetes in favor of the `spec.ingressClassName` field on the Ingress resource and a corresponding `IngressClass` object.
+Most controllers still honor the annotation for backward compatibility, but check your controller's documentation — for the NGINX controller you can instead create an `IngressClass` named `nginx` and rely on it as the cluster default.
+{{% /notice %}}
+
+```bash
 $ fission route list
 NAME                                 METHOD HOST URL     INGRESS FUNCTION_NAME
 249838c9-9ae3-492a-bba1-b0464ae65671 GET         /ihello false   hello

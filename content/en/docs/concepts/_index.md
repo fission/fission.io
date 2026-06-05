@@ -1,99 +1,65 @@
 ---
 title: "Concepts"
-weight: 3
+weight: 2
 description: >
-  Concepts of Fission architecture
+  The Fission mental model: how functions, environments, triggers, and packages fit together.
 ---
 
-Fission has three main concepts: **Functions, Environments, and Triggers.**
+Fission lets you run short-lived functions on Kubernetes without managing pods, deployments, or services yourself.
+You write a function, point it at a language environment, and bind it to an event with a trigger.
+Fission turns that into running, autoscaled pods on demand.
 
-{{< img "./assets/trigger-function-environment.png" "Trigger, Function, Environment" "30em" "1" >}}
+This page gives you the mental model.
+Each object below has its own page that goes deeper.
 
-## Functions
+## The four objects you work with
 
-A **Fission** function is something that Fission executes. It's usually a
-module with one entry point, and that entry point is a function with a
-certain interface. A number of programming languages are supported
-for Functions.
+Everything in Fission is built from four core objects, each backed by a Kubernetes Custom Resource:
 
-Here's an example of a simple function in JavaScript:
+- A **Function** is your code plus the configuration that says how to run it.
+- An **Environment** is the language-specific container that builds and runs your function.
+- A **Trigger** binds an event source (an HTTP request, a timer, a message-queue message, a Kubernetes event) to a function invocation.
+- A **Package** holds your code as archives and ties it to an environment, optionally building source into a runnable artifact.
 
-```js
-module.exports = async function(context) {
-    return {
-        status: 200,
-        body: "hello, world!\n"
-    };
-}
+The relationship is simple: a Trigger fires, the request reaches your Function, and your Function runs inside a pod created from its Environment, using the code stored in its Package.
+
+## How the objects relate
+
+```mermaid
+flowchart LR
+  event(["Event Source"]) -->|"fires"| trigger["Trigger"]
+  trigger -->|"references"| fn["Function"]
+  fn -->|"references"| env["Environment"]
+  fn -->|"references"| pkg["Package"]
+  env -->|"provides runtime image for"| fnPod["Function Pod"]
+  pkg -->|"supplies code to"| fnPod
+  fn -->|"runs as"| fnPod
 ```
 
-## Environments
+A Trigger names a Function.
+A Function names exactly one Environment and (optionally) one Package.
+At invocation time Fission combines the Environment's runtime image with the Package's code to produce a running Function Pod that serves your request over HTTP.
 
-Environments are the language-specific parts of Fission. An
-**Environment** contains just enough software to build and run a Fission
-Function.
+## Explore the concepts
 
-Since Fission invokes Functions through HTTP, this means the runtime
-of an environment is a container with an HTTP server, and usually a
-dynamic loader that can load a function.  Some environments also
-contain builder containers, which take care of compilation and
-gathering dependencies.
+{{% notice info %}}
+New to Fission?
+Read the pages in order — they build on each other.
+{{% /notice %}}
 
-You can modify any of Fission's existing environments and rebuild them,
-or you can also build a new environment from scratch.
+- **[Functions]({{% ref "/docs/concepts/functions.md" %}})** — what a function is, its entry point and interface, and how invocation works.
+- **[Environments]({{% ref "/docs/concepts/environments.md" %}})** — language runtimes, optional builders, and the versioned environment interface.
+- **[Executors]({{% ref "/docs/concepts/executors.md" %}})** — how Fission provisions and scales function pods (poolmgr vs newdeploy vs container).
+- **[Triggers]({{% ref "/docs/concepts/triggers.md" %}})** — the event sources that invoke your functions.
+- **[Packages and builds]({{% ref "/docs/concepts/packages-and-builds.md" %}})** — source and deployment archives, and the build pipeline.
 
-Check out our complete list of [Fission Environments]({{% ref "../usage/languages/" %}}).
+## Specs: declarative configuration
 
-## Triggers
- 
-Functions are invoked on the occurrence of an event; a **Trigger** is
-what configures Fission to use that event to invoke a function.  In
-other words, a trigger is a binding of events to function invocations.
+The objects above are normally created with `fission` CLI commands, but you can also declare them in YAML **specs**.
+Specs live on the client side and let the CLI create or update objects idempotently, including bundling your source into archives.
+See [Spec reference]({{% ref "/docs/usage/spec/" %}}) for the declarative workflow.
 
-For example, an **HTTP Trigger** may bind GET requests on a certain path
-to the invocation of a certain function.
+## Related
 
-There are several types of triggers: 
-
-* **HTTP Triggers** invoke functions when receiving HTTP requests.
-* **Timer Triggers** invoke functions based on time.
-* **Message Queue Triggers** for Kafka, NATS, and Azure queues.
-* **Kubernetes Watch Triggers** to invoke functions when something in your cluster changes.
-
-When a trigger receives requests/events, it invokes the target function 
-defined in trigger object by sending an HTTP request through router to a function.
-
-## Other Concepts
-
-These are concepts you may not need while starting out, but might be
-useful to know in more advanced usage.
-
-### Archives
-
-An **Archive** is a zip file containing source code or compiled binaries.
-
-Archives with runnable functions in them are called **Deployment
-Archives**; those with source code in them are called **Source
-Archives**.
-
-### Packages
-
-A **Package** is a Fission object containing a Deployment Archive and
-a Source Archive (if any). A Package also references a certain environment.
-
-When you create a Package with a Source Archive, Fission automatically
-builds it using the appropriate builder environment, and adds a
-Deployment Archive to the package.
-
-### Specifications
-
-Specifications (**specs** for short) are simply YAML config files
-containing the objects we've spoken about so far --- Functions,
-Environments, Triggers, Packages and Archives.  
-
-Specifications exist only on the client side, and are a way to
-instruct the Fission CLI about what objects to create or update.  They
-also specify how to bundle up source code, binaries etc into Archives.
-
-The Fission CLI features an idempotent deployment tool that works
-using these specifications.
+- [Architecture]({{% ref "/docs/architecture/" %}}) — the components that implement these concepts.
+- [Language environments]({{% ref "/docs/usage/languages/" %}}) — the runtimes you can use.

@@ -50,6 +50,34 @@ You can also deploy continuously with `fission spec apply --watch`.
 
 We'll see examples of all these commands in the tutorial below.
 
+### The spec workflow
+
+The `fission spec` subcommands form a simple loop: generate specs locally, validate them, then apply them to the cluster.
+`fission spec destroy` tears down everything a previous apply created.
+
+```mermaid
+flowchart LR
+  init["spec init"] --> generate["fission ... create --spec"]
+  generate --> validate["spec validate"]
+  validate --> apply["spec apply"]
+  apply -->|"edit source / specs"| generate
+  apply --> list["spec list"]
+  apply --> destroy["spec destroy"]
+```
+
+The full set of subcommands:
+
+| Command | What it does |
+| ------- | ------------ |
+| `fission spec init` | Creates the `specs/` directory and a `fission-config.yaml` carrying the deployment ID. |
+| `fission ... create --spec` | Writes a resource (function, environment, trigger, ...) as a YAML file under `specs/` instead of creating it on the cluster. |
+| `fission spec validate` | Checks the specs for duplicate names and broken references between resources. |
+| `fission spec apply` | Reconciles the cluster to match the specs (create, update, delete). Add `--wait` to block on builds or `--watch` for continuous deployment. |
+| `fission spec list` | Lists the resources defined by the specs in the directory. |
+| `fission spec destroy` | Deletes every resource that a previous apply created from these specs. |
+
+All of these commands accept `--specdir` to point at a non-default directory and `--specignore` to point at a `.specignore` file (default `.specignore`) that excludes paths from being read as specs, much like `.gitignore`.
+
 ## Tutorial
 
 This tutorial assumes you've already set up Fission, and tested a simple hello world function to make sure everything's working.
@@ -275,7 +303,7 @@ They represent a target state, and Kubernetes then does the work to ensure this 
 
 Kubernetes resources can be extended, using _Custom Resources_.
 Fission runs on top of Kubernetes and sets up your functions, environments and triggers as Custom Resources.
-You can see even these custom resources from `kubectl`: try `kubectl get customeresourcedefinitions` or `kubectl get function.fission.io`
+You can see even these custom resources from `kubectl`: try `kubectl get customresourcedefinitions` or `kubectl get function.fission.io`
 
 Your specs directory is, basically, set of resources plus a bit of configuration.
 Each YAML file contains one or more resources.
