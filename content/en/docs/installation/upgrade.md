@@ -33,6 +33,13 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 
 _See [configuration](#configuration) below._
 
+## Upgrade to 1.25.x release
+
+v1.25.0 raises the minimum supported Kubernetes version to **1.32** and continues the security-hardening line.
+The HTTPTrigger path and the PodSpec capability set are now tighter at admission, and the HTTPTrigger / TimeTrigger / CanaryConfig admission webhooks are removed in favor of API-server CEL — invalid cron schedules, CORS origins, and ingress paths are now admitted and surfaced as `…=False` status conditions rather than rejected at creation.
+
+See the [v1.25.0 release notes](/docs/releases/v1.25.0/#upgrade-notes) for the full list of breaking changes and the action each one requires.
+
 ## Upgrade to 1.24.x release
 
 v1.24.0 is a security-hardening release.
