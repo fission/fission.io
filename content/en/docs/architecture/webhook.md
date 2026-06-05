@@ -18,17 +18,17 @@ This catches mistakes early — at `kubectl apply` or `fission ... create` time 
 ## Validation flow
 
 ```mermaid
-flowchart LR
-  client["kubectl / Fission CLI"]
-  api["Kubernetes API Server"]
-  cel["CEL Validation Rules"]
+flowchart TB
+  client["kubectl / CLI"]
+  api["API Server"]
+  cel["CEL Rules"]
   webhook["Admission Webhook"]
   etcd["Persisted CRD"]
-  client -->|"① create / update"| api
-  api -->|"② evaluates"| cel
-  cel -->|"③ if applicable"| webhook
-  webhook -->|"④ admit"| etcd
-  webhook -->|"⑤ deny"| client
+  client -->|"<b>1.</b> create / update"| api
+  api -->|"<b>2.</b> evaluates"| cel
+  cel -->|"<b>3.</b> if applicable"| webhook
+  webhook -->|"<b>4.</b> admit"| etcd
+  webhook -->|"<b>5.</b> deny"| client
 
   class client,api,cel user
   class webhook fission

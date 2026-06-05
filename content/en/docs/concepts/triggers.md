@@ -22,10 +22,10 @@ Knowing which trigger fits an event source lets you build event-driven systems w
 
 ```mermaid
 flowchart LR
-  source(["Event Source"]):::user -->|"① fires"| trigger["Trigger"]:::fission
-  trigger -->|"② invokes"| router["Router"]:::fission
-  router -->|"③ resolves address via executor"| fnPod["Function Pod"]:::pod
-  fnPod -->|"④ response"| router
+  source(["Event Source"]):::user -->|"<b>1.</b> fires"| trigger["Trigger"]:::fission
+  trigger -->|"<b>2.</b> invokes"| router["Router"]:::fission
+  router -->|"<b>3.</b> resolves address via executor"| fnPod["Function Pod"]:::pod
+  fnPod -->|"<b>4.</b> response"| router
 
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43

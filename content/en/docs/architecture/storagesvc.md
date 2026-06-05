@@ -30,13 +30,13 @@ Configure it under `persistence.s3` in the Helm chart, setting `endPoint` for no
 ## Archive upload and download
 
 ```mermaid
-flowchart LR
-  builder["Builder Pod (fetcher)"]:::pod -->|"① POST /v1/archive (upload)"| ss["StorageSvc"]:::fission
-  ss -->|"② put object"| backend["Backend: local PVC or S3"]:::store
-  ss -->|"③ returns archive URL + id"| builder
-  fnpod["Function Pod (fetcher)"]:::pod -->|"④ GET /v1/archive?id= (download)"| ss
-  ss -->|"⑤ open object"| backend
-  ss -->|"⑥ streams deployment archive"| fnpod
+flowchart TB
+  builder["Builder Pod"]:::pod -->|"<b>1.</b> POST /v1/archive"| ss["StorageSvc"]:::fission
+  ss -->|"<b>2.</b> put object"| backend["Backend: PVC or S3"]:::store
+  ss -->|"<b>3.</b> archive URL + id"| builder
+  fnpod["Function Pod"]:::pod -->|"<b>4.</b> GET /v1/archive"| ss
+  ss -->|"<b>5.</b> open object"| backend
+  ss -->|"<b>6.</b> streams archive"| fnpod
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
   classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3

@@ -30,7 +30,7 @@ Each connector is documented on its own page:
 ## Architecture
 
 ```mermaid
-flowchart LR
+flowchart TB
   source["Event Source"]:::user
 
   subgraph k8s["Kubernetes Cluster"]
@@ -41,13 +41,13 @@ flowchart LR
     fnPod["Function Pod"]:::pod
   end
 
-  source -->|"① messages"| keda
-  keda -->|"② scales 0..N"| connector
+  source -->|"<b>1.</b> messages"| keda
+  keda -->|"<b>2.</b> scales 0..N"| connector
   scaledobject -.->|"defines scaling"| connector
-  source -->|"③ consume"| connector
-  connector -->|"④ POST message"| router
-  router -->|"⑤ forwards request"| fnPod
-  fnPod -->|"⑥ response"| connector
+  source -->|"<b>3.</b> consume"| connector
+  connector -->|"<b>4.</b> POST message"| router
+  router -->|"<b>5.</b> forwards request"| fnPod
+  fnPod -->|"<b>6.</b> response"| connector
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3

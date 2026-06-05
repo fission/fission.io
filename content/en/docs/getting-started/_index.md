@@ -184,11 +184,11 @@ The port-forward maps it to `localhost:8080` so you can reach it without a load 
 Every Fission workflow follows the same shape: install once, then iterate on environments, functions, and triggers.
 
 ```mermaid
-flowchart LR
-  install["Install Fission"]:::fission -->|"① adds runtime"| env["Environment"]:::fission
-  env -->|"② runs code"| fn["Function"]:::pod
-  fn -->|"③ exposed by"| trigger["Trigger"]:::fission
-  trigger -->|"④ invoke + inspect"| observe["Observe"]:::user
+flowchart TB
+  install["Install Fission"]:::fission -->|"<b>1.</b> adds runtime"| env["Environment"]:::fission
+  env -->|"<b>2.</b> runs code"| fn["Function"]:::pod
+  fn -->|"<b>3.</b> exposed by"| trigger["Trigger"]:::fission
+  trigger -->|"<b>4.</b> invoke + inspect"| observe["Observe"]:::user
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3

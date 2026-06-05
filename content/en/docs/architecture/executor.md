@@ -63,20 +63,15 @@ This is the path the first request to an unwarmed function takes through a `pool
 ```mermaid
 sequenceDiagram
   autonumber
-  participant Router
-  participant Executor
-  participant PoolMgr as PoolManager
-  participant K8s as Kubernetes API
-  participant Fetcher
-  participant Env as Env Container
-  Router->>Executor: GetServiceForFunction
-  Executor->>PoolMgr: GetFuncSvc (read Function + Environment)
-  PoolMgr->>K8s: select warm pod from pool, relabel
-  PoolMgr->>Fetcher: copy function package into pod
-  Fetcher->>Env: POST /specialize (load function)
-  Env-->>PoolMgr: specialized, ready
-  PoolMgr-->>Executor: function service record (pod address)
-  Executor-->>Router: ready address
+  participant R as Router
+  participant E as Executor (poolmgr)
+  participant K as K8s API
+  participant P as Function Pod
+  R->>E: GetServiceForFunction
+  E->>K: pick warm pod
+  E->>P: fetch package, specialize
+  P-->>E: ready
+  E-->>R: pod address
 ```
 
 ## Reconcilers, self-healing, and cleanup

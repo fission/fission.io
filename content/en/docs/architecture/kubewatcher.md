@@ -18,14 +18,14 @@ It runs as the `kubewatcher` service inside `fission-bundle` and is only active 
 ## How it works
 
 ```mermaid
-flowchart LR
-  user["You"] -->|"① create KubernetesWatchTrigger"| apiserver["Kubernetes API Server"]
+flowchart TB
+  user["You"] -->|"<b>1.</b> create WatchTrigger"| apiserver["Kubernetes API Server"]
   subgraph k8s["Kubernetes Cluster"]
-    apiserver -->|"② reconcile event"| kubewatcher["KubeWatcher"]
-    kubewatcher -->|"③ watch resource"| apiserver
-    apiserver -->|"④ resource change event"| kubewatcher
-    kubewatcher -->|"⑤ POST serialized object"| router["Router"]
-    router -->|"⑥ forwards request"| fnPod["Function Pod"]
+    apiserver -->|"<b>2.</b> reconcile event"| kubewatcher["KubeWatcher"]
+    kubewatcher -->|"<b>3.</b> watch resource"| apiserver
+    apiserver -->|"<b>4.</b> change event"| kubewatcher
+    kubewatcher -->|"<b>5.</b> POST object"| router["Router"]
+    router -->|"<b>6.</b> forwards request"| fnPod["Function Pod"]
   end
 
   class user,apiserver user

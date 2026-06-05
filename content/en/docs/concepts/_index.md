@@ -26,14 +26,14 @@ The relationship is simple: a Trigger fires, the request reaches your Function, 
 ## How the objects relate
 
 ```mermaid
-flowchart LR
+flowchart TB
   event(["Event Source"]):::user -->|"fires"| trigger["Trigger"]:::fission
   trigger -->|"references"| fn["Function"]:::fission
   fn -->|"references"| env["Environment"]:::fission
   fn -->|"references"| pkg["Package"]:::store
-  env -->|"provides runtime image for"| fnPod["Function Pod"]:::pod
-  pkg -->|"supplies code to"| fnPod
-  fn -->|"runs as"| fnPod
+  fn -->|"runs as"| fnPod["Function Pod"]:::pod
+  env -->|"runtime image"| fnPod
+  pkg -->|"code"| fnPod
 
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43

@@ -16,9 +16,9 @@ Fission's components and your function pods are the sources.
 Each source emits one or more signals, which a collector ingests and stores, and which Grafana then queries for dashboards and ad-hoc exploration.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph sources["Fission Sources"]
-    components["Core components (router, executor, ...)"]
+    components["Core components<br/>(router, executor, ...)"]
     fnPods["Function pods"]
   end
 

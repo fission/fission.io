@@ -38,17 +38,17 @@ When a request arrives for a function that has no warm pod, the executor takes a
 Because the pod is already scheduled and running, the cold start is just the specialize step.
 
 ```mermaid
-flowchart LR
-  router["Router"]:::fission -->|"① requests address"| pm["Pool Manager"]:::fission
+flowchart TB
+  router["Router"]:::fission -->|"<b>1.</b> requests address"| pm["Pool Manager"]:::fission
   subgraph pool["Environment Pool"]
     warm1["Warm Pod"]:::pod
     warm2["Warm Pod"]:::pod
   end
-  pm -->|"② picks idle pod"| warm1
-  pm -->|"③ sends specialize request"| warm1
-  warm1 -->|"④ becomes"| spec["Specialized Pod"]:::pod
-  pm -->|"⑤ returns address"| router
-  router -->|"⑥ HTTP request"| spec
+  pm -->|"<b>2.</b> picks idle pod"| warm1
+  pm -->|"<b>3.</b> specialize request"| warm1
+  warm1 -->|"<b>4.</b> becomes"| spec["Specialized Pod"]:::pod
+  pm -->|"<b>5.</b> returns address"| router
+  router -->|"<b>6.</b> HTTP request"| spec
 
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
@@ -63,14 +63,14 @@ New Deploy gives each function its own Kubernetes Deployment, Service, and Horiz
 There is no shared pool, so the first request pays the cost of creating and scheduling the Deployment — but you get full per-function resource isolation and CPU-based autoscaling.
 
 ```mermaid
-flowchart LR
-  router["Router"]:::fission -->|"① requests address"| nd["New Deploy"]:::fission
-  nd -->|"② creates"| deploy["Deployment"]:::fission
-  nd -->|"③ creates"| hpa["HorizontalPodAutoscaler"]:::fission
-  deploy -->|"manages"| fnPod["Function Pod(s)"]:::pod
+flowchart TB
+  router["Router"]:::fission -->|"<b>1.</b> requests address"| nd["New Deploy"]:::fission
+  nd -->|"<b>2.</b> creates"| deploy["Deployment"]:::fission
+  nd -->|"<b>3.</b> creates"| hpa["HorizontalPodAutoscaler"]:::fission
   hpa -->|"scales on CPU"| deploy
-  nd -->|"④ returns service address"| router
-  router -->|"⑤ HTTP request"| fnPod
+  deploy -->|"manages"| fnPod["Function Pod(s)"]:::pod
+  nd -->|"<b>4.</b> returns address"| router
+  router -->|"<b>5.</b> HTTP request"| fnPod
 
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
@@ -86,14 +86,14 @@ The Container executor runs functions from an arbitrary container image that you
 Like New Deploy, it creates a per-function Deployment, Service, and HPA, but it does not use an environment runtime image — your image is responsible for serving HTTP.
 
 ```mermaid
-flowchart LR
-  router["Router"]:::fission -->|"① requests address"| cn["Container Executor"]:::fission
-  fn["Function (with podspec)"]:::user -->|"supplies image + pod spec"| cn
-  cn -->|"② creates"| deploy["Deployment"]:::fission
-  cn -->|"③ creates"| hpa["HorizontalPodAutoscaler"]:::fission
+flowchart TB
+  fn["Function<br/>(with podspec)"]:::user -->|"image + pod spec"| cn
+  router["Router"]:::fission -->|"<b>1.</b> requests address"| cn["Container Executor"]:::fission
+  cn -->|"<b>2.</b> creates"| deploy["Deployment"]:::fission
+  cn -->|"<b>3.</b> creates"| hpa["HorizontalPodAutoscaler"]:::fission
   deploy -->|"manages"| fnPod["Container Pod(s)"]:::pod
-  cn -->|"④ returns service address"| router
-  router -->|"⑤ HTTP request"| fnPod
+  cn -->|"<b>4.</b> returns address"| router
+  router -->|"<b>5.</b> HTTP request"| fnPod
 
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43

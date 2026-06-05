@@ -20,9 +20,9 @@ flowchart LR
     fnPod["Function Pod"]:::pod
   end
 
-  apiserver -->|"① object event"| kubewatcher
-  kubewatcher -->|"② POST event"| router
-  router -->|"③ forwards request"| fnPod
+  apiserver -->|"<b>1.</b> object event"| kubewatcher
+  kubewatcher -->|"<b>2.</b> POST event"| router
+  router -->|"<b>3.</b> forwards request"| fnPod
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3

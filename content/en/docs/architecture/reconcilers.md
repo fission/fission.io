@@ -18,11 +18,11 @@ This page explains what a reconcile loop is, which components use one, and what 
 A reconcile loop runs the same three steps every time the resource it watches changes — and periodically even when nothing changed.
 
 ```mermaid
-flowchart LR
+flowchart TB
   watch["Watch CRD change"]
-  compare["Compare desired vs actual"]
-  act["Create / update / delete resources"]
-  status["Update status & Conditions"]
+  compare["Compare desired<br/>vs actual"]
+  act["Create / update /<br/>delete resources"]
+  status["Update status<br/>& Conditions"]
   watch --> compare
   compare -->|"drift found"| act
   act --> status

@@ -41,11 +41,11 @@ No matter what triggers a function — an HTTP request, a timer, a message-queue
 
 ```mermaid
 flowchart LR
-  trigger["Trigger"]:::fission -->|"① invokes"| router["Router"]:::fission
-  router -->|"② asks for address"| executor["Executor"]:::fission
-  executor -->|"③ returns pod address"| router
-  router -->|"④ HTTP request"| fnPod["Function Pod"]:::pod
-  fnPod -->|"⑤ HTTP response"| router
+  trigger["Trigger"]:::fission -->|"<b>1.</b> invokes"| router["Router"]:::fission
+  router -->|"<b>2.</b> asks for address"| executor["Executor"]:::fission
+  executor -->|"<b>3.</b> returns pod address"| router
+  router -->|"<b>4.</b> HTTP request"| fnPod["Function Pod"]:::pod
+  fnPod -->|"<b>5.</b> HTTP response"| router
 
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3

@@ -18,14 +18,14 @@ It runs as the `timer` service inside `fission-bundle` and is only active when y
 ## How it works
 
 ```mermaid
-flowchart LR
-  user["You"] -->|"① create TimeTrigger"| apiserver["Kubernetes API Server"]
+flowchart TB
+  user["You"] -->|"<b>1.</b> create TimeTrigger"| apiserver["API Server"]
   subgraph k8s["Kubernetes Cluster"]
-    apiserver -->|"② reconcile event"| timer["Timer"]
-    timer -->|"③ register cron entry"| cron["Cron Scheduler"]
-    cron -->|"④ on schedule"| timer
-    timer -->|"⑤ HTTP request"| router["Router"]
-    router -->|"⑥ forwards request"| fnPod["Function Pod"]
+    apiserver -->|"<b>2.</b> reconcile event"| timer["Timer"]
+    timer -->|"<b>3.</b> register cron"| cron["Cron Scheduler"]
+    cron -->|"<b>4.</b> on schedule"| timer
+    timer -->|"<b>5.</b> HTTP request"| router["Router"]
+    router -->|"<b>6.</b> forwards request"| fnPod["Function Pod"]
   end
 
   class user,apiserver user

@@ -19,7 +19,7 @@ It is served by the `fission-bundle` binary as the `router` service.
 ## Request flow
 
 ```mermaid
-flowchart LR
+flowchart TB
   client(["Client"]):::user
   subgraph k8s["Kubernetes Cluster"]
     router["Router"]:::fission
@@ -27,13 +27,13 @@ flowchart LR
     executor["Executor"]:::fission
     fnPod["Function Pod"]:::pod
   end
-  client -->|"① HTTP request"| router
-  router -->|"② resolve trigger"| cache
-  cache -->|"③ hit"| fnPod
-  cache -->|"④ miss"| executor
-  executor -->|"⑤ GetServiceForFunction"| router
-  router -->|"⑥ forwards request"| fnPod
-  fnPod -->|"⑦ response"| client
+  client -->|"<b>1.</b> HTTP request"| router
+  router -->|"<b>2.</b> resolve trigger"| cache
+  cache -->|"<b>3.</b> hit"| fnPod
+  cache -->|"<b>4.</b> miss"| executor
+  executor -->|"<b>5.</b> GetServiceForFunction"| router
+  router -->|"<b>6.</b> forwards request"| fnPod
+  fnPod -->|"<b>7.</b> response"| client
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3

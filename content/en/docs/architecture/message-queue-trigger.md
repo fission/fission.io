@@ -20,15 +20,15 @@ Using a KEDA-based trigger requires KEDA (v2.20) installed in the cluster.
 
 ```mermaid
 flowchart LR
-  queue["Message Queue Topic"] -->|"③ reports lag"| scaler["KEDA Scaler"]
+  queue["Message Queue Topic"] -->|"<b>3.</b> reports lag"| scaler["KEDA Scaler"]
   subgraph k8s["Kubernetes Cluster"]
-    mqt["MQT Scaler Manager"] -->|"① creates"| scaledobject["KEDA ScaledObject"]
-    scaledobject -->|"② drives"| scaler
-    scaler -->|"④ scales 0..N"| connector["Connector Deployment"]
-    queue -->|"⑤ delivers message"| connector
-    connector -->|"⑥ HTTP POST message"| router["Router"]
-    router -->|"⑦ forwards request"| fnPod["Function Pod"]
-    connector -->|"⑧ on success / error"| respTopics["Response / Error Topic"]
+    mqt["MQT Scaler Manager"] -->|"<b>1.</b> creates"| scaledobject["KEDA ScaledObject"]
+    scaledobject -->|"<b>2.</b> drives"| scaler
+    scaler -->|"<b>4.</b> scales 0..N"| connector["Connector Deployment"]
+    queue -->|"<b>5.</b> delivers message"| connector
+    connector -->|"<b>6.</b> HTTP POST message"| router["Router"]
+    router -->|"<b>7.</b> forwards request"| fnPod["Function Pod"]
+    connector -->|"<b>8.</b> on success / error"| respTopics["Response / Error Topic"]
   end
 
   class queue,respTopics user

@@ -15,13 +15,13 @@ Knowing which component owns each step tells you whose log to read.
 A function request flows through the router and executor before reaching your code:
 
 ```mermaid
-flowchart LR
-  client["Client"]:::user -->|"① HTTP request"| router["Router"]
-  router -->|"② asks for function pod"| executor["Executor"]
-  executor -->|"③ creates / picks"| fnPod["Function Pod"]
-  router -->|"④ forwards request"| fnPod
-  fnPod -->|"⑤ response"| router
-  router -->|"⑥ response"| client
+flowchart TB
+  client["Client"]:::user -->|"<b>1.</b> HTTP request"| router["Router"]
+  router -->|"<b>2.</b> asks for pod"| executor["Executor"]
+  executor -->|"<b>3.</b> creates / picks"| fnPod["Function Pod"]
+  router -->|"<b>4.</b> forwards request"| fnPod
+  fnPod -->|"<b>5.</b> response"| router
+  router -->|"<b>6.</b> response"| client
   subgraph k8s["Kubernetes Cluster"]
     router:::fission
     executor:::fission

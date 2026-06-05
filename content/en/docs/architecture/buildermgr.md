@@ -19,19 +19,24 @@ Reconciliation is level-based, so the builder objects self-heal if the live clus
 ## How a build flows
 
 ```mermaid
-flowchart LR
-  user["fission CLI"]:::user -->|"① creates Package with source archive"| pkg["Package CRD"]:::store
-  user -->|"② creates Environment with builder image"| env["Environment CRD"]:::store
+flowchart TB
+  user["fission CLI"]:::user
+  pkg["Package CRD"]:::store
+  env["Environment CRD"]:::store
   subgraph bm["Builder Manager"]
     envrec["Environment Reconciler"]:::fission
     pkgrec["Package Reconciler"]:::fission
   end
-  env -->|"③ reconciled"| envrec
-  envrec -->|"④ creates builder Service + Deployment"| pod["Builder Pod"]:::pod
-  pkg -->|"⑤ BuildStatus pending"| pkgrec
-  pkgrec -->|"⑥ fetch source, build, upload"| pod
-  pod -->|"⑦ download source / upload deployment archive"| storage["StorageSvc"]:::fission
-  pkgrec -->|"⑧ writes BuildStatus + logs"| pkg
+  pod["Builder Pod"]:::pod
+  storage["StorageSvc"]:::fission
+  user -->|"<b>1.</b> create Package"| pkg
+  user -->|"<b>2.</b> create Environment"| env
+  env -->|"<b>3.</b> reconciled"| envrec
+  envrec -->|"<b>4.</b> builder Service + Deployment"| pod
+  pkg -->|"<b>5.</b> BuildStatus pending"| pkgrec
+  pkgrec -->|"<b>6.</b> fetch source, build, upload"| pod
+  pod -->|"<b>7.</b> source / deployment archive"| storage
+  pkgrec -->|"<b>8.</b> BuildStatus + logs"| pkg
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3

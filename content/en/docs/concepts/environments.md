@@ -27,15 +27,15 @@ An environment has up to two parts:
   It compiles source code and gathers dependencies, turning a source archive into a runnable deployment archive.
 
 ```mermaid
-flowchart LR
+flowchart TB
   subgraph env["Environment"]
+    builder["Builder Container<br/>(optional)"]:::pod
     runtime["Runtime Container"]:::pod
-    builder["Builder Container (optional)"]:::pod
   end
-  src(["Source Archive"]):::store -->|"① compiled by"| builder
-  builder -->|"② produces"| deploy(["Deployment Archive"]):::store
-  deploy -->|"③ loaded into"| runtime
-  runtime -->|"④ serves"| fnPod["Function Pod"]:::pod
+  src(["Source Archive"]):::store -->|"<b>1.</b> compiled by"| builder
+  builder -->|"<b>2.</b> produces"| deploy(["Deployment Archive"]):::store
+  deploy -->|"<b>3.</b> loaded into"| runtime
+  runtime -->|"<b>4.</b> serves"| fnPod["Function Pod"]:::pod
 
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
   classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3

@@ -802,6 +802,13 @@ a {
 	margin: 1.5rem auto;
 }
 
+/* Step numbers in edge labels (<b>1.</b> ...) pop in the accent crimson. */
+.mermaid .edgeLabel b {
+	color: #d23150;
+	font-weight: 700;
+	padding-right: 0.1em;
+}
+
 .mermaid svg {
 	max-width: 100%;
 	height: auto;

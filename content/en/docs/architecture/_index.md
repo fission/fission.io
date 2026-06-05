@@ -18,35 +18,32 @@ It helps to split the components into two groups.
 
 ## Architecture overview
 
-The diagram below splits Fission into a **control plane** (the components that watch your Fission resources and reconcile the cluster toward them) and a **data plane** (the components that carry an actual request to your function).
+The diagram below shows how the components cooperate: blue boxes are Fission services, teal dashed boxes are the pods they manage, and the numbered arrows trace the build path (1–6) and the request path (7–10).
+Conceptually the Executor, Builder Manager, and Admission Webhook form the **control plane** (they watch your Fission resources and reconcile the cluster toward them), while the Router, function pods, and StorageSvc form the **data plane** (they carry an actual request to your function).
 
 ```mermaid
-flowchart LR
+flowchart TB
   user["User / Fission CLI"]
   subgraph k8s["Kubernetes Cluster"]
-    api["Kubernetes API Server (Fission CRDs)"]
-    subgraph control["Control Plane"]
-      executor["Executor"]
-      buildermgr["Builder Manager"]
-      webhook["Admission Webhook"]
-    end
-    subgraph data["Data Plane"]
-      router["Router"]
-      fnPod["Function Pod"]
-      builderPod["Builder Pod"]
-      storage["StorageSvc"]
-    end
+    api["Kubernetes API Server"]
+    webhook["Admission Webhook"]
+    executor["Executor"]
+    buildermgr["Builder Manager"]
+    builderPod["Builder Pod"]
+    storage["StorageSvc"]
+    router["Router"]
+    fnPod["Function Pod"]
   end
-  user -->|"① applies CRDs"| api
-  api -->|"② admission check"| webhook
-  executor -->|"③ watches & reconciles"| api
-  buildermgr -->|"④ watches packages"| api
-  buildermgr -->|"⑤ builds source"| builderPod
-  builderPod -->|"⑥ uploads archive"| storage
-  executor -->|"⑦ creates"| fnPod
-  router -->|"⑧ asks for address"| executor
-  router -->|"⑨ forwards request"| fnPod
-  fnPod -->|"⑩ fetches deploy archive"| storage
+  user -->|"<b>1.</b> applies CRDs"| api
+  api -->|"<b>2.</b> admission check"| webhook
+  api -->|"<b>3.</b> watched by"| executor
+  api -->|"<b>4.</b> watched by"| buildermgr
+  buildermgr -->|"<b>5.</b> builds source"| builderPod
+  builderPod -->|"<b>6.</b> uploads archive"| storage
+  executor -->|"<b>7.</b> creates"| fnPod
+  router -->|"<b>8.</b> asks for address"| executor
+  router -->|"<b>9.</b> forwards request"| fnPod
+  fnPod -->|"<b>10.</b> fetches archive"| storage
 
   class user,api user
   class executor,buildermgr,webhook,router,storage fission

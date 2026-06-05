@@ -55,13 +55,13 @@ A failed build is terminal and recorded with `failed` plus the build log — ins
 When a package has a source archive, the build runs through these components:
 
 ```mermaid
-flowchart LR
-  src(["Source Archive"]):::store -->|"① package set to pending"| bm["Builder Manager"]:::fission
-  bm -->|"② sends build request"| builder["Builder Pod"]:::pod
-  builder -->|"③ compiles into"| deploy(["Deployment Archive"]):::store
-  builder -->|"④ uploads to"| storage["Storage Service"]:::fission
-  bm -->|"⑤ updates package status"| pkg["Package"]:::store
-  pkg -->|"⑥ deployment archive served to"| fnPod["Function Pod"]:::pod
+flowchart TB
+  src(["Source Archive"]):::store -->|"<b>1.</b> set to pending"| bm["Builder Manager"]:::fission
+  bm -->|"<b>2.</b> build request"| builder["Builder Pod"]:::pod
+  builder -->|"<b>3.</b> compiles into"| deploy(["Deployment Archive"]):::store
+  builder -->|"<b>4.</b> uploads to"| storage["Storage Service"]:::fission
+  bm -->|"<b>5.</b> updates status"| pkg["Package"]:::store
+  pkg -->|"<b>6.</b> archive served to"| fnPod["Function Pod"]:::pod
 
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
