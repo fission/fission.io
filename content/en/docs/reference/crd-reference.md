@@ -54,7 +54,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `type` _[ArchiveType](#archivetype)_ | Type defines how the package is specified: literal or URL.<br />Available value:<br /> - literal<br /> - url |  |  |
+| `type` _[ArchiveType](#archivetype)_ | Type defines how the package is specified: literal or URL.<br />Available value:<br /> - literal<br /> - url |  | Enum: [ literal url] <br /> |
 | `literal` _integer array_ | Literal contents of the package. Can be used for<br />encoding packages below TODO (256 KB?) size. |  |  |
 | `url` _string_ | URL references a package. |  |  |
 | `checksum` _[Checksum](#checksum)_ | Checksum ensures the integrity of packages<br />referenced by URL. Ignored for literals. |  |  |
@@ -99,6 +99,7 @@ _Appears in:_
 
 
 Builder is the setting for environment builder.
+Bounded podspec / container safety rules — see the matching Runtime block above.
 
 
 
@@ -224,7 +225,7 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `namespace` _string_ |  |  |  |
-| `name` _string_ |  |  |  |
+| `name` _string_ |  |  | MaxLength: 63 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
 
 
 #### Environment
@@ -252,7 +253,8 @@ Environment is environment for building and running user functions.
 
 
 
-EnvironmentReference is a reference to an environment.
+EnvironmentReference is a reference to an environment. It is used by both
+FunctionSpec.Environment and PackageSpec.Environment.
 
 
 
@@ -263,7 +265,7 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `namespace` _string_ |  |  |  |
-| `name` _string_ |  |  |  |
+| `name` _string_ | Name of the referenced environment. Optional + omitempty: an unset<br />reference is omitted and its Pattern skipped (a container function has<br />no environment; a Package with an unset environment is admitted and<br />fails later with a clear builder error — the fission CLI still rejects<br />it). When set, it must be a DNS-1123 label. |  | MaxLength: 63 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
 
 
 #### EnvironmentSpec
@@ -279,14 +281,14 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `version` _integer_ | Version is the Environment API version<br />Version "1" allows user to run code snippet in a file, and<br />it's supported by most of the environments except tensorflow-serving.<br />Version "2" supports downloading and compiling user function if source archive is not empty.<br />Version "3" is almost the same with v2, but you're able to control the size of pre-warm pool of the environment. |  |  |
+| `version` _integer_ | Version is the Environment API version<br />Version "1" allows user to run code snippet in a file, and<br />it's supported by most of the environments except tensorflow-serving.<br />Version "2" supports downloading and compiling user function if source archive is not empty.<br />Version "3" is almost the same with v2, but you're able to control the size of pre-warm pool of the environment. |  | Maximum: 3 <br />Minimum: 1 <br /> |
 | `runtime` _[Runtime](#runtime)_ | Runtime is configuration for running function, like container image etc. |  |  |
 | `builder` _[Builder](#builder)_ | (Optional) Builder is configuration for builder manager to launch environment builder to build source code into<br />deployable binary. |  |  |
-| `allowedFunctionsPerContainer` _[AllowedFunctionsPerContainer](#allowedfunctionspercontainer)_ | (Optional) defaults to 'single'. Fission workflow uses<br />'infinite' to load multiple functions in one function pod.<br />Available value:<br />- single<br />- infinite |  |  |
+| `allowedFunctionsPerContainer` _[AllowedFunctionsPerContainer](#allowedfunctionspercontainer)_ | (Optional) defaults to 'single'. Fission workflow uses<br />'infinite' to load multiple functions in one function pod.<br />Available value:<br />- single<br />- infinite |  | Enum: [single infinite] <br /> |
 | `allowAccessToExternalNetwork` _boolean_ | Istio default blocks all egress traffic for safety.<br />To enable accessibility of external network for builder/function pod, set to 'true'.<br />(Optional) defaults to 'false' |  |  |
 | `resources` _[ResourceRequirements](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#resourcerequirements-v1-core)_ | The request and limit CPU/MEM resource setting for poolmanager to set up pods in the pre-warm pool.<br />(Optional) defaults to no limitation. |  |  |
-| `poolsize` _integer_ | The initial pool size for environment |  |  |
-| `terminationGracePeriod` _integer_ | The grace time for pod to perform connection draining before termination. The unit is in seconds.<br />(Optional) defaults to 360 seconds |  |  |
+| `poolsize` _integer_ | The initial pool size for environment |  | Minimum: 0 <br /> |
+| `terminationGracePeriod` _integer_ | The grace time for pod to perform connection draining before termination. The unit is in seconds.<br />(Optional) defaults to 360 seconds |  | Minimum: 0 <br /> |
 | `keeparchive` _boolean_ | KeepArchive is used by fetcher to determine if the extracted archive<br />or unarchived file should be placed, which is then used by specialize handler.<br />(This is mainly for the JVM environment because .jar is one kind of zip archive.) |  |  |
 | `imagepullsecret` _string_ | ImagePullSecret is the secret for Kubernetes to pull an image from a<br />private registry. |  |  |
 
@@ -428,7 +430,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `type` _[FunctionReferenceType](#functionreferencetype)_ | Type indicates whether this function reference is by name or selector. For now,<br />the only supported reference type is by "name".  Future reference types:<br />  * Function by label or annotation<br />  * Branch or tag of a versioned function<br />  * A "rolling upgrade" from one version of a function to another<br />Available value:<br />- name<br />- function-weights |  |  |
+| `type` _[FunctionReferenceType](#functionreferencetype)_ | Type indicates whether this function reference is by name or selector. For now,<br />the only supported reference type is by "name".  Future reference types:<br />  * Function by label or annotation<br />  * Branch or tag of a versioned function<br />  * A "rolling upgrade" from one version of a function to another<br />Available value:<br />- name<br />- function-weights |  | Enum: [name function-weights] <br /> |
 | `name` _string_ | Name of the function. |  |  |
 | `functionweights` _object (keys:string, values:integer)_ | Function Reference by weight. this map contains function name as key and its weight<br />as the value. This is for canary upgrade purpose. |  |  |
 
@@ -451,6 +453,13 @@ _Appears in:_
 
 
 FunctionSpec describes the contents of the function.
+Bounded podspec safety rules — CEL admission gate for the simple pod-level
+invariants. Per-container SecurityContext checks stay in the webhook
+(ValidatePodSpecSafety) because iterating containers exceeds the CEL cost
+budget; the rules here cover only the bounded, cheap cases. The has()
+guards on each scalar are required: PodSpec's bool/string fields are
+json:"...,omitempty" so a zero/empty value is OMITTED from the object,
+and CEL errors with "no such key" if the rule accesses an absent field.
 
 
 
@@ -550,12 +559,12 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `host` _string_ | Deprecated: the original idea of this field is not for setting Ingress.<br />Since we have IngressConfig now, remove Host after couple releases. |  |  |
+| `host` _string_ | Deprecated: the original idea of this field is not for setting Ingress.<br />Since we have IngressConfig now, remove Host after couple releases. |  | Pattern: `^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*)?$` <br /> |
 | `relativeurl` _string_ | RelativeURL is the exposed URL for external client to access a function with. |  |  |
 | `prefix` _string_ | Prefix with which functions are exposed.<br />NOTE: Prefix takes precedence over URL/RelativeURL.<br />Note that it does not treat slashes specially ("/foobar/" will be matched by<br />the prefix "/foobar"). |  |  |
 | `keepPrefix` _boolean_ | When function is exposed with Prefix based path,<br />keepPrefix decides whether to keep or trim prefix in URL while invoking function. |  |  |
-| `method` _string_ | Use Methods instead of Method. This field is going to be deprecated in a future release<br />HTTP method to access a function. |  |  |
-| `methods` _string array_ | HTTP methods to access a function |  |  |
+| `method` _string_ | Use Methods instead of Method. This field is going to be deprecated in a future release<br />HTTP method to access a function. |  | Enum: [ GET HEAD POST PUT PATCH DELETE CONNECT OPTIONS TRACE] <br /> |
+| `methods` _string array_ | HTTP methods to access a function |  | items:Enum: [GET HEAD POST PUT PATCH DELETE CONNECT OPTIONS TRACE] <br /> |
 | `functionref` _[FunctionReference](#functionreference)_ | FunctionReference is a reference to the target function. |  |  |
 | `createingress` _boolean_ | If CreateIngress is true, router will create an ingress definition. |  |  |
 | `ingressconfig` _[IngressConfig](#ingressconfig)_ | IngressConfig for router to set up Ingress. |  |  |
@@ -656,7 +665,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `namespace` _string_ |  |  |  |
+| `namespace` _string_ |  |  | MaxLength: 63 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
 | `type` _string_ | Type of resource to watch (Pod, Service, etc.) |  |  |
 | `labelselector` _object (keys:string, values:string)_ | Resource labels |  |  |
 | `functionref` _[FunctionReference](#functionreference)_ | The reference to a function for kubewatcher to invoke with<br />when receiving events. |  |  |
@@ -796,7 +805,7 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `namespace` _string_ |  |  |  |
-| `name` _string_ |  |  |  |
+| `name` _string_ | The package reference is optional, so Name is omitempty: when unset it<br />is omitted from the object and the Pattern below is skipped (a function<br />may legitimately have no package). A present name must be a DNS-1123<br />label. A leaf Pattern (cheap structural validation) is used rather than<br />a spec-level CEL matches() (which would exceed the cost budget). |  | MaxLength: 63 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
 | `resourceversion` _string_ | Including resource version in the reference forces the function to be updated on<br />package update, making it possible to cache the function based on its metadata. |  |  |
 
 
@@ -832,7 +841,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `buildstatus` _[BuildStatus](#buildstatus)_ | BuildStatus is the package build status. | pending |  |
+| `buildstatus` _[BuildStatus](#buildstatus)_ | BuildStatus is the package build status. | pending | Enum: [ pending running succeeded failed none] <br /> |
 | `buildlog` _string_ | BuildLog stores build log during the compilation. |  |  |
 | `lastUpdateTimestamp` _[Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#time-v1-meta)_ | LastUpdateTimestamp will store the timestamp the package was last updated<br />metav1.Time is a wrapper around time.Time which supports correct marshaling to YAML and JSON.<br />https://github.com/kubernetes/apimachinery/blob/44bd77c24ef93cd3a5eb6fef64e514025d10d44e/pkg/apis/meta/v1/time.go#L26-L35 |  |  |
 | `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ | Conditions represent the latest observations of the package's state. |  |  |
@@ -845,6 +854,11 @@ _Appears in:_
 
 
 Runtime is the setting for environment runtime.
+Bounded podspec / container safety rules — CEL admission gate for the
+simple, bounded fields. Per-container PodSpec.containers iteration stays
+in the webhook (ValidatePodSpecSafety / ValidateContainerSafety) because
+it exceeds the CEL cost budget. The has() guards are required because
+json:"...,omitempty" omits zero/empty values from the object.
 
 
 
@@ -872,7 +886,7 @@ _Appears in:_
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
 | `namespace` _string_ |  |  |  |
-| `name` _string_ |  |  |  |
+| `name` _string_ |  |  | MaxLength: 63 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
 
 
 #### StrategyType
