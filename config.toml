@@ -67,6 +67,11 @@ unsafe = true
 [markup.highlight]
 style = "tango"
 
+[security]
+# Hugo >= 0.158 denies text/html content files by default.
+# This site intentionally uses HTML content files (e.g. content/en/_index.html).
+allowContent = ['.*']
+
 ## Configuration for BlackFriday markdown parser: https://github.com/russross/blackfriday
 [blackfriday]
 angledQuotes = false
@@ -124,6 +129,51 @@ notoc = true
 
 # First one is picked as the Twitter card image if not set on page.
 images = ["images/og-image-fission.png"]
+
+# Mermaid diagrams. Docsy v0.15.0 ships the render hook + conditional
+# per-page CDN loader (only pages with a ```mermaid fence load the JS).
+# Values here are merged into mermaid.initialize() by Docsy.
+[params.mermaid]
+enable = true
+version = "11"            # pin major; resolves to latest 11.x from jsDelivr
+theme = "base"            # "base" is the only theme that honors themeVariables
+fontFamily = "Lato, sans-serif"
+
+# themeVariables — match the site palette (navy #1f2a43, blue #2d70de, purple #8147d2).
+[params.mermaid.themeVariables]
+background = "#ffffff"
+primaryColor = "#eef3fc"          # node fill: very light tint of brand blue
+primaryBorderColor = "#2d70de"    # node border: brand blue
+primaryTextColor = "#1f2a43"      # node text: dark navy
+secondaryColor = "#f3ecfb"        # light purple fill
+secondaryBorderColor = "#8147d2"  # purple accent border
+secondaryTextColor = "#1f2a43"
+tertiaryColor = "#f7f9fc"
+tertiaryBorderColor = "#1f2a43"
+tertiaryTextColor = "#1f2a43"
+lineColor = "#2d70de"             # edges/arrows: brand blue
+textColor = "#1f2a43"             # labels outside nodes
+mainBkg = "#eef3fc"
+nodeBorder = "#2d70de"
+clusterBkg = "#f7f9fc"            # subgraph background
+clusterBorder = "#8147d2"
+titleColor = "#1f2a43"
+fontFamily = "Lato, sans-serif"
+fontSize = "15px"
+# sequenceDiagram-specific
+actorBkg = "#eef3fc"
+actorBorder = "#2d70de"
+actorTextColor = "#1f2a43"
+signalColor = "#1f2a43"
+signalTextColor = "#1f2a43"
+labelBoxBkgColor = "#f3ecfb"
+labelBoxBorderColor = "#8147d2"
+labelTextColor = "#1f2a43"
+noteBkgColor = "#fff7d6"          # gentle amber notes, readable on white
+noteBorderColor = "#8147d2"
+noteTextColor = "#1f2a43"
+activationBkgColor = "#dbe7fb"
+nodeTextColor = "#1f2a43"
 
 [params.social]
 github = 'fission'

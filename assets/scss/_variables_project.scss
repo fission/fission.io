@@ -794,3 +794,9 @@ a {
 .DocSearch-Hit-content-wrapper {
 	overflow-y: hidden;
 }
+
+/* Mermaid diagrams: keep SVGs inside the content column on small screens. */
+.mermaid svg {
+	max-width: 100%;
+	height: auto;
+}
