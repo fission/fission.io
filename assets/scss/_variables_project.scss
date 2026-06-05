@@ -795,8 +795,105 @@ a {
 	overflow-y: hidden;
 }
 
-/* Mermaid diagrams: keep SVGs inside the content column on small screens. */
+/* Mermaid diagrams: centered, padded, and kept inside the content column. */
+.td-content .mermaid {
+	display: flex;
+	justify-content: center;
+	margin: 1.5rem auto;
+}
+
 .mermaid svg {
 	max-width: 100%;
 	height: auto;
+}
+
+/* Center content images (img shortcode and inline markdown images). */
+.td-content .post-img {
+	display: block;
+	text-align: center;
+	margin: 1.5rem auto;
+	max-width: 100%;
+}
+
+.td-content .post-img img {
+	max-width: 100%;
+	height: auto;
+}
+
+.td-content p > img,
+.td-content > img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Zoomable diagrams/images: affordance cursor. */
+.fission-zoomable {
+	cursor: zoom-in;
+}
+
+/* Fullscreen lightbox for diagrams and images. */
+.fission-lightbox {
+	position: fixed;
+	inset: 0;
+	z-index: 2000;
+	background: rgba(18, 19, 20, 0.82);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	cursor: grab;
+	touch-action: none;
+}
+
+.fission-lightbox.is-dragging {
+	cursor: grabbing;
+}
+
+.fission-lightbox__stage {
+	background: #ffffff;
+	border-radius: 8px;
+	padding: 1.5rem;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+	transition: transform 60ms linear;
+	max-width: none;
+}
+
+.fission-lightbox__stage img {
+	display: block;
+	max-width: 85vw;
+	max-height: 80vh;
+}
+
+.fission-lightbox__stage svg {
+	display: block;
+}
+
+.fission-lightbox__close {
+	position: fixed;
+	top: 1rem;
+	right: 1.25rem;
+	width: 2.75rem;
+	height: 2.75rem;
+	border: none;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.92);
+	color: #1f2a43;
+	font-size: 1.75rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.fission-lightbox__close:hover {
+	background: #ffffff;
+}
+
+.fission-lightbox__hint {
+	position: fixed;
+	bottom: 1rem;
+	left: 50%;
+	transform: translateX(-50%);
+	color: rgba(255, 255, 255, 0.85);
+	font-size: 0.85rem;
+	pointer-events: none;
 }

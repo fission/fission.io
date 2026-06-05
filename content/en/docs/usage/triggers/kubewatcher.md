@@ -14,15 +14,18 @@ The `kubewatcher` component watches the resource you specify and POSTs each even
 ```mermaid
 flowchart LR
   subgraph k8s["Kubernetes Cluster"]
-    apiserver["API Server"]
-    kubewatcher["KubeWatcher"]
-    router["Router"]
-    fnPod["Function Pod"]
+    apiserver["API Server"]:::user
+    kubewatcher["KubeWatcher"]:::fission
+    router["Router"]:::fission
+    fnPod["Function Pod"]:::pod
   end
 
-  apiserver -->|"object event"| kubewatcher
-  kubewatcher -->|"POST event"| router
-  router -->|"forwards request"| fnPod
+  apiserver -->|"① object event"| kubewatcher
+  kubewatcher -->|"② POST event"| router
+  router -->|"③ forwards request"| fnPod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. You create a watch trigger naming a resource type, a namespace, and (optionally) a label selector.

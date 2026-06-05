@@ -17,12 +17,15 @@ The `--executortype` flag on `fission fn create` accepts `poolmgr` or `newdeploy
 
 ```mermaid
 flowchart LR
-  start(["Create a function"]) -->|"existing container image"| container["container executor"]
-  start -->|"fastest cold start"| poolmgr["poolmgr executor"]
-  start -->|"per-function autoscaling"| newdeploy["newdeploy executor"]
-  poolmgr -->|"specializes from pool"| warm["Warm generic pod"]
-  newdeploy -->|"creates Deployment + HPA"| deploy["Dedicated Deployment"]
-  container -->|"runs your image"| img["Custom container pod"]
+  start(["Create a function"]):::user -->|"existing container image"| container["container executor"]:::fission
+  start -->|"fastest cold start"| poolmgr["poolmgr executor"]:::fission
+  start -->|"per-function autoscaling"| newdeploy["newdeploy executor"]:::fission
+  poolmgr -->|"specializes from pool"| warm["Warm generic pod"]:::pod
+  newdeploy -->|"creates Deployment + HPA"| deploy["Dedicated Deployment"]:::pod
+  container -->|"runs your image"| img["Custom container pod"]:::pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 #### Poolmgr (Pool-based executor)

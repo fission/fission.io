@@ -27,13 +27,18 @@ The relationship is simple: a Trigger fires, the request reaches your Function, 
 
 ```mermaid
 flowchart LR
-  event(["Event Source"]) -->|"fires"| trigger["Trigger"]
-  trigger -->|"references"| fn["Function"]
-  fn -->|"references"| env["Environment"]
-  fn -->|"references"| pkg["Package"]
-  env -->|"provides runtime image for"| fnPod["Function Pod"]
+  event(["Event Source"]):::user -->|"fires"| trigger["Trigger"]:::fission
+  trigger -->|"references"| fn["Function"]:::fission
+  fn -->|"references"| env["Environment"]:::fission
+  fn -->|"references"| pkg["Package"]:::store
+  env -->|"provides runtime image for"| fnPod["Function Pod"]:::pod
   pkg -->|"supplies code to"| fnPod
   fn -->|"runs as"| fnPod
+
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 A Trigger names a Function.

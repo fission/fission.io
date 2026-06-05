@@ -37,16 +37,23 @@ flowchart LR
       storage["StorageSvc"]
     end
   end
-  user -->|"applies CRDs"| api
-  api -->|"admission check"| webhook
-  executor -->|"watches & reconciles"| api
-  buildermgr -->|"watches packages"| api
-  buildermgr -->|"builds source"| builderPod
-  builderPod -->|"uploads archive"| storage
-  executor -->|"creates"| fnPod
-  router -->|"asks for address"| executor
-  router -->|"forwards request"| fnPod
-  fnPod -->|"fetches deploy archive"| storage
+  user -->|"① applies CRDs"| api
+  api -->|"② admission check"| webhook
+  executor -->|"③ watches & reconciles"| api
+  buildermgr -->|"④ watches packages"| api
+  buildermgr -->|"⑤ builds source"| builderPod
+  builderPod -->|"⑥ uploads archive"| storage
+  executor -->|"⑦ creates"| fnPod
+  router -->|"⑧ asks for address"| executor
+  router -->|"⑨ forwards request"| fnPod
+  fnPod -->|"⑩ fetches deploy archive"| storage
+
+  class user,api user
+  class executor,buildermgr,webhook,router,storage fission
+  class fnPod,builderPod pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 The control plane never sits in the request path.

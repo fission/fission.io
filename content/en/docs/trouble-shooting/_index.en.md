@@ -16,17 +16,20 @@ A function request flows through the router and executor before reaching your co
 
 ```mermaid
 flowchart LR
-  client["Client"] -->|"HTTP request"| router["Router"]
-  router -->|"asks for function pod"| executor["Executor"]
-  executor -->|"creates / picks"| fnPod["Function Pod"]
-  router -->|"forwards request"| fnPod
-  fnPod -->|"response"| router
-  router -->|"response"| client
+  client["Client"]:::user -->|"① HTTP request"| router["Router"]
+  router -->|"② asks for function pod"| executor["Executor"]
+  executor -->|"③ creates / picks"| fnPod["Function Pod"]
+  router -->|"④ forwards request"| fnPod
+  fnPod -->|"⑤ response"| router
+  router -->|"⑥ response"| client
   subgraph k8s["Kubernetes Cluster"]
-    router
-    executor
-    fnPod
+    router:::fission
+    executor:::fission
+    fnPod:::pod
   end
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 ## Self-diagnose in three steps

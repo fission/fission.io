@@ -21,15 +21,19 @@ It maintains stable symlinks to function pod log files; a Fluent Bit sidecar con
 
 ```mermaid
 flowchart LR
-  fnpod["Function Pod"] -->|"writes container logs"| logfiles["/var/log/containers"]
+  fnpod["Function Pod"]:::pod -->|"① writes container logs"| logfiles["/var/log/containers"]:::store
   subgraph node["Node (logger DaemonSet pod)"]
-    logger["Logger container"]
-    shipper["Fluent Bit sidecar"]
+    logger["Logger container"]:::fission
+    shipper["Fluent Bit sidecar"]:::fission
   end
-  logger -->|"reconciles ready function pods"| logfiles
-  logger -->|"creates symlinks"| symlinks["/var/log/fission"]
-  shipper -->|"tails symlinks"| symlinks
-  shipper -->|"ships logs"| backend["Log backend (e.g. InfluxDB)"]
+  logger -->|"② reconciles ready function pods"| logfiles
+  logger -->|"③ creates symlinks"| symlinks["/var/log/fission"]:::store
+  shipper -->|"④ tails symlinks"| symlinks
+  shipper -->|"⑤ ships logs"| backend["Log backend (e.g. InfluxDB)"]:::user
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. Containers in the function pod write logs to the node's container log files under `/var/log/containers`.

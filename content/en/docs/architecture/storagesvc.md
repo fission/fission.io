@@ -31,12 +31,15 @@ Configure it under `persistence.s3` in the Helm chart, setting `endPoint` for no
 
 ```mermaid
 flowchart LR
-  builder["Builder Pod (fetcher)"] -->|"POST /v1/archive (upload)"| ss["StorageSvc"]
-  ss -->|"put object"| backend["Backend: local PVC or S3"]
-  ss -->|"returns archive URL + id"| builder
-  fnpod["Function Pod (fetcher)"] -->|"GET /v1/archive?id= (download)"| ss
-  ss -->|"open object"| backend
-  ss -->|"streams deployment archive"| fnpod
+  builder["Builder Pod (fetcher)"]:::pod -->|"① POST /v1/archive (upload)"| ss["StorageSvc"]:::fission
+  ss -->|"② put object"| backend["Backend: local PVC or S3"]:::store
+  ss -->|"③ returns archive URL + id"| builder
+  fnpod["Function Pod (fetcher)"]:::pod -->|"④ GET /v1/archive?id= (download)"| ss
+  ss -->|"⑤ open object"| backend
+  ss -->|"⑥ streams deployment archive"| fnpod
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. After a build, the builder pod's fetcher uploads the deployment archive with a multipart `POST /v1/archive` and an `X-File-Size` header; StorageSvc writes it to the backend and returns an opaque `id`.

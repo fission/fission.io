@@ -41,11 +41,14 @@ No matter what triggers a function — an HTTP request, a timer, a message-queue
 
 ```mermaid
 flowchart LR
-  trigger["Trigger"] -->|"invokes"| router["Router"]
-  router -->|"asks for address"| executor["Executor"]
-  executor -->|"returns pod address"| router
-  router -->|"HTTP request"| fnPod["Function Pod"]
-  fnPod -->|"HTTP response"| router
+  trigger["Trigger"]:::fission -->|"① invokes"| router["Router"]:::fission
+  router -->|"② asks for address"| executor["Executor"]:::fission
+  executor -->|"③ returns pod address"| router
+  router -->|"④ HTTP request"| fnPod["Function Pod"]:::pod
+  fnPod -->|"⑤ HTTP response"| router
+
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. A trigger decides a function should run and forwards the event to the **router**.

@@ -24,11 +24,18 @@ flowchart LR
   cel["CEL Validation Rules"]
   webhook["Admission Webhook"]
   etcd["Persisted CRD"]
-  client -->|"create / update"| api
-  api -->|"evaluates"| cel
-  cel -->|"if applicable"| webhook
-  webhook -->|"admit"| etcd
-  webhook -->|"deny"| client
+  client -->|"① create / update"| api
+  api -->|"② evaluates"| cel
+  cel -->|"③ if applicable"| webhook
+  webhook -->|"④ admit"| etcd
+  webhook -->|"⑤ deny"| client
+
+  class client,api,cel user
+  class webhook fission
+  class etcd store
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 The API server evaluates the CRD's CEL rules first, then calls the webhook for the resources it is registered on.

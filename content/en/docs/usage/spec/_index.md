@@ -57,12 +57,15 @@ The `fission spec` subcommands form a simple loop: generate specs locally, valid
 
 ```mermaid
 flowchart LR
-  init["spec init"] --> generate["fission ... create --spec"]
-  generate --> validate["spec validate"]
-  validate --> apply["spec apply"]
+  init["spec init"]:::user --> generate["fission ... create --spec"]:::user
+  generate --> validate["spec validate"]:::user
+  validate --> apply["spec apply"]:::fission
   apply -->|"edit source / specs"| generate
-  apply --> list["spec list"]
-  apply --> destroy["spec destroy"]
+  apply --> list["spec list"]:::user
+  apply --> destroy["spec destroy"]:::accent
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef accent fill:#fdeef1,stroke:#d23150,color:#1f2a43
 ```
 
 The full set of subcommands:

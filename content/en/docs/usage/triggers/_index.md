@@ -33,14 +33,14 @@ HTTP triggers are served directly by the router; the other trigger types run a d
 
 ```mermaid
 flowchart LR
-  client["HTTP Client"]
-  timer["Timer"]
-  mqt["MQ Trigger"]
-  watch["KubeWatcher"]
+  client["HTTP Client"]:::user
+  timer["Timer"]:::fission
+  mqt["MQ Trigger"]:::fission
+  watch["KubeWatcher"]:::fission
 
   subgraph k8s["Kubernetes Cluster"]
-    router["Router"]
-    fnPod["Function Pod"]
+    router["Router"]:::fission
+    fnPod["Function Pod"]:::pod
   end
 
   client -->|"HTTP request"| router
@@ -49,6 +49,9 @@ flowchart LR
   watch -->|"on object change"| router
   router -->|"forwards request"| fnPod
   fnPod -->|"response"| router
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 The router resolves the request to a function and forwards it to a running pod (starting one if needed), then returns the function's response.

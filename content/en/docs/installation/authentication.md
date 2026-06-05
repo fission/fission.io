@@ -27,6 +27,7 @@ The generated token must then be passed in the `Authorization` header of every s
 
 ```mermaid
 sequenceDiagram
+    autonumber
     actor client as Client
     participant router as Router
     participant fnPod as Function Pod

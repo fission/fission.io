@@ -28,6 +28,9 @@ flowchart LR
   act --> status
   compare -->|"in sync"| status
   status -->|"requeue"| watch
+
+  class watch,compare,act,status fission
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
 ```
 
 1. **Watch.** The reconciler subscribes to changes on its CRD (for example, a Function or an Environment).

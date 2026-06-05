@@ -19,14 +19,21 @@ It runs as the `timer` service inside `fission-bundle` and is only active when y
 
 ```mermaid
 flowchart LR
-  user["You"] -->|"create TimeTrigger"| apiserver["Kubernetes API Server"]
+  user["You"] -->|"① create TimeTrigger"| apiserver["Kubernetes API Server"]
   subgraph k8s["Kubernetes Cluster"]
-    apiserver -->|"reconcile event"| timer["Timer"]
-    timer -->|"register cron entry"| cron["Cron Scheduler"]
-    cron -->|"on schedule"| timer
-    timer -->|"HTTP request"| router["Router"]
-    router -->|"forwards request"| fnPod["Function Pod"]
+    apiserver -->|"② reconcile event"| timer["Timer"]
+    timer -->|"③ register cron entry"| cron["Cron Scheduler"]
+    cron -->|"④ on schedule"| timer
+    timer -->|"⑤ HTTP request"| router["Router"]
+    router -->|"⑥ forwards request"| fnPod["Function Pod"]
   end
+
+  class user,apiserver user
+  class timer,cron,router fission
+  class fnPod pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. You create a `TimeTrigger` CRD that specifies a cron expression, a target function, and the HTTP method to use.

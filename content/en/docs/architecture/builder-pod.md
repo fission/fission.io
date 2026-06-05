@@ -21,6 +21,7 @@ Each builder pod runs two containers that share a volume:
 
 ```mermaid
 sequenceDiagram
+  autonumber
   participant bm as Builder Manager
   participant fetcher as Fetcher
   participant builder as Builder Container

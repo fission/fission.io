@@ -29,13 +29,16 @@ An environment has up to two parts:
 ```mermaid
 flowchart LR
   subgraph env["Environment"]
-    runtime["Runtime Container"]
-    builder["Builder Container (optional)"]
+    runtime["Runtime Container"]:::pod
+    builder["Builder Container (optional)"]:::pod
   end
-  src(["Source Archive"]) -->|"compiled by"| builder
-  builder -->|"produces"| deploy(["Deployment Archive"])
-  deploy -->|"loaded into"| runtime
-  runtime -->|"serves"| fnPod["Function Pod"]
+  src(["Source Archive"]):::store -->|"① compiled by"| builder
+  builder -->|"② produces"| deploy(["Deployment Archive"]):::store
+  deploy -->|"③ loaded into"| runtime
+  runtime -->|"④ serves"| fnPod["Function Pod"]:::pod
+
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 You only need the builder container for languages that compile or fetch dependencies.

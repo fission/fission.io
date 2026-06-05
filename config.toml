@@ -139,40 +139,43 @@ version = "11"            # pin major; resolves to latest 11.x from jsDelivr
 theme = "base"            # "base" is the only theme that honors themeVariables
 fontFamily = "Lato, sans-serif"
 
-# themeVariables — match the site palette (navy #1f2a43, blue #2d70de, purple #8147d2).
+# themeVariables — clean light style: white nodes, grey-blue borders, slate
+# arrows, navy text. Per-diagram classDefs add category colors (blue Fission
+# components, teal pods, amber storage, crimson step markers).
 [params.mermaid.themeVariables]
 background = "#ffffff"
-primaryColor = "#eef3fc"          # node fill: very light tint of brand blue
-primaryBorderColor = "#2d70de"    # node border: brand blue
+primaryColor = "#ffffff"          # node fill: white
+primaryBorderColor = "#94a3b8"    # node border: grey-blue
 primaryTextColor = "#1f2a43"      # node text: dark navy
-secondaryColor = "#f3ecfb"        # light purple fill
-secondaryBorderColor = "#8147d2"  # purple accent border
+secondaryColor = "#e8f0fe"        # light blue fill
+secondaryBorderColor = "#2d70de"  # brand blue border
 secondaryTextColor = "#1f2a43"
-tertiaryColor = "#f7f9fc"
-tertiaryBorderColor = "#1f2a43"
+tertiaryColor = "#fbfcfe"
+tertiaryBorderColor = "#cbd5e1"
 tertiaryTextColor = "#1f2a43"
-lineColor = "#2d70de"             # edges/arrows: brand blue
+lineColor = "#64748b"             # edges/arrows: slate grey
 textColor = "#1f2a43"             # labels outside nodes
-mainBkg = "#eef3fc"
-nodeBorder = "#2d70de"
-clusterBkg = "#f7f9fc"            # subgraph background
-clusterBorder = "#8147d2"
+mainBkg = "#ffffff"
+nodeBorder = "#94a3b8"
+clusterBkg = "#ffffff"            # subgraph background: white, thin border
+clusterBorder = "#cbd5e1"
 titleColor = "#1f2a43"
 fontFamily = "Lato, sans-serif"
 fontSize = "15px"
+edgeLabelBackground = "#ffffff"
 # sequenceDiagram-specific
-actorBkg = "#eef3fc"
-actorBorder = "#2d70de"
+actorBkg = "#ffffff"
+actorBorder = "#94a3b8"
 actorTextColor = "#1f2a43"
-signalColor = "#1f2a43"
+signalColor = "#64748b"
 signalTextColor = "#1f2a43"
-labelBoxBkgColor = "#f3ecfb"
-labelBoxBorderColor = "#8147d2"
+labelBoxBkgColor = "#e8f0fe"
+labelBoxBorderColor = "#2d70de"
 labelTextColor = "#1f2a43"
-noteBkgColor = "#fff7d6"          # gentle amber notes, readable on white
-noteBorderColor = "#8147d2"
+noteBkgColor = "#fff7e0"          # gentle amber notes, readable on white
+noteBorderColor = "#dba514"
 noteTextColor = "#1f2a43"
-activationBkgColor = "#dbe7fb"
+activationBkgColor = "#e8f0fe"
 nodeTextColor = "#1f2a43"
 
 [params.social]

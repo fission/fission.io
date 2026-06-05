@@ -31,23 +31,27 @@ Each connector is documented on its own page:
 
 ```mermaid
 flowchart LR
-  source["Event Source"]
+  source["Event Source"]:::user
 
   subgraph k8s["Kubernetes Cluster"]
-    keda["KEDA"]
-    scaledobject["ScaledObject"]
-    connector["Connector Deployment"]
-    router["Router"]
-    fnPod["Function Pod"]
+    keda["KEDA"]:::user
+    scaledobject["ScaledObject"]:::store
+    connector["Connector Deployment"]:::fission
+    router["Router"]:::fission
+    fnPod["Function Pod"]:::pod
   end
 
-  source -->|"messages"| keda
-  keda -->|"scales 0..N"| connector
+  source -->|"① messages"| keda
+  keda -->|"② scales 0..N"| connector
   scaledobject -.->|"defines scaling"| connector
-  source -->|"consume"| connector
-  connector -->|"POST message"| router
-  router -->|"forwards request"| fnPod
-  fnPod -->|"response"| connector
+  source -->|"③ consume"| connector
+  connector -->|"④ POST message"| router
+  router -->|"⑤ forwards request"| fnPod
+  fnPod -->|"⑥ response"| connector
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. When you create a KEDA message queue trigger, Fission creates a `ScaledObject` and a connector deployment that the `ScaledObject` references.

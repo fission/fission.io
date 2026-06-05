@@ -19,14 +19,21 @@ It runs as the `kubewatcher` service inside `fission-bundle` and is only active 
 
 ```mermaid
 flowchart LR
-  user["You"] -->|"create KubernetesWatchTrigger"| apiserver["Kubernetes API Server"]
+  user["You"] -->|"① create KubernetesWatchTrigger"| apiserver["Kubernetes API Server"]
   subgraph k8s["Kubernetes Cluster"]
-    apiserver -->|"reconcile event"| kubewatcher["KubeWatcher"]
-    kubewatcher -->|"watch resource"| apiserver
-    apiserver -->|"resource change event"| kubewatcher
-    kubewatcher -->|"POST serialized object"| router["Router"]
-    router -->|"forwards request"| fnPod["Function Pod"]
+    apiserver -->|"② reconcile event"| kubewatcher["KubeWatcher"]
+    kubewatcher -->|"③ watch resource"| apiserver
+    apiserver -->|"④ resource change event"| kubewatcher
+    kubewatcher -->|"⑤ POST serialized object"| router["Router"]
+    router -->|"⑥ forwards request"| fnPod["Function Pod"]
   end
+
+  class user,apiserver user
+  class kubewatcher,router fission
+  class fnPod pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. You create a `KubernetesWatchTrigger` CRD that specifies the resource type to watch, the namespace, and the function to invoke.

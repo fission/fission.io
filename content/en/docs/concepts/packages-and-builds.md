@@ -56,12 +56,16 @@ When a package has a source archive, the build runs through these components:
 
 ```mermaid
 flowchart LR
-  src(["Source Archive"]) -->|"package set to pending"| bm["Builder Manager"]
-  bm -->|"sends build request"| builder["Builder Pod"]
-  builder -->|"compiles into"| deploy(["Deployment Archive"])
-  builder -->|"uploads to"| storage["Storage Service"]
-  bm -->|"updates package status"| pkg["Package"]
-  pkg -->|"deployment archive served to"| fnPod["Function Pod"]
+  src(["Source Archive"]):::store -->|"① package set to pending"| bm["Builder Manager"]:::fission
+  bm -->|"② sends build request"| builder["Builder Pod"]:::pod
+  builder -->|"③ compiles into"| deploy(["Deployment Archive"]):::store
+  builder -->|"④ uploads to"| storage["Storage Service"]:::fission
+  bm -->|"⑤ updates package status"| pkg["Package"]:::store
+  pkg -->|"⑥ deployment archive served to"| fnPod["Function Pod"]:::pod
+
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. A package with a source archive enters `buildstatus: pending`.

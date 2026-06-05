@@ -39,16 +39,19 @@ Because the pod is already scheduled and running, the cold start is just the spe
 
 ```mermaid
 flowchart LR
-  router["Router"] -->|"requests address"| pm["Pool Manager"]
+  router["Router"]:::fission -->|"① requests address"| pm["Pool Manager"]:::fission
   subgraph pool["Environment Pool"]
-    warm1["Warm Pod"]
-    warm2["Warm Pod"]
+    warm1["Warm Pod"]:::pod
+    warm2["Warm Pod"]:::pod
   end
-  pm -->|"picks idle pod"| warm1
-  pm -->|"sends specialize request"| warm1
-  warm1 -->|"becomes"| spec["Specialized Pod"]
-  pm -->|"returns address"| router
-  router -->|"HTTP request"| spec
+  pm -->|"② picks idle pod"| warm1
+  pm -->|"③ sends specialize request"| warm1
+  warm1 -->|"④ becomes"| spec["Specialized Pod"]:::pod
+  pm -->|"⑤ returns address"| router
+  router -->|"⑥ HTTP request"| spec
+
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 Idle specialized pods are reaped back so the pool can be reused.
@@ -61,13 +64,16 @@ There is no shared pool, so the first request pays the cost of creating and sche
 
 ```mermaid
 flowchart LR
-  router["Router"] -->|"requests address"| nd["New Deploy"]
-  nd -->|"creates"| deploy["Deployment"]
-  nd -->|"creates"| hpa["HorizontalPodAutoscaler"]
-  deploy -->|"manages"| fnPod["Function Pod(s)"]
+  router["Router"]:::fission -->|"① requests address"| nd["New Deploy"]:::fission
+  nd -->|"② creates"| deploy["Deployment"]:::fission
+  nd -->|"③ creates"| hpa["HorizontalPodAutoscaler"]:::fission
+  deploy -->|"manages"| fnPod["Function Pod(s)"]:::pod
   hpa -->|"scales on CPU"| deploy
-  nd -->|"returns service address"| router
-  router -->|"HTTP request"| fnPod
+  nd -->|"④ returns service address"| router
+  router -->|"⑤ HTTP request"| fnPod
+
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 The HPA scales between `minScale` and `maxScale` based on `targetCPUPercent`.
@@ -81,13 +87,17 @@ Like New Deploy, it creates a per-function Deployment, Service, and HPA, but it 
 
 ```mermaid
 flowchart LR
-  router["Router"] -->|"requests address"| cn["Container Executor"]
-  fn["Function (with podspec)"] -->|"supplies image + pod spec"| cn
-  cn -->|"creates"| deploy["Deployment"]
-  cn -->|"creates"| hpa["HorizontalPodAutoscaler"]
-  deploy -->|"manages"| fnPod["Container Pod(s)"]
-  cn -->|"returns service address"| router
-  router -->|"HTTP request"| fnPod
+  router["Router"]:::fission -->|"① requests address"| cn["Container Executor"]:::fission
+  fn["Function (with podspec)"]:::user -->|"supplies image + pod spec"| cn
+  cn -->|"② creates"| deploy["Deployment"]:::fission
+  cn -->|"③ creates"| hpa["HorizontalPodAutoscaler"]:::fission
+  deploy -->|"manages"| fnPod["Container Pod(s)"]:::pod
+  cn -->|"④ returns service address"| router
+  router -->|"⑤ HTTP request"| fnPod
+
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 A CEL rule requires that any function with `executorType: container` provides a `podspec`.

@@ -20,16 +20,23 @@ Using a KEDA-based trigger requires KEDA (v2.20) installed in the cluster.
 
 ```mermaid
 flowchart LR
-  queue["Message Queue Topic"] -->|"reports lag"| scaler["KEDA Scaler"]
+  queue["Message Queue Topic"] -->|"③ reports lag"| scaler["KEDA Scaler"]
   subgraph k8s["Kubernetes Cluster"]
-    mqt["MQT Scaler Manager"] -->|"creates"| scaledobject["KEDA ScaledObject"]
-    scaledobject -->|"drives"| scaler
-    scaler -->|"scales 0..N"| connector["Connector Deployment"]
-    queue -->|"delivers message"| connector
-    connector -->|"HTTP POST message"| router["Router"]
-    router -->|"forwards request"| fnPod["Function Pod"]
-    connector -->|"on success / error"| respTopics["Response / Error Topic"]
+    mqt["MQT Scaler Manager"] -->|"① creates"| scaledobject["KEDA ScaledObject"]
+    scaledobject -->|"② drives"| scaler
+    scaler -->|"④ scales 0..N"| connector["Connector Deployment"]
+    queue -->|"⑤ delivers message"| connector
+    connector -->|"⑥ HTTP POST message"| router["Router"]
+    router -->|"⑦ forwards request"| fnPod["Function Pod"]
+    connector -->|"⑧ on success / error"| respTopics["Response / Error Topic"]
   end
+
+  class queue,respTopics user
+  class mqt,scaledobject,scaler,router fission
+  class connector,fnPod pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 1. You create a `MessageQueueTrigger` CRD with `mqtkind: keda`, naming the queue type, topic, target function, and scaling settings.

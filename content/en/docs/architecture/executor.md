@@ -62,6 +62,7 @@ This is the path the first request to an unwarmed function takes through a `pool
 
 ```mermaid
 sequenceDiagram
+  autonumber
   participant Router
   participant Executor
   participant PoolMgr as PoolManager

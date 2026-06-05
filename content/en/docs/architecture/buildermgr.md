@@ -20,18 +20,22 @@ Reconciliation is level-based, so the builder objects self-heal if the live clus
 
 ```mermaid
 flowchart LR
-  user["fission CLI"] -->|"creates Package with source archive"| pkg["Package CRD"]
-  user -->|"creates Environment with builder image"| env["Environment CRD"]
+  user["fission CLI"]:::user -->|"① creates Package with source archive"| pkg["Package CRD"]:::store
+  user -->|"② creates Environment with builder image"| env["Environment CRD"]:::store
   subgraph bm["Builder Manager"]
-    envrec["Environment Reconciler"]
-    pkgrec["Package Reconciler"]
+    envrec["Environment Reconciler"]:::fission
+    pkgrec["Package Reconciler"]:::fission
   end
-  env -->|"reconciled"| envrec
-  envrec -->|"creates builder Service + Deployment"| pod["Builder Pod"]
-  pkg -->|"BuildStatus pending"| pkgrec
-  pkgrec -->|"fetch source, build, upload"| pod
-  pod -->|"download source / upload deployment archive"| storage["StorageSvc"]
-  pkgrec -->|"writes BuildStatus + logs"| pkg
+  env -->|"③ reconciled"| envrec
+  envrec -->|"④ creates builder Service + Deployment"| pod["Builder Pod"]:::pod
+  pkg -->|"⑤ BuildStatus pending"| pkgrec
+  pkgrec -->|"⑥ fetch source, build, upload"| pod
+  pod -->|"⑦ download source / upload deployment archive"| storage["StorageSvc"]:::fission
+  pkgrec -->|"⑧ writes BuildStatus + logs"| pkg
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 ## Environment reconciler

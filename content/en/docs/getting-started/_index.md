@@ -185,10 +185,13 @@ Every Fission workflow follows the same shape: install once, then iterate on env
 
 ```mermaid
 flowchart LR
-  install["Install Fission"] -->|"adds runtime"| env["Environment"]
-  env -->|"runs code"| fn["Function"]
-  fn -->|"exposed by"| trigger["Trigger"]
-  trigger -->|"invoke + inspect"| observe["Observe"]
+  install["Install Fission"]:::fission -->|"① adds runtime"| env["Environment"]:::fission
+  env -->|"② runs code"| fn["Function"]:::pod
+  fn -->|"③ exposed by"| trigger["Trigger"]:::fission
+  trigger -->|"④ invoke + inspect"| observe["Observe"]:::user
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 You just completed every stage of this loop: you installed Fission, created the `python` environment, deployed the `hello` function, attached an HTTP trigger, and observed its output through `fission function test` and `curl`.
