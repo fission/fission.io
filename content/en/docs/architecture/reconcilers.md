@@ -10,7 +10,7 @@ A **reconciler** is a control loop that watches a Fission resource and keeps the
 This is the standard Kubernetes operator pattern, built on [controller-runtime](https://github.com/kubernetes-sigs/controller-runtime).
 You declare *what* you want as a CRD; the reconciler figures out *how* to make the cluster match, and keeps doing so over time.
 
-Fission adopted this model across its components in [RFC-0005](https://github.com/fission/fission/tree/main/rfcs).
+Fission adopted this model across its components in the {{< release-version >}} control-plane rework (RFC-0005).
 This page explains what a reconcile loop is, which components use one, and what you get from it.
 
 ## What a reconcile loop is

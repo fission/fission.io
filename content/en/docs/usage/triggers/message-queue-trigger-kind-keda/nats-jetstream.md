@@ -69,7 +69,7 @@ Before we dive into details, let's walk through overall flow of event and functi
 The producer function is a go program which creates a message and drops into a NATS jetstream stream `input`.
 For brevity all values have been hard coded in the code itself.
 There are different ways of loading this function into cluster. We have created fission function here.
-All the files required are present [here](https://github.com/fission/examples/tree/jetstream-example/miscellaneous/message-queue-trigger/nats-jetstream/producer).
+A reference producer implementation (standalone variant of the same logic) lives in the [keda-connectors repository](https://github.com/fission/keda-connectors/tree/main/nats-jetstream-http-connector/test/producer).
 
 Steps for deploying producer function:
 
@@ -80,9 +80,7 @@ fission fn create --name producer --env go --src "producer/*" --entrypoint Handl
 
 the above step creates an environment `go` and creates a `producer` function in it.
 
-[Go file](https://github.com/fission/examples/blob/jetstream-example/miscellaneous/message-queue-trigger/nats-jetstream/producer/main.go)
-
-The go file mentioned above-
+The producer's Go file-
 
 - creates a NATS connection and gets the Jetstream context
 - creates the input stream, response and error response stream which are later required by the consumer
@@ -90,7 +88,7 @@ The go file mentioned above-
 
 ### Consumer function
 
-The consumer function is golang function which takes the body of the request, appends a "Hello" and returns the resulting string. The file is present [here](https://github.com/fission/examples/blob/jetstream-example/miscellaneous/message-queue-trigger/nats-jetstream/consumer/main.go).
+The consumer function is golang function which takes the body of the request, appends a "Hello" and returns the resulting string.
 
 Let's create function:
 

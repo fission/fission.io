@@ -155,6 +155,8 @@ gh pr create ...
 - **Use plain absolute URLs** for in-repo links: `/docs/installation/upgrade/`, `/docs/releases/vX.Y.Z/`. The dominant repo convention.
 - **Do NOT use the custom `{{< relref >}}` shortcode** for content pages — it only resolves section `_index.md` paths and throws `can't evaluate field URL in type page.Page` on regular pages, failing the build.
 - Use `{{< release-version >}}` / `{{< chart-version >}}` for version strings in prose; the release-notes page title legitimately hardcodes its own version.
+- **Only link repo files that actually exist at the linked ref** — verify each `github.com/fission/*/blob|tree/...` URL (e.g. `curl -sL -o /dev/null -w "%{http_code}"`).
+Internal design docs (RFC-NNNN) are **not checked into fission/fission** — reference them as plain text, never as `rfc/*.md` links.
 
 ## Common Mistakes
 
