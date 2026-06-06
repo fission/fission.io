@@ -1,6 +1,6 @@
 ---
 name: cutting-fission-release-docs
-description: Use when preparing fission.io docs for a new Fission release (e.g. "new release v1.X.0", "create release notes page", "make changes for 1.X.0"). Covers the version bump in config.toml, the release-notes page, upgrade-guide notes for breaking changes, regenerated CLI/CRD reference docs, build verification, and the PR.
+description: Use when preparing fission.io docs for a new Fission release (e.g. "new release v1.X.0", "create release notes page", "make changes for 1.X.0", "prepare for release"). Covers the version bump in config.toml, the release-notes page, upgrade-guide notes for breaking changes, the compatibility matrix, the homepage What's New card, regenerated CLI/CRD reference docs, build verification, and the PR.
 ---
 
 # Cutting Fission Release Docs
@@ -20,7 +20,10 @@ Version values are decoupled: `release_version` (app, e.g. `v1.24.0`) and `chart
 | `config.toml` | Bump `release_version` and `chart_version` (verify both against the chart at the tag) |
 | `content/en/docs/releases/vX.Y.Z.md` | New release-notes page (see weight rule below) |
 | `content/en/docs/installation/upgrade.md` | New "Upgrade to X.Y.x release" section **only if** the release has breaking/behavioral changes |
+| `content/en/docs/installation/compatibility.md` | Add a literal row for the **previous** release; update the top shortcode row's columns for the new one (see step 5) |
+| `content/en/_index.html` | Replace a What's New card with the release announcement (see step 6) |
 | `content/en/docs/reference/fission-cli/*`, `crd-reference.md` | Regenerated from the new `fission` binary **only if** the CLI/CRDs changed (often already staged in the working tree) |
+| `static/data/environments.json` | Refresh via `tools/environments.py` **only if** environment images changed with the release |
 
 ## Procedure
 
@@ -95,11 +98,32 @@ See the [vX.Y.0 release notes](/docs/releases/vX.Y.Z/#upgrade-notes) for the ful
 
 The release page's Upgrade Notes should link back to the general guide (`/docs/installation/upgrade/`) for the routine CRD/CLI/chart steps. Don't duplicate the breaking-change detail in both places.
 
-### 5. Reference docs (CLI/CRD), if changed
+### 5. Compatibility matrix
+
+`content/en/docs/installation/compatibility.md` has a Kubernetes table and a KEDA table.
+The **top row of each uses `{{< release-version >}}`**, so after the config.toml bump it labels itself with the new version automatically — but its *data columns* still describe the previous release until you update them.
+
+- Insert a literal row for the previous release (copy the old top row's data, replace the shortcode with the literal `vX.Y.Z`).
+- Update the top row's columns for the new release: built-against = the `k8s.io/api` minor in the release's `go.mod`; tested-with = the `kindest/node` versions in the release's CI workflows; minimum = the chart's `kubeVersion` floor; KEDA = the `keda` version in `go.mod`/values.
+- Update any `kubeVersion` notice text if the floor changed.
+
+```bash
+gh api "repos/fission/fission/contents/go.mod?ref=vX.Y.0" -q .content | base64 -d | grep -E 'k8s.io/api |keda'
+```
+
+### 6. Homepage What's New card
+
+The landing page announces releases in the "What's New" cards, which are **hardcoded in `content/en/_index.html`** (~line 333) — the `[[params.whatsnew]]` block in `config.toml` is not referenced by any layout, but keep it in sync anyway.
+
+Replace the stalest card with a `RELEASE`-badged card: heading "Announcing Fission vX.Y.Z", a one-sentence summary of the headline changes, and a `hero-mid` button linking `/docs/releases/vX.Y.Z/`.
+
+### 7. Reference docs (CLI/CRD), if changed
 
 If the release changed `fission` CLI commands/flags or CRD schemas, the `content/en/docs/reference/fission-cli/*.md` and `crd-reference.md` files are regenerated from the new binary (usually already present as modified/untracked files in the working tree — keep them, they belong to this release). New subcommands appear as new `?? fission_*_*.md` files.
 
-### 6. Verify the build
+If the release shipped new/changed environment images, refresh `static/data/environments.json` with `tools/environments.py` — see the **updating-environments-and-examples** skill.
+
+### 8. Verify the build
 
 ```bash
 ./build.sh   # hugo --minify --printPathWarnings --gc
@@ -113,11 +137,13 @@ Then confirm the upgrade anchor resolves:
 grep -oE 'upgrade-to-12[0-9]x-release' public/docs/installation/upgrade/index.html | sort -u
 ```
 
-### 7. Branch, commit, PR
+### 9. Branch, commit, PR
 
 ```bash
 git switch -c docs-vX.Y.0
-git add config.toml content/en/docs/releases/vX.Y.Z.md content/en/docs/installation/upgrade.md content/en/docs/reference/
+git add config.toml content/en/_index.html content/en/docs/releases/vX.Y.Z.md \
+  content/en/docs/installation/upgrade.md content/en/docs/installation/compatibility.md \
+  content/en/docs/reference/
 git commit   # message: "Doc changes vX.Y.0"
 gh pr create ...
 ```
@@ -141,6 +167,8 @@ gh pr create ...
 | Added a "New Contributors" section with no new contributors | Empty/fabricated section | Include it only if the GitHub body has one |
 | Assumed `chart_version == release_version` | Wrong chart version published in docs | Read `Chart.yaml` `version` at the tag |
 | Bumped only `release_version` | `{{< chart-version >}}` still shows the old chart | Bump both in `config.toml` |
+| Forgot the compatibility matrix | Top (shortcode) row shows the new version with the *old* release's K8s/KEDA data | Add literal row for previous release; update top-row columns (step 5) |
+| Edited only `[[params.whatsnew]]` in config.toml | Homepage still shows the old card | The cards are hardcoded in `content/en/_index.html`; edit there (step 6) |
 
 ## Red Flags — Stop
 
