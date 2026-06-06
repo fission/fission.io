@@ -32,7 +32,7 @@ Please use the `fission release version` as image tag instead of `latest` when a
 $ fission environment create --name go --image ghcr.io/fission/go-env:<release-version> --builder ghcr.io/fission/go-builder:<release-version> --version 3
 
 # Example
-$ fission environment create --name go --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
+$ fission environment create --name go --image ghcr.io/fission/go-env-1.26 --builder ghcr.io/fission/go-builder-1.26
 ```
 
 You can find all images and image tags at following table. To get an overall overview of all available images, please have a look at our [Docker Hub page](https://hub.docker.com/u/fission).
@@ -41,7 +41,7 @@ You can find all images and image tags at following table. To get an overall ove
 
 | Go Version | Image | Builder Image |
 |------------|------------|-----------|
-| 1.23 | [ghcr.io/fission/go-env-1.23](https://github.com/fission/environments/pkgs/container/go-env-1.23/versions?filters%5Bversion_type%5D=tagged) | [ghcr.io/fission/go-builder-1.23](https://github.com/fission/environments/pkgs/container/go-builder-1.23/versions?filters%5Bversion_type%5D=tagged) |
+| 1.26 | [ghcr.io/fission/go-env-1.26](https://github.com/fission/environments/pkgs/container/go-env-1.26/versions?filters%5Bversion_type%5D=tagged) | [ghcr.io/fission/go-builder-1.26](https://github.com/fission/environments/pkgs/container/go-builder-1.26/versions?filters%5Bversion_type%5D=tagged) |
 
 ### Write a simple function in Go
 
@@ -318,7 +318,7 @@ See full image list [here](#go-environment-image-list)
 
 #### Go module support
 
-Please use image version equal or after `ghcr.io/fission/go-env-1.23`.
+Please use image version equal or after `ghcr.io/fission/go-env-1.26`.
 
 Initialize your project
 

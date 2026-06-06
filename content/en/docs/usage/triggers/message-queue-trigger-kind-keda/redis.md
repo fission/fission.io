@@ -96,7 +96,7 @@ $ go mod init
 $ go mod tidy
 $ zip -qr redis.zip *
 
-$ fission env create --name goenv --image ghcr.io/fission/go-env-1.23 --builder ghcr.io/fission/go-builder-1.23
+$ fission env create --name goenv --image ghcr.io/fission/go-env-1.26 --builder ghcr.io/fission/go-builder-1.26
 $ fission package create --env goenv --src redis.zip
 $ fission fn create --name producerfunc --env goenv --pkg redis-zip-zlre --entrypoint Handler
 $ fission package info --name redis-zip-zlre

@@ -4,8 +4,9 @@ description: "Writing Java functions with fission"
 weight: 10
 ---
 
-Fission supports functions written in Java and runs then on JVM.
-Current JVM environment is based on openjdk8 and uses Spring Boot as framework.
+Fission supports functions written in Java and runs them on the JVM.
+The JVM environment runs on Java 25 (LTS, eclipse-temurin) and uses Spring Boot 3.5.x as its framework.
+A `jvm-jersey` variant is also available that runs the Jersey RESTful Web Services framework on Java 25.
 
 ### Before you start
 
@@ -137,7 +138,7 @@ JVM environment already has the spring-boot-starter-web and fission-java-core as
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
-    <version>2.0.1.RELEASE</version>
+    <version>3.5.0</version>
     <scope>provided</scope>
 </dependency>
 <dependency>

@@ -27,8 +27,8 @@
                 "builder": "go-builder"
             },
             {
-                "main": "go-env-1.23",
-                "builder": "go-builder-1.23"
+                "main": "go-env-1.26",
+                "builder": "go-builder-1.26"
             }
         ]
     },
@@ -82,8 +82,8 @@
         "repo": "https://github.com/fission/environments/tree/master/jvm-jersey",
         "images": [
             {
-                "main": "jvm-jersey-env-22",
-                "builder": "jvm-jersey-builder-22"
+                "main": "jvm-jersey-env-25",
+                "builder": "jvm-jersey-builder-25"
             }
         ]
     },
@@ -105,6 +105,17 @@
             {
                 "main": "dotnet20-env",
                 "builder": "dotnet20-builder"
+            }
+        ]
+    },
+    {
+        "name": ".NET 8",
+        "logo": "/images/lang-logo/dotnetcore-logo.svg",
+        "repo": "https://github.com/fission/environments/tree/master/dotnet8",
+        "images": [
+            {
+                "main": "dotnet8-env",
+                "builder": "dotnet8-builder"
             }
         ]
     },
