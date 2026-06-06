@@ -129,7 +129,7 @@ Value for myKey: myValue
 ##### Body
 
 HTTP POST and PUT requests can have a request body.
-Once again, youccan access this body through the request object.
+Once again, you can access this body through the request object.
 
 For requests with a JSON Content-Type, you can directly get a parsed object with `request.get_json()` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.get_json).  
 
@@ -270,7 +270,7 @@ $ zip -jr demo-src-pkg.zip sourcepkg/
   adding: user.py (deflated 25%)
 ```
 
-Using the source archive creared in previous step, you can create a package in Fission:
+Using the source archive created in the previous step, you can create a package in Fission:
 
 ```bash
 $ fission package create --sourcearchive demo-src-pkg.zip --env python --buildcmd "./build.sh"

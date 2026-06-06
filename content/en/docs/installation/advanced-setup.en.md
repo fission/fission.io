@@ -57,7 +57,13 @@ requests. However, it also limits the ability to distribute traffic to new pods 
 As shown in the figure above, the router tries to send requests to v1 function pod even after v2 is up. Only when the v1 function pod
 is terminated, router will then re-establish connections to v2. (See [issue](https://github.com/fission/fission/issues/723#issuecomment-395483957) here)
 
-You can enable Keep-Alive by setting environment variable as follows at router deployment.
+Enable Keep-Alive through the chart value (recommended):
+
+```sh
+router.roundTrip.disableKeepAlive=false
+```
+
+This renders the `ROUTER_ROUND_TRIP_DISABLE_KEEP_ALIVE` environment variable on the router deployment:
 
 ```yaml
 env:
@@ -118,21 +124,20 @@ Once enabling endpoint access log, the router resource
 utilization increases when under heavy workloads.
 {{% /notice %}}
 
-### ProbabilitySampler in router
+### Trace sampling rate
 
-`ProbabilitySampler` returns True or False for whether a span should 
-be sampled depending on the results of a coin flip [1].
+Fission emits OpenTelemetry traces.
+The sampler decides, per request, whether a span is recorded, based on a configurable probability.
 
-To change probability of sampler, you can set
+To change the sampling probability, set the chart value:
 
 ```sh
-router.traceSamplingRate=0.01
+openTelemetry.tracesSamplingRate=0.01
 ```
 
-when using helm to deploy 1.7.0. Or, you can change the environment variable 
-`TRACING_SAMPLING_RATE` of router deployment to any value you want.
-
-If the value of `router.traceSamplingRate` is `1` means to sample all incoming requests and `0` means to disable it.
+This renders the `OTEL_TRACES_SAMPLER_ARG` environment variable on the Fission components.
+A value of `1` samples every incoming request and `0` disables sampling entirely.
+The chart default is `0.1`.
 
 ## Executor
 

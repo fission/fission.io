@@ -14,8 +14,7 @@ Work here is almost always content edits (Markdown under `content/en/`), templat
 - `npm install` — install PostCSS toolchain (autoprefixer for the Docsy theme).
 - `hugo server` — local preview on http://localhost:1313/.
 - `./build.sh` — what Netlify runs (`hugo --minify --printPathWarnings --gc`).
-- Netlify pins exact versions in `netlify.toml`: **Hugo 0.152.2** (extended) and **Go 1.25.5**.
-Match these locally when reproducing CI builds — Hugo behavior differs across versions.
+- Netlify pins exact versions in `netlify.toml` (currently **Hugo 0.157.0** extended and **Go 1.26.3**) — treat that file as the source of truth and match it locally when reproducing CI builds; Hugo behavior differs across versions.
 - The Docsy theme is pulled as a **Hugo Module** via `go.mod` (`github.com/google/docsy`), not a git submodule.
 The `.gitmodules` file is empty and the `git submodule update` line in `CONTRIBUTING.md` is stale — ignore it.
 - There are no unit tests. CI (`.github/workflows/main.yml`) runs reviewdog misspell + languagetool on changed `*.md` files only.
@@ -27,7 +26,7 @@ All site content is under `content/en/` (single language, `defaultContentLanguag
 - `docs/` — versioned product documentation (architecture, concepts, installation, usage, reference, releases, trouble-shooting, contributing).
 - `blog/` — blog posts; permalink scheme is `/blog/:slug/` (set in `config.toml` `[permalinks]`).
 - `environments/`, `examples/`, `support/`, `author/` — top-level sections wired into the main menu in `config.toml`.
-- `_index.html` is the landing page; many of its content blocks come from `[params]` in `config.toml` (`whatsnew` cards, hero links, etc.) rather than from Markdown.
+- `_index.html` is the landing page; its content blocks (What's New cards, hero, community) are **hardcoded in that file** — the `[[params.whatsnew]]` block in `config.toml` is not referenced by any layout, so update both to keep them in sync but edit the HTML to change what renders.
 
 Authoring conventions worth knowing:
 
@@ -48,6 +47,27 @@ When cutting a Fission release, two values in `config.toml` change independently
 
 These are decoupled because the chart can revision without an app release.
 Don't assume they move together.
+
+## Design system & site conventions
+
+The site follows a documented design language (navy/blue palette, white cards with hover lift, light-blue pills) and strict authoring rules (absolute URLs not `relref`, version shortcodes, lazy-loaded images with dimensions, no inline styles).
+The details live in `.claude/resources/`:
+
+- [.claude/resources/design-system.md](.claude/resources/design-system.md) — palette, card pattern, SCSS namespaces in `_variables_project.scss`, Bootstrap 5 gotchas, image/SVG rules.
+- [.claude/resources/mermaid-diagrams.md](.claude/resources/mermaid-diagrams.md) — diagram color kit, the <900px width rule, step-number style, lightbox/partial-cache gotchas.
+- [.claude/resources/page-patterns.md](.claude/resources/page-patterns.md) — docs nav order, page skeletons, catalog/blog/homepage/support page structures and their traps.
+- [.claude/resources/automation-ideas.md](.claude/resources/automation-ideas.md) — backlog of process automation worth building.
+
+Consult the matching resource file before styling or restructuring a page.
+
+## Skills
+
+Recurring workflows are codified as skills in `.claude/skills/` — use them instead of rediscovering the process:
+
+- **cutting-fission-release-docs** — preparing the site for a new Fission release (version bumps, release-notes page, compatibility matrix, What's New card, upgrade guide).
+- **bumping-hugo-docsy-site** — bumping the pinned Hugo/Go/Docsy versions safely.
+- **updating-environments-and-examples** — adding or refreshing entries on the environments/examples catalog pages.
+- **writing-blog-posts** — authoring a blog post with correct front matter and featured image.
 
 ## Redirects and URL stability
 

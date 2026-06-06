@@ -35,6 +35,146 @@
 </script>
 {{ end }}
 
+{{/*
+  Docs lightbox: click a mermaid diagram or content image to open it in a
+  fullscreen overlay with wheel/double-click zoom and drag panning.
+  Dependency-free; ESC, backdrop click, or the close button dismiss it.
+*/}}
+<script>
+(function () {
+  function openLightbox(node) {
+    var overlay = document.createElement('div');
+    overlay.className = 'fission-lightbox';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-label', 'Zoomed diagram');
+
+    var stage = document.createElement('div');
+    stage.className = 'fission-lightbox__stage';
+
+    var srcRect = node.getBoundingClientRect();
+    // Keep the id: mermaid embeds a <style> scoped to the svg id, and CSS id
+    // selectors match every element carrying it, so the clone stays styled.
+    var content = node.cloneNode(true);
+    if (content.tagName.toLowerCase() === 'svg') {
+      // Give the clone an explicit comfortable width; viewBox keeps the ratio.
+      content.removeAttribute('width');
+      content.removeAttribute('height');
+      content.style.maxWidth = 'none';
+      var target = Math.min(window.innerWidth * 0.85, Math.max(srcRect.width * 2, 640));
+      var ratio = srcRect.width > 0 ? srcRect.height / srcRect.width : 0.6;
+      if (target * ratio > window.innerHeight * 0.8) {
+        target = (window.innerHeight * 0.8) / ratio;
+      }
+      content.style.width = target + 'px';
+      content.style.height = 'auto';
+    }
+    stage.appendChild(content);
+
+    var close = document.createElement('button');
+    close.className = 'fission-lightbox__close';
+    close.setAttribute('aria-label', 'Close');
+    close.innerHTML = '&times;';
+
+    var hint = document.createElement('div');
+    hint.className = 'fission-lightbox__hint';
+    hint.textContent = 'Scroll to zoom · drag to pan · Esc to close';
+
+    overlay.appendChild(stage);
+    overlay.appendChild(close);
+    overlay.appendChild(hint);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    var scale = 1, tx = 0, ty = 0;
+    var dragging = false, lastX = 0, lastY = 0, moved = false;
+
+    function apply() {
+      stage.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+    }
+
+    function destroy() {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+      overlay.remove();
+    }
+    function onKey(e) { if (e.key === 'Escape') destroy(); }
+    document.addEventListener('keydown', onKey);
+    close.addEventListener('click', destroy);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay && !moved) destroy();
+      moved = false;
+    });
+
+    overlay.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var next = Math.min(8, Math.max(0.3, scale * (e.deltaY < 0 ? 1.12 : 0.89)));
+      scale = next;
+      apply();
+    }, { passive: false });
+
+    stage.addEventListener('dblclick', function (e) {
+      e.preventDefault();
+      scale = scale < 2 ? scale * 1.8 : 1;
+      if (scale === 1) { tx = 0; ty = 0; }
+      apply();
+    });
+
+    overlay.addEventListener('pointerdown', function (e) {
+      dragging = true; moved = false;
+      lastX = e.clientX; lastY = e.clientY;
+      overlay.setPointerCapture(e.pointerId);
+      overlay.classList.add('is-dragging');
+    });
+    overlay.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - lastX, dy = e.clientY - lastY;
+      if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+      tx += dx; ty += dy;
+      lastX = e.clientX; lastY = e.clientY;
+      apply();
+    });
+    overlay.addEventListener('pointerup', function () {
+      dragging = false;
+      overlay.classList.remove('is-dragging');
+    });
+  }
+
+  function wire() {
+    document.querySelectorAll('.td-content .mermaid svg').forEach(function (svg) {
+      var holder = svg.closest('.mermaid');
+      if (holder && !holder.dataset.lightbox) {
+        holder.dataset.lightbox = '1';
+        holder.classList.add('fission-zoomable');
+        holder.addEventListener('click', function () { openLightbox(svg); });
+      }
+    });
+    document.querySelectorAll('.td-content .post-img img, .td-content > img, .td-content p > img').forEach(function (img) {
+      if (!img.dataset.lightbox) {
+        img.dataset.lightbox = '1';
+        img.classList.add('fission-zoomable');
+        img.addEventListener('click', function () { openLightbox(img); });
+      }
+    });
+  }
+
+  // Mermaid renders asynchronously after load; observe until diagrams settle.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wire);
+  } else {
+    wire();
+  }
+  var pending = document.querySelectorAll('.td-content .mermaid:not([data-processed])').length;
+  if (pending > 0) {
+    var observer = new MutationObserver(function () {
+      wire();
+      if (!document.querySelector('.td-content .mermaid:not([data-processed])')) observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-processed'] });
+    setTimeout(function () { observer.disconnect(); }, 15000);
+  }
+})();
+</script>
+
 {{/* Homepage: turn the transparent hero navbar solid once the user scrolls. */}}
 <script>
 (function () {

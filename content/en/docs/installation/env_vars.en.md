@@ -17,7 +17,9 @@ Set `FISSION_NAMESPACE` to the namespace where the Fission installed.
 $ export FISSION_NAMESPACE=<namespace>
 ```
 
-In case you've decided to use a separate namespace for functions, you also want to set `FISSION_FUNCTION_NAMESPACE`. It is the default case for `helm` installations to use `fission-function` namespace.
+If you run functions in a separate namespace, set `FISSION_FUNCTION_NAMESPACE` to that namespace.
+By default the Helm chart creates functions in the `defaultNamespace` value (which is `default`), so you only need this when you have changed `functionNamespace` or are targeting a non-default function namespace.
+
 ``` bash
 $ export FISSION_FUNCTION_NAMESPACE=<namespace>
 ```
@@ -35,15 +37,15 @@ You need to ensure that the IP address in it is **accessible** from the public n
 
 It's convenient to set the `FISSION_ROUTER_URL` environment variable to the **externally-visible** address of the Fission router.
 
-### Clusters Only Support NodePort
+### Clusters that only support NodePort
 
-Here we use minikube for example.
+Here we use minikube as an example.
 
 ``` bash
-$ export FISSION_ROUTER=$(minikube ip):$(kubectl -n fission get svc router -o jsonpath='{...nodePort}')
+$ export FISSION_ROUTER_URL=$(minikube ip):$(kubectl -n fission get svc router -o jsonpath='{...nodePort}')
 ```
 
-Above line translates to IP (from minikube):PORT (from the fission router) e.g., 192.168.99.110:30722. This address is stored in FISSION_ROUTER environment variable.
+This resolves to `IP (from minikube):PORT (from the fission router)`, for example `192.168.99.110:30722`, and is stored in the `FISSION_ROUTER_URL` environment variable.
 
 ### Cloud Hosted Clusters
 
@@ -63,10 +65,10 @@ Then:
 
 ``` bash
 # AWS
-$ export FISSION_ROUTER=$(kubectl --namespace fission get svc router -o=jsonpath='{..hostname}')
+$ export FISSION_ROUTER_URL=$(kubectl --namespace fission get svc router -o=jsonpath='{..hostname}')
 
 # GCP
-$ export FISSION_ROUTER=$(kubectl --namespace fission get svc router -o=jsonpath='{..ip}')
+$ export FISSION_ROUTER_URL=$(kubectl --namespace fission get svc router -o=jsonpath='{..ip}')
 ```
 
 Check whether there are **firewall rules** that block you from accessing the IP address.
@@ -86,8 +88,8 @@ In this case, you can use the port-forward method instead:
 ``` bash
 # Port-forward
 $ kubectl --namespace fission port-forward $(kubectl --namespace fission get pod -l svc=router -o name) <local port>:8888 &
-$ export FISSION_ROUTER=127.0.0.1:<local port>
+$ export FISSION_ROUTER_URL=127.0.0.1:<local port>
 ```
 
-Now, `curl http://${FISSION_ROUTER}/` will open a connection that goes through the port forward you just created.
+Now, `curl http://${FISSION_ROUTER_URL}/` opens a connection that goes through the port-forward you just created.
 This is useful for local testing of your function.

@@ -56,33 +56,22 @@ NAME                                    REFERENCE                               
 newdeploy-helloscale-default-ql0uqiwp   Deployment/newdeploy-helloscale-default-ql0uqiwp   <unknown>/50%   1         6         1          20h
 ```
 
-To install the metric server, clone the repo <https://github.com/kubernetes-incubator/metrics-server> and change the metric-server's command to use insecure certificates in YAMLs in deploy directory.
-
-``` yaml
-containers:
-- name: metrics-server
-  image: k8s.gcr.io/metrics-server-amd64:v0.3.3
-  command:
-    - /metrics-server
-    - --kubelet-insecure-tls
-```
-
-Once you have changed the command create the metric server by applying the manifests:
+Install the [metrics-server](https://github.com/kubernetes-sigs/metrics-server) from its latest release:
 
 ```bash
-$ kubectl apply -f deploy/1.8+/
-clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
-clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
-rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
-apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
-serviceaccount/metrics-server created
-deployment.extensions/metrics-server created
-service/metrics-server created
-clusterrole.rbac.authorization.k8s.io/system:metrics-server created
-clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+$ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
 
-After a few minutes you can validate that metric server is working by running command:
+On Docker Desktop, the kubelet serving certificate is self-signed, so you must let metrics-server skip TLS verification.
+Patch the deployment to add the `--kubelet-insecure-tls` flag:
+
+```bash
+$ kubectl -n kube-system patch deployment metrics-server \
+    --type=json \
+    -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+```
+
+After a few minutes you can validate that metrics-server is working by running:
 
 ```bash
 $ kubectl top node

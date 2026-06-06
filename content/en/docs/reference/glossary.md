@@ -51,11 +51,16 @@ Build.sh is a shell script file that is used to create a custom package by insta
 
 ### Canary Config
 
-A canary config is custom resource used to configure a canary deployment for Fission functions.
+A canary config is a custom resource used to configure a canary deployment for Fission functions.
 
 ### Canary Deployment
 
 Canary Deployment is a deployment strategy to deploy a new version of your Fission function to a cluster incrementally with minimal risk in a way that it gradually serves user traffic from 0% to 100%.
+
+### CEL Validation
+
+Common Expression Language (CEL) validation rules are constraints embedded directly in Fission's CRDs and enforced by the Kubernetes API server when an object is created or updated.
+They reject invalid resources early — for example, an unknown executor type, a negative scale, or a maximum scale below the minimum — without needing a separate admission webhook.
 
 ### Cold Start
 
@@ -64,10 +69,6 @@ It is defined as the setup time that is required for a function to be up and run
 ### Concurrency
 
 Concurrency refers to the amount of requests a function should process simultaneously.
-
-### Controller
-
-Controller contains CRUD APIs for functions, triggers, environments, Kubernetes event watches, etc. and proxy APIs to internal 3rd-party services. A client talks to the controller.
 
 ## D
 
@@ -87,11 +88,19 @@ Specifies how frequently user traffic needs to be incremented for the new versio
 
 ### Environment
 
-Environments provide a run time which is used to execute Fission functions. Currently, Fission supports pre-built environments that include NodeJS, Python3, Go, JVM, Ruby, Binary, PHP, .NET and Pearl.
+Environments provide a runtime that is used to execute Fission functions.
+Fission ships pre-built environments for NodeJS, Python, Ruby, Go, PHP, and Bash, and you can also run any custom container as an environment.
 
 ### Executor
 
-Executor is responsible for spinning up function pods. It retrieves function information from Kubernetes CRD and invokes an executor type to spin up a function pod.
+Executor is responsible for spinning up function pods.
+It reads function information from the Fission CRDs and invokes the configured executor type to provision the pod.
+In {{< release-version >}} the executor runs as a set of controller-runtime reconcilers that watch the Function and Environment resources and the workloads they own.
+
+### Executor Type
+
+The executor type determines how a function's pods are provisioned and scaled.
+Fission has exactly three: **Pool Manager** (`poolmgr`), which serves requests from a warm pool of generic pods for fast cold starts; **New Deploy** (`newdeploy`), which creates a Deployment, Service, and Horizontal Pod Autoscaler per function; and **Container** (`container`), which runs a user-supplied container image as the function pod.
 
 ## F
 
@@ -108,6 +117,11 @@ Specifies the parameter for checking the health of the new version of a function
 ### Fetcher
 
 Fetcher pulls the [source archive](#source-archive) from the [storage service](#storage-service) and verifies the checksum of the file. After the build is complete, it uploads the [deployment archive](#deployment-archive) to the storage service.
+
+### Finalizer
+
+A finalizer is a key on a Kubernetes object that blocks its deletion until a controller has done its cleanup and removed the key.
+Fission's executor adds the `fission.io/function-cleanup` finalizer to Functions so that a function's pods and workloads are reliably torn down before the Function resource disappears.
 
 ### Fission CLI
 
@@ -152,6 +166,12 @@ It is a type of trigger that invokes a Fission function whenever there is an HTT
 ## K
 
 ---
+
+### KEDA Scaler
+
+[KEDA](https://keda.sh/) (Kubernetes Event-Driven Autoscaling) is the engine Fission uses to scale message-queue triggers based on queue depth.
+For a `keda`-kind Message Queue Trigger, Fission creates a KEDA `ScaledObject` (and `TriggerAuthentication`) so the consumer scales out as messages arrive and scales to zero when the queue is empty.
+Fission {{< release-version >}} integrates KEDA v2.20.
 
 ### Kubernetes Watch Trigger
 
@@ -253,6 +273,11 @@ The size of pool i.e.: number of pods in a pool.
 
 ---
 
+### Reconciler
+
+A reconciler is a control loop (built on [controller-runtime](https://github.com/kubernetes-sigs/controller-runtime)) that continuously drives the actual cluster state toward the desired state declared in a custom resource.
+In {{< release-version >}}, the Fission executor runs Environment and Function reconcilers that watch the Fission CRDs and the workloads they own, re-create resources that drift, and use finalizers for clean teardown.
+
 ### Requests Per Pod
 
 RequestsPerPod denotes how many requests will be routed to each pod in Pool Manager.
@@ -274,6 +299,12 @@ Router is responsible for forwarding HTTP requests to function pods.
 ### Source Archive
 
 Source archive is an archive file that contains the source code.
+
+### Specialization
+
+Specialization is the step that turns a generic, pooled environment pod into a pod that runs one specific function.
+The fetcher loads the function's deployment archive into the running environment pod and calls the runtime's specialize endpoint, after which the pod is ready to serve that function's requests.
+This is what makes Pool Manager cold starts fast: the pod is already warm, and only the function code needs to be loaded.
 
 ### Specification
 

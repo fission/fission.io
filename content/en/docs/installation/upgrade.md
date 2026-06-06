@@ -5,9 +5,10 @@ description: >
   Upgrade guidance 1.13 onwards
 ---
 
-{{< notice warning >}}
-Note: Fission upgrades cause a downtime as of now, however we try to minimize it. Please upvote the [issue#1856](https://github.com/fission/fission/issues/1856) so we can priortize fixing it.
-{{< /notice >}}
+{{% notice warning %}}
+Fission upgrades currently cause a short downtime, though we work to minimize it.
+Please upvote [issue #1856](https://github.com/fission/fission/issues/1856) so we can prioritize fixing it.
+{{% /notice %}}
 
 ## Upgrade to the latest Fission version
 
@@ -33,12 +34,22 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 
 _See [configuration](#configuration) below._
 
-## Upgrade to 1.25.x release
+## Upgrade to {{< release-version >}} release
 
-v1.25.0 raises the minimum supported Kubernetes version to **1.32** and continues the security-hardening line.
-The HTTPTrigger path and the PodSpec capability set are now tighter at admission, and the HTTPTrigger / TimeTrigger / CanaryConfig admission webhooks are removed in favor of API-server CEL — invalid cron schedules, CORS origins, and ingress paths are now admitted and surfaced as `…=False` status conditions rather than rejected at creation.
+{{< release-version >}} raises the minimum supported Kubernetes version to **1.32** and continues the security-hardening line.
+Before upgrading, confirm your cluster is on Kubernetes 1.32 or newer — the Helm chart now refuses to install on anything older.
 
-See the [v1.25.0 release notes](/docs/releases/v1.25.0/#upgrade-notes) for the full list of breaking changes and the action each one requires.
+Three breaking changes need attention:
+
+1. **Kubernetes 1.32 minimum.** Clusters below 1.32 are rejected by the chart's `kubeVersion` constraint and fail the runtime `fission check` floor. The fluentbit `PodSecurityPolicy` manifest and the `logger.podSecurityPolicy` Helm value are removed (PSP no longer exists in Kubernetes 1.32); use Pod Security Admission instead.
+2. **HTTPTrigger path validation at admission.** Empty paths, `..` traversal, root-only `/`, and paths that collide with router-owned routes (`/router-healthz`, `/readyz`, `/_version`, `/auth/login`) or shadow `/fission-function/<ns>/<name>` are now rejected. The `fission` CLI already enforced these; raw `kubectl apply` no longer bypasses them. Fix offending trigger paths before upgrading.
+3. **PodSpec capabilities are an allowlist.** `Environment` and `Function` PodSpecs may only add `NET_BIND_SERVICE`; every container is forced to `drop: ["ALL"]`. Specs that added other capabilities are rejected, and workloads that silently relied on the OCI default cap set will see those caps stripped.
+
+The HTTPTrigger / TimeTrigger / CanaryConfig admission webhooks are also removed in favor of API-server CEL validation.
+A side effect: a raw `kubectl apply` of an invalid cron schedule, CORS origin, or ingress path is now **admitted and flagged with a `…=False` status condition** (for example `Scheduled=False`, `RouteAdmitted=False`) rather than rejected at creation.
+The `fission` CLI still rejects these client-side, so the common path is unchanged.
+
+See the [{{< release-version >}} release notes]({{% ref "../releases/v1.25.0.md" %}}#upgrade-notes) for the full list of breaking changes and the action each one requires.
 
 ## Upgrade to 1.24.x release
 
@@ -46,7 +57,7 @@ v1.24.0 is a security-hardening release.
 The admission webhooks now reject cross-namespace references and dangerous PodSpec fields, deny cross-origin browser requests by default, and stop mounting the `fission-builder` ServiceAccount token into user builder containers.
 Specs that rely on the rejected primitives will fail admission after upgrade, so review them first.
 
-See the [v1.24.0 release notes](/docs/releases/v1.24.0/#upgrade-notes) for the full list of breaking changes and the action each one requires.
+See the [v1.24.0 release notes]({{% ref "../releases/v1.24.0.md" %}}#upgrade-notes) for the full list of breaking changes and the action each one requires.
 
 ## Upgrade to 1.23.x release
 
@@ -75,7 +86,7 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all \
 
 With `enabled=false`, every signer/verifier short-circuits to pass-through and the cluster falls back to `NetworkPolicy` + namespace isolation alone — matching pre-1.23 in-cluster behaviour.
 
-See [Internal Service Authentication](/docs/installation/internal-auth/) for the full toggle matrix, secret rotation, and longer-term mitigation.
+See [Internal Service Authentication]({{% ref "internal-auth.md" %}}) for the full toggle matrix, secret rotation, and longer-term mitigation.
 
 ## Upgrade to 1.15.x release from 1.14.x release
 

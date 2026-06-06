@@ -31,7 +31,7 @@ $ fission route create --name foobar --method GET --function nodejs --url "/foob
 Which results in ingress definition like below:
 
 ```yaml
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: foobar
@@ -41,10 +41,13 @@ spec:
   rules:
   - http:
       paths:
-      - backend:
-          serviceName: router
-          servicePort: 80
-        path: /foobar
+      - path: /foobar
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: router
+            port:
+              number: 80
 ```
 
 If you want to limit the accessibility of function to a specific hosts, specify the host rule like `--ingressrule "example.com=/foobar"`:
@@ -55,10 +58,13 @@ spec:
   - host: example.com
     http:
       paths:
-      - backend:
-          serviceName: router
-          servicePort: 80
-        path: /foobar
+      - path: /foobar
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: router
+            port:
+              number: 80
 ```  
 
 **NOTE**: The format of rule depends on the underlying ingress controller you are using.

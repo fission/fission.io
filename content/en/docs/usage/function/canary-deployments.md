@@ -4,18 +4,17 @@ draft: false
 weight: 49
 ---
 
-This tutorial will walk you through setting up a canary config to deploy a new version of a function on your cluster with minimal risk in a way that it gradually serves user traffic starting from 0% going all the way to 100% eventually.
+This tutorial walks you through setting up a canary config to roll out a new version of a function with minimal risk.
+Traffic to the new version is increased gradually, starting at 0% and going all the way to 100%, and is rolled back automatically if the new version becomes unhealthy.
 
 ### Setup & pre-requisites
 
-Canary feature can be enabled or disabled by setting a feature flag in helm chart `canaryDeployment.enabled` to true or false during fission installation.
+Enable the canary feature by setting `canaryDeployment.enabled` to `true` in the Helm chart during Fission installation.
 
-This feature is dependent on **Prometheus** metrics to check the health of the new version of the function.
-Hence, Prometheus is listed as a dependency for fission chart.
-Either an existing prometheus deployment in the cluster can be used or Prometheus could be installed along with fission.
-To install prometheus with fission, the flag prometheusDeploy can be set to True in the helm chart.
-In order to re-use existing Prometheus deployment, fission checks the value of Prometheus server service environment variable in its controller pod.
-If that can't be accessed, fission proceeds without enabling the canary feature.
+The feature relies on **Prometheus** metrics to judge the health of the new version of the function.
+Point Fission at your Prometheus by setting the `prometheus.serviceEndpoint` Helm value to a Prometheus URL that is reachable from inside the cluster.
+You can reuse an existing Prometheus deployment or install one alongside Fission.
+If no reachable Prometheus endpoint is configured, the canary deployment feature cannot evaluate function health and rollouts will not progress.
 
 #### Canary Config parameters
 
@@ -33,15 +32,13 @@ A Canary Config has the following parameters :
   
 * **weightincrement**: Specifies the percentage increase of user traffic towards the new version of the function
   
-* **failureType**: Specifies the parameter for checking the health of the new version of a function.
-  For now, the only supported type is `status-code` which is the http status code.
-  So if a function returns a status code other than 200, its considered to be unhealthy.
+* **failureType**: Specifies how the health of the new version of a function is checked.
+  The only supported type is `status-code` (the HTTP status code), so a function that returns a status code other than 200 is considered unhealthy.
+  This field is set in the CanaryConfig spec; the CLI does not expose a flag for it.
 
-For example, let's say the current stable version of a function is fna-v1 and the latest version of a function is fna-v2.
-Let's suppose we want to increment the traffic towards the new version in steps of 30% every 1m with a failure threshold of 10%.
-For such a scenario, the sample canary config is given below.
-What happens is that every 1m, the percentage of failed requests to fna-v2 gets calculated from prometheus metrics.
-If it is under the configured failure threshold of 10%, then the percentage traffic to fn-v2 gets incremented by 30% and this cycle repeats until either the failure threshold has reached at which point, the deployment is rolled back or fn-v2 is receiving 100% of the user traffic.
+For example, suppose the current stable version of a function is `fn-a-v1` and the new version is `fn-a-v2`.
+We want to increment traffic towards the new version in steps of 30% every 1m, with a failure threshold of 10%.
+The sample canary config below captures this.
 
 ```yaml
 apiVersion: fission.io/v1
@@ -59,8 +56,9 @@ spec:
   weightincrement: 30
 ```
 
-What happens is that every 1m, the percentage of failed requests to fn-a-v2 gets calculated from prometheus metrics.
-If it is under the configured failure threshold of 10%, then the percentage traffic to fn-a-v2 gets incremented by 30% and this cycle repeats until - either the failure threshold has reached at which point the deployment is rolled back, or, fn-v2 is receiving 100% of the user traffic.
+Every 1m, the percentage of failed requests to `fn-a-v2` is calculated from Prometheus metrics.
+If it is under the configured failure threshold of 10%, the traffic to `fn-a-v2` is incremented by 30%.
+This cycle repeats until either the failure threshold is reached (the deployment is rolled back) or `fn-a-v2` is receiving 100% of user traffic.
 
 #### Steps to setup a canary config
 
@@ -86,13 +84,17 @@ $ fission route create --name route-fn-a --function fna-v1 --weight 100 --functi
 4. Create a canary config:
 
 ```bash
-$ fission canary-config create --name canary-1 --newfunction fna-v2 --oldfunction fna-v1 --httptrigger route-fn-a --increment-step 30 --increment-interval 1m --failure-threshold 10
+$ fission canary create --name canary-1 --newfunction fna-v2 --oldfunction fna-v1 --httptrigger route-fn-a --increment-step 30 --increment-interval 1m --failure-threshold 10
 ```
+
+{{% notice info %}}
+`fission canary-config` is a valid alias for `fission canary`, so older commands such as `fission canary-config create` still work.
+{{% /notice %}}
 
 #### Steps to verify the status of a canary deployment
 
 ```bash
-$ fission canary-config get --name canary-1
+$ fission canary get --name canary-1
 ```
 
 This prints the status of the canary deployment of the new version of the function.

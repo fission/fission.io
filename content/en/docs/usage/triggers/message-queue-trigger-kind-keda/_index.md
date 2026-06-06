@@ -1,59 +1,108 @@
 ---
-title: "Message Queue Trigger: Kind Keda"
-description: "Keda based Message Queue Trigger"
+title: "Message Queue Trigger: KEDA"
+description: "KEDA based Message Queue Trigger"
 date: 2020-07-20T14:30:01+05:30
 weight: 3
 ---
 
-_This is a new feature getting released in 1.11._
-
-## Brief Introduction
-
-Message queue trigger integration with KEDA has enabled autoscaling of trigger handler.
-Now, there are two kinds of message queue triggers:
-
-1. fission
-2. keda
-
-Message queue trigger kind can be specified using `mqtkind` flag.
+A **message queue trigger invokes a function for each message published to a queue or stream**.
+The **KEDA-based message queue trigger is the recommended way to consume from message queues in Fission** — it autoscales the connector that reads from your event source, scaling all the way down to zero when there are no messages and back up as load grows.
 
 {{% notice info %}}
-
-Starting from fission version 1.16, the default value of the flag `--mqtkind` is keda. To create the regular [message queue trigger](/docs/usage/triggers/message-queue-trigger/) one must specify `--mqtkind=fission`.
-
+KEDA is the default and recommended kind for message queue triggers.
+`--mqtkind` defaults to `keda`, so you only need to set it explicitly when you want the legacy Fission-managed connector (`--mqtkind=fission`).
+The Fission kind is being phased out — prefer KEDA for all new triggers.
 {{% /notice %}}
+
+## Supported event sources
+
+Each connector is documented on its own page:
+
+- [Apache Kafka]({{% ref "kafka.md" %}})
+- [AWS SQS]({{% ref "aws-sqs.md" %}})
+- [AWS Kinesis]({{% ref "aws-kinesis.md" %}})
+- [GCP Pub/Sub]({{% ref "gcp-pub-sub.md" %}})
+- [NATS JetStream]({{% ref "nats-jetstream.md" %}})
+- [NATS Streaming]({{% ref "nats-streaming.md" %}})
+- [RabbitMQ]({{% ref "rabbitmq.md" %}})
+- [Redis Lists]({{% ref "redis.md" %}})
 
 ## Architecture
 
-{{< img "../assets/mqt-kind-keda.png" "" "40em" "1" >}}
+```mermaid
+flowchart TB
+  source["Event Source"]:::user
 
-1. The user creates a trigger adding all relevant parameters.
-   These parameters are different for each message queue and hence are encapsulated in a metadata field and follow a key-value format.
-   As soon as you create the MQ Trigger, Fission creates a ScaledObject and a consumer deployment object which is referenced by ScaledObject.
-   The ScaledObject is a Keda’s way of encapsulating the consumer deployment and all relevant information for connecting to an event source!
-   Keda goes ahead and creates a HPA for the deployment and scales down the deployment to zero.
-2. As the message arrives in the event source - the Keda will scale the HPA and deployment from 0 - to 1 for consuming messages.
-   As more messages arrive the deployment is scaled beyond 1 automatically too.
-3. The deployment is like an connector which consumes messages from the source and then calls a function.
-4. The function consumes the message and returns the response to deployment pods, which puts the response in response topic and errors in error topic as may be applicable.
+  subgraph k8s["Kubernetes Cluster"]
+    keda["KEDA"]:::user
+    scaledobject["ScaledObject"]:::store
+    connector["Connector Deployment"]:::fission
+    router["Router"]:::fission
+    fnPod["Function Pod"]:::pod
+  end
 
-## Usage
+  source -->|"<b>1.</b> messages"| keda
+  keda -->|"<b>2.</b> scales 0..N"| connector
+  scaledobject -.->|"defines scaling"| connector
+  source -->|"<b>3.</b> consume"| connector
+  connector -->|"<b>4.</b> POST message"| router
+  router -->|"<b>5.</b> forwards request"| fnPod
+  fnPod -->|"<b>6.</b> response"| connector
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
+```
 
-### Prerequisite
+1. When you create a KEDA message queue trigger, Fission creates a `ScaledObject` and a connector deployment that the `ScaledObject` references.
+   The `ScaledObject` is KEDA's way of encapsulating the connector deployment and the information needed to connect to an event source.
+   If authentication is required, the trigger also creates a `TriggerAuthentication` referencing your secret.
+2. KEDA creates an HPA for the deployment and scales it down to zero while there are no messages.
+3. As messages arrive in the event source, KEDA scales the connector deployment from 0 to 1, and beyond as the backlog grows.
+4. The connector consumes each message and POSTs it to the function through the router.
+5. The function returns a response; the connector writes successful responses to the response topic and failures to the error topic, when those are configured.
 
-- KEDA [must be installed](https://keda.sh/docs/latest/deploy/#helm) on your cluster
-- Message queue trigger KEDA integration should be enabled.
+## Prerequisites
 
-To enable integration set the value `mqt_keda.enabled` to `true` while installing Fission with helm chart.
+- [KEDA must be installed](https://keda.sh/docs/latest/deploy/#helm) on your cluster.
+  Fission {{< release-version >}} is built against KEDA v2.20.
+- The KEDA integration must be enabled in Fission.
+  Set `mqt_keda.enabled` to `true` when installing or upgrading the Fission Helm chart.
 
-When you create a message queue trigger of kind keda, it creates [a ScaledObject and a TriggerAuthentication](https://keda.sh/docs/latest/concepts/#custom-resources-crd).
-The ScaledObjects represent the desired mapping between an event source (e.g. Apache Kafka) and the Kubernetes deployment.
-A ScaledObject may also reference a TriggerAuthentication which contains the authentication configuration or secrets to monitor the event source.
-For successful creation of these objects, user should specify the following fields while creating a message queue trigger.
+## Create a KEDA trigger
 
-1. pollinginterval: Interval to check the message source for up/down scaling operation of consumers
-2. cooldownperiod: The period to wait after the last trigger reported active before scaling the consumer back to 0
-3. minreplicacount: Minimum number of replicas of consumers to scale down to
-4. maxreplicacount: Maximum number of replicas of consumers to scale up to
-5. metadata: Metadata needed for connecting to source system in format: `--metadata key1=value1 --metadata key2=value2`
-6. secret: Name of secret object (secret fields must be similarly specified as in mentioned for [particular scaler](https://keda.sh/docs/latest/scalers/))
+Create a message queue trigger with `fission mqtrigger create` (alias `fission mqt create`).
+The connection details for each event source go in repeatable `--metadata key=value` flags, and credentials are referenced by `--secret`.
+
+```bash
+fission mqt create --name <name> --function <function> \
+    --mqtype <source-type> --mqtkind keda \
+    --topic <input-topic> --resptopic <response-topic> --errortopic <error-topic> \
+    --maxretries 3 \
+    --metadata key1=value1 --metadata key2=value2 \
+    --secret <secret-name>
+```
+
+Key flags:
+
+| Flag | Purpose |
+| --- | --- |
+| `--mqtype` | Event source type. For KEDA: `kafka`, `aws-sqs-queue`, `aws-kinesis-stream`, `gcp-pubsub`, `stan`, `nats-jetstream`, `rabbitmq`, `redis`. |
+| `--mqtkind` | Trigger kind; defaults to `keda`. |
+| `--topic` | Topic, queue, or subject the connector reads from. |
+| `--resptopic` | Topic to publish successful function responses to (discarded if unset). |
+| `--errortopic` | Topic to publish errors to (discarded if unset). |
+| `--maxretries` | Maximum retries before a failed message is sent to the error topic. |
+| `--metadata` | Connection metadata for the source, in `key=value` form (repeatable). |
+| `--secret` | Name of the Kubernetes Secret holding source credentials. |
+| `--pollinginterval` | Seconds between checks of the source for scaling decisions (default 30). |
+| `--cooldownperiod` | Seconds to wait after the last active trigger before scaling back to 0 (default 300). |
+| `--minreplicacount` | Minimum number of connector replicas to scale down to. |
+| `--maxreplicacount` | Maximum number of connector replicas to scale up to (default 100). |
+
+The exact `--metadata` keys depend on the event source — see the connector page for each source.
+
+## Related
+
+- [Triggers overview]({{% ref "../_index.md" %}})
+- [KEDA scalers](https://keda.sh/docs/latest/scalers/)

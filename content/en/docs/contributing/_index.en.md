@@ -1,280 +1,257 @@
 ---
 title: "Contributing to Fission"
 linkTitle: Contributing
-weight: 6
+weight: 7
 description: >
-  Build deploy and contribute to Fission!
+  Set up a development environment, build and deploy Fission from source, and open your first pull request.
 ---
 
-Thanks for helping make Fission better😍!
+Thanks for helping make Fission better 😍!
 
-There are many areas we can use contributions - ranging from code, documentation, feature proposals, issue triage, samples, and content creation.
+Fission is a community project, and contributions are welcome across the board: code, documentation, feature proposals, issue triage, samples, and content.
+This page gets you from a fresh clone to a running, hand-built cluster and your first pull request.
 
-First, please read the [code of conduct](https://github.com/fission/.github/blob/main/CODE_OF_CONDUCT.md). By participating, you're expected to uphold this code.
+Before you start, please read the [code of conduct](https://github.com/fission/.github/blob/main/CODE_OF_CONDUCT.md).
+By participating, you agree to uphold it.
 
-- [Choose something to work on](#choose-something-to-work-on)
-  - [Get Help](#get-help)
-- [Contributing - building & deploying](#contributing---building--deploying)
-  - [Pre-requisite](#pre-requisite)
-    - [Use Skaffold with Kind/K8S Cluster to build and deploy](#use-skaffold-with-kindk8s-cluster-to-build-and-deploy)
-  - [Validating Installation](#validating-installation)
-  - [Examples](#examples)
-  - [Understanding code structure](#understanding-code-structure)
-    - [cmd](#cmd)
-      - [pkg](#pkg)
-    - [Custom Resource Definitions](#custom-resource-definitions)
-    - [Charts](#charts)
-    - [Environments](#environments)
-  
-# Choose something to work on
+## Where the code lives
 
-- The easiest way to start is to look at existing [issues](https://github.com/fission/fission/issues) and see if there's something there that you'd like to work on. You can filter issues with label "[Good first issue](https://github.com/fission/fission/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)" which are relatively self sufficient issues and great for first time contributors.
+Fission is split across a few repositories.
+Pick the one that matches what you want to change.
 
-- If you are going to pick up an issue, it would be good to add a comment stating the intention.
-- If the contribution is a big change/new feature, please raise an issue and discuss the needs, design in the issue in detail.
+| Repository | What it holds |
+| :--- | :--- |
+| [fission/fission](https://github.com/fission/fission) | Core platform: router, executor, builder manager, storage service, triggers, webhook, and the `fission` CLI. |
+| [fission/environments](https://github.com/fission/environments) | Language runtimes and builder images (NodeJS, Python, Ruby, Go, PHP, Bash, and more). |
+| [fission/keda-connectors](https://github.com/fission/keda-connectors) | Message-queue connectors that bridge KEDA-scaled triggers to function invocations. |
+| [fission/fission.io](https://github.com/fission/fission.io) | This documentation site (Hugo + Docsy). |
+| [fission/examples](https://github.com/fission/examples) | Sample functions in several languages. |
 
-Please check following repositories for your areas of interest,
+## Choose something to work on
 
-- For contributing a new Fission environment, please check the [environments repo](https://github.com/fission/environments)
-- For contributing a new Keda Connector, please check the [Keda Connectors repo](https://github.com/fission/keda-connectors)
-- You can contribute to the Fission Docs by adding content to the [docs repo](https://github.com/fission/fission.io)
+The easiest way to start is to browse the open [issues](https://github.com/fission/fission/issues) and find something you'd like to take on.
+Filter by the [good first issue](https://github.com/fission/fission/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) label for self-contained tasks that are friendly to newcomers.
 
-## Get Help
+If you pick up an issue, leave a comment saying so, so others don't duplicate your work.
+For a large change or a new feature, open an issue first and discuss the design before writing code.
 
-Do reach out on Slack or Twitter and we are happy to help.
+### Get help
 
-- Drop by the [slack channel](/slack).
-- Say Hi on [twitter](https://twitter.com/fissionio).
+We're happy to help you get unstuck.
 
-# Contributing - building & deploying
+- Drop by the [Slack channel](/slack) — the fastest place to ask questions.
+- Say hi on [Twitter](https://twitter.com/fissionio).
 
-## Pre-requisite
+## Set up a development environment
 
-- You'll need the [`go` compiler](https://golang.org/) and tools installed. Currently version 1.16.x of Go is needed.
-- You'll also need [docker](https://docs.docker.com/install) for building images locally. For Mac and Windows, Docker Desktop is recommended. You may prefer any compatible options for you OS.
-- You will need a Kubernetes cluster and you can use one of options from below.
-  
-  - [Kind](https://kind.sigs.k8s.io/)(Preferred)
+You'll build the Fission images yourself and deploy them to a local Kubernetes cluster.
+
+### Prerequisites
+
+- The [Go compiler](https://golang.org/) and tools.
+  Fission {{< release-version >}} builds with Go 1.26.4 (see `go.mod`).
+- [Docker](https://docs.docker.com/install) for building images locally.
+  Docker Desktop is recommended on Mac and Windows.
+- A Kubernetes cluster, version 1.32 or newer.
+  Any of the following works:
+  - [Kind](https://kind.sigs.k8s.io/) (preferred for local development)
   - [Minikube](https://github.com/kubernetes/minikube)
-  - Cluster in cloud such as GKE (Google Kubernetes Engine cluster)/ EKS (Elastic Kubernetes Service)/ AKS (Azure Kubernetes Service)
+  - A managed cluster such as GKE, EKS, or AKS
+- [`kubectl`](https://kubernetes.io/docs/tasks/tools/) and [Helm](https://helm.sh/).
+- [GoReleaser](https://goreleaser.com/install/) to build the Go binaries.
+- [Skaffold](https://skaffold.dev/docs/install/) to drive the local build-and-deploy loop.
+- A working understanding of core Fission concepts such as [environments]({{% ref "/docs/concepts/environments.md" %}}) and [functions]({{% ref "/docs/concepts/functions.md" %}}) helps a lot.
 
-- Kubectl and [Helm](https://helm.sh/) installed.
-- [Goreleaser](https://goreleaser.com/install/) for building the Go binaries.
-- [Skaffold](https://skaffold.dev/docs/install/) for local development workflow to make it easier to build and deploy Fission.
-- And of course some basic concepts of Fission such as environment, function are good to be aware of!
+{{% notice info %}}
+The `fission/fission` repository's `CONTRIBUTING.md` points back to this page.
+This is the authoritative contributor guide.
+{{% /notice %}}
 
-### Use Skaffold with Kind/K8S Cluster to build and deploy
+### Build and deploy with Skaffold
 
-You should create a Kubernetes cluster using Kind/Minikube cluster or if using a cloud provider cluster then Kubecontext should be pointing to appropriate cluster.
+The repository ships a Skaffold configuration with a `kind` profile for local clusters.
+The general flow is: build the binaries, create the CRDs, then let Skaffold build images and deploy the Helm chart.
 
-- For building & deploying to Cloud Provider K8S cluster such as GKE/EKS/AKS:
+{{< tabs >}}
+{{< tab "Kind cluster" >}}
 
-```console
-skaffold config set default-repo vishalbiyani  // (vishalbiyani - should be your registry/Dockerhub handle)
-skaffold run
-```
-
-- For building & deploying to Kind cluster use Kind profile
-  
 ```console
 kind create cluster
 kubectl create ns fission
-make skaffold-prebuild # This builds all Go binaries required for Fission
-make create-crds
+make skaffold-prebuild   # cross-builds the Linux binaries with GoReleaser
+make create-crds         # applies crds/v1 to the cluster
 skaffold run -p kind
 ```
 
-- If you want your new changes to reflect after skaffold deploy,
+To redeploy after a code change, rebuild the binaries and run Skaffold again:
 
 ```console
-make skaffold-prebuild # This builds all Go binaries required for Fission
+make skaffold-prebuild
 skaffold run -p kind
 ```
-{{< notice info >}}
-Skaffold no longer uses the `--force` option which was causing issues with re-deploying after changes.
-For any changes requiring pod restart, please restart the pods manually.
-{{< /notice >}}
 
-## Validating Installation
+{{< /tab >}}
+{{< tab "Cloud cluster (GKE/EKS/AKS)" >}}
 
-If you are using Helm, you should see release installed:
-
-```sh
-$ helm list -n fission -oyaml
-- app_version: 1.14.1
-  chart: fission-all-1.14.1
-  name: fission
-  namespace: fission
-  revision: "1"
-  status: deployed
-  updated: 2021-09-13 13:16:28.51769
-```
-
-Also, you should see the Fission services deployed and running:
-
-```sh
-$ kubectl get pods -nfission
-NAME                                                    READY   STATUS             RESTARTS   AGE
-buildermgr-6f778d4ff9-dqnq5                             1/1     Running            0          6h9m
-controller-d44bd4f4d-5q4z5                              1/1     Running            0          6h9m
-executor-557c68c6fd-dg8ld                               1/1     Running            0          6h9m
-influxdb-845548c959-2954p                               1/1     Running            0          6h9m
-kubewatcher-5784c454b8-5mqsk                            1/1     Running            0          6h9m
-logger-bncqn                                            2/2     Running            0          6h9m
-mqtrigger-kafka-765b674ff-jk5x9                         1/1     Running            0          6h9m
-mqtrigger-nats-streaming-797498966c-xgxmk               1/1     Running            3          6h9m
-nats-streaming-6bf48bccb6-fmmr9                         1/1     Running            0          6h9m
-router-db76576bd-xxh7r                                  1/1     Running            0          6h9m
-storagesvc-799dcb5bdf-f69k9                             1/1     Running            0          6h9m
-timer-7d85d9c9fb-knctw                                  1/1     Running            0          6h9m
-```
-
-## Examples
-
-In [examples repo](https://github.com/fission/examples), we have a few Fission function samples for different languages.
-You can add your own samples also, so that they can provide help to a wider community.
-
-## Understanding code structure
-
-### cmd
-
-[Cmd](https://github.com/fission/fission/tree/master/cmd) package is entrypoint for all runtime components and also has Dockerfile for each component.
-The actual logic here will be pretty light and most of logic of each component is in [pkg](https://github.com/fission/fission/tree/master/pkg) (Discussed later).
-
-| Component                | Runtime Component      |Used in|
-| :-------------           |:-------------          |:-|
-| fetcher                  | Docker Image           |Environments|
-| fission-bundle           | Docker Image           |Binary for all components|
-| fission-cli              | CLI Binary             |CLI by user|
-| preupgradechecks         | Docker Image           |Pre-install upgrade|
-| reporter                 | Docker Image           |Used for analytics |
-
-```text
-cmd
-├── builder
-│   ├── Dockerfile.fission-builder
-│   ├── app
-│   │   └── server.go
-│   └── main.go
-├── fetcher
-│   ├── Dockerfile.fission-fetcher
-│   ├── app
-│   │   └── server.go
-│   └── main.go
-├── fission-bundle
-│   ├── Dockerfile.fission-bundle
-│   ├── main.go
-│   └── mqtrigger
-│       └── mqtrigger.go
-├── fission-cli
-│   ├── app
-│   │   └── app.go
-│   └── main.go
-├── preupgradechecks
-│   ├── Dockerfile.fission-preupgradechecks
-│   ├── main.go
-│   └── preupgradechecks.go
-└── reporter
-    ├── Dockerfile.reporter
-    ├── app
-    │   ├── app.go
-    │   └── cmd_event.go
-    └── main.go
-```
-
-**fetcher** : is a very lightweight component and all of related logic is in [fetcher package](https://github.com/fission/fission/tree/master/pkg/fetcher) itself.
-Fetcher helps in fetching and uploading code and in specializing environments.
-
-**fission-bundle** : is a component which is a single binary for all components.
-Based on arguments you pass to fission-bundle - it becomes that component.
-For ex.
+Point your kubecontext at the target cluster, set your image registry, then run Skaffold:
 
 ```console
-/fission-bundle --controllerPort "8888" # Runs Controller
-
-/fission-bundle --kubewatcher --routerUrl http://router.fission  # Runs Kubewatcher
+skaffold config set default-repo <your-registry>   # e.g. your Docker Hub handle
+skaffold run
 ```
 
-So, most server side components running on server side are fission-bundle binary wrapped in container and used with different arguments.
-Various arguments and environment variables are passed from manifests/helm chart.
+{{< /tab >}}
+{{< /tabs >}}
 
-**fission-cli** : is the cli used by end user to interact Fission
+{{% notice info %}}
+Skaffold no longer passes `--force`, which previously caused redeploy issues.
+For changes that need a pod restart, restart the affected pods manually.
+{{% /notice %}}
 
-**preupgradechecks** : is again a small independent component to do pre-install upgrade tasks.
+### Verify the installation
 
-#### pkg
+Check that the Helm release is installed:
 
-Pkg is where most of core components and logic reside.
-The structure is fairly self-explanatory for example all of executor related functionality will be in executor package and so on.
-
-```text
-pkg
-├── apis
-├── builder
-├── buildermgr
-├── cache
-├── canaryconfigmgr
-├── controller
-├── crd
-├── error
-├── executor
-├── featureconfig
-├── fetcher
-├── fission-cli
-├── generated
-├── generator
-├── info
-├── kubewatcher
-├── logger
-├── mqtrigger
-├── plugin
-├── poolcache
-├── publisher
-├── router
-├── storagesvc
-├── throttler
-├── timer
-├── tracker
-└── utils
+```console
+helm list -n fission
 ```
+
+Then confirm the Fission components are running:
+
+```console
+kubectl get pods -n fission
+```
+
+You should see pods for the router, executor, builder manager, storage service, kubewatcher, timer, message-queue trigger, webhook, and logger.
+
+{{% notice info %}}
+There is no `controller` pod.
+The old Controller REST API server has been deprecated and removed from the architecture — the CLI and other clients now talk directly to the Kubernetes API server and Fission CRDs.
+{{% /notice %}}
+
+Finally, validate the install end to end:
+
+```console
+fission check
+```
+
+## Run the checks and tests
+
+The `Makefile` wraps the common developer tasks.
+Run these before opening a pull request so CI passes on the first try.
+
+| Target | What it does |
+| :--- | :--- |
+| `make code-checks` | Runs `golangci-lint` over the codebase. |
+| `make test-run` | Runs lint plus the unit/integration test script (`hack/runtests.sh`). |
+| `make build-fission-cli` | Builds the `fission` CLI binary for your platform via GoReleaser. |
+| `make check` | Convenience target: `test-run`, then `build-fission-cli`, then `clean`. |
+| `make license-check` | Fails if any source file is missing its SPDX license header (run `make license` to add them). |
+
+### Generated code and references
+
+Several artifacts are generated, not hand-edited.
+If you change the API types, CLI commands, or webhook annotations, regenerate the affected outputs:
+
+| Target | Regenerates |
+| :--- | :--- |
+| `make codegen` | Deep-copy and client code for the CRD types. |
+| `make generate-crds` | The CRD manifests under `crds/v1`. |
+| `make generate-webhooks` | The admission webhook configuration from the `+kubebuilder:webhook` markers. |
+| `make generate-cli-docs` | The CLI reference pages. |
+| `make generate-crd-ref-docs` | The CRD reference page in this docs site. |
+| `make all-generators` | Runs the code, CRD, and CLI/CRD-reference generators together (`codegen`, `generate-crds`, `generate-cli-docs`, `generate-crd-ref-docs`); run `make generate-webhooks` separately when webhook markers change. |
+
+{{% notice warning %}}
+The CLI, CRD, and metrics reference pages on this site are generated by these targets.
+Edit the source in `fission/fission` and regenerate — do not hand-edit the generated Markdown.
+{{% /notice %}}
+
+## Understand the code structure
+
+A quick map of `fission/fission` so you know where to look.
+
+### `cmd/`
+
+Entry points and Dockerfiles for each runtime component.
+The logic here is thin; the real work lives in `pkg/`.
+
+| Component | Form | Role |
+| :--- | :--- | :--- |
+| `fission-bundle` | Docker image | Single binary for every server-side component; the flag you pass decides which one it becomes. |
+| `fetcher` | Docker image | Fetches source/deployment archives and specializes environment pods. |
+| `fission-cli` | CLI binary | The `fission` command you run as a user. |
+| `preupgradechecks` | Docker image | Pre-install and upgrade safety checks. |
+| `reporter` | Docker image | Anonymous usage analytics. |
+
+`fission-bundle` runs different services depending on its flags, for example:
+
+```console
+/fission-bundle --routerPort 8888       # runs the Router
+/fission-bundle --executorPort 8888     # runs the Executor
+/fission-bundle --kubewatcher           # runs the Kubernetes watcher
+/fission-bundle --webhookPort 9443      # runs the admission webhook
+```
+
+The Helm chart wires the right flags and environment variables for each Deployment.
+
+### `pkg/`
+
+Core logic, organized by component — for example, all executor behavior lives in `pkg/executor`, the router in `pkg/router`, and so on.
+
+As of {{< release-version >}}, the executor's environment and function controllers are built on [controller-runtime](https://github.com/kubernetes-sigs/controller-runtime) reconcilers (see `pkg/executor/envreconciler` and `pkg/executor/funcreconciler`).
+They watch the Fission CRDs and the Kubernetes workloads they own, self-heal on drift, and use a cleanup finalizer (`fission.io/function-cleanup`) so teardown is reliable.
 
 ### Custom Resource Definitions
 
-Fission defines few Custom Resources Definitions, which helps in Fission defining Kubernetes like APIs for Fission entities,
-and in extending APIs as per Fission needs.
-
-You can visualize CRDs [here](https://doc.crds.dev/github.com/fission/fission).
-YAML definition can be found in [crds folder](https://github.com/fission/fission/tree/master/crds).
-
-All definitions are defined in [pkg/apis/core/v1/types.go](https://github.com/fission/fission/blob/master/pkg/apis/core/v1/types.go).
+Fission's CRDs (API group `fission.io/v1`) define Kubernetes-style APIs for Fission entities: Function, Environment, Package, HTTPTrigger, TimeTrigger, MessageQueueTrigger, KubernetesWatchTrigger, and CanaryConfig.
+The Go types live in [pkg/apis/core/v1/types.go](https://github.com/fission/fission/blob/master/pkg/apis/core/v1/types.go), and the generated manifests under [crds/v1](https://github.com/fission/fission/tree/master/crds).
+Many constraints (valid executor types, scale bounds, checksum types) are enforced as CEL validation rules on the CRDs at the API server.
 
 ### Charts
 
-Fission currently has `fission-all` for development.
-
-```text
-charts
-└── fission-all
-```
+The `fission-all` Helm chart under `charts/` deploys the whole platform; it's also what the Skaffold flow installs.
 
 ### Environments
 
-Each of runtime environments is in [fission/environments](https://github.com/fission/environments) repository and fairly independent. If you are enhancing or creating a new environment - most likely you will end up making changes in that repository.
+Each language runtime lives in [fission/environments](https://github.com/fission/environments) and is fairly self-contained.
+If you're adding or improving a runtime, that's the repository to work in.
+You can browse the current versions on the [environments page](/environments/).
 
-```text
-.
-├── environments
-│   ├── binary
-│   ├── dotnet
-│   ├── dotnet20
-│   ├── go
-│   ├── jvm
-│   ├── nodejs
-│   ├── perl
-│   ├── php7
-│   ├── python
-│   ├── ruby
-│   └── tensorflow-serving
+## Contribute to the docs
+
+This site is a [Hugo](https://gohugo.io) static site using the [Docsy](https://github.com/google/docsy) theme, in the [fission/fission.io](https://github.com/fission/fission.io) repository.
+Content lives under `content/en/`.
+
+To preview your changes locally:
+
+```console
+npm install      # installs the PostCSS toolchain
+hugo server      # serves the site at http://localhost:1313/
 ```
 
-You can visualize latest environment version at [environments](/environments/)
+A few conventions to follow:
+
+- Write one sentence per line within paragraphs.
+  CommonMark renders single newlines as spaces, so the page looks identical but diffs stay surgical.
+- Never hardcode a Fission version in page text.
+  Use the `{{</* release-version */>}}` and `{{</* chart-version */>}}` shortcodes instead.
+- Use the `ref` shortcode for internal links so broken links fail the build.
+- When you move or rename a page, add a redirect in `netlify.toml` to keep old URLs working.
+
+## Open a pull request
+
+1. Fork the repository and create a branch off `master` (or `main` for this docs site).
+2. Make your change, keeping commits focused and the history readable.
+3. Run `make check` (for `fission/fission`) so lint and tests pass locally.
+4. Sign off your commits if the repository requires it, and reference the issue you're addressing.
+5. Push your branch and open a pull request with a clear description of the what and the why.
+6. Respond to review feedback; maintainers will guide you through any required changes.
+
+CI runs the same checks you ran locally, so a green local run usually means a green pull request.
+
+## Related
+
+- [Architecture overview]({{% ref "/docs/architecture/_index.md" %}})
+- [Installation guide]({{% ref "/docs/installation/_index.en.md" %}})
+- [CLI reference]({{% ref "/docs/reference/fission-cli/_index.md" %}})

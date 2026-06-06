@@ -15,15 +15,26 @@ It is assumed that the CI/CD tooling which deploys to Kubernetes will have inter
 Before installing Fission you will need to make container images available in a container registry which is accessible to the Kubernetes cluster.
 You can download and retag them or export and import image tar files based on your setup.
 
-For Fission to be installed you will need following images:
+For a core Fission install you will need the following images:
 
 ```text
-fission/fission-bundle
-fission/fetcher
-fission/influxdb
-fluent/fluent-bit
+ghcr.io/fission/fission-bundle
+ghcr.io/fission/fetcher
+ghcr.io/fission/pre-upgrade-checks
 busybox
 ```
+
+If you enable the optional logger (`influxdb.enabled=true`), also mirror:
+
+```text
+fluent/fluent-bit
+influxdb:1.8
+```
+
+{{% notice info %}}
+Image references and tags can change between releases.
+Run `helm show values --version {{< chart-version >}} fission-charts/fission-all` against the chart you intend to install and mirror exactly the images it lists.
+{{% /notice %}}
 
 In addition, you will need to import environment images which will be used by functions. For example, if you are only going to use python and node environments then you will need to import the following images:
 
@@ -67,8 +78,8 @@ type: NodePort
 ### Builder
 
 In a offline setup the builder won't work if it has to fetch dependencies from the internet.
-If you are using a private artifact manager such as Artifactory or Nexus to fetch dependencies then the URLs for those servers have to be configured  in respective build tool.
-\Please check the build tool's documentation to configure the custom artifact server from which dependencies can be fetched.
+If you are using a private artifact manager such as Artifactory or Nexus to fetch dependencies, then the URLs for those servers have to be configured in the respective build tool.
+Please check the build tool's documentation to configure the custom artifact server from which dependencies can be fetched.
 
 ### LoadBalancer & Accessing Fission Functions
 

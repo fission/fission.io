@@ -8,8 +8,8 @@ With 1.7.0+, you can specify which credential to use for kubelet to pull images 
 First, you need to follow the [kubernetes guide](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) to create the secret.
 
 {{% notice warning %}}
-The secret must be created in the same namespace where the function pods created.<br>
-For example, if the function pods are in the `fission-function` namespace, you need to create the secret in `fission-function` as well.
+The secret must be created in the namespace where the function pods run.
+By default this is the namespace where your Fission resources live (for example, `default`); confirm with `kubectl get pods -l environmentName=<env>` to see where the pods are scheduled.
 {{% /notice %}}
 
 Then, specify the secret when creating the environment.

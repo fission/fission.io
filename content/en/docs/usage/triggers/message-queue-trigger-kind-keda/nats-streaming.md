@@ -121,7 +121,7 @@ func main() {
 }
 ```
 
-[Dockerfile](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/producer/Dockerfile)
+Dockerfile:
 
 ```docker
 FROM golang:1.15-alpine as builder

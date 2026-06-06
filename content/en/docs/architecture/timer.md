@@ -2,12 +2,59 @@
 title: "Timer"
 weight: 12
 description: >
-  Invoke functions periodically
+  Invoke functions on a cron schedule
 ---
 
-The timer works like kubernetes CronJob but instead of creating a pod to do the task, it sends a request to router to invoke the function.
-It's suitable for the background tasks that need to execute periodically.
+Timer is the Fission component that invokes a function on a recurring schedule defined by a cron expression.
 
-{{< img "../assets/timer.png" "Fig.1 Timer Trigger" "30em" "1" >}}
+It behaves like a Kubernetes CronJob, but instead of creating a Pod for each run it sends an HTTP request to the [Router]({{% ref "/docs/architecture/router.md" %}}) to invoke your function.
+This makes it well suited to lightweight, periodic background work such as cleanup jobs, polling, and scheduled reports.
 
-1. If the schedule time arrived, Timer invokes the function defined.
+{{% notice info %}}
+Timer is an optional component.
+It runs as the `timer` service inside `fission-bundle` and is only active when you create `TimeTrigger` resources.
+{{% /notice %}}
+
+## How it works
+
+```mermaid
+flowchart TB
+  user["You"] -->|"<b>1.</b> create TimeTrigger"| apiserver["API Server"]
+  subgraph k8s["Kubernetes Cluster"]
+    apiserver -->|"<b>2.</b> reconcile event"| timer["Timer"]
+    timer -->|"<b>3.</b> register cron"| cron["Cron Scheduler"]
+    cron -->|"<b>4.</b> on schedule"| timer
+    timer -->|"<b>5.</b> HTTP request"| router["Router"]
+    router -->|"<b>6.</b> forwards request"| fnPod["Function Pod"]
+  end
+
+  class user,apiserver user
+  class timer,cron,router fission
+  class fnPod pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+```
+
+1. You create a `TimeTrigger` CRD that specifies a cron expression, a target function, and the HTTP method to use.
+2. A controller-runtime reconciler in Timer observes the trigger and registers a cron entry for the trigger's schedule.
+3. When the schedule fires, Timer issues an HTTP request to the Router at the function's URL.
+4. The Router forwards the request to a function pod and the function runs.
+
+Each request carries an `X-Fission-Timer-Name` header set to the trigger name, so a function shared by several timers can tell which schedule invoked it.
+The request body is empty; the HTTP method comes from `spec.method` and an optional `spec.subpath` is appended to the function URL.
+
+When you update a trigger's schedule the cron entry is stopped and re-registered so the new schedule takes effect, and deleting the trigger stops and drops its cron entry.
+
+## Cron expression format
+
+Timer uses the [robfig/cron](https://github.com/robfig/cron) v3 parser.
+A schedule may be a standard five-field cron expression (minute, hour, day-of-month, month, day-of-week), with an optional leading seconds field, or a descriptor such as `@every 1m` or `@hourly`.
+
+A function namespace equals its trigger namespace: a `TimeTrigger` can only invoke a function in the same namespace as the trigger.
+
+## Related
+
+- [Router]({{% ref "/docs/architecture/router.md" %}}) - the component Timer sends requests to.
+- [Reconcilers]({{% ref "/docs/architecture/reconcilers.md" %}}) - the control-loop pattern Timer uses to drive cron entries from `TimeTrigger` CRDs.
+- [Create a time trigger]({{% ref "/docs/usage/triggers/timer.md" %}}) - task-oriented usage guide.

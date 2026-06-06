@@ -4,6 +4,10 @@ draft: false
 weight: 1
 ---
 
+An **environment** is the language runtime that executes your function code.
+Fission ships environments for NodeJS, Python, Ruby, Go, PHP, and Bash, and you can build your own.
+You must create an environment before creating any function that uses it.
+
 ## Create an environment
 
 You can create an environment on your cluster from an image for that language.
@@ -50,3 +54,9 @@ node ac84d62e-001f-11e8-85c9-42010aa00010 ghcr.io/fission/node-env
 $ kubectl get environment.fission.io -o yaml
 # Full YAML of Fission environment object
 ```
+
+## Related
+
+* [Environments]({{% ref "/docs/concepts/environments.md" %}}) — what environments are and how runtimes work.
+* [Create a function]({{% ref "functions.en.md" %}}) — deploy code into an environment.
+* [Packaging source code]({{% ref "package.en.md" %}}) — use a builder to build functions from source.

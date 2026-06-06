@@ -4,6 +4,10 @@ draft: false
 weight: 35
 ---
 
+A Fission **package** is the deployable artifact behind a function: it holds your code as either a *source archive* (built on the cluster by a builder) or a pre-built *deployment archive*.
+This page shows how to create both kinds of package and attach them to a function.
+For the concepts behind builders and the build pipeline, read [Packages and builds]({{% ref "/docs/concepts/packages-and-builds.md" %}}).
+
 #### Creating a Source Package
 
 Before you create a package, you need to create an environment with an associated builder image:
@@ -175,3 +179,9 @@ Hello, world!
 
 While these examples illustrate how to use packages, you don't have to use them every time you need to build your source code.
 A better way is to use [Specifications]({{% ref "../spec/_index.md" %}}).
+
+#### Related
+
+* [Packages and builds]({{% ref "/docs/concepts/packages-and-builds.md" %}}) — how the builder pipeline turns source into a deployment package.
+* [Create a function]({{% ref "functions.en.md" %}}) — building functions directly from source.
+* [Use a URL as an archive source]({{% ref "url-as-archive-source.md" %}}) — reference a remote archive instead of uploading one.

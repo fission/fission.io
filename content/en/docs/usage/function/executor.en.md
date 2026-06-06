@@ -4,20 +4,39 @@ draft: false
 weight: 45
 ---
 
-[Fission Concepts/Function Executors]({{%ref "../../architecture/executor.md" %}}) describes the major difference between executors.
-In this guide, we will go through how to set up/config different executors for function.  
+This guide shows how to choose and configure an executor when you create a function.
+For the concepts and trade-offs behind each executor type, read [Executors]({{% ref "/docs/concepts/executors.md" %}}).
+
+Fission has three executor types:
+
+* **poolmgr** — the default; serves requests from a warm pool of generic pods for fast cold starts.
+* **newdeploy** — gives each function its own Kubernetes Deployment with autoscaling (HPA).
+* **container** — runs an arbitrary container image as a function (see [Running container as functions]({{% ref "container-functions.md" %}})).
+
+The `--executortype` flag on `fission fn create` accepts `poolmgr` or `newdeploy`; the `container` type is created with [`fission fn run-container`]({{% ref "container-functions.md" %}}) instead.
+
+```mermaid
+flowchart TB
+  start(["Create a function"]):::user -->|"fastest cold start"| poolmgr["poolmgr executor"]:::fission
+  start -->|"per-function autoscaling"| newdeploy["newdeploy executor"]:::fission
+  start -->|"existing image"| container["container executor"]:::fission
+  poolmgr -->|"specializes from pool"| warm["Warm generic pod"]:::pod
+  newdeploy -->|"Deployment + HPA"| deploy["Dedicated Deployment"]:::pod
+  container -->|"runs your image"| img["Custom container pod"]:::pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+```
 
 #### Poolmgr (Pool-based executor)
 
-You can create a function like following to use poolmgr as backend executor.
-You can use the `concurrency` field to control the maximum number of concurrent pod specialization(default 5) to serve requests.
-The `concurrency` field is only supported by poolmgr.
+Poolmgr is the default executor, so the two commands below are equivalent:
 
 ```bash
-# The default executor type for function is poolmgr
-$ fission fn create --name foobar --concurrency=4 --env nodejs --code hello.js
+# The default executor type for a function is poolmgr
+$ fission fn create --name foobar --env nodejs --code hello.js
 
-# Or, set executor type to poolmgr explicitly
+# Or, set the executor type to poolmgr explicitly
 $ fission fn create --name foobar --env nodejs --code hello.js --executortype poolmgr
 ```
 
@@ -48,44 +67,48 @@ NAME     UID               IMAGE              POOLSIZE MINCPU MAXCPU MINMEMORY M
 python   73e4e8a3-db49-... ghcr.io/fission/python-env 1        100m   200m   128Mi     256Mi     false  360
 ```
 
-Functions created in Pool Manager can have the following features:
+Poolmgr functions support three tuning flags.
+All three are valid **only** for the `poolmgr` executor type.
 
-* Requests Per Pod:
+* **Requests per pod** (`--requestsperpod`, alias `--rpp`, default `1`):
 
-You can control how many requests will be served by each pod. For instance, if you want each pod to serve only 5 requests, here's how you can do it:
+The maximum number of concurrent requests a single specialized pod will serve.
+Increase it to pack more concurrent requests onto each pod.
+For example, to let each pod handle up to 5 concurrent requests:
 
 ```bash
 $ fission fn create --name foobar --env nodejs --code hello.js --rpp 5
 ```
 
-* OnceOnly:
+* **Once only** (`--onceonly`, alias `--yolo`, default off):
 
-This can be enabled for functions which are long running tasks, the pod will only serve one request.  Each request is assured to be served by a new pod.
+When enabled, a specialized pod serves exactly one request in its lifetime, then is recycled.
+This is useful for long-running tasks where each request should get a fresh pod.
 
 ```bash
-$ fission fn create --name foobar --env nodejs --code hello.js --yolo true
+$ fission fn create --name foobar --env nodejs --code hello.js --rpp 1 --yolo
 ```
 
-* Concurrency:
+* **Concurrency** (`--concurrency`, alias `--con`, default `500`):
 
-If you want to rate limit the amount of requests a function should process, you can do so by:
+The maximum number of pods that may be specialized concurrently to serve incoming requests.
+Lower it to cap how many pods the function can take from the pool at once.
 
 ```bash
-$ fission fn create --name foobar --env nodejs --code hello.js --con 1000
+$ fission fn create --name foobar --env nodejs --code hello.js --con 100
 ```
 
 ### Newdeploy (New-deployment executor)
 
-Newdeploy provides autoscaling and min/max scale setting for functions, and allow a function to handle spikes in workloads.
-To create a function with newdeploy, you have to set executor type to `newdeploy` explicitly.
+Newdeploy gives each function its own Kubernetes Deployment with a HorizontalPodAutoscaler, so the function can scale out to handle spikes in load.
+To use it, set the executor type to `newdeploy` explicitly.
 
 ```bash
 $ fission fn create --name foobar --env nodejs --code hello.js --executortype newdeploy
 ```
 
-Unlike Poolmgr sets all configs at the environment-level.
-Newdeploy provides more **fine grained** configuration at the **function-level**.
-Here are some flags for Newdeploy:
+Unlike poolmgr, which sets resources at the environment level, newdeploy provides more **fine-grained** configuration at the **function level**.
+The relevant flags are:
 
 ```text
 --mincpu value         Minimum CPU to be assigned to pod (In millicore, minimum 1)
@@ -96,6 +119,11 @@ Here are some flags for Newdeploy:
 --maxscale value       Maximum number of pods (Uses resource inputs to configure HPA)
 --targetcpu value      Target average CPU usage percentage across pods for scaling (default: 80)
 ```
+
+{{% notice info %}}
+For the `newdeploy` and `container` executors the API server validates these values: `maxscale` must be greater than `0`, `minscale` must be `0` or higher and not exceed `maxscale`, and `targetcpu` must be between `0` and `100`.
+A request that violates these rules is rejected at create or update time.
+{{% /notice %}}
 
 So if we want to limit a function's min/max cpu to 100m/200m and min/max memory to 128Mi/256Mi.
 
@@ -219,3 +247,9 @@ hello-qoxmothj   Deployment/hello-qoxmothj   6% / 50%     1         6         1 
 hello-qoxmothj   Deployment/hello-qoxmothj   6% / 50%     1         6         1         12m
 hello-qoxmothj   Deployment/hello-qoxmothj   6% / 50%     1         6         1         12m
 ```
+
+#### Related
+
+* [Executors]({{% ref "/docs/concepts/executors.md" %}}) — concepts and trade-offs behind each executor type.
+* [Running container as functions]({{% ref "container-functions.md" %}}) — using the `container` executor.
+* [Create a function]({{% ref "functions.en.md" %}}) — the everyday function workflow.

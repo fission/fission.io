@@ -2,36 +2,41 @@
 title: "Controller"
 weight: 13
 description: >
-  Accept REST API requests and create Fission resources
+  Deprecated REST API server — clients now talk directly to the Kubernetes API server and Fission CRDs.
 ---
 
+{{% notice warning %}}
+The Controller is deprecated and is no longer part of the Fission architecture.
+It was deprecated in 1.18.0 and removed from the default install in 1.20.0.
+This page is kept for reference and migration guidance only.
+{{% /notice %}}
 
-{{< notice info >}}
-Controller is deprecated from version 1.18.0. You can still enable it using - `controller.enabled` flag in helm charts.
-{{< /notice >}}
+The Controller was a standalone REST API server that the Fission CLI used to talk to.
+It exposed CRUD endpoints for Fission resources and proxied requests to internal services.
 
-{{< notice warning >}}
-Controller is removed from version 1.20.0. You will need to use alternative Kubernetes APIs to manage Fission resources.
-{{< /notice >}}
+Every Fission resource has always been stored as a [Kubernetes Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), so the Controller was an extra hop in front of the Kubernetes API server.
+That hop has been removed.
 
-Controller is the component that the client talks to.
-It contains CRUD APIs for functions, triggers, environments, Kubernetes event watches, etc. and proxy APIs to internal 3rd-party services.
+## What replaced it
 
-All fission resources are stored in <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/" target="_blank">Kubernetes CRDs</a>.
-It needs to be able to talk to Kubernetes API service.
-To access CRDs in all namespaces, a service account with cluster-wide admin permission is used by Controller.
+The Fission CLI and all Fission components now talk to the Kubernetes API server directly.
+You create, read, update, and delete Fission resources as native CRDs, and the API server handles authentication, authorization (RBAC), and validation.
 
-{{< img "../assets/controller.png" "Fig.1 Controller" "40em" "1" >}}
+Validation that the Controller used to perform now runs at the API server through [CEL rules]({{% ref "webhook.md" %}}) on the CRDs and a focused [admission webhook]({{% ref "webhook.md" %}}).
 
-1. The clients send requests to the endpoints on Controller.
-2. (A) Controller operates the CRDs based on the request.
-3. (B) If a request is to another internal service, proxy the request to the service.
+The Helm chart no longer has a `controller.enabled` flag — the component was removed entirely, not merely disabled by default.
 
-## API
+## Migration
 
-See [here](https://github.com/fission/fission/blob/master/pkg/controller/api.go) for more details.
+If you have tooling or scripts that called the old Controller REST endpoints, switch them to the Kubernetes API.
 
-* `/v2/apidocs.json`: The OpenAPI 2.0 (Swagger) doc of all CRUD APIs for Fission CRDs.
-* `/proxy/*`: The proxy APIs to internal services.
-* `/v2/<resources>/*`: The CRUD APIs for Fission CRDs.
-* `/healthz`: The health check endpoint.
+- Use the `fission` CLI for everyday operations.
+  It speaks to the Kubernetes API server using your kubeconfig.
+- Use `kubectl` (or any Kubernetes client) to manage Fission resources as CRDs directly — for example `kubectl get functions.fission.io` or `kubectl apply -f function.yaml`.
+- Apply Kubernetes RBAC to Fission CRDs to control who can manage which resources.
+
+## Related
+
+- [Architecture overview]({{% ref "_index.md" %}}) — the current set of Fission components.
+- [Admission Webhook]({{% ref "webhook.md" %}}) — how Fission resources are validated today.
+- [Reconcilers]({{% ref "reconcilers.md" %}}) — how components act on the CRDs you create.

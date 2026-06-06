@@ -53,8 +53,8 @@ $ kubectl -n fission patch configmap feature-config \
     -p '{"data":{"config.yaml":"Y2FuYXJ5OgogIGVuYWJsZWQ6IHRydWUKICBwcm9tZXRoZXVzU3ZjOiAiaHR0cHM6Ly9wcm9tZXRoZXVzLWs4cy1vcGVuc2hpZnQtbW9uaXRvcmluZy5hcHBzLl91cmxfLm9wZW5zaGlmdC5jb20iCg"}}'
 ```
 
-Delete controller pod to enforce it to reload the config.
+Restart the canaryconfig pod so it reloads the updated config.
 
 ```sh
-$ kubectl -n fission delete pod -l svc=controller
+$ kubectl -n fission delete pod -l svc=canaryconfig
 ```

@@ -40,7 +40,15 @@ spec:
 ```
 
 In this section we will look at various use cases that are possible with PodSpec support in Fission.
-To learn more about how specs please check [this documentation link]({{% ref "_index.md"%}}).
+To learn more about specs, check [the spec documentation]({{% ref "../_index.md" %}}).
+
+{{% notice warning %}}
+**Security: PodSpec fields are validated and hardened (since {{< release-version >}}).**
+Because the executor and builder service accounts can create Pods and Deployments, Fission rejects PodSpec fields that would let a function tenant escape the container sandbox or reach node-level state.
+A user- or environment-supplied (init)container may add only the `NET_BIND_SERVICE` Linux capability through `securityContext.capabilities.add`; every other capability is rejected by the allowlist, and the executor forces `securityContext.capabilities.drop: ["ALL"]` when it merges the pod.
+The following are also rejected: `hostNetwork`, `hostPID`, `hostIPC`, `hostPath` volumes, `serviceAccountName`/`serviceAccount` overrides, `privileged: true`, and `allowPrivilegeEscalation: true`.
+Keep your PodSpec additions within these bounds, or `fission spec apply` (and the admission webhook) will reject the Environment or Function.
+{{% /notice %}}
 
 ## Many More!
 

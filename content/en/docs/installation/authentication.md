@@ -10,7 +10,7 @@ description: >
 When using Fission, if you are using an ingress, you might already have some form of authentication in place for external calls.
 But if you aren't, Fission didn't provide a way to configure authentication for your API calls.
 
-Starting with [v1.16.0](/docs/releases/v1.16.0-rc1/), Fission allows you to have an **authentication mechanism in place for Fission function invocations**.
+Starting with [v1.16.0]({{% ref "../releases/v1.16.0.md" %}}), Fission allows you to have an **authentication mechanism in place for Fission function invocations**.
 
 ## Understanding Authentication for Fission Functions
 
@@ -20,10 +20,24 @@ This is an optional feature that can be enabled/disable depending on your requir
 When enabled, a new endpoint for authentication will be registered in the router.
 All the API calls to Fission functions will now be routed through function endpoints using authentication token.
 
-Fission will also create a secret named `router` in `fission` namespace with a default `username`, a randomly generated `password` and a `jwtSigninKey`.
-This secret is mounted on a volume on the router pod.
-The user has to first create an `auth token` by providing the `username` and `password`.
-The token generated has to be passed in the authentication header for all subsequent API calls to the function.
+Fission also creates a Secret named `router` in the `fission` namespace with a default `username`, a randomly generated `password`, and a `jwtSigningKey`.
+This Secret is mounted as a volume on the router pod.
+You first create an auth token by providing the `username` and `password`.
+The generated token must then be passed in the `Authorization` header of every subsequent function call.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor client as Client
+    participant router as Router
+    participant fnPod as Function Pod
+    client->>router: POST /auth/login (username + password)
+    router-->>client: signed JWT token
+    client->>router: GET /<route> (Authorization: Bearer token)
+    router->>router: verify JWT with jwtSigningKey
+    router->>fnPod: forward request
+    fnPod-->>client: response
+```
 
 ## Enabling Authentication
 
@@ -34,30 +48,34 @@ This can be found in `charts/fission-all/values.yaml`.
 --set authentication.enabled=true
 ```
 
-You can also set other parameters related to Authentication
+You can also tune the related parameters in the `authentication` section of `values.yaml`:
 
 ```yaml
-  ## authUriPath defines authentication endpoint path via router 
+authentication:
+  enabled: true
+
+  ## authUriPath defines the authentication endpoint path on the router.
   ## default '/auth/login'
   authUriPath:
 
-  ## authUsername is used as a username for authentication
+  ## authUsername is the username used for authentication.
   ## default 'admin'
   authUsername: admin
-  
-  ## jwtSigningKey is the signing key used for signing the JWT token
-  jwtSigningKey: serverless
 
-  ## jwtExpiryTime is the JWT expiry timein seconds
+  ## jwtSigningKey is the key used to sign the JWT token.
+  ## If left empty, the chart generates a random key on install.
+  jwtSigningKey:
+
+  ## jwtExpiryTime is the JWT expiry time in seconds.
   ## default '120'
-  jwtExpiryTime: 
-  
-  ## jwtIssuer is the issuer of JWT
+  jwtExpiryTime:
+
+  ## jwtIssuer is the issuer claim of the JWT.
   ## default 'fission'
   jwtIssuer: fission
 ```
 
->> Refer to our [installation](_index.en.md) guide if you are installing Fission for the first time. Or visit our [Fission Upgrade](../upgrade) guide if you're upgrading from an older version.
+Refer to the [installation guide]({{% ref "_index.en.md" %}}) if you are installing Fission for the first time, or to the [Upgrade Guide]({{% ref "upgrade.md" %}}) if you are upgrading from an older version.
 
 ## Generating Auth Token
 
@@ -70,12 +88,15 @@ export FISSION_PASSWORD=$(kubectl get secrets/router --template={{.data.password
 export FISSION_AUTH_TOKEN=$(fission token create --username $FISSION_USERNAME --password $FISSION_PASSWORD)
 ```
 
-To understand more about generating tokens, refer to our [Fission Token Create](/docs/reference/fission-cli/fission_token_create/) document.
+To understand more about generating tokens, refer to the [`fission token create`]({{% ref "../reference/fission-cli/fission_token_create.md" %}}) reference.
 
-With this all your API calls to Fission functions are now authenticated using the token generated.
-*If a malformed token is used, the API call will fail and return an error.*
+With this, all your API calls to Fission functions are now authenticated using the generated token.
+If a malformed token is used, the API call fails and returns an error.
 
->> The `auth token` is valid for 120s by default.
+{{% notice info %}}
+The auth token is valid for 120 seconds by default.
+Adjust this with `authentication.jwtExpiryTime`.
+{{% /notice %}}
 
 ## Using Authentication in Fission
 
@@ -105,7 +126,6 @@ If the `auth token` is not configured correctly or malformed, the function will 
 ```bash
 fission fn test --name hello
 Error: Error calling function hello: 401; Please try again or fix the error: {"message":"Unauthorized: malformed Token","statusCode":401}
-Error: Error getting function logs from controller: error getting logs from controller, status code: '500'. Try to get logs from log database.
 ```
 
 ### Fission Function API call
@@ -132,6 +152,12 @@ hello, world!
 ```
 
 You can also test your Fission function using Postman.
-Generate the `auth token` and pass it as bearer token in the header of the request.
+Generate the auth token and pass it as a bearer token in the header of the request.
 
 ![Fission Authentication using Postman](../assets/fission-auth-postman.png)
+
+## Related
+
+- [Internal Service Authentication]({{% ref "internal-auth.md" %}}) — HMAC auth for Fission's internal control-plane RPCs (a separate, on-by-default feature).
+- [`fission token create`]({{% ref "../reference/fission-cli/fission_token_create.md" %}}) — CLI reference.
+- [Installing Fission]({{% ref "_index.en.md" %}})

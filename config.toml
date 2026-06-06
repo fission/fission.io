@@ -67,6 +67,11 @@ unsafe = true
 [markup.highlight]
 style = "tango"
 
+[security]
+# Hugo >= 0.158 denies text/html content files by default.
+# This site intentionally uses HTML content files (e.g. content/en/_index.html).
+allowContent = ['.*']
+
 ## Configuration for BlackFriday markdown parser: https://github.com/russross/blackfriday
 [blackfriday]
 angledQuotes = false
@@ -99,7 +104,7 @@ weight = 1
 # Everything below this are Site Params
 
 [params]
-copyright = "Copyright © 2020 Fission Project"
+copyright = "Fission Project"
 github_repo = "https://github.com/fission/fission.io"
 github_project_repo = "https://github.com/fission/fission"
 privacy_policy = ""
@@ -125,19 +130,67 @@ notoc = true
 # First one is picked as the Twitter card image if not set on page.
 images = ["images/og-image-fission.png"]
 
+# Mermaid diagrams. Docsy v0.15.0 ships the render hook + conditional
+# per-page CDN loader (only pages with a ```mermaid fence load the JS).
+# Values here are merged into mermaid.initialize() by Docsy.
+[params.mermaid]
+enable = true
+version = "11"            # pin major; resolves to latest 11.x from jsDelivr
+theme = "base"            # "base" is the only theme that honors themeVariables
+fontFamily = "Lato, sans-serif"
+
+# themeVariables — clean light style: white nodes, grey-blue borders, slate
+# arrows, navy text. Per-diagram classDefs add category colors (blue Fission
+# components, teal pods, amber storage, crimson step markers).
+[params.mermaid.themeVariables]
+background = "#ffffff"
+primaryColor = "#ffffff"          # node fill: white
+primaryBorderColor = "#94a3b8"    # node border: grey-blue
+primaryTextColor = "#1f2a43"      # node text: dark navy
+secondaryColor = "#e8f0fe"        # light blue fill
+secondaryBorderColor = "#2d70de"  # brand blue border
+secondaryTextColor = "#1f2a43"
+tertiaryColor = "#fbfcfe"
+tertiaryBorderColor = "#cbd5e1"
+tertiaryTextColor = "#1f2a43"
+lineColor = "#64748b"             # edges/arrows: slate grey
+textColor = "#1f2a43"             # labels outside nodes
+mainBkg = "#ffffff"
+nodeBorder = "#94a3b8"
+clusterBkg = "#ffffff"            # subgraph background: white, thin border
+clusterBorder = "#cbd5e1"
+titleColor = "#1f2a43"
+fontFamily = "Lato, sans-serif"
+fontSize = "15px"
+edgeLabelBackground = "#ffffff"
+# sequenceDiagram-specific
+actorBkg = "#ffffff"
+actorBorder = "#94a3b8"
+actorTextColor = "#1f2a43"
+signalColor = "#64748b"
+signalTextColor = "#1f2a43"
+labelBoxBkgColor = "#e8f0fe"
+labelBoxBorderColor = "#2d70de"
+labelTextColor = "#1f2a43"
+noteBkgColor = "#fff7e0"          # gentle amber notes, readable on white
+noteBorderColor = "#dba514"
+noteTextColor = "#1f2a43"
+activationBkgColor = "#e8f0fe"
+nodeTextColor = "#1f2a43"
+
 [params.social]
 github = 'fission'
 slackurl = "/slack"
 twitter = 'fissionio'
 
 [[params.whatsnew]]
-badge = 'FISSION DZONE REFCARD'
-body = 'Get started with Serverless on Kubernetes in 5 minutes! Learn how to set up Fission, its key concepts, how to create and invoke a function, monitor its performance, and more.'
-heading = 'New! Download the Fission.io Refcard'
+badge = 'RELEASE'
+body = 'Fission v1.25.0 is out! Kubernetes 1.32 support, stricter admission with API-server CEL validation, PodSpec capability allowlist, and more.'
+heading = 'Announcing Fission v1.25.0'
 [params.whatsnew.button]
 hero_class = 'mid'
-text = 'Download Now!'
-url = 'https://platform9.com/wp-content/uploads/2019/03/dzone-refcard-fissionio.pdf'
+text = 'Read Release Notes'
+url = '/docs/releases/v1.25.0/'
 
 [[params.whatsnew]]
 badge = 'BLOG'
