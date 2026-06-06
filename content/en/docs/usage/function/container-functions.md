@@ -2,6 +2,8 @@
 title: "Running container as functions"
 draft: false
 weight: 46
+description: >
+  Run an existing container image as a function with the container executor via fission function run-container, without an environment or builder.
 ---
 
 {{% notice info %}}

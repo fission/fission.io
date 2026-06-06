@@ -3,6 +3,7 @@ title: "Kubernetes Response Engine: Falcosidekick + Fission"
 date: 2021-09-01
 author: Gaurav Gahlot
 categories: ["Tutorials"]
+description: "Build a Kubernetes response engine that uses Falco and Falcosidekick to trigger a Fission function which auto-deletes compromised pods."
 slug: falcosidekick-response-engine-fission
 ---
 

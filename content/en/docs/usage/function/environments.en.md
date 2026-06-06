@@ -2,6 +2,8 @@
 title: "Create Environment"
 draft: false
 weight: 1
+description: >
+  Create a language runtime environment with fission env create, set CPU/memory limits and poolsize, and attach a builder image for source builds.
 ---
 
 An **environment** is the language runtime that executes your function code.

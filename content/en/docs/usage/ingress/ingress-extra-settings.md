@@ -1,6 +1,8 @@
 ---
 title: "Host, Path, Annotations and TLS"
 weight: 2
+description: >
+  Configure ingress host rules, paths, annotations, and TLS on a Fission route using --ingressrule, --ingressannotation, and --ingresstls.
 ---
 
 ### Annotations (`--ingressannotation`)

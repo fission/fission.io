@@ -2,6 +2,8 @@
 title: "Create Function"
 draft: false
 weight: 2
+description: >
+  Create a function with fission fn create, route HTTP traffic to it, test it, and update its code through the everyday function workflow.
 ---
 
 This page walks you through the everyday function workflow: create a function, route HTTP traffic to it, test it, update its code, and inspect it.

@@ -1,6 +1,8 @@
 ---
 title: "Environment Variable"
 date: 2019-12-06T17:02:55+08:00
+description: >
+  Set environment variables on Fission environment pods via PodSpec, including exposing Kubernetes Secrets and ConfigMaps to your function.
 ---
 
 Functions sometimes require to pass-in parameter through environment variable to control internal behavior of a function like `GOMAXPROCS` for Go or you may want to expose secret/configmap as environment variable.

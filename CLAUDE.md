@@ -57,6 +57,7 @@ The details live in `.claude/resources/`:
 - [.claude/resources/mermaid-diagrams.md](.claude/resources/mermaid-diagrams.md) — diagram color kit, the <900px width rule, step-number style, lightbox/partial-cache gotchas.
 - [.claude/resources/page-patterns.md](.claude/resources/page-patterns.md) — docs nav order, page skeletons, catalog/blog/homepage/support page structures and their traps.
 - [.claude/resources/automation-ideas.md](.claude/resources/automation-ideas.md) — backlog of process automation worth building.
+- [.claude/resources/seo.md](.claude/resources/seo.md) — SEO/LLM rules: required front-matter descriptions, JSON-LD partial, llms.txt + markdown-mirror outputs, title/heading conventions.
 
 Consult the matching resource file before styling or restructuring a page.
 

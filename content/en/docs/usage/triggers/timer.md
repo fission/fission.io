@@ -2,6 +2,8 @@
 title: "Timer Triggers"
 date: 2019-12-17T14:38:24+08:00
 weight: 4
+description: >
+  Invoke functions on a cron schedule with timer triggers using fission timer create, supporting cron specs and descriptors like @every.
 ---
 
 A **time trigger invokes a function on a cron schedule** — once, or repeatedly.

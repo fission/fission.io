@@ -2,6 +2,8 @@
 title: "Accessing URL parameters"
 date: 2018-10-25T17:39:41+08:00
 weight: 3
+description: >
+  Define path parameters in an HTTP trigger URL with gorilla/mux patterns and read their values inside a function via request headers.
 ---
 
 To develop an application consists with REST APIs, we may want to access URL parameters in functions.

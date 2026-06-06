@@ -2,6 +2,8 @@
 title: "Fission NATS Streaming"
 weight: 2
 draft: true
+description: >
+  Legacy reference for the removed Fission-kind NATS Streaming message queue trigger; use the KEDA-based NATS Streaming trigger instead.
 ---
 
 {{% notice warning %}}

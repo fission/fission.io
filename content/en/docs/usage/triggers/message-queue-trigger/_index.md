@@ -3,6 +3,8 @@ title: "[Removed] Message Queue Trigger: Kind Fission"
 date: 2019-12-17T14:38:11+08:00
 weight: 4
 draft: true
+description: >
+  Legacy reference for the removed Fission-kind message queue trigger that invoked functions from queue messages; use the KEDA trigger instead.
 ---
 
 {{% notice warning %}}

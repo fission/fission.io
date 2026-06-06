@@ -32,6 +32,7 @@ images = ["images/featured/my-post-featured.png"]
 ```
 
 - `type = "blog"` is required.
+- `description` is required — it is the meta description, OG description, and llms.txt entry (see `.claude/resources/seo.md`).
 - `categories`: `["Tutorials"]` for how-tos, `["Fission"]` for project/release news — reuse existing categories, don't invent new ones.
 - `author` full name; it links to the author taxonomy page automatically.
 - Use a real current `date` with timezone — the list groups by year and sorts by it.

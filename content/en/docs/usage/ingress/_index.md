@@ -3,6 +3,8 @@ title: "Exposing Functions With Ingress"
 linkTitle: Ingress
 draft: false
 weight: 60
+description: >
+  Expose a Fission function outside the cluster on an FQDN using an NGINX ingress controller and Fission's route with --createingress.
 ---
 
 Ingress is a Kubernetes built-in resource that allows accessing Kubernetes services from outside of cluster with help of a ingress controller.

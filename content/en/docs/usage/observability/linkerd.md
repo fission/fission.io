@@ -1,6 +1,8 @@
 ---
 title: "Observability with Linkerd"
 weight: 20
+description: >
+  Mesh Fission function and component pods with the Linkerd service mesh to view request rate, success rate, and latency in its dashboard.
 ---
 
 ## Observability with Linkerd

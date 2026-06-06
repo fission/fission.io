@@ -3,6 +3,8 @@ title: "RBAC Permissions"
 linkTitle: RBAC permissions
 draft: false
 weight: 60
+description: >
+  Understand the Kubernetes RBAC roles Fission components use, the permissions needed to drive the CLI, and how to scope a user to one namespace.
 ---
 
 **This guide explains the Kubernetes RBAC that Fission's components use, the permissions a human (or CI) user needs to drive the Fission CLI, and how to scope a user down to a single namespace.**

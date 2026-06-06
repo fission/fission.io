@@ -1,6 +1,8 @@
 ---
 title: "Pull an Image From a Private Registry"
 weight: 6
+description: >
+  Pull environment images from a private registry by passing an imagePullSecret to fission environment create with --imagepullsecret.
 ---
 
 With 1.7.0+, you can specify which credential to use for kubelet to pull images from the private registry.

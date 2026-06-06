@@ -1,6 +1,8 @@
 ---
 title: "Toleration"
 date: 2019-12-06T16:48:14+08:00
+description: >
+  Add tolerations to a Fission environment's PodSpec so functions schedule onto tainted nodes reserved for specific hardware or workloads.
 ---
 
 **Taints and tolerations** are mechanisms to influence scheduling of pods in Kubernetes.

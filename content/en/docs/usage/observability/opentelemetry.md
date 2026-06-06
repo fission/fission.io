@@ -1,6 +1,8 @@
 ---
 title: "Tracing with OpenTelemetry"
 weight: 11
+description: >
+  Configure Fission's OpenTelemetry tracing via the Helm openTelemetry values to export OTLP spans to Jaeger or any compatible backend.
 ---
 
 ## Tracing in Fission

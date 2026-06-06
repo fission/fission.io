@@ -1,6 +1,8 @@
 ---
 title: "Logs with Loki"
 weight: 20
+description: >
+  Aggregate Fission component and function pod logs with the Grafana Loki, Promtail, and Grafana stack installed via Helm.
 ---
 
 ## Logs in Fission

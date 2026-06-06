@@ -1,6 +1,8 @@
 ---
 title: "Volume"
 date: 2019-12-06T16:50:52+08:00
+description: >
+  Define and mount Kubernetes volumes on Fission function containers through PodSpec so stateful functions can access attached data.
 ---
 
 Functions are great for stateless things but there are use cases where functions deal with data, that is best attached as volume.

@@ -2,6 +2,8 @@
 title: "Kubernetes Watch Triggers"
 date: 2019-12-17T14:38:40+08:00
 weight: 5
+description: >
+  Invoke a function whenever a watched Kubernetes object is added, modified, or deleted using a kubewatcher-backed watch trigger.
 ---
 
 A **Kubernetes watch trigger invokes a function whenever a watched Kubernetes object changes** (added, modified, or deleted).
