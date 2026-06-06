@@ -125,7 +125,7 @@ stateDiagram-v2
 - **Reaped** — the executor releases the pod (poolmgr returns it to the pool; newdeploy/container can scale to zero).
 
 {{% notice info %}}
-As of {{< release-version >}}, the executor's environment and function controllers run as controller-runtime reconcilers (RFC-0005), with self-healing on drift and cleanup finalizers for reliable teardown.
+As of {{< release-version >}}, the executor's environment and function controllers run as controller-runtime reconcilers, with self-healing on drift and cleanup finalizers for reliable teardown.
 {{% /notice %}}
 
 ## Choosing an executor

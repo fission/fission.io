@@ -76,7 +76,7 @@ sequenceDiagram
 
 ## Reconcilers, self-healing, and cleanup
 
-In {{< release-version >}} the executor's controllers were consolidated onto controller-runtime reconcilers (RFC-0004), collapsing the previous nine reconcilers down to three.
+In {{< release-version >}} the executor's controllers were consolidated onto controller-runtime reconcilers, collapsing the previous nine reconcilers down to three.
 
 - **Single Function reconciler.**
 One Function-centric reconciler resolves each function's executor type and dispatches create, update, and delete to the owning type.
