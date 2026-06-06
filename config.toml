@@ -184,13 +184,13 @@ slackurl = "/slack"
 twitter = 'fissionio'
 
 [[params.whatsnew]]
-badge = 'FISSION DZONE REFCARD'
-body = 'Get started with Serverless on Kubernetes in 5 minutes! Learn how to set up Fission, its key concepts, how to create and invoke a function, monitor its performance, and more.'
-heading = 'New! Download the Fission.io Refcard'
+badge = 'RELEASE'
+body = 'Fission v1.25.0 is out! Kubernetes 1.32 support, stricter admission with API-server CEL validation, PodSpec capability allowlist, and more.'
+heading = 'Announcing Fission v1.25.0'
 [params.whatsnew.button]
 hero_class = 'mid'
-text = 'Download Now!'
-url = 'https://platform9.com/wp-content/uploads/2019/03/dzone-refcard-fissionio.pdf'
+text = 'Read Release Notes'
+url = '/docs/releases/v1.25.0/'
 
 [[params.whatsnew]]
 badge = 'BLOG'
