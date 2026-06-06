@@ -2,6 +2,8 @@
 title: "Packaging source code"
 draft: false
 weight: 35
+description: >
+  Create source and deployment packages with fission package, build source archives on the cluster with a builder, and attach packages to functions.
 ---
 
 A Fission **package** is the deployable artifact behind a function: it holds your code as either a *source archive* (built on the cluster by a builder) or a pre-built *deployment archive*.

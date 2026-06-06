@@ -3,6 +3,7 @@ title = "Hello World: Creating Functions using Fission (in Golang)"
 date = "2018-03-05T11:13:45-08:00"
 author = "Timirah James"
 categories = ["Tutorials"]
+description = "A beginner walkthrough for deploying a Go Hello World function on Fission, from Minikube and CLI setup to creating an environment and invoking the function."
 type = "blog"
 +++
 

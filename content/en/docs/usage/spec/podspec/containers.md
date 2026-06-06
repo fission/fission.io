@@ -1,6 +1,8 @@
 ---
 title: "Sidecar and Init Container"
 date: 2019-12-06T16:52:08+08:00
+description: >
+  Add init containers and sidecar containers to a Fission environment's PodSpec to run setup or auxiliary processes alongside functions.
 ---
 
 ## Init container

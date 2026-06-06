@@ -2,6 +2,8 @@
 title: "Accessing Secrets/ConfigMaps"
 draft: false
 weight: 4
+description: >
+  Mount Kubernetes Secrets and ConfigMaps into a Fission function and read their values for API keys and configuration.
 ---
 
 Functions can access Kubernetes [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) and [ConfigMaps](https://kubernetes.io/docs/concepts/storage/volumes/#configmap).

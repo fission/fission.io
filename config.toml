@@ -264,6 +264,25 @@ changefreq = "monthly"
 filename = "sitemap.xml"
 priority = 0.5
 
+# LLM-friendly outputs.
+# LLMS is defined by Docsy (text/plain, baseName "llms") and rendered by its
+# layouts/index.llms.txt -> serves /llms.txt, a markdown site index for AI agents.
+# The "markdown" format renders every page through Docsy's layouts/all.md ->
+# serves <page>/index.md, a plain-markdown mirror that llms.txt links to.
+[mediaTypes."text/markdown"]
+suffixes = ["md"]
+
+[outputFormats.markdown]
+mediaType = "text/markdown"
+baseName = "index"
+isPlainText = true
+notAlternative = true
+
+[outputs]
+home = ["HTML", "RSS", "LLMS", "markdown"]
+section = ["HTML", "markdown"]
+page = ["HTML", "markdown"]
+
 [params.search.algolia]
 appId = "MSV5TDX060"
 apiKey = "d814136dbb3b955516468a309c4b425e"

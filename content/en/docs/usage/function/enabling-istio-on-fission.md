@@ -2,6 +2,8 @@
 title: "Enabling Istio on Fission"
 draft: false
 weight: 62
+description: >
+  Install Fission with the Istio service mesh and enable automatic sidecar injection for Fission and function pods.
 ---
 
 This tutorial sets up Fission with [Istio](https://istio.io/), a service mesh for Kubernetes.

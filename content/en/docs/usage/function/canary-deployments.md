@@ -2,6 +2,8 @@
 title: "Canary Deployments for Functions"
 draft: false
 weight: 49
+description: >
+  Gradually shift HTTP traffic to a new function version with a CanaryConfig, using Prometheus health checks to auto-rollback on failure.
 ---
 
 This tutorial walks you through setting up a canary config to roll out a new version of a function with minimal risk.

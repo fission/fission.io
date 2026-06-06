@@ -3,6 +3,7 @@ title: "Serverless Kafka Consumer for Confluent Cloud"
 date: 2021-11-10T11:21:01+05:30
 author: Ankit Chawla
 categories: ["Tutorials"]
+description: "Consume Apache Kafka topics from Confluent Cloud with Fission using the KEDA Kafka connector over SASL/SSL, with producer and consumer functions."
 draft: false
 ---
 

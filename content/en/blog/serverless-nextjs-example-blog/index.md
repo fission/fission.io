@@ -3,6 +3,7 @@ title: "Serverless Next.js Example Blog with Fission"
 date: 2021-11-17T13:29:16+05:30
 author: Sanket Sudake
 categories: ["Tutorials"]
+description: "Deploy a Next.js blog on Fission using prefixed path routing so a single Node.js function serves all of the app's pages."
 draft: false
 ---
 

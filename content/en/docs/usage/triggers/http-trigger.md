@@ -2,6 +2,8 @@
 title: "HTTP Trigger"
 date: 2019-12-17T14:38:00+08:00
 weight: 1
+description: >
+  Invoke functions over HTTP by mapping URL paths and methods to functions with fission httptrigger create, including URL path parameters.
 ---
 
 An **HTTP trigger invokes a function when the router receives a matching HTTP request**.

@@ -1,6 +1,8 @@
 ---
 title: "Use URL as archive source when creating functions/packages"
 weight: 7
+description: >
+  Embed a remote URL directly in a package archive when creating functions or packages to cut creation time and improve spec portability.
 ---
 
 Previously, the CLI tends to download the file and upload it to internal storagsvc to persist when a  user provides URL as archive source while creating the package.

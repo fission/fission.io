@@ -2,6 +2,8 @@
 title: "Controlling Function Execution"
 draft: false
 weight: 45
+description: >
+  Choose and configure a function executor (poolmgr, newdeploy, or container) with --executortype to control cold starts and per-function autoscaling.
 ---
 
 This guide shows how to choose and configure an executor when you create a function.

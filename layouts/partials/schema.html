@@ -1,0 +1,101 @@
+{{- /*
+  JSON-LD structured data. Docsy's head.html invokes `partial "schema.html"`,
+  so this site-level partial is picked up on every page.
+  Entities: home = Organization + WebSite + SoftwareApplication;
+  blog posts = BlogPosting; docs pages = TechArticle + BreadcrumbList.
+*/ -}}
+{{- $org := dict
+  "@type" "Organization"
+  "name" "Fission"
+  "url" site.BaseURL
+  "logo" (absURL "images/logo.png")
+  "sameAs" (slice
+    "https://github.com/fission/fission"
+    "https://twitter.com/fissionio"
+    "https://fission.io/slack")
+-}}
+{{- $defaultImage := absURL "images/og-image-fission.png" -}}
+{{- if .IsHome -}}
+{{- $home := dict
+  "@context" "https://schema.org"
+  "@graph" (slice
+    $org
+    (dict
+      "@type" "WebSite"
+      "name" site.Title
+      "url" site.BaseURL
+      "description" site.Params.description
+      "publisher" $org)
+    (dict
+      "@type" "SoftwareApplication"
+      "name" "Fission"
+      "url" site.BaseURL
+      "description" site.Params.description
+      "applicationCategory" "DeveloperApplication"
+      "operatingSystem" "Kubernetes"
+      "softwareVersion" site.Params.release_version
+      "license" "https://www.apache.org/licenses/LICENSE-2.0"
+      "image" $defaultImage
+      "offers" (dict "@type" "Offer" "price" "0" "priceCurrency" "USD")
+      "sameAs" "https://github.com/fission/fission"))
+-}}
+<script type="application/ld+json">{{ $home | jsonify | safeJS }}</script>
+{{- else if and .IsPage (eq .Section "blog") -}}
+{{- $image := $defaultImage -}}
+{{- with .Params.images -}}
+  {{- with index . 0 -}}{{- $image = absURL (strings.TrimPrefix "/" .) -}}{{- end -}}
+{{- end -}}
+{{- $post := dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "description" (partial "page-description.html" .)
+  "url" .Permalink
+  "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "image" $image
+  "publisher" $org
+-}}
+{{- with .Params.author -}}
+  {{- $post = merge $post (dict "author" (dict "@type" "Person" "name" .)) -}}
+{{- else -}}
+  {{- $post = merge $post (dict "author" $org) -}}
+{{- end -}}
+<script type="application/ld+json">{{ $post | jsonify | safeJS }}</script>
+{{- else if eq .Section "docs" -}}
+{{- if .IsPage -}}
+{{- $article := dict
+  "@context" "https://schema.org"
+  "@type" "TechArticle"
+  "headline" .Title
+  "description" (partial "page-description.html" .)
+  "url" .Permalink
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "image" $defaultImage
+  "author" $org
+  "publisher" $org
+-}}
+<script type="application/ld+json">{{ $article | jsonify | safeJS }}</script>
+{{- end -}}
+{{- $items := slice -}}
+{{- $pos := 1 -}}
+{{- range .Ancestors.Reverse -}}
+  {{- $items = $items | append (dict
+    "@type" "ListItem"
+    "position" $pos
+    "name" (.LinkTitle | plainify)
+    "item" .Permalink) -}}
+  {{- $pos = add $pos 1 -}}
+{{- end -}}
+{{- $items = $items | append (dict
+  "@type" "ListItem"
+  "position" $pos
+  "name" (.LinkTitle | plainify)
+  "item" .Permalink) -}}
+{{- $breadcrumbs := dict
+  "@context" "https://schema.org"
+  "@type" "BreadcrumbList"
+  "itemListElement" $items
+-}}
+<script type="application/ld+json">{{ $breadcrumbs | jsonify | safeJS }}</script>
+{{- end -}}

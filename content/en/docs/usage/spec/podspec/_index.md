@@ -1,6 +1,8 @@
 ---
 title: "Add PodSpec to spec file"
 date: 2019-12-06T13:39:39+08:00
+description: >
+  Customize the Kubernetes PodSpec of Fission function and environment pods to control containers, volumes, scheduling, and security context.
 ---
 
 ## What is PodSpec

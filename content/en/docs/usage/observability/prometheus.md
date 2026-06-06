@@ -1,6 +1,8 @@
 ---
 title: "Metrics with Prometheus"
 weight: 10
+description: >
+  Scrape Fission component and function metrics with Prometheus and visualize them in Grafana using the kube-prometheus-stack Helm chart.
 ---
 
 ## Metrics in Fission
