@@ -109,6 +109,17 @@
         ]
     },
     {
+        "name": ".NET 8",
+        "logo": "/images/lang-logo/dotnetcore-logo.svg",
+        "repo": "https://github.com/fission/environments/tree/master/dotnet8",
+        "images": [
+            {
+                "main": "dotnet8-env",
+                "builder": "dotnet8-builder"
+            }
+        ]
+    },
+    {
         "name": "Perl",
         "logo": "/images/lang-logo/perl-logo.svg",
         "repo": "https://github.com/fission/environments/tree/master/perl",

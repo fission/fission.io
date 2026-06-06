@@ -1,19 +1,27 @@
 import json, sys
 
-env_dict = {
-    'JVM Environment': 'Java',
-    'JVM Jersey Environment': 'Java (JVM-Jersey)',
-    'Ruby Environment': 'Ruby',
-    'Python Environment': 'Python',
-    'Python FastAPI Environment': 'Python (FastAPI)',
-    'Fission Binary Environment': 'Misc',
-    'PHP Environment': 'PHP',
-    'Dotnet 2 Environment': '.NET Core',
-    'Go Environment': 'Go',
-    'Dotnet Environment': '.NET',
-    'Perl Environment': 'Perl',
-    'Tensorflow Serving Environment': 'TensorFlow',
-    'Nodejs Environment': 'Node.js',
+# Map each upstream environment to a site catalog entry.
+# We key by the upstream "image" (runtime image) name because it is unique and
+# stable, whereas the upstream "name" field is not: jvm and jvm-jersey both use
+# "JVM Environment". The image name also matches the GHCR package name exactly.
+image_dict = {
+    'jvm-env': 'Java',
+    'jvm-jersey-env-25': 'Java (JVM-Jersey)',
+    'ruby-env': 'Ruby',
+    'python-env': 'Python',
+    'python-fastapi-env': 'Python (FastAPI)',
+    'binary-env': 'Misc',
+    'php-env': 'PHP',
+    'dotnet20-env': '.NET Core',
+    'go-env': 'Go',
+    'go-env-1.26': 'Go',
+    'dotnet-env': '.NET',
+    'dotnet8-env': '.NET 8',
+    'perl-env': 'Perl',
+    'tensorflow-serving-env': 'TensorFlow',
+    'node-env': 'Node.js',
+    'node-env-22': 'Node.js',
+    'node-env-debian': 'Node.js',
 }
 
 def load_environment_json(file_name):
@@ -29,23 +37,30 @@ def create_env_string(src_envs, dst_envs):
         for src_env in src_envs:
             num_envs = len(src_env)
             for i in range(0, num_envs):
-                if name == env_dict[src_env[i]['name']]:
-                    if 'image' in src_env[i] and 'builder' in src_env[i]:
-                        data_list.append({
-                            "main": src_env[i]['image'],
-                            "builder": src_env[i]['builder']
-                        })
-                    elif 'image' in src_env[i]:
-                        data_list.append({
-                            "main": src_env[i]['image']
-                        })
-                    elif 'builder' in src_env[i]:
-                        data_list.append({
-                            "builder": src_env[i]['builder']
-                        })
-                    else:
-                        print("image and builder not present for", src_env[i]['name'])
-                        sys.exit(1)
+                src = src_env[i]
+                image = src.get('image')
+                if image not in image_dict:
+                    print("no site mapping for upstream image", image,
+                          "(", src.get('name'), ")")
+                    sys.exit(1)
+                if image_dict[image] != name:
+                    continue
+                if 'image' in src and 'builder' in src:
+                    data_list.append({
+                        "main": src['image'],
+                        "builder": src['builder']
+                    })
+                elif 'image' in src:
+                    data_list.append({
+                        "main": src['image']
+                    })
+                elif 'builder' in src:
+                    data_list.append({
+                        "builder": src['builder']
+                    })
+                else:
+                    print("image and builder not present for", src.get('name'))
+                    sys.exit(1)
         dst_env['images'] = data_list
 
     return dst_envs
