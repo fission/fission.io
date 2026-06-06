@@ -1,0 +1,54 @@
+{{ define "main" -}}
+
+<div class="td-content">
+<h1>{{ .Title }}</h1>
+{{ with .Content }}{{ . }}{{ end -}}
+</div>
+{{ if (and .Parent .Parent.IsHome) -}}
+  {{ $.Scratch.Set "blog-pages" (where .Site.RegularPages "Section" .Section) -}}
+{{ else -}}
+  {{ $.Scratch.Set "blog-pages" .Pages -}}
+{{ end -}}
+
+{{ if .Pages -}}
+<div class="td-blog-posts">
+  {{ $pager := .Paginate (( $.Scratch.Get "blog-pages").GroupByDate "2006" ) -}}
+  {{ range $pager.PageGroups -}}
+  <h2 class="blog-list__year">{{ T "post_posts_in" }} {{ .Key }}</h2>
+  <div class="row g-4 mb-4">
+    {{ range .Pages -}}
+    {{/* Thumbnail: front-matter `images` (static path), else a bundle resource named *featured*, else branded fallback. */ -}}
+    {{ $thumb := "" -}}
+    {{ with .Params.images }}{{ with index . 0 }}{{ $thumb = printf "/%s" (strings.TrimPrefix "/" .) }}{{ end }}{{ end -}}
+    {{ if not $thumb }}{{ with (.Resources.ByType "image").GetMatch "**featured*" }}{{ $thumb = .RelPermalink }}{{ end }}{{ end -}}
+    <div class="col-12 col-md-6">
+      <a class="blog-card" href="{{ .RelPermalink }}">
+        {{ if $thumb -}}
+        <div class="blog-card__thumb">
+          <img src="{{ $thumb }}" alt="" width="600" height="300" loading="lazy" decoding="async">
+        </div>
+        {{ else -}}
+        <div class="blog-card__thumb blog-card__thumb--fallback">
+          <img src="/images/fission-logo-white.svg" alt="" width="180" height="54" loading="lazy" decoding="async">
+        </div>
+        {{ end -}}
+        <div class="blog-card__body">
+          <h3 class="blog-card__title">{{ .Title }}</h3>
+          <p class="blog-card__meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+            {{- with .Params.author }} &middot; {{ . | markdownify }}{{ end }} &middot; {{ .ReadingTime }} min read
+            {{- range first 1 .Params.categories }} <span class="blog-card__category">{{ . }}</span>{{ end }}
+          </p>
+          <p class="blog-card__excerpt">{{ .Plain | safeHTML | truncate 180 }}</p>
+        </div>
+      </a>
+    </div>
+    {{ end -}}
+  </div>
+  {{ end -}}
+</div>
+<div class="td-blog-posts__pagination">
+  {{ partial "pagination.html" . -}}
+</div>
+{{- end -}}
+{{ end -}}

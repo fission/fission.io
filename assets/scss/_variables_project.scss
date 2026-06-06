@@ -904,3 +904,574 @@ a {
 	font-size: 0.85rem;
 	pointer-events: none;
 }
+
+/* =========================================================
+   Section pages: Environments, Examples, Support, Blog list.
+   Shared design language with the docs overhaul: white cards,
+   soft shadow, navy text, blue/light-blue accents, hover lift.
+   ========================================================= */
+
+// Shared page header for the catalog pages (environments, examples).
+.catalog-header {
+	h1 {
+		font-weight: 700;
+		color: #1f2a43;
+		margin-bottom: 0.25rem;
+	}
+
+	.catalog-intro {
+		color: #5a5b75;
+		font-size: 17px;
+		margin-bottom: 1.5rem;
+		max-width: 60rem;
+	}
+}
+
+// Search + language filter toolbar.
+.catalog-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 1rem;
+	align-items: center;
+	margin-bottom: 0.75rem;
+
+	input[type="search"] {
+		flex: 1 1 16rem;
+		min-width: 12rem;
+	}
+
+	select {
+		flex: 0 0 auto;
+		width: auto;
+		min-width: 11rem;
+	}
+
+	input[type="search"],
+	select {
+		border: 1px solid #cbd5e1;
+		border-radius: 6px;
+		padding: 0.5rem 0.75rem;
+		color: #1f2a43;
+
+		&:focus {
+			border-color: #2d70de;
+			box-shadow: 0 0 0 0.15rem rgba(45, 112, 222, 0.15);
+		}
+	}
+}
+
+.catalog-count {
+	color: #94a3b8;
+	font-size: 0.875rem;
+	margin-bottom: 1rem;
+}
+
+// --- Environments page -----------------------------------
+
+.env-card {
+	background: #fff;
+	border: 1px solid #e4e9f2;
+	border-radius: 8px;
+	box-shadow: 0 5px 10px 0 rgba(41, 26, 204, 0.08);
+	height: 100%;
+	overflow: hidden;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 10px 18px 0 rgba(41, 26, 204, 0.14);
+		transform: translateY(-2px);
+	}
+}
+
+.env-card__header {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem 1rem;
+	background: #f4f8fe;
+	border-bottom: 1px solid #e4e9f2;
+}
+
+.env-card__logo {
+	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fff;
+	border: 1px solid #e4e9f2;
+	border-radius: 8px;
+	padding: 6px;
+
+	img {
+		max-width: 100%;
+		max-height: 100%;
+		width: auto;
+		height: auto;
+	}
+}
+
+.env-card__name {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #1f2a43;
+	flex: 1 1 auto;
+}
+
+.env-card__repo {
+	color: #64748b;
+	font-size: 1.35rem;
+	line-height: 1;
+
+	&:hover {
+		color: #1f2a43;
+		text-decoration: none;
+	}
+}
+
+.env-card__body {
+	padding: 0.75rem 1rem;
+}
+
+.env-card__pair {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	margin: 0.5rem 0;
+
+	.fa-exchange-alt {
+		color: #94a3b8;
+		font-size: 0.8rem;
+	}
+}
+
+.env-card__single {
+	text-align: center;
+	margin: 0.5rem 0;
+}
+
+.env-badge {
+	display: inline-block;
+	background: #e8f0fe;
+	color: #1c4fa8;
+	border-radius: 999px;
+	padding: 0.3rem 0.85rem;
+	font-size: 0.85rem;
+	font-weight: 600;
+	text-decoration: none !important;
+	transition: background 0.15s ease;
+
+	&:hover {
+		background: #d4e3fc;
+		color: #143c82;
+	}
+}
+
+.env-card__empty {
+	color: #94a3b8;
+	font-size: 0.9rem;
+	text-align: center;
+	margin: 0.5rem 0;
+}
+
+// --- Examples page ---------------------------------------
+
+.example-group__header {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 2rem 0 0.25rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid #e4e9f2;
+	width: 100%;
+
+	img {
+		width: 26px;
+		height: 26px;
+		object-fit: contain;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: #1f2a43;
+	}
+
+	.example-group__count {
+		color: #94a3b8;
+		font-size: 0.875rem;
+		font-weight: 400;
+	}
+}
+
+.example-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: #fff;
+	border: 1px solid #e4e9f2;
+	border-radius: 8px;
+	box-shadow: 0 5px 10px 0 rgba(41, 26, 204, 0.08);
+	padding: 1rem 1.1rem;
+	text-decoration: none !important;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 10px 18px 0 rgba(41, 26, 204, 0.14);
+		transform: translateY(-2px);
+		text-decoration: none;
+
+		.example-card__title {
+			color: #2d70de;
+		}
+	}
+}
+
+.example-card__top {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-bottom: 0.6rem;
+
+	img {
+		width: 28px;
+		height: 28px;
+		object-fit: contain;
+		flex: 0 0 auto;
+	}
+
+	.fa-external-link-alt {
+		margin-left: auto;
+		color: #cbd5e1;
+		font-size: 0.8rem;
+	}
+}
+
+.example-card__title {
+	margin: 0;
+	font-size: 1.02rem;
+	font-weight: 700;
+	color: #1f2a43;
+	line-height: 1.3;
+	transition: color 0.15s ease;
+}
+
+.example-card__desc {
+	color: #5a5b75;
+	font-size: 0.9rem;
+	line-height: 1.45;
+	margin: 0 0 0.75rem;
+	flex: 1 1 auto;
+}
+
+.example-card__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+
+	.example-tag {
+		background: #e8f0fe;
+		color: #1c4fa8;
+		border-radius: 999px;
+		padding: 0.15rem 0.65rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+	}
+}
+
+// --- Support page ----------------------------------------
+
+.support-hero {
+	padding-bottom: 40px;
+
+	a,
+	a:hover {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.hero-title {
+		margin-top: 1rem;
+	}
+
+	.support-hero__sub {
+		color: rgba(255, 255, 255, 0.85);
+		font-weight: 400;
+		font-size: 1.35rem;
+	}
+}
+
+.support-sponsor {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+	padding: 1.75rem 1.5rem;
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(255, 255, 255, 0.14);
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	color: #fff;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.14);
+		transform: translateY(-2px);
+	}
+
+	h4 {
+		margin: 0 0 0.5rem;
+		font-weight: 700;
+	}
+
+	p {
+		color: rgba(255, 255, 255, 0.85);
+		font-size: 0.95rem;
+		margin: 0;
+	}
+}
+
+.support-sponsor__logo {
+	height: 80px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 1rem;
+
+	img {
+		max-height: 100%;
+		max-width: 80%;
+		object-fit: contain;
+	}
+}
+
+// Self-serve help strip between hero and community section.
+.support-help {
+	padding: 3rem 0 1rem;
+
+	.support-help__title {
+		text-align: center;
+		font-weight: 700;
+		color: #1f2a43;
+		margin-bottom: 1.5rem;
+	}
+}
+
+.support-help__card {
+	display: block;
+	height: 100%;
+	background: #fff;
+	border: 1px solid #e4e9f2;
+	border-radius: 8px;
+	box-shadow: 0 5px 10px 0 rgba(41, 26, 204, 0.08);
+	padding: 1.25rem 1.4rem;
+	text-decoration: none !important;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 10px 18px 0 rgba(41, 26, 204, 0.14);
+		transform: translateY(-2px);
+
+		h5 {
+			color: #2d70de;
+		}
+	}
+
+	i {
+		color: #2d70de;
+		font-size: 1.2rem;
+		margin-bottom: 0.5rem;
+	}
+
+	h5 {
+		font-weight: 700;
+		color: #1f2a43;
+		margin: 0 0 0.35rem;
+		transition: color 0.15s ease;
+	}
+
+	p {
+		color: #5a5b75;
+		font-size: 0.9rem;
+		margin: 0;
+	}
+}
+
+// Community cards: single responsive markup (no mobile/desktop twins).
+.support-community {
+	padding: 2rem 0 3.5rem;
+
+	.support-community__title {
+		font-weight: 700;
+		color: #1f2a43;
+	}
+}
+
+.support-community__card {
+	display: block;
+	height: 100%;
+	background: #fff;
+	border: 1px solid #e4e9f2;
+	border-radius: 8px;
+	box-shadow: 0 5px 10px 0 rgba(41, 26, 204, 0.08);
+	padding: 1.25rem 1.4rem;
+	text-decoration: none !important;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 10px 18px 0 rgba(41, 26, 204, 0.14);
+		transform: translateY(-2px);
+	}
+
+	.support-community__head {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin-bottom: 0.5rem;
+
+		img {
+			width: 28px;
+			height: 28px;
+			object-fit: contain;
+		}
+
+		span {
+			font-weight: 700;
+			font-size: 1.05rem;
+			color: #1f2a43;
+		}
+	}
+
+	p {
+		color: #5a5b75;
+		font-size: 0.9rem;
+		margin: 0;
+	}
+}
+
+// --- Blog list -------------------------------------------
+
+.blog-list__year {
+	font-weight: 700;
+	color: #1f2a43;
+	margin: 2.25rem 0 1rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid #e4e9f2;
+}
+
+.blog-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: #fff;
+	border: 1px solid #e4e9f2;
+	border-radius: 8px;
+	box-shadow: 0 5px 10px 0 rgba(41, 26, 204, 0.08);
+	overflow: hidden;
+	text-decoration: none !important;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 10px 18px 0 rgba(41, 26, 204, 0.14);
+		transform: translateY(-2px);
+
+		.blog-card__title {
+			color: #2d70de;
+		}
+	}
+}
+
+.blog-card__thumb {
+	aspect-ratio: 2 / 1;
+	overflow: hidden;
+	background: #f4f8fe;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+}
+
+.blog-card__thumb--fallback {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(130deg, #473782 30%, #2c2c62 90%);
+
+	img {
+		width: 30%;
+		height: auto;
+		object-fit: contain;
+		opacity: 0.9;
+	}
+}
+
+.blog-card__body {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	padding: 1rem 1.2rem 1.2rem;
+}
+
+.blog-card__title {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #1f2a43;
+	line-height: 1.35;
+	margin: 0 0 0.4rem;
+	transition: color 0.15s ease;
+}
+
+.blog-card__meta {
+	color: #94a3b8;
+	font-size: 0.8rem;
+	margin-bottom: 0.6rem;
+
+	.blog-card__category {
+		display: inline-block;
+		background: #e8f0fe;
+		color: #1c4fa8;
+		border-radius: 999px;
+		padding: 0.05rem 0.6rem;
+		font-weight: 600;
+	}
+}
+
+.blog-card__excerpt {
+	color: #5a5b75;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	margin: 0;
+	flex: 1 1 auto;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+// Blog pages: hide docs-oriented meta links (create child page, doc
+// issues, view source); keep "Edit this page" for quick typo fixes.
+.td-blog .td-page-meta__view,
+.td-blog .td-page-meta__markdown,
+.td-blog .td-page-meta__child,
+.td-blog .td-page-meta__issue,
+.td-blog .td-page-meta__project-issue {
+	display: none !important; // Docsy sets `display: block` with higher specificity.
+}
+
+// Blog single: muted byline under the title.
+.blog-byline {
+	color: #94a3b8;
+	font-size: 0.9rem;
+	margin-bottom: 1rem;
+
+	a {
+		color: #2d70de;
+	}
+}

@@ -5,29 +5,25 @@ description: "Examples of Fission serverless functions by the Fission community 
 images: ["images/og-image-fission.png"]
 ---
 
-<div class="container push-down mb-5">
+<div class="container push-down mb-5 catalog-header">
   <div class="row mb-2">
     <div class="col-12">
-      <h1 class="font-weight-bold">Examples</h1>
+      <h1>Examples</h1>
+      <p class="catalog-intro">
+        Ready-to-run Fission functions from the team and the community, grouped by language.
+        Every card links to the source in the
+        <a href="https://github.com/fission/examples" target="_blank" rel="noopener">fission/examples</a> repository.
+      </p>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <div class="form-group">
-        <h5><label class="d-block" for="search">Search</label></h5>
-        <input type="search" placeholder="Search query" class="form-control" 
-          id="search" oninput="updateExampleItems()">
-      </div>
-    </div>
-    <div class="col">
-      <div class="form-group">
-        <h5><label class="d-block" for="filter-lang">Filter by language</label></h5>
-        <select class="form-control" id="filter-lang" onchange="updateExampleItems()">
-          <option value="" selected disabled>Loading...</option>
-        </select>
-      </div>
-    </div>
+  <div class="catalog-toolbar">
+    <input type="search" placeholder="Search examples&hellip;" class="form-control" aria-label="Search examples"
+      id="search" oninput="updateExampleItems()">
+    <select class="form-select" id="filter-lang" aria-label="Filter by language" onchange="updateExampleItems()">
+      <option value="" selected disabled>Loading&hellip;</option>
+    </select>
   </div>
+  <div class="catalog-count" id="example-count" aria-live="polite"></div>
 
   <div class="row" id="example-list"></div>
 </div>
@@ -35,58 +31,71 @@ images: ["images/og-image-fission.png"]
 <script type="text/javascript">
   const examples = {{< readfile file="/static/data/examples.json" >}};
 
-  let languageOptions = [`<option value="">All</option>`].concat(
-    examples.map(e => `<option value="${e.language}">${e.language}</option>`));
+  let languageOptions = [`<option value="">All languages</option>`].concat(
+    examples.filter(e => e.examples.length > 0).map(e => `<option value="${e.language}">${e.language}</option>`));
   document.getElementById("filter-lang").innerHTML = languageOptions.join(' ');
+
+  function exampleCard(example, logo) {
+    const tags = example.tags.map(tagText => `<span class="example-tag">${tagText}</span>`);
+
+    return `<div class="col-xl-3 col-lg-4 col-md-6 col-12 my-2">
+        <a class="example-card" href="${example.link}" target="_blank" rel="noopener">
+          <div class="example-card__top">
+            <img src="${logo}" alt="" width="28" height="28" loading="lazy" decoding="async" />
+            <h4 class="example-card__title">${example.name}</h4>
+            <i class="fas fa-external-link-alt"></i>
+          </div>
+          <p class="example-card__desc">${example.description}</p>
+          <div class="example-card__tags">${tags.join(' ')}</div>
+        </a>
+      </div>`;
+  }
 
   function updateExampleItems() {
     const searchQuery = document.getElementById("search").value.trim().toLowerCase();
     const selectedLanguageFilter = document.getElementById("filter-lang").value;
 
-    const exampleItems = examples.map(e => {
+    let totalCount = 0;
+
+    const groups = examples.map(e => {
       let filteredLangExamples = e.examples;
 
       if (searchQuery) {
         filteredLangExamples = filteredLangExamples.filter(example => example.name.toLowerCase().includes(searchQuery) ||
-        example.description.toLowerCase().includes(searchQuery) || 
+        example.description.toLowerCase().includes(searchQuery) ||
         example.tags.find(tag => tag.toLowerCase().includes(searchQuery)) ||
         e.tags.find(tag => tag.toLowerCase().includes(searchQuery)));
       }
 
       if (selectedLanguageFilter) {
-        filteredLangExamples = filteredLangExamples.filter(example => e.language === selectedLanguageFilter || 
+        filteredLangExamples = filteredLangExamples.filter(example => e.language === selectedLanguageFilter ||
           example.language === selectedLanguageFilter);
       }
 
-      const exampleCards = filteredLangExamples.map(example => {
-        const logo = examples.find(e => e.language === example.language)?.logo || e.logo;
-        
-        const tags = e.tags.concat(example.tags).map(tagText => 
-          `<span class="badge m-1 rounded-pill text-bg-primary" style="line-height: 1.2">${tagText}</span>`);
+      if (filteredLangExamples.length === 0) return '';
 
-        return `<div class="col-xl-3 col-lg-4 col-md-6 col-12 my-3">
-            <a class="card card-hover h-100 p-3" href="${example.link}" 
-              style="user-select: text; box-shadow: 0 5px 10px 0 rgb(41 26 204 / 12%)" draggable="false" target="_blank">
-              <div class="text-primary">
-                <div class="mt-2" style="height: 60px">
-                  <img class="w-100 h-100" src="${logo}" />
-                </div>
-                <div>
-                  <h4 class="px-2 mb-1 mt-4">${example.name}</h4>
-                  <div class="px-2 mb-2">${example.description}</div>
-                  <h5>${tags.join(' ')}</h5>
-                </div>
-              </div>
-            </a>
-          </div>
-        `;
+      totalCount += filteredLangExamples.length;
+
+      const exampleCards = filteredLangExamples.map(example => {
+        const logo = examples.find(g => g.language === example.language)?.logo || e.logo;
+        return exampleCard(example, logo);
       });
 
-      return exampleCards.join(' ');
-    }).filter(card => card);
+      const header = `<div class="example-group__header col-12">
+          <img src="${e.logo}" alt="" width="26" height="26" loading="lazy" decoding="async" />
+          <h2>${e.language}</h2>
+          <span class="example-group__count">${filteredLangExamples.length}
+            example${filteredLangExamples.length === 1 ? '' : 's'}</span>
+        </div>`;
 
-    document.getElementById("example-list").innerHTML = exampleItems.length > 0 ?
-      exampleItems.join(' ') : `<div class="col-12">No examples available</div>`;
+      return header + exampleCards.join(' ');
+    }).filter(group => group);
+
+    document.getElementById("example-count").textContent =
+      `${totalCount} example${totalCount === 1 ? '' : 's'}`;
+
+    document.getElementById("example-list").innerHTML = groups.length > 0 ?
+      groups.join(' ') : `<div class="col-12">No examples match the search filters</div>`;
   }
   updateExampleItems();
 </script>
