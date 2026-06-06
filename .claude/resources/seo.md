@@ -37,6 +37,22 @@ Validate after changes: extract `application/ld+json` blocks from built pages an
 - Site title stays the short "Fission" (it suffixes every page title).
 - Home `<title>`/og:title come from the landing page's front-matter title ("Fission — Open Source Kubernetes-native Serverless Framework") via the **forked** `layouts/partials/head.html` (one-block change from Docsy v0.15 — re-diff on Docsy bumps).
 
+## Analytics
+
+- Analytics runs through **GTM container `GTM-NX83GPK`** (inline snippet in `layouts/partials/hooks/head-end.html`), which loads **GA4 `G-BKDL6KWXQX`** (verified by inspecting the served gtm.js; it also carries a dead legacy UA tag).
+- `services.googleAnalytics.id` in config.toml is **intentionally empty** — setting it would make Docsy inject gtag.js alongside GTM and double-count every hit.
+
+## Taxonomy pages
+
+- `/tags/`, `/categories/*`, `/author/*` are thin listings: **noindexed** (`noindex, follow` in the forked `partials/head.html`) and **excluded from sitemap.xml** (`layouts/sitemap.xml` override of Hugo's embedded template).
+They remain crawlable and linked for navigation.
+
+## Search (Algolia DocSearch)
+
+- Config: `[params.search.algolia]` in config.toml (search-only API key — safe to be public).
+- The DocSearch crawler runs on Algolia's infrastructure on its own weekly schedule; the repo cannot trigger a crawl.
+Manual re-crawl: https://crawler.algolia.com/ with the DocSearch account that owns app `MSV5TDX060`.
+
 ## Plumbing
 
 - `layouts/robots.txt` → `/robots.txt` with the `Sitemap:` line (`enableRobotsTXT = true`).
