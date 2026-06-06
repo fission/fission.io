@@ -1,51 +1,38 @@
-# Fission Site Source Repo
+# Fission Website Source
 
-This is the source for the [fission.io](https://fission.io)
-website.
+Source for [fission.io](https://fission.io) — the website and documentation for the [Fission](https://github.com/fission/fission) serverless framework.
+
+## How the site is built
+
+- [Hugo](https://gohugo.io) static site using the [Docsy](https://www.docsy.dev) theme.
+Docsy is pulled in as a **Hugo Module** via `go.mod` (no git submodules).
+- Hosted on [Netlify](https://netlify.com), which builds every push and every PR (deploy previews) by running `./build.sh`.
+- Exact build tool versions are pinned in `netlify.toml` (Hugo extended + Go) — match them locally when reproducing CI builds.
+- `npm install` provides the PostCSS toolchain Docsy needs.
 
 ## Repo organization
 
-This is a [hugo](https://gohugo.io) statically-generated site, hosted
-on [netlify](https://netlify.com).  The site is automatically built by
-netlify (see netlify.toml and build.sh).
-
-All site content is stored in the `content` directory in markdown format.
-
 ```text
 content/en
-├── _index.html  # Landing page
-├── author       # Info about blog authors
-├── blog         # Blog posts
-├── docs         # Documentation pages
-└── search.md
+├── _index.html   # Landing page
+├── docs          # Documentation (getting-started, concepts, architecture,
+│                 #   installation, usage, trouble-shooting, reference, releases)
+├── blog          # Blog posts
+├── environments  # Language runtimes catalog (data-driven)
+├── examples      # Function examples catalog (data-driven)
+├── support       # Commercial support and community page
+└── author        # Blog author taxonomy pages
+
+assets/scss       # Project styles (_variables_project.scss)
+layouts           # Site-level template overrides (blog list, head, schema, shortcodes)
+static/data       # environments.json / examples.json behind the catalog pages
+static/images     # Images, logos, blog featured images
+tools             # Helper scripts (environments.json refresh, release notes formatting)
 ```
+
+- Versioned values (Fission release, Helm chart) live in `config.toml` (`release_version`, `chart_version`) and are referenced in content through the `{{< release-version >}}` / `{{< chart-version >}}` shortcodes.
+- The site also serves machine-readable outputs for AI tools: [`/llms.txt`](https://fission.io/llms.txt) and a markdown mirror of every page at `<url>/index.md`.
 
 ## Contributing
 
-### Setup
-
-1. Clone and setup
-
-    ```sh
-    # Install NPM dependencies with Node LTS version
-    npm install
-    ```
-
-2. Run Hugo server
-
-    ```sh
-    $ hugo server
-    Web Server is available at http://localhost:1313/ (bind address 127.0.0.1)
-    Press Ctrl+C to stop
-    ```
-
-You can visit [localhost:1313](http://localhost:1313/) in browser to preview website.
-
-### Making changes
-
-1. Create a new branch
-2. Make your changes
-3. Verify your changes locally with Hugo server
-4. Commit and push your changes to the branch
-5. Raise a PR to default branch, verify changes with Netlify preview URL
-6. Once PR is merged, your changes would be live on the site
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, the preview workflow, and authoring conventions.
