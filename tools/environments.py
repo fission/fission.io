@@ -8,6 +8,7 @@ image_dict = {
     'jvm-env': 'Java',
     'jvm-jersey-env-25': 'Java (JVM-Jersey)',
     'ruby-env': 'Ruby',
+    'rust-env': 'Rust',
     'python-env': 'Python',
     'python-fastapi-env': 'Python (FastAPI)',
     'binary-env': 'Misc',

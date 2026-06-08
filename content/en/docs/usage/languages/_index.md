@@ -21,6 +21,7 @@ Each environment has a runtime image (`*-env`) and, where dependency building is
 | Node.js | `ghcr.io/fission/node-env` | `ghcr.io/fission/node-builder` | [Node.js]({{% ref "nodejs.md" %}}) |
 | Python | `ghcr.io/fission/python-env` | `ghcr.io/fission/python-builder` | [Python]({{% ref "python.md" %}}) |
 | Go | `ghcr.io/fission/go-env` | `ghcr.io/fission/go-builder` | [Go]({{% ref "go.md" %}}) |
+| Rust | `ghcr.io/fission/rust-env` | `ghcr.io/fission/rust-builder` | [Rust]({{% ref "rust.md" %}}) |
 | Java (JVM) | `ghcr.io/fission/jvm-env` | `ghcr.io/fission/jvm-builder` | [Java]({{% ref "java.md" %}}) |
 | Ruby | `ghcr.io/fission/ruby-env` | `ghcr.io/fission/ruby-builder` | [environments repo](https://github.com/fission/environments/tree/master/ruby) |
 | PHP | `ghcr.io/fission/php-env` | `ghcr.io/fission/php-builder` | [environments repo](https://github.com/fission/environments/tree/master/php7) |
