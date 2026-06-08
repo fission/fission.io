@@ -33,6 +33,17 @@
         ]
     },
     {
+        "name": "Rust",
+        "logo": "/images/lang-logo/rust-logo.svg",
+        "repo": "https://github.com/fission/environments/tree/master/rust",
+        "images": [
+            {
+                "main": "rust-env",
+                "builder": "rust-builder"
+            }
+        ]
+    },
+    {
         "name": "Python",
         "logo": "/images/lang-logo/python-logo.svg",
         "repo": "https://github.com/fission/environments/tree/master/python",
