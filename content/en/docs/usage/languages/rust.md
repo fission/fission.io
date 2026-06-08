@@ -235,10 +235,14 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-fission-rust = { git = "https://github.com/fission/environments" }
+fission-rust = { git = "https://github.com/fission/environments", rev = "<commit-sha>" }
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 serde_json = "1"
 ```
+
+Pin the dependency to a commit with `rev` for reproducible builds.
+Without `rev` the git dependency tracks `master` and can change under you between builds; pinning a `rev` keeps every build resolving the same source.
+The builder pod fetches the crate over the network at build time, so the builder needs egress to GitHub — the same as for any crates.io dependency.
 
 ```rust
 // src/main.rs
