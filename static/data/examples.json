@@ -12,47 +12,81 @@
         "description": "Simple Hello World Example in Node.js",
         "link": "https://github.com/fission/examples/blob/main/nodejs/hello.js",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "node.js"
+        ],
+        "language": "JavaScript"
       },
       {
         "name": "Hello World with callback",
         "description": "Simple Hello World Example implemented with legacy call back implementation",
         "link": "https://github.com/fission/examples/blob/main/nodejs/hello-callback.js",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "node.js"
+        ],
+        "language": "JavaScript"
       },
       {
         "name": "Node.js require",
         "description": "Demonstrates require feature in Node.js",
         "link": "https://github.com/fission/examples/blob/main/nodejs/index.js",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "node.js"
+        ],
+        "language": "JavaScript"
       },
       {
         "name": "Multi Entry",
-        "description": "This is a multiple exports example",
+        "description": "This is a multiple exports example.",
         "link": "https://github.com/fission/examples/blob/main/nodejs/multi-entry.js",
-        "tags": []
+        "tags": [
+          "node.js"
+        ],
+        "language": "JavaScript"
       },
       {
         "name": "Kubernetes Events",
-        "description": "This example watches Kubernetes events and sends them to a Slack channel",
+        "description": "This example watches Kubernetes events and sends them to a Slack channel.",
         "link": "https://github.com/fission/examples/blob/main/nodejs/kubeEventsSlack.js",
         "tags": [
+          "node.js",
           "kubernetes",
           "slack"
-        ]
+        ],
+        "language": "JavaScript"
       },
       {
         "name": "Weather API",
         "description": "In this example, the Yahoo Weather API is used to current weather at a given location",
         "link": "https://github.com/fission/examples/blob/main/nodejs/weather.js",
         "tags": [
+          "node.js",
           "api"
-        ]
+        ],
+        "language": "JavaScript"
+      },
+      {
+        "name": "ECMAScript Modules (ESM)",
+        "description": "Pure ESM function using export default, for the Node.js 22 environment",
+        "link": "https://github.com/fission/examples/blob/main/nodejs/hello-esm.js",
+        "tags": [
+          "hello world",
+          "node.js",
+          "esm"
+        ],
+        "language": "JavaScript"
+      },
+      {
+        "name": "WebSocket Echo",
+        "description": "WebSocket handler that echoes received messages back to the client",
+        "link": "https://github.com/fission/examples/blob/main/nodejs/echo.js",
+        "tags": [
+          "node.js",
+          "websocket"
+        ],
+        "language": "JavaScript"
       }
     ]
   },
@@ -68,106 +102,201 @@
         "description": "Simple Hello World Example in Python",
         "link": "https://github.com/fission/examples/blob/main/python/hello.py",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "python"
+        ],
+        "language": "Python"
       },
       {
         "name": "Request-Response in Python",
-        "description": "Code to show how you can access the HTTP request fields, such as the body, headers and query",
+        "description": "Code to show how you can access the HTTP request fields, such as the body, headers and query.",
         "link": "https://github.com/fission/examples/blob/main/python/requestdata.py",
         "tags": [
-          "request-response"
-        ]
+          "request response",
+          "python"
+        ],
+        "language": "Python"
       },
       {
         "name": "Changing Status Code",
         "description": "Code to show how you can change the response status code",
         "link": "https://github.com/fission/examples/blob/main/python/statuscode.py",
         "tags": [
-          "request-response"
-        ]
+          "request response",
+          "python"
+        ],
+        "language": "Python"
       },
       {
         "name": "Multi File",
         "description": "Working with multiple source files in Python",
         "link": "https://github.com/fission/examples/tree/main/python/multifile",
-        "tags": []
+        "tags": [
+          "python"
+        ],
+        "language": "Python"
       },
       {
         "name": "Guestbook",
         "description": "Demonstration of using Python and Fission to create a serverless guestbook",
         "link": "https://github.com/fission/examples/tree/main/python/guestbook",
         "tags": [
+          "python",
           "application"
-        ]
+        ],
+        "language": "Python"
       },
       {
         "name": "Source Package",
-        "description": "Example of how to use the Fission Python Build environment to resolve (pip) dependencies before deploying the function",
+        "description": "Example of how to use the Fission Python Build environment to resolve (pip) dependencies before deploying the function.",
         "link": "https://github.com/fission/examples/tree/main/python/sourcepkg",
         "tags": [
+          "python",
           "pip"
-        ]
+        ],
+        "language": "Python"
       },
       {
         "name": "Voting App",
         "description": "Fission based application to connect to a relational database like Postgres & perform basic operations",
         "link": "https://github.com/fission/examples/tree/main/python/votingapp",
         "tags": [
+          "python",
           "application",
           "database",
           "postgresql"
-        ]
+        ],
+        "language": "Python"
       },
       {
         "name": "OpenTelemetry Datadog",
-        "description": "Example to show how you can use Opentelemetry to send traces from your Fission functions to Datadog",
+        "description": "Example to show how you can use Opentelemetry to send traces from your Fission functions to Datadog.",
         "link": "https://github.com/fission/examples/tree/main/python/opentelemetry-datadog",
         "tags": [
+          "python",
           "application",
           "observability",
           "opentelemetry",
           "datadog"
-        ]
+        ],
+        "language": "Python"
       },
       {
         "name": "Single Vs Monolith",
         "description": "Example to show how you can create Fission applications using different architectures",
         "link": "https://github.com/fission/examples/tree/main/python/SinglevsMonolith",
         "tags": [
+          "python",
           "application",
           "architecture",
           "design"
-        ]
+        ],
+        "language": "Python"
       },
       {
         "name": "Twitter Bot",
-        "description": "Twitter Bot that responds to tweets & notifies in Slack channel",
+        "description": "Twitter Bot that responds to tweets & notifies in Slack channel.",
         "link": "https://github.com/fission/examples/tree/main/python/TwitterBot",
         "tags": [
+          "python",
           "application",
           "twitter",
           "slack",
           "bot"
-        ]
+        ],
+        "language": "Python"
       },
       {
         "name": "Zapier Webhook",
         "description": "Example to show webhook integration with Zapier",
         "link": "https://github.com/fission/examples/tree/main/python/ZapierWebhook",
         "tags": [
+          "python",
           "application",
           "zapier",
           "webhook"
-        ]
+        ],
+        "language": "Python"
       },
       {
         "name": "Websocket Sample Python",
         "description": "Example to show usage of websocket in Python based function",
         "link": "https://github.com/fission/examples/tree/main/python/websocket",
         "tags": [
+          "python",
           "application",
           "websocket"
+        ],
+        "language": "Python"
+      }
+    ]
+  },
+  {
+    "language": "Python (FastAPI)",
+    "logo": "/images/lang-logo/python-logo.svg",
+    "tags": [
+      "python",
+      "fastapi"
+    ],
+    "examples": [
+      {
+        "name": "Hello World",
+        "description": "Simple Hello World example for the Python FastAPI environment",
+        "link": "https://github.com/fission/examples/blob/main/python-fastapi/hello.py",
+        "tags": [
+          "hello world",
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Request-Response",
+        "description": "Access the HTTP request fields, such as the body, headers and query",
+        "link": "https://github.com/fission/examples/blob/main/python-fastapi/requestdata.py",
+        "tags": [
+          "request response",
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Changing Status Code",
+        "description": "Change the response status code",
+        "link": "https://github.com/fission/examples/blob/main/python-fastapi/statuscode.py",
+        "tags": [
+          "request response",
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Multi File",
+        "description": "Working with multiple source files in the Python FastAPI environment",
+        "link": "https://github.com/fission/examples/tree/main/python-fastapi/multifile",
+        "tags": [
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Source Package",
+        "description": "Use the Python build environment to resolve (pip) dependencies before deploying the function",
+        "link": "https://github.com/fission/examples/tree/main/python-fastapi/sourcepkg",
+        "tags": [
+          "python",
+          "fastapi",
+          "pip"
+        ]
+      },
+      {
+        "name": "Guestbook",
+        "description": "A serverless guestbook built with Python FastAPI and Redis",
+        "link": "https://github.com/fission/examples/tree/main/python-fastapi/guestbook",
+        "tags": [
+          "python",
+          "fastapi",
+          "application",
+          "redis"
         ]
       }
     ]
@@ -184,14 +313,19 @@
         "description": "Simple Hello World Example in Go",
         "link": "https://github.com/fission/examples/tree/main/go/hello-world",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "go"
+        ],
+        "language": "Go"
       },
       {
         "name": "Using Go Modules",
         "description": "How to use Go Modules in Fission",
         "link": "https://github.com/fission/examples/tree/main/go/module-example",
-        "tags": []
+        "tags": [
+          "go"
+        ],
+        "language": "Go"
       }
     ]
   },
@@ -207,9 +341,11 @@
         "description": "Simple Hello World Example in Java",
         "link": "https://github.com/fission/examples/tree/main/java/hello-world",
         "tags": [
-          "hello-world",
+          "hello world",
+          "java",
           "jvm"
-        ]
+        ],
+        "language": "Java"
       }
     ]
   },
@@ -226,30 +362,121 @@
         "description": "Simple Hello World Example in C#",
         "link": "https://github.com/fission/examples/blob/main/dotnet/helloworld.cs",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "c#",
+          ".net"
+        ],
+        "language": ".NET"
       },
       {
         "name": "Accessing Request Body Parameters",
-        "description": "Code to show how to access request body parameters in C#",
+        "description": "Code to show how to access request body parameters in C#.",
         "link": "https://github.com/fission/examples/blob/main/dotnet/requestbody.cs",
-        "tags": [
-          "request-response"
-        ]
+        "tags": [],
+        "language": ".NET"
       },
       {
         "name": "Accessing Request Header Parameters",
-        "description": "Code to show how to access request header parameters in C#",
+        "description": "Code to show how to access request header parameters in C#.",
         "link": "https://github.com/fission/examples/blob/main/dotnet/requestheaders.cs",
         "tags": [
-          "request-response"
-        ]
+          "request response",
+          "c#",
+          ".net"
+        ],
+        "language": ".NET"
       },
       {
         "name": "Accessing Context Arguments",
-        "description": "Code to show how to access context arguments in C#",
+        "description": "Code to show how to access context arguments in C#.",
         "link": "https://github.com/fission/examples/blob/main/dotnet/arguments.cs",
-        "tags": []
+        "tags": [
+          "c#",
+          ".net"
+        ],
+        "language": ".NET"
+      }
+    ]
+  },
+  {
+    "language": ".NET 8",
+    "logo": "/images/lang-logo/dotnetcore-logo.svg",
+    "tags": [
+      "c#",
+      ".net",
+      ".net8"
+    ],
+    "examples": [
+      {
+        "name": "Hello World",
+        "description": "Minimal .NET 8 function returning a string",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/HelloWorld",
+        "tags": [
+          "hello world",
+          ".net",
+          "c#"
+        ]
+      },
+      {
+        "name": "HTTP Trigger",
+        "description": "Read the HTTP method and URL from the request context",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/HttpTriggerExample",
+        "tags": [
+          "request response",
+          ".net",
+          "c#"
+        ]
+      },
+      {
+        "name": "Async Function",
+        "description": "Run asynchronous work inside a .NET 8 function",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/AsyncFunctionExample",
+        "tags": [
+          ".net",
+          "c#",
+          "async"
+        ]
+      },
+      {
+        "name": "Multi File",
+        "description": "Multi-file .NET 8 project with controllers, services, and models",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/MultiFileExample",
+        "tags": [
+          ".net",
+          "c#",
+          "application"
+        ]
+      }
+    ]
+  },
+  {
+    "language": "Rust",
+    "logo": "/images/lang-logo/rust-logo.svg",
+    "tags": [
+      "rust"
+    ],
+    "examples": [
+      {
+        "name": "Hello World",
+        "description": "Single-file Rust function using an axum handler signature",
+        "link": "https://github.com/fission/examples/blob/main/rust/hello.rs",
+        "tags": [
+          "hello world",
+          "rust"
+        ],
+        "language": "Rust"
+      },
+      {
+        "name": "Cargo Project",
+        "description": "A full Cargo crate that serves HTTP on the Fission runtime port and echoes the request body as JSON",
+        "link": "https://github.com/fission/examples/tree/main/rust/project-example",
+        "tags": [
+          "rust",
+          "application",
+          "cargo",
+          "axum"
+        ],
+        "language": "Rust"
       }
     ]
   },
@@ -265,8 +492,10 @@
         "description": "Simple Hello World Example in Perl",
         "link": "https://github.com/fission/examples/blob/main/perl/hello.pm",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "perl"
+        ],
+        "language": "Perl"
       }
     ]
   },
@@ -282,31 +511,40 @@
         "description": "Simple Hello World Example in PHP",
         "link": "https://github.com/fission/examples/blob/main/php7/hello.php",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "php"
+        ],
+        "language": "PHP"
       },
       {
         "name": "Hello World with Request-Response",
-        "description": "Code to show how request response work with PHP in Fission",
+        "description": "Code to show how request response work with PHP in Fission.",
         "link": "https://github.com/fission/examples/blob/main/php7/hellopsr.php",
         "tags": [
-          "request-response"
-        ]
+          "request response",
+          "php"
+        ],
+        "language": "PHP"
       },
       {
         "name": "Currency Converter",
         "description": "Code to show working with APIs in PHP",
         "link": "https://github.com/fission/examples/blob/main/php7/stock.php",
         "tags": [
-          "request-response",
-          "api"
-        ]
+          "request response",
+          "api",
+          "php"
+        ],
+        "language": "PHP"
       },
       {
         "name": "Multi File",
         "description": "Working with multiple files and external libraries in PHP",
         "link": "https://github.com/fission/examples/tree/main/php7/multifile",
-        "tags": []
+        "tags": [
+          "php"
+        ],
+        "language": "PHP"
       }
     ]
   },
@@ -322,32 +560,32 @@
         "description": "Simple Hello World Example in Ruby",
         "link": "https://github.com/fission/examples/blob/main/ruby/hello.rb",
         "tags": [
-          "hello-world"
-        ]
+          "hello world",
+          "ruby"
+        ],
+        "language": "Ruby"
       },
       {
         "name": "Request-Response in Ruby",
         "description": "Code to show Fission::Context and Fission::Response objects",
         "link": "https://github.com/fission/examples/blob/main/ruby/request_data.rb",
         "tags": [
-          "request-response"
-        ]
+          "request response",
+          "ruby"
+        ],
+        "language": "Ruby"
       },
       {
         "name": "Send events to Slack",
         "description": "Code to show how to send events to Slack using Ruby",
         "link": "https://github.com/fission/examples/blob/main/ruby/events_to_slack.rb",
         "tags": [
+          "ruby",
           "slack"
-        ]
+        ],
+        "language": "Ruby"
       }
     ]
-  },
-  {
-    "language": "TensorFlow",
-    "logo": "/images/lang-logo/tensorflow-logo.svg",
-    "tags": [],
-    "examples": []
   },
   {
     "language": "Misc",
@@ -358,7 +596,7 @@
     "examples": [
       {
         "name": "Binary Environment",
-        "description": "Sample codes using binary go server to execute shell scripts",
+        "description": "Sample codes using binary go server to execute shell scripts.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/binary",
         "tags": [
           "go"
@@ -367,7 +605,7 @@
       },
       {
         "name": "Binary Environment with multiple files",
-        "description": "Code to show fission binary environment with multiple programs",
+        "description": "Code to show fission binary environment with multiple programs.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/binary-function",
         "tags": [
           "go"
@@ -376,7 +614,7 @@
       },
       {
         "name": "Container Functions",
-        "description": "Example to show how to run container functions in Fission",
+        "description": "Example to show how to run container functions in Fission.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/container-functions/next-app",
         "tags": [
           "container",
@@ -387,7 +625,7 @@
       },
       {
         "name": "Dashboards",
-        "description": "Prometheus and Grafana dashboards for Fission",
+        "description": "Prometheus and Grafana dashboards for Fission.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/dashboards",
         "tags": [
           "observability",
@@ -398,7 +636,7 @@
       },
       {
         "name": "Falco",
-        "description": "Using Falcosidekick and Fission to detect and delete a compromised pod in a Kubernetes cluster",
+        "description": "Using Falcosidekick and Fission to detect and delete a compromised pod in a Kubernetes cluster.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/falco",
         "tags": [
           "falco",
@@ -420,7 +658,7 @@
       },
       {
         "name": "Long Running Compute",
-        "description": "Example to show how long running computes work in Fission",
+        "description": "Example to show how long running computes work in Fission.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/long-running-compute",
         "tags": [
           "python",
@@ -430,7 +668,7 @@
       },
       {
         "name": "Long Running Functions",
-        "description": "Example to show how long running functions work in Fission",
+        "description": "Example to show how long running functions work in Fission.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/long-running-functions",
         "tags": [
           "python",
@@ -440,7 +678,7 @@
       },
       {
         "name": "Nextjs Blog",
-        "description": "This sample shows a demo blog using Fission function handling multiple URLs with prefix path",
+        "description": "This sample shows a demo blog using Fission function handling multiple URLs with prefix path.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/nextjs-blog-demo",
         "tags": [
           "nextjs",
@@ -452,7 +690,7 @@
       },
       {
         "name": "Nextjs app with prefix",
-        "description": "This sample demos a Fission function handling multiple URLs with prefix path mentioned in route",
+        "description": "This sample demos a Fission function handling multiple URLs with prefix path mentioned in route.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/nextjs-prefixpath",
         "tags": [
           "nextjs",
@@ -464,7 +702,7 @@
       },
       {
         "name": "Chrome Headless in a Fission function",
-        "description": "This examples shows running headless chrome in a fission function",
+        "description": "This examples shows running headless chrome in a fission function.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/nodejs-chrome-headless",
         "tags": [
           "javascript",
@@ -476,7 +714,7 @@
       },
       {
         "name": "Tensorflow serving environment",
-        "description": "Example to show how tensorflow serving environment works in Fission",
+        "description": "Example to show how tensorflow serving environment works in Fission.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/tensorflow-serving",
         "tags": [
           "tensorflow",
@@ -486,7 +724,7 @@
       },
       {
         "name": "Websocket based chat application",
-        "description": "Chat application built on websockets",
+        "description": "Chat application built on websockets.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/websocket",
         "tags": [
           "chat",
@@ -497,12 +735,184 @@
       },
       {
         "name": "Workshop Samples",
-        "description": "Examples showcased during any workshops",
+        "description": "Examples showcased during any workshops.",
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/workshop",
         "tags": [
           "workshop"
         ],
         "language": "Go"
+      },
+      {
+        "name": "Kafka Keda SASL",
+        "description": "Fission Message Queue Trigger based on Kafka Keda SASL",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda-sasl",
+        "tags": [
+          "message queue trigger",
+          "kafka",
+          "keda",
+          "go"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "Kafka Keda",
+        "description": "Fission Message Queue Trigger based on Strimzi Kafka.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda",
+        "tags": [
+          "message queue trigger",
+          "kafka",
+          "keda",
+          "go"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "Kafka Message Queue Trigger",
+        "description": "Fission Message Queue Trigger based on Strimzi Kafka.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-mqt-fission",
+        "tags": [
+          "message queue trigger",
+          "kafka",
+          "go"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "Keda GCP Pub Sub",
+        "description": "Fission Message Queue Trigger based on Google Cloud's Publisher Subscriber Service.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/keda-gcppubsub",
+        "tags": [
+          "message queue trigger",
+          "google cloud",
+          "keda",
+          "pubsub",
+          "python"
+        ],
+        "language": "Python"
+      },
+      {
+        "name": "Keda Kafka RabbitMQ",
+        "description": "Fission Message Queue Trigger based on Kafka and Rabbit MQ",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/keda-kafka-rabbitmq",
+        "tags": [
+          "message queue trigger",
+          "rabbit mq",
+          "keda",
+          "go"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "AWS Kinesis with Keda",
+        "description": "Fission Message Queue Trigger based on AWS Kinesis",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/keda-kinesis",
+        "tags": [
+          "message queue trigger",
+          "aws",
+          "keda",
+          "go",
+          "kinesis"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "Keda Rabbit MQ in Go",
+        "description": "Fission Message Queue Trigger based on Rabbit MQ in Go",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/keda-rabbitmq-go",
+        "tags": [
+          "message queue trigger",
+          "rabbit mq",
+          "keda",
+          "go"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "Keda Rabbit MQ Functions",
+        "description": "Fission Message Queue Trigger based on Rabbit MQ",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/keda-rabbitmq",
+        "tags": [
+          "message queue trigger",
+          "rabbit mq",
+          "keda",
+          "go"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "AWS SQS with Keda",
+        "description": "The example demonstrates the integration of Fission functions, AWS SQS and Keda",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/keda-sqs",
+        "tags": [
+          "message queue trigger",
+          "aws",
+          "keda",
+          "go",
+          "sqs"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "NATS with Keda",
+        "description": "The example demonstrates the integration of Fission functions, NATS Message Queue and Keda",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/nats-keda",
+        "tags": [
+          "message queue trigger",
+          "nats",
+          "keda",
+          "javascript"
+        ],
+        "language": "JavaScript"
+      },
+      {
+        "name": "Message Queue Trigger Demonstration - NATS Streaming",
+        "description": "The example demonstrates the integration of Fission functions, NATS Streaming and Keda",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/nats-streaming",
+        "tags": [
+          "message queue trigger",
+          "nats",
+          "keda",
+          "go"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "Hello Spec Example",
+        "description": "Hello world example using Fission Specs.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/spec-example/hello-spec-exmaple",
+        "tags": [
+          "python",
+          "spec"
+        ],
+        "language": "Python"
+      },
+      {
+        "name": "Multi namespace spec example",
+        "description": "Fission spec example with multi namespaces.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/spec-example/multinamespace-spec-example",
+        "tags": [
+          "go",
+          "spec"
+        ],
+        "language": "Go"
+      },
+      {
+        "name": "Nodejs Parse Limit",
+        "description": "Example to deploy a Node.js application using Fission specs.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/spec-example/nodejs-bodyParser-limit-example",
+        "tags": [
+          "javascript",
+          "spec"
+        ],
+        "language": "JavaScript"
+      },
+      {
+        "name": "Podspec example",
+        "description": "Code to show how to add podspec for builder of environment",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/spec-example/podspec-example",
+        "tags": [
+          "spec"
+        ]
       }
     ]
   }

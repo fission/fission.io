@@ -1,6 +1,7 @@
 # Tools
 
 - `environments.py` updates `static/data/environments.json`.
+- `examples.py` updates `static/data/examples.json`.
 - `notes.py` generates content for changelog section in release notes.
 
 ## Environments
@@ -35,6 +36,25 @@ Now, run the script.
 ```
 python3 environments.py
 ```
+
+## Examples
+
+The examples catalog rendered at `/examples` is built from the per-language
+`examples.json` files in the [fission/examples](https://github.com/fission/examples)
+repository (one next to each language's samples, plus the ones under
+`miscellaneous/`). `examples.py` reads those files, groups them by language, adds
+the catalog logos and group tags, and writes `static/data/examples.json`.
+
+Clone `fission/examples` and regenerate (run from this `tools/` directory):
+```
+python3 examples.py /path/to/fission-examples
+```
+The path argument defaults to a sibling checkout at `../../examples`. Commit the
+updated `static/data/examples.json`.
+
+To add a new example, add an entry to the relevant `examples.json` in the
+`fission/examples` repo, then rerun the script. New languages or logos are
+configured in the `GROUPS` list in `examples.py`.
 
 ## ChangeLog
 Copy the changelog section from draft release to a file `notes.txt`.
