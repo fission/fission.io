@@ -66,6 +66,27 @@
           "api"
         ],
         "language": "JavaScript"
+      },
+      {
+        "name": "ECMAScript Modules (ESM)",
+        "description": "Pure ESM function using export default, for the Node.js 22 environment",
+        "link": "https://github.com/fission/examples/blob/main/nodejs/hello-esm.js",
+        "tags": [
+          "hello world",
+          "node.js",
+          "esm"
+        ],
+        "language": "JavaScript"
+      },
+      {
+        "name": "WebSocket Echo",
+        "description": "WebSocket handler that echoes received messages back to the client",
+        "link": "https://github.com/fission/examples/blob/main/nodejs/echo.js",
+        "tags": [
+          "node.js",
+          "websocket"
+        ],
+        "language": "JavaScript"
       }
     ]
   },
@@ -211,6 +232,76 @@
     ]
   },
   {
+    "language": "Python (FastAPI)",
+    "logo": "/images/lang-logo/python-logo.svg",
+    "tags": [
+      "python",
+      "fastapi"
+    ],
+    "examples": [
+      {
+        "name": "Hello World",
+        "description": "Simple Hello World example for the Python FastAPI environment",
+        "link": "https://github.com/fission/examples/blob/main/python-fastapi/hello.py",
+        "tags": [
+          "hello world",
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Request-Response",
+        "description": "Access the HTTP request fields, such as the body, headers and query",
+        "link": "https://github.com/fission/examples/blob/main/python-fastapi/requestdata.py",
+        "tags": [
+          "request response",
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Changing Status Code",
+        "description": "Change the response status code",
+        "link": "https://github.com/fission/examples/blob/main/python-fastapi/statuscode.py",
+        "tags": [
+          "request response",
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Multi File",
+        "description": "Working with multiple source files in the Python FastAPI environment",
+        "link": "https://github.com/fission/examples/tree/main/python-fastapi/multifile",
+        "tags": [
+          "python",
+          "fastapi"
+        ]
+      },
+      {
+        "name": "Source Package",
+        "description": "Use the Python build environment to resolve (pip) dependencies before deploying the function",
+        "link": "https://github.com/fission/examples/tree/main/python-fastapi/sourcepkg",
+        "tags": [
+          "python",
+          "fastapi",
+          "pip"
+        ]
+      },
+      {
+        "name": "Guestbook",
+        "description": "A serverless guestbook built with Python FastAPI and Redis",
+        "link": "https://github.com/fission/examples/tree/main/python-fastapi/guestbook",
+        "tags": [
+          "python",
+          "fastapi",
+          "application",
+          "redis"
+        ]
+      }
+    ]
+  },
+  {
     "language": "Go",
     "logo": "/images/lang-logo/go-logo.svg",
     "tags": [
@@ -304,6 +395,88 @@
           ".net"
         ],
         "language": ".NET"
+      }
+    ]
+  },
+  {
+    "language": ".NET 8",
+    "logo": "/images/lang-logo/dotnetcore-logo.svg",
+    "tags": [
+      "c#",
+      ".net",
+      ".net8"
+    ],
+    "examples": [
+      {
+        "name": "Hello World",
+        "description": "Minimal .NET 8 function returning a string",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/HelloWorld",
+        "tags": [
+          "hello world",
+          ".net",
+          "c#"
+        ]
+      },
+      {
+        "name": "HTTP Trigger",
+        "description": "Read the HTTP method and URL from the request context",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/HttpTriggerExample",
+        "tags": [
+          "request response",
+          ".net",
+          "c#"
+        ]
+      },
+      {
+        "name": "Async Function",
+        "description": "Run asynchronous work inside a .NET 8 function",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/AsyncFunctionExample",
+        "tags": [
+          ".net",
+          "c#",
+          "async"
+        ]
+      },
+      {
+        "name": "Multi File",
+        "description": "Multi-file .NET 8 project with controllers, services, and models",
+        "link": "https://github.com/fission/examples/tree/main/dotnet8/MultiFileExample",
+        "tags": [
+          ".net",
+          "c#",
+          "application"
+        ]
+      }
+    ]
+  },
+  {
+    "language": "Rust",
+    "logo": "/images/lang-logo/rust-logo.svg",
+    "tags": [
+      "rust"
+    ],
+    "examples": [
+      {
+        "name": "Hello World",
+        "description": "Single-file Rust function using an axum handler signature",
+        "link": "https://github.com/fission/examples/blob/main/rust/hello.rs",
+        "tags": [
+          "hello world",
+          "rust"
+        ],
+        "language": "Rust"
+      },
+      {
+        "name": "Cargo Project",
+        "description": "A full Cargo crate that serves HTTP on the Fission runtime port and echoes the request body as JSON",
+        "link": "https://github.com/fission/examples/tree/main/rust/project-example",
+        "tags": [
+          "rust",
+          "application",
+          "cargo",
+          "axum"
+        ],
+        "language": "Rust"
       }
     ]
   },
@@ -525,7 +698,7 @@
           "blog",
           "prefix"
         ],
-        "language": "Python"
+        "language": "JavaScript"
       },
       {
         "name": "Chrome Headless in a Fission function",
@@ -547,7 +720,7 @@
           "tensorflow",
           "application"
         ],
-        "language": "JavaScript"
+        "language": "TensorFlow"
       },
       {
         "name": "Websocket based chat application",
@@ -575,7 +748,7 @@
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda-sasl",
         "tags": [
           "message queue trigger",
-          "kakfa",
+          "kafka",
           "keda",
           "go"
         ],
@@ -587,7 +760,7 @@
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-keda",
         "tags": [
           "message queue trigger",
-          "kakfa",
+          "kafka",
           "keda",
           "go"
         ],
@@ -599,7 +772,7 @@
         "link": "https://github.com/fission/examples/tree/main/miscellaneous/message-queue-trigger/kafka-mqt-fission",
         "tags": [
           "message queue trigger",
-          "kakfa",
+          "kafka",
           "go"
         ],
         "language": "Go"
