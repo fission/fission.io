@@ -112,16 +112,82 @@ spec:
         - name: regcred
 ```
 
-{{< notice info >}}
+{{% notice info %}}
 **Pin digests in production.**
 A package references an image; re-pushing the same tag with different content is **not** detected automatically (functions roll only on package update).
 Setting `digest` makes the reference immutable and the pull verifiable.
-{{< /notice >}}
+{{% /notice %}}
 
-#### Private and insecure registries
+#### Private registries
 
-Pulls authenticate with, in order: the `fission-fetcher` service account's `imagePullSecrets`, the package's `imagePullSecrets` (which must exist in the function's namespace), and anonymous access.
-For a cluster-wide registry credential, attach a docker-registry secret to the fetcher service account; for per-package credentials, use the spec field above.
+Code-image pulls resolve credentials in this order:
+
+1. The **`fission-fetcher` service account's `imagePullSecrets`** — the cluster-wide default for all packages.
+2. The **package's own `imagePullSecrets`** — per-package credentials, set in the package spec.
+3. **Anonymous** access.
+
+Both secret sources are resolved in the namespace the function pods run in.
+For functions in the `default` namespace that is the configured function namespace (`fission-function` in many installs); for functions in other namespaces it is the function's own namespace.
+Confirm with `kubectl get pods -l environmentName=<env> -A` if unsure.
+
+##### Step 1 — create a registry secret
+
+Create a standard `docker-registry` secret in the function-pod namespace (see the [Kubernetes guide](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for registry-specific details):
+
+```bash
+$ kubectl create secret docker-registry regcred \
+    --namespace fission-function \
+    --docker-server=registry.example.com \
+    --docker-username=ci-bot \
+    --docker-password="$REGISTRY_TOKEN"
+```
+
+##### Step 2a — cluster-wide: attach the secret to the fetcher service account
+
+Patch the `fission-fetcher` service account in the same namespace; every OCI package pull then uses it without any per-package configuration:
+
+```bash
+$ kubectl patch serviceaccount fission-fetcher \
+    --namespace fission-function \
+    -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+```
+
+##### Step 2b — per-package: reference the secret in the package spec
+
+For credentials scoped to one package (e.g. different teams pulling from different registries), set `imagePullSecrets` in the package spec instead:
+
+```yaml
+apiVersion: fission.io/v1
+kind: Package
+metadata:
+  name: hello
+spec:
+  environment:
+    name: python
+  deployment:
+    type: oci
+    oci:
+      image: registry.example.com/myteam/hello-code:v1
+      imagePullSecrets:
+        - name: regcred
+```
+
+##### Verifying
+
+Create a function on the package and invoke it; on a credential problem the function returns a 5xx and the fetcher log names the registry error:
+
+```bash
+$ kubectl logs <function-pod> -c fetcher -n fission-function | grep -i "error extracting OCI image"
+```
+
+{{% notice warning %}}
+Fission does not validate that the referenced secrets exist or hold working credentials — a missing or wrong secret surfaces only at pull time.
+With [image volumes](#optional-mount-code-with-kubernetes-image-volumes) enabled, the **kubelet** performs the pull using the same two secret sources (the pod inherits both), so the same setup keeps working — but pull errors then appear as pod events (`kubectl describe pod`, `ErrImagePull`) rather than fetcher logs.
+{{% /notice %}}
+
+Runtime/environment images are pulled by the kubelet independently of package images; for those, see [Pull an Image From a Private Registry]({{% ref "/docs/usage/function/private-registry.md" %}}).
+
+#### Insecure (plain-HTTP) registries
 
 Plain-HTTP registries are refused by default.
 To allow specific hosts (e.g. an in-cluster registry for development), set the Helm value:
@@ -132,6 +198,7 @@ fetcher:
 ```
 
 This is a comma-separated host allowlist, not a global switch — every other registry still requires TLS.
+Localhost and private (RFC-1918) IP addresses are implicitly trusted by the underlying client, matching Docker's behavior.
 
 #### Optional: mount code with Kubernetes image volumes
 
