@@ -3,7 +3,7 @@ title: "OCI image packages"
 draft: false
 weight: 36
 description: >
-  Ship function code as an OCI image instead of an archive: build a code-only image, create a package with --oci, pin digests, use private registries, and optionally mount code via Kubernetes image volumes.
+  Ship Fission function code as an OCI image instead of an archive: build a code-only image, create a package with --oci, and pin digests for fast cold starts.
 ---
 
 Starting with Fission v1.26.0, a package's deployment archive can be an **OCI image** instead of a zip archive.
@@ -15,6 +15,17 @@ $ fission package create --name hello --env python \
 ```
 
 Everything else — environments, functions, triggers, entry points — works exactly as with archive-based packages.
+
+```mermaid
+flowchart TB
+  ci["You / CI<br/>(--oci)"]:::user -->|"push code image"| reg["OCI Registry"]:::store
+  build["Fission Builder"]:::fission -->|"publish on build"| reg
+  reg -->|"pull at cold start"| pod["Function Pod"]:::pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
+```
 
 #### Why deliver code as an image?
 

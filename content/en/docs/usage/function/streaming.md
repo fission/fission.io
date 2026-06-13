@@ -3,7 +3,7 @@ title: "Streaming Responses"
 draft: false
 weight: 48
 description: >
-  Stream a function's response incrementally with Server-Sent Events, HTTP chunked transfer, or a WebSocket upgrade using spec.streaming and the --streaming flags — for LLM tokens, AI agents, chat, and long-running responses.
+  Stream a Fission function's response incrementally over Server-Sent Events, HTTP chunked transfer, or WebSocket — for LLM tokens, chat, and long-running calls.
 ---
 
 By default a function buffers its full response and the router cuts the request off at `functionTimeout`.
@@ -12,6 +12,23 @@ The response is flushed to the client as it is produced and is **not** bound by 
 
 Streaming is **per-function and opt-in**: omit the `spec.streaming` object (or the `--streaming` flag) and the function keeps the existing buffered behavior exactly.
 Typical use cases are LLM token streaming, AI agent runs, chat, SSE feeds, and other long-running or bidirectional responses.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant R as Router
+    participant F as Function Pod
+    C->>R: HTTP request
+    R->>F: proxy request
+    F-->>R: first bytes
+    R-->>C: flush immediately
+    Note over R,F: idle timer resets on every chunk
+    F-->>R: more chunks
+    R-->>C: flush each chunk
+    F-->>R: stream ends
+    R-->>C: close connection
+```
 
 ## Enable streaming
 

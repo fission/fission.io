@@ -3,13 +3,25 @@ title: "Functions as MCP Tools"
 draft: false
 weight: 49
 description: >
-  Advertise a Fission function as a Model Context Protocol (MCP) tool so LLM agents can discover and invoke it — enable the MCP server, expose a function with --expose-as-mcp, describe its inputs with a JSON Schema, and scope access with a signed JWT.
+  Expose a Fission function as a Model Context Protocol (MCP) tool so LLM agents can discover and invoke it, with a JSON Schema for inputs and JWT-scoped access.
 ---
 
 The [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) is an open protocol that lets LLM agents discover and call external tools.
 Starting with Fission {{< release-version >}} you can advertise a function as an MCP tool: any agent that speaks MCP (for example Claude) can then list it and invoke it over Fission's existing internal invocation path, with no hand-written adapter code.
 
 Exposing a function as a tool is **opt-in per function** and additive — functions you don't mark stay private.
+
+```mermaid
+flowchart TB
+  agent["LLM Agent"]:::user -->|"<b>1.</b> list / call tool (JWT)"| mcp["MCP Server"]:::fission
+  mcp -->|"<b>2.</b> watch Function CRDs"| fns["Tool-exposed Functions"]:::store
+  mcp -->|"<b>3.</b> invoke via internal path"| router["Router"]:::fission
+  router -->|"<b>4.</b> HTTP request"| pod["Function Pod"]:::pod
+  classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
+  classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
+```
 
 ## Enable the MCP server
 
