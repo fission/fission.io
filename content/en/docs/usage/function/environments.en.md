@@ -22,7 +22,7 @@ $ fission env create --name node \
                      --image ghcr.io/fission/node-env \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
-                     --poolsize 4
+                     --version 3 --poolsize 4
 ```
 
 In case of the pool based executor, the resources specified for environment are used for function pod as well.

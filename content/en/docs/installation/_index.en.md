@@ -236,8 +236,13 @@ nix-env -iA nixos.fission
 
 {{< /tab >}}
 {{< tab "Windows" >}}
-For Windows, you can use the linux binary on WSL. Or you can download
-this windows executable: [fission.exe](https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-{{% release-version %}}-windows-amd64.exe)
+On Windows you can install the CLI with [Scoop](https://scoop.sh/):
+
+```powershell
+scoop install fission-cli
+```
+
+Alternatively, you can use the Linux binary on WSL, or download this windows executable: [fission.exe](https://github.com/fission/fission/releases/download/{{% release-version %}}/fission-{{% release-version %}}-windows-amd64.exe)
 {{< /tab >}}
 {{< /tabs >}}
 
