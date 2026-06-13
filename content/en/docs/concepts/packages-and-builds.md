@@ -75,22 +75,28 @@ flowchart TB
 5. The builder manager records the upload result, sets `buildstatus: succeeded`, and updates dependent functions so they pick up the new archive.
 
 {{% notice warning %}}
-As of {{< release-version >}}, builder pods no longer inherit the builder service-account token, and cross-namespace Environment or Package references are rejected.
+As of v1.24.0, builder pods no longer inherit the builder service-account token, and cross-namespace Environment or Package references are rejected.
 Keep a function's environment and package in the same namespace.
 {{% /notice %}}
 
-## Literal vs URL archives, and checksums
+## Literal, URL, and OCI archives
 
-An archive is stored in one of two ways, set by its `type`:
+A deployment archive is delivered in one of three ways, set by its `type`:
 
 - **`literal`** — the archive bytes are embedded directly in the resource, suitable for small packages.
 - **`url`** — the archive is referenced by URL and fetched on demand, suitable for larger artifacts stored externally (for example, in the storage service).
+- **`oci`** — the deployment code is the filesystem of an **OCI image** in a container registry, pulled at cold start. Available since v1.26.0 and for deployment archives only. See [OCI image packages]({{% ref "/docs/usage/function/oci-packages.md" %}}).
 
 URL archives carry a **checksum** so Fission can verify integrity when fetching.
 The only supported checksum type is `sha256`, enforced by a CEL rule on the resource; the sum is hex-encoded.
-Checksums are ignored for literal archives, where the bytes are already present.
+Checksums are ignored for literal archives, where the bytes are already present; OCI archives can instead be pinned to an image `digest`.
 
 You can point a function at an externally hosted archive over a URL; see [URL as archive source]({{% ref "/docs/usage/function/url-as-archive-source.md" %}}).
+
+{{% notice info %}}
+When a [package registry]({{% ref "/docs/usage/function/oci-packages.md" %}}) is configured cluster-wide, the builder publishes each successful build's deployment archive as a digest-pinned OCI image and functions cold-start from it (with a tarball fallback through the storage service).
+Without a registry configured, builds use the storage-service path described above unchanged.
+{{% /notice %}}
 
 ## Related
 

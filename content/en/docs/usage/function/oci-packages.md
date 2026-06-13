@@ -22,8 +22,8 @@ Everything else — environments, functions, triggers, entry points — works ex
 * **Standard supply-chain tooling**: code images can be signed (`cosign`), scanned, replicated, and promoted with the same tooling you already use for runtime images.
 * **Registry-native workflows**: CI pipelines that already push images need no extra upload step to Fission's storage service.
 
-OCI delivery is **opt-in per package**.
-Archive-based packages remain the default and are unaffected.
+OCI delivery is **opt-in**: it applies per package via `--oci`, or cluster-wide for every build once you configure a [package registry](#automatic-oci-delivery-for-built-packages).
+With neither configured, archive-based packages remain the default and are unaffected.
 
 #### Building a compatible code image
 
@@ -117,6 +117,44 @@ spec:
 A package references an image; re-pushing the same tag with different content is **not** detected automatically (functions roll only on package update).
 Setting `digest` makes the reference immutable and the pull verifiable.
 {{% /notice %}}
+
+#### Automatic OCI delivery for built packages
+
+The `--oci` flow above is **per package** — you build and push the image yourself.
+You can also have Fission do this for **every** build cluster-wide: configure a **package registry** and each successful build publishes its deployment archive as a digest-pinned OCI image, and functions cold-start by pulling it instead of downloading a tarball from the storage service.
+
+Enable it with Helm:
+
+```yaml
+packageRegistry:
+  enabled: true
+  # Repository root. Packages are pushed to <repositoryPrefix>/<namespace>/<package>.
+  repositoryPrefix: ghcr.io/myorg/fission-packages
+  # Secret names (kubernetes.io/dockerconfigjson) in the builder namespace.
+  # pushSecret needs write access (build time); pullSecret needs read access
+  # (attached to packages for the pull). Keep them separate.
+  pushSecret: registry-push
+  pullSecret: registry-pull
+  # On a failed push: true keeps the build and stores a tarball instead
+  # (the package gets condition OCIPublished=False); false fails the build.
+  fallbackToStorage: true
+```
+
+| Helm value | Default | Meaning |
+| --- | --- | --- |
+| `packageRegistry.enabled` | `false` | Publish built deployment archives as OCI images. When unset, builds use the storage-service tarball path unchanged. |
+| `packageRegistry.repositoryPrefix` | `""` | Repository root; images are pushed to `<repositoryPrefix>/<namespace>/<package>`. |
+| `packageRegistry.pushSecret` | `""` | `dockerconfigjson` secret (in the builder namespace) with **write** access, used at build time. |
+| `packageRegistry.pullSecret` | `""` | `dockerconfigjson` secret with **read** access, stamped into each package's `imagePullSecrets`. |
+| `packageRegistry.fallbackToStorage` | `true` | On push failure, keep the build and fall back to a tarball (package gets `OCIPublished=False`); `false` fails the build. |
+| `packageRegistry.publishedPrefix` | `""` | Advanced: node-visible prefix recorded in packages when nodes reach the registry at a different address than pods do (e.g. an in-cluster registry via NodePort). |
+| `packageRegistry.insecureHosts` | `""` | Comma-separated `host[:port]` list allowed to use plain HTTP instead of TLS. |
+
+To keep a single package on the tarball path regardless of the cluster setting, annotate it:
+
+```bash
+$ kubectl annotate package <name> -n <ns> fission.io/package-delivery=tarball
+```
 
 #### Private registries
 

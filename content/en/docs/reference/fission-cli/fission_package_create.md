@@ -22,6 +22,7 @@ fission package create [flags]
       --srcchecksum string          SHA256 checksum of source archive when providing URL
       --deploychecksum string       SHA256 checksum of deploy archive when providing URL
       --insecure                    Skip generating SHA256 checksum for file integrity validation
+      --oci string                  Pre-built OCI image reference containing the deployment code (registry/repo:tag[@digest])
       --buildcmd string             Build command for builder to run with
       --spec                        Save to the spec directory instead of creating on cluster
       --dry                         View the generated specs

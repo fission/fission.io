@@ -15,6 +15,12 @@ It is reached only over the cluster network by the builder pods, function-pod fe
 Packages whose archive is **larger than 256 KB** are stored in StorageSvc rather than inline in the `Package` resource; smaller archives are stored as literals in the CRD itself.
 A builder pod uploads the deployment archive it produces to StorageSvc, and the fetcher inside a function pod downloads that archive when specializing the function.
 
+{{% notice info %}}
+Since v1.26.0, when a package registry is configured (`packageRegistry.enabled`), a build's deployment archive is instead published as a digest-pinned **OCI image** and pulled at cold start, bypassing StorageSvc for that package.
+StorageSvc remains the default and the fallback (`fallbackToStorage`) when no registry is configured or a push fails, and source archives always use StorageSvc.
+See [OCI image packages]({{% ref "/docs/usage/function/oci-packages.md" %}}).
+{{% /notice %}}
+
 ## Storage backends
 
 StorageSvc abstracts over two object-store backends, selected by the `persistence.storageType` Helm value:

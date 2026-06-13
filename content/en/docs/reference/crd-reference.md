@@ -46,6 +46,12 @@ _Appears in:_
 
 Archive contains or references a collection of sources or
 binary files.
+The CEL rule below deliberately never references self.literal: any
+access to a byte-format field (even has()) makes the apiserver convert
+its base64 value for CEL using URL-safe decoding, which rejects any
+standard-base64 payload containing '/' or '+' — in practice every
+zipped literal archive. The literal/oci combination is instead
+rejected by the webhook (Archive.Validate), with the same message.
 
 
 
@@ -54,19 +60,19 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `type` _[ArchiveType](#archivetype)_ | Type defines how the package is specified: literal or URL.<br />Available value:<br /> - literal<br /> - url |  | Enum: [ literal url] <br /> |
+| `type` _[ArchiveType](#archivetype)_ | Type defines how the package is specified: literal, URL, or OCI.<br />Available value:<br /> - literal<br /> - url<br /> - oci |  | Enum: [ literal url oci] <br /> |
 | `literal` _integer array_ | Literal contents of the package. Can be used for<br />encoding packages below TODO (256 KB?) size. |  |  |
 | `url` _string_ | URL references a package. |  |  |
 | `checksum` _[Checksum](#checksum)_ | Checksum ensures the integrity of packages<br />referenced by URL. Ignored for literals. |  |  |
+| `oci` _[OCIArchive](#ociarchive)_ | OCI references an OCI image holding the deployment code.<br />Mutually exclusive with Literal and URL. Supported only on<br />PackageSpec.Deployment; PackageSpec.Validate rejects it on Source<br />(source archives feed the builder, which has no OCI pull path). |  |  |
 
 
 #### ArchiveType
 
 _Underlying type:_ _string_
 
-ArchiveType is either literal or URL, indicating whether
-the package is specified in the Archive struct or
-externally.
+ArchiveType is literal, url, or oci, indicating whether the
+package is specified in the Archive struct or externally.
 
 
 
@@ -77,6 +83,7 @@ _Appears in:_
 | --- | --- |
 | `literal` | ArchiveTypeLiteral means the package contents are specified in the Literal field of<br />resource itself.<br /> |
 | `url` | ArchiveTypeUrl means the package contents are at the specified URL.<br /> |
+| `oci` | ArchiveTypeOCI means the package contents are the filesystem of an<br />OCI image referenced in the OCI field of the resource.<br /> |
 
 
 
@@ -476,6 +483,8 @@ _Appears in:_
 | `InvokeStrategy` _[InvokeStrategy](#invokestrategy)_ | InvokeStrategy is a set of controls which affect how function executes |  |  |
 | `functionTimeout` _integer_ | FunctionTimeout provides a maximum amount of duration within which a request for<br />a particular function execution should be complete.<br />This is optional. If not specified default value will be taken as 60s |  |  |
 | `idletimeout` _integer_ | IdleTimeout specifies the length of time that a function is idle before the<br />function pod(s) are eligible for deletion. If no traffic to the function<br />is detected within the idle timeout, the executor will then recycle the<br />function pod(s) to release resources. |  |  |
+| `streaming` _[StreamingConfig](#streamingconfig)_ | Streaming opts this function into the router's streaming invocation path:<br />incremental flushing, an idle/max timeout split, and a router-driven pod<br />keepalive for the connection's lifetime. When nil (the default) the function<br />uses the classic buffered, retry-on-transient-error proxy path with a single<br />FunctionTimeout deadline. Additive and backward compatible. |  |  |
+| `tool` _[ToolConfig](#toolconfig)_ | Tool, when non-nil, advertises this function as a Model Context Protocol<br />(MCP) tool on the fission-bundle --mcpPort server. The MCP server watches<br />Function CRDs and hot-updates its tool list from this field. Presence is<br />the on switch (like Streaming): nil (the default) means the function is<br />never advertised as a tool. Additive and backward compatible. |  |  |
 | `concurrency` _integer_ | Maximum number of pods to be specialized which will serve requests<br />This is optional. If not specified default value will be taken as 500 |  |  |
 | `requestsPerPod` _integer_ | RequestsPerPod indicates the maximum number of concurrent requests that can be served by a specialized pod<br />This is optional. If not specified default value will be taken as 1 |  |  |
 | `onceOnly` _boolean_ | OnceOnly specifies if specialized pod will serve exactly one request in its lifetime and would be garbage collected after serving that one request<br />This is optional. If not specified default value will be taken as false |  |  |
@@ -498,6 +507,43 @@ _Appears in:_
 | --- | --- | --- | --- |
 | `observedGeneration` _integer_ | ObservedGeneration reflects the .metadata.generation that the<br />controller observed when it last updated the status. |  |  |
 | `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ | Conditions represent the latest observations of the function's state. |  |  |
+
+
+#### GatewayParentRef
+
+
+
+GatewayParentRef references a Gateway (and optionally a specific listener)
+that the generated HTTPRoute attaches to. It mirrors the subset of
+gateway.networking.k8s.io ParentReference that Fission needs.
+
+
+
+_Appears in:_
+- [GatewayRouteConfig](#gatewayrouteconfig)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `name` _string_ | Name of the parent Gateway. |  |  |
+| `namespace` _string_ | Namespace of the parent Gateway. Defaults to the router's namespace<br />when empty. A non-empty, different namespace needs a ReferenceGrant. |  |  |
+| `sectionName` _string_ | SectionName selects a specific listener on the Gateway. Empty attaches<br />to all compatible listeners. |  |  |
+| `port` _integer_ | Port narrows attachment to a specific Gateway listener port. |  | Maximum: 65535 <br />Minimum: 1 <br /> |
+
+
+#### GatewayRouteConfig
+
+
+
+GatewayRouteConfig is the Gateway-API-specific portion of a RouteConfig.
+
+
+
+_Appears in:_
+- [RouteConfig](#routeconfig)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `parentRefs` _[GatewayParentRef](#gatewayparentref) array_ | ParentRefs are the Gateways the generated HTTPRoute attaches to. The<br />referenced Gateways are owned by the cluster operator (Fission does<br />not create Gateways or GatewayClasses). A cross-namespace parentRef<br />requires a ReferenceGrant in the Gateway's namespace. |  |  |
 
 
 #### HTTPTrigger
@@ -566,8 +612,9 @@ _Appears in:_
 | `method` _string_ | Use Methods instead of Method. This field is going to be deprecated in a future release<br />HTTP method to access a function. |  | Enum: [ GET HEAD POST PUT PATCH DELETE CONNECT OPTIONS TRACE] <br /> |
 | `methods` _string array_ | HTTP methods to access a function |  | items:Enum: [GET HEAD POST PUT PATCH DELETE CONNECT OPTIONS TRACE] <br /> |
 | `functionref` _[FunctionReference](#functionreference)_ | FunctionReference is a reference to the target function. |  |  |
-| `createingress` _boolean_ | If CreateIngress is true, router will create an ingress definition. |  |  |
-| `ingressconfig` _[IngressConfig](#ingressconfig)_ | IngressConfig for router to set up Ingress. |  |  |
+| `createingress` _boolean_ | If CreateIngress is true, router will create an ingress definition.<br />Deprecated: the Kubernetes Ingress API is frozen. Use RouteConfig<br />(with Provider "gateway") to expose functions through the Gateway API<br />instead. CreateIngress + IngressConfig keep working for the<br />deprecation window but will be removed in a future release. |  |  |
+| `ingressconfig` _[IngressConfig](#ingressconfig)_ | IngressConfig for router to set up Ingress.<br />Deprecated: superseded by RouteConfig. See CreateIngress. |  |  |
+| `routeConfig` _[RouteConfig](#routeconfig)_ | RouteConfig declares how the router exposes this trigger through an<br />external route provider (Ingress or the Gateway API). It is the<br />provider-neutral successor to CreateIngress + IngressConfig: when set<br />it takes precedence over those fields. Leave nil to expose the<br />function only through the router's own URL. |  |  |
 | `corsConfig` _[HTTPTriggerCorsConfig](#httptriggercorsconfig)_ | CorsConfig configures CORS response headers for browser<br />callers of this trigger. When nil, the router emits no<br />Access-Control-* headers and the browser's Same-Origin<br />Policy enforces cluster isolation from cross-origin pages<br />(the deny-by-default behaviour). Set this field to<br />allowlist specific origins for SPAs that legitimately<br />call this trigger cross-origin. |  |  |
 
 
@@ -593,6 +640,8 @@ _Appears in:_
 
 
 IngressConfig is for router to set up Ingress.
+Deprecated: superseded by RouteConfig. The Kubernetes Ingress API is
+frozen; use RouteConfig with Provider "gateway" for new triggers.
 
 
 
@@ -770,6 +819,28 @@ _Appears in:_
 
 
 
+#### OCIArchive
+
+
+
+OCIArchive references an OCI image whose flattened filesystem
+contains the deployment code (RFC-0001). The environment runtime
+image stays the pod's main container; only how the code reaches
+the shared volume changes.
+
+
+
+_Appears in:_
+- [Archive](#archive)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `image` _string_ | Image is a fully qualified OCI reference: registry/repo:tag[@digest]. |  | MinLength: 1 <br /> |
+| `imagePullSecrets` _[LocalObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#localobjectreference-v1-core) array_ | ImagePullSecrets are resolved when pulling the image. The<br />fetcher-pull path passes them to the in-fetcher keychain; the<br />image-volume path sets them on pod.Spec.ImagePullSecrets.<br />They must exist in the namespace the function pods run in —<br />the function's own namespace, or the configured function<br />namespace for default-namespace functions. |  |  |
+| `subPath` _string_ | SubPath points at the deployment root inside the image<br />filesystem, as a clean relative path; empty means the image<br />root. It must be a directory: the image-volume path mounts it<br />via the pod volumeMount subPath, and kubelets reject file<br />subpaths on image volumes. |  |  |
+| `digest` _string_ | Digest is an optional content hash validated on pull. |  | Pattern: `^sha256:[a-f0-9]\{64\}$` <br /> |
+
+
 #### Package
 
 
@@ -847,6 +918,49 @@ _Appears in:_
 | `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ | Conditions represent the latest observations of the package's state. |  |  |
 
 
+#### RouteConfig
+
+
+
+RouteConfig declares how the router exposes an HTTPTrigger through an
+external route provider. It is the provider-neutral successor to the
+deprecated CreateIngress + IngressConfig fields: the router routes it to
+the matching RouteProvider based on Provider.
+
+
+
+_Appears in:_
+- [HTTPTriggerSpec](#httptriggerspec)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `provider` _[RouteProviderType](#routeprovidertype)_ | Provider selects the route provider that reconciles this trigger's<br />external route. "ingress" creates a networking.k8s.io Ingress (the<br />deprecated path); "gateway" creates a gateway.networking.k8s.io<br />HTTPRoute attached to an operator-managed Gateway. The "gateway"<br />provider must be enabled on the router (GATEWAY_API_ENABLED). |  | Enum: [ingress gateway] <br /> |
+| `hostnames` _string array_ | Hostnames the route matches. For the gateway provider these become<br />the HTTPRoute hostnames; for the ingress provider only the first is<br />used as the Ingress rule host. Empty matches all hosts. |  |  |
+| `path` _string_ | Path is the request path the route matches (must be absolute, start<br />with '/'). Defaults to "/" when empty. |  |  |
+| `annotations` _object (keys:string, values:string)_ | Annotations are added to the generated route object (Ingress or<br />HTTPRoute). Use these for implementation-specific configuration<br />understood by your Ingress controller or Gateway implementation. |  |  |
+| `tls` _string_ | TLS names a Secret holding the TLS key and certificate. It applies to<br />the ingress provider only; with the gateway provider TLS termination<br />is configured on the Gateway listener and this field is ignored. |  |  |
+| `gateway` _[GatewayRouteConfig](#gatewayrouteconfig)_ | Gateway holds Gateway-API-specific configuration. Required (at least<br />one parentRef) when Provider is "gateway", unless the router is<br />configured with a default Gateway parentRef. |  |  |
+
+
+#### RouteProviderType
+
+_Underlying type:_ _string_
+
+RouteProviderType selects how the router exposes an HTTPTrigger externally.
+It is the type of RouteConfig.Provider; the allowed values are the constants
+below (also enforced by the field's kubebuilder Enum marker).
+
+
+
+_Appears in:_
+- [RouteConfig](#routeconfig)
+
+| Field | Description |
+| --- | --- |
+| `ingress` | RouteProviderIngress creates a networking.k8s.io Ingress (deprecated).<br /> |
+| `gateway` | RouteProviderGateway creates a gateway.networking.k8s.io HTTPRoute.<br /> |
+
+
 
 
 #### Runtime
@@ -900,6 +1014,47 @@ StrategyType is the strategy to be used for function execution
 _Appears in:_
 - [InvokeStrategy](#invokestrategy)
 
+
+
+#### StreamingConfig
+
+
+
+StreamingConfig controls the router's streaming behavior for a function.
+Presence is the on switch: a non-nil Streaming enables the streaming path,
+nil (the default) is the classic buffered path. There is no separate enabled
+flag, so the in-memory zero value and the stored object never disagree.
+
+
+
+_Appears in:_
+- [FunctionSpec](#functionspec)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `protocol` _[StreamingProtocol](#streamingprotocol)_ | Protocol hints how the router proxies the response. | auto | Enum: [auto sse chunked websocket] <br /> |
+| `idleTimeoutSeconds` _integer_ | IdleTimeoutSeconds is the maximum time the router waits without bytes flowing<br />from the function before it aborts the stream; reset on every chunk. 0 means<br />use the package default (DefaultStreamIdleSeconds). |  | Minimum: 0 <br /> |
+| `maxDurationSeconds` _integer_ | MaxDurationSeconds is an optional hard ceiling on total stream lifetime<br />regardless of activity. 0 (the default) means no ceiling — the idle<br />timeout governs. A streaming function does NOT inherit FunctionTimeout as<br />a ceiling; that total-wall-clock cap is exactly what streaming escapes. |  | Minimum: 0 <br /> |
+
+
+#### StreamingProtocol
+
+_Underlying type:_ _string_
+
+StreamingProtocol selects how the router treats the upstream response.
+
+_Validation:_
+- Enum: [auto sse chunked websocket]
+
+_Appears in:_
+- [StreamingConfig](#streamingconfig)
+
+| Field | Description |
+| --- | --- |
+| `auto` | StreamingAuto flushes immediately and lets the upstream decide the framing<br />(SSE, chunked, or a WebSocket Upgrade); the safe default.<br /> |
+| `sse` |  |
+| `chunked` |  |
+| `websocket` |  |
 
 
 #### TimeTrigger
@@ -958,6 +1113,29 @@ _Appears in:_
 | --- | --- | --- | --- |
 | `observedGeneration` _integer_ |  |  |  |
 | `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ |  |  |  |
+
+
+#### ToolConfig
+
+
+
+ToolConfig declares how a Function is exposed as an MCP (Model Context
+Protocol) tool. The MCP server reuses the function's existing internal
+invocation path; this struct only declares the agent-facing tool contract.
+Presence of the enclosing FunctionSpec.Tool is the on switch — there is no
+separate enabled flag, so the in-memory zero value and the stored object
+never disagree (the same rationale as StreamingConfig).
+
+
+
+_Appears in:_
+- [FunctionSpec](#functionspec)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `description` _string_ | Description is the human/agent-facing tool description surfaced in the MCP<br />tools/list response. Required. |  |  |
+| `inputSchema` _[JSON](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#json-v1-apiextensions-k8s-io)_ | InputSchema is the JSON Schema (draft 2020-12) for the tool's arguments,<br />surfaced verbatim as the MCP tool inputSchema. Stored as raw JSON so the<br />CRD does not constrain the schema shape. When empty the tool advertises an<br />open object schema (\{"type":"object"\}). |  |  |
+| `toolName` _string_ | ToolName overrides the advertised tool name. Defaults to<br />"<namespace>-<function name>". Must match ^[a-zA-Z0-9_-]\{1,64\}$. |  | Pattern: `^[a-zA-Z0-9_-]\{1,64\}$` <br /> |
 
 
 

@@ -9,6 +9,12 @@ type = "blog"
 
 ## Introduction
 
+> **Recommended: the streaming WebSocket path.**
+> Since Fission v1.26.0, WebSocket is first-class for **every** environment through the streaming invocation path (`fission fn create ... --streaming --streamingprotocol websocket`) — not just the NodeJS/Python built-in support this post describes.
+> The router upgrades the connection and holds the function pod for the socket's lifetime, so you no longer need the event-based keepalive mechanism (the Python `socket_tracker.py` / fetcher `/wsevent` endpoints), which is now deprecated.
+> The `main(ws, clients)` model below is unchanged.
+> See [Streaming responses](https://fission.io/docs/usage/function/streaming/) for the current approach.
+
 In this post we will look into how we can develop a simple a web socket based chat application using Fission functions.
 Fission's [NodeJS environment][15] now has built in support for [WebSocket][1].
 So, we are going to use this environment to power our simple web based chat application.
