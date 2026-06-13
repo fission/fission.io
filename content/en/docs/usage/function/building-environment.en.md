@@ -57,6 +57,23 @@ The lifecycle is deliberately simple:
 2. The executor sends exactly one **specialize** request, which loads the user's code and caches it in memory.
 3. From then on the container is **warm** and serves all invocations for that one function.
 
+```mermaid
+sequenceDiagram
+  autonumber
+  participant Fission
+  participant Runtime as Runtime server
+  participant Func as User function
+  Fission->>Runtime: GET /healthz
+  Runtime-->>Fission: 200 OK
+  Fission->>Runtime: POST /v2/specialize
+  Runtime->>Runtime: load & cache code
+  Runtime-->>Fission: 200 specialized
+  Fission->>Runtime: function request
+  Runtime->>Func: invoke cached function
+  Func-->>Runtime: response
+  Runtime-->>Fission: response
+```
+
 {{% notice info %}}
 A container specializes **exactly once**.
 Fission's pool manager replaces whole pods rather than re-specializing them, so you never need to handle a second specialize call.
@@ -144,6 +161,20 @@ A builder image must provide an executable at **`/usr/local/bin/build`** that:
 1. reads source from the directory in the `SRC_PKG` environment variable,
 2. produces a deployable artifact in the directory in the `DEPLOY_PKG` environment variable,
 3. exits `0` on success, non-zero on failure.
+
+```mermaid
+flowchart TB
+  src(["Source package<br/>$SRC_PKG"]):::store
+  build["/usr/local/bin/build"]:::pod
+  deploy(["Deployment package<br/>$DEPLOY_PKG"]):::store
+  runtime["Runtime container"]:::pod
+  src -->|"<b>1.</b> read source"| build
+  build -->|"<b>2.</b> compile / fetch deps"| deploy
+  deploy -->|"<b>3.</b> loaded by runtime"| runtime
+
+  classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
+```
 
 The build script is short and language-specific.
 Examples from the shipped environments:
