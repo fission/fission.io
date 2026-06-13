@@ -9,6 +9,10 @@ type = "blog"
 
 # Introduction
 
+> **Note (2026):** This post uses the original `.github/main.workflow` syntax, which GitHub has since replaced with YAML workflow files.
+> For the current way to deploy Fission from CI/CD — including registry-native [OCI image packages](https://fission.io/docs/usage/function/oci-packages/) — see [CI/CD and GitOps with Fission](https://fission.io/docs/usage/cicd/).
+> The concepts below still apply; only the workflow syntax has changed.
+
 GitHub recently launched [GitHub Actions](https://github.com/features/actions) which enable developers to develop workflows and execute them based on events in code repositories such as a push event or an issue creation. 
 
 There are many Actions available on the [Github marketplace](https://github.com/marketplace?type=actions) which you can use for automating various tasks and workflows around development and deployment. In this tutorial we will use the recently launched [Fission Action](https://github.com/marketplace/actions/fission) and build a simple workflow that deploys a Fission function to a Kubernetes cluster.

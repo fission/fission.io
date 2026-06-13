@@ -34,4 +34,4 @@ Operational and advanced topics:
 * [Use a URL as an archive source]({{% ref "function/url-as-archive-source.md" %}})
 * [Enable Istio on Fission]({{% ref "function/enabling-istio-on-fission.md" %}})
 
-For reproducible, version-controlled deployments, also read about the [spec-based workflow]({{% ref "/docs/usage/spec/_index.md" %}}).
+For reproducible, version-controlled deployments, also read about the [spec-based workflow]({{% ref "/docs/usage/spec/_index.md" %}}) and how to [deploy from CI/CD]({{% ref "cicd.md" %}}).
