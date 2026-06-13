@@ -73,6 +73,7 @@ Fission ships environments for these languages, and you can build a custom envir
 {{< /tabs >}}
 
 See [Language environments]({{% ref "/docs/usage/languages/" %}}) for per-language setup and entry-point signatures.
+To build a runtime for a language Fission does not ship, see [Building a Custom Environment]({{% ref "/docs/usage/function/building-environment.en.md" %}}).
 
 ## The versioned environment interface
 
@@ -108,5 +109,6 @@ The field accepts only `single` or `infinite`.
 ## Related
 
 - [Language environments]({{% ref "/docs/usage/languages/" %}}) — set up a runtime for your language.
+- [Building a Custom Environment]({{% ref "/docs/usage/function/building-environment.en.md" %}}) — implement the runtime/builder contract for a new language.
 - [Packages and builds]({{% ref "/docs/concepts/packages-and-builds.md" %}}) — how the builder turns source into a deployment archive.
 - [Executors]({{% ref "/docs/concepts/executors.md" %}}) — how the runtime container becomes a serving pod.
