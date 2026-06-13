@@ -19,7 +19,7 @@ $ fission env create --name pythonsrc --image ghcr.io/fission/python-env \
                      --builder ghcr.io/fission/python-builder \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
-                     --poolsize 2
+                     --version 3 --poolsize 2
 
 environment 'pythonsrc' created
 ```
@@ -134,7 +134,7 @@ $ fission env create --name pythondeploy --image ghcr.io/fission/python-env \
                      --builder ghcr.io/fission/python-builder \
                      --mincpu 40 --maxcpu 80 \
                      --minmemory 64 --maxmemory 128 \
-                     --poolsize 2
+                     --version 3 --poolsize 2
 
 environment 'pythondeploy' created
 ```

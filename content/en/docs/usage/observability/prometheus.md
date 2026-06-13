@@ -48,7 +48,7 @@ export METRICS_NAMESPACE=monitoring
 kubectl create namespace $METRICS_NAMESPACE
 ```
 
-Install Prometheus and Grafana with the release name `fission-metrics`.
+Install Prometheus and Grafana with the release name `prometheus`.
 
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
