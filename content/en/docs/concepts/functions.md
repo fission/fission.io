@@ -71,9 +71,11 @@ The fields you most often set are:
 - **`idletimeout`** — how long a function may sit idle before its pods are reaped.
 - **`concurrency`** and **`requestsPerPod`** — how many pods may be specialized and how many concurrent requests each pod serves.
 - **`secrets`** and **`configmaps`** — Kubernetes Secrets and ConfigMaps made available to the function.
+- **`streaming`** — optional; opt the function into incremental (SSE / chunked / WebSocket) responses. When set, the response is governed by `idleTimeoutSeconds` (and an optional `maxDurationSeconds`) instead of `functionTimeout`. See [Streaming responses]({{% ref "/docs/usage/function/streaming.md" %}}).
+- **`tool`** — optional; advertise the function as a [Model Context Protocol tool]({{% ref "/docs/usage/function/mcp-tools.md" %}}) so LLM agents can discover and invoke it.
 
 {{% notice info %}}
-The `Function` resource has a status subresource with Conditions, so you can inspect reconciliation state with `kubectl get function <name> -o yaml`.
+The `Function` resource has a status subresource with Conditions, so you can inspect reconciliation state with `kubectl get function <name> -o yaml` — or wait on it directly with `kubectl wait --for=condition=Ready function/<name>`.
 {{% /notice %}}
 
 A function references exactly one environment.
@@ -81,7 +83,7 @@ Several functions can share a single package by using different `functionName` e
 
 ## Defaults worth knowing
 
-- **Function timeout** defaults to 60 seconds when `functionTimeout` is unset.
+- **Function timeout** defaults to 60 seconds when `functionTimeout` is unset. This cap does **not** apply to [streaming functions]({{% ref "/docs/usage/function/streaming.md" %}}), which are governed by a stream idle timeout instead.
 - **Concurrency** (maximum pods specialized for a function) defaults to 500.
 - **Requests per pod** defaults to 1, meaning each specialized pod serves one request at a time unless you raise it.
 

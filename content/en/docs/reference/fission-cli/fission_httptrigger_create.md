@@ -18,10 +18,16 @@ fission httptrigger create [flags]
       --url string                      URL pattern (See gorilla/mux supported patterns) [DEPRECATED for 'fn create', use 'route create' instead]
       --name string                     HTTP trigger name
       --method stringArray              HTTP Methods: GET,POST,PUT,DELETE,HEAD. To mention single method: --method GET and for multiple methods --method GET --method POST. [DEPRECATED for 'fn create', use 'route create' instead] (default [GET])
-      --createingress                   Creates ingress with same URL
-      --ingressrule string              Host for Ingress rule: --ingressrule host=path (the format of host/path depends on what ingress controller you used)
-      --ingressannotation stringArray   Annotation for Ingress: --ingressannotation key=value (the format of annotation depends on what ingress controller you used)
-      --ingresstls string               Name of the Secret contains TLS key and crt for Ingress (the usability of TLS features depends on what ingress controller you used)
+      --createingress                   Creates ingress with same URL [DEPRECATED: the Kubernetes Ingress API is frozen, use --route-provider gateway instead]
+      --ingressrule string              Host for Ingress rule: --ingressrule host=path (the format of host/path depends on what ingress controller you used) [DEPRECATED: use --route-host/--route-path]
+      --ingressannotation stringArray   Annotation for Ingress: --ingressannotation key=value (the format of annotation depends on what ingress controller you used) [DEPRECATED: use --route-annotation]
+      --ingresstls string               Name of the Secret contains TLS key and crt for Ingress (the usability of TLS features depends on what ingress controller you used) [DEPRECATED: use --route-tls]
+      --route-provider string           Route provider that exposes the function externally: one of 'ingress' or 'gateway' (Gateway API HTTPRoute). When set, takes precedence over --createingress.
+      --route-host stringArray          Hostname the route matches (repeatable): --route-host demo.example.com. Empty matches all hosts.
+      --route-path string               Request path the route matches (must start with '/'); defaults to the trigger URL/prefix
+      --route-annotation stringArray    Annotation added to the generated route object: --route-annotation key=value (repeatable)
+      --route-tls string                Name of the Secret holding TLS key and cert (ingress provider only; gateway TLS is configured on the Gateway listener)
+      --gateway stringArray             Parent Gateway the HTTPRoute attaches to (gateway provider): --gateway name or --gateway namespace/name (repeatable)
       --weight ints                     Weight for each function supplied with --function flag, in the same order. Used for canary deployment
       --spec                            Save to the spec directory instead of creating on cluster
       --dry                             View the generated specs

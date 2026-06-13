@@ -16,6 +16,7 @@ The **Tested with** column lists the `kindest/node` images each release's CI run
 | Fission version | Built against (`k8s.io/api`) | Tested with (kind) | Minimum Kubernetes |
 | --------------- | ---------------------------- | ------------------ | ------------------ |
 | {{< release-version >}} | v0.36 | 1.32, 1.34, 1.36 | **1.32** |
+| v1.25.0 | v0.36 | 1.32, 1.34, 1.36 | 1.32 |
 | v1.24.0 | v0.35 | 1.28, 1.32, 1.34 | 1.28 |
 | v1.23.0 | v0.35 | 1.28, 1.32, 1.34 | 1.28 |
 | v1.22.0 | v0.34 | 1.28, 1.32, 1.34 | 1.28 |
@@ -38,6 +39,7 @@ From v1.21.0 onward, KEDA is a direct Go dependency of Fission and the table bel
 | Fission version | KEDA version |
 | --------------- | ------------ |
 | {{< release-version >}} | v2.20 |
+| v1.25.0 | v2.20 |
 | v1.24.0 | v2.19 |
 | v1.23.0 | v2.18 |
 | v1.22.0 | v2.18 |

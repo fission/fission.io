@@ -34,9 +34,21 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 
 _See [configuration](#configuration) below._
 
-## Upgrade to {{< release-version >}} release
+## Upgrade to 1.26.x release
 
-{{< release-version >}} raises the minimum supported Kubernetes version to **1.32** and continues the security-hardening line.
+v1.26.0 is a large feature release: OCI-native package delivery, the Kubernetes Gateway API route provider, streaming responses, functions as MCP tools, and an EndpointSlice-native router data plane.
+There are no Kubernetes-version or admission changes from v1.25.0, so the routine CRD/CLI/chart steps above are all most installs need.
+
+Two behavioral defaults are worth reviewing before you upgrade:
+
+- The router now serves warm traffic directly from EndpointSlices and accounts request concurrency **per router replica** by default. Functions that depend on global concurrency enforcement should set the `fission.io/concurrency-enforcement: strict` annotation.
+- When a package registry is configured (`packageRegistry.enabled`), builds publish their deployment archive as a digest-pinned OCI image and functions cold-start from it. Leave `packageRegistry.enabled` unset to keep today's tarball behavior unchanged.
+
+See the [v1.26.0 release notes](/docs/releases/v1.26.0/#upgrade-notes) for the full list of behavioral changes and the action each one requires.
+
+## Upgrade to 1.25.x release
+
+v1.25.0 raises the minimum supported Kubernetes version to **1.32** and continues the security-hardening line.
 Before upgrading, confirm your cluster is on Kubernetes 1.32 or newer — the Helm chart now refuses to install on anything older.
 
 Three breaking changes need attention:
@@ -49,7 +61,7 @@ The HTTPTrigger / TimeTrigger / CanaryConfig admission webhooks are also removed
 A side effect: a raw `kubectl apply` of an invalid cron schedule, CORS origin, or ingress path is now **admitted and flagged with a `…=False` status condition** (for example `Scheduled=False`, `RouteAdmitted=False`) rather than rejected at creation.
 The `fission` CLI still rejects these client-side, so the common path is unchanged.
 
-See the [{{< release-version >}} release notes]({{% ref "../releases/v1.25.0.md" %}}#upgrade-notes) for the full list of breaking changes and the action each one requires.
+See the [v1.25.0 release notes](/docs/releases/v1.25.0/#upgrade-notes) for the full list of breaking changes and the action each one requires.
 
 ## Upgrade to 1.24.x release
 

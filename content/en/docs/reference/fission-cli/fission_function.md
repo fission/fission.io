@@ -33,6 +33,7 @@ Create, update and manage functions
 * [fission function pods](/docs/reference/fission-cli/fission_function_pods/)	 - List pods currently used by a function
 * [fission function run-container](/docs/reference/fission-cli/fission_function_run-container/)	 - Alpha: Run a container image as a function
 * [fission function test](/docs/reference/fission-cli/fission_function_test/)	 - Test a function
+* [fission function tools](/docs/reference/fission-cli/fission_function_tools/)	 - List functions exposed as MCP (Model Context Protocol) tools
 * [fission function update](/docs/reference/fission-cli/fission_function_update/)	 - Update a function
 * [fission function update-container](/docs/reference/fission-cli/fission_function_update-container/)	 - Alpha: Update a function running a container
 * [fission function wait](/docs/reference/fission-cli/fission_function_wait/)	 - Wait for a function to reach a status condition

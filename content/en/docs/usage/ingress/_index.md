@@ -7,6 +7,12 @@ description: >
   Expose a Fission function outside the cluster on an FQDN using an NGINX ingress controller and Fission's route with --createingress.
 ---
 
+{{% alert title="Deprecated — use the Gateway API" color="warning" %}}
+The Kubernetes Ingress API is frozen, and Fission's `--createingress` flow is **deprecated**.
+For new functions, prefer [Exposing Functions With the Gateway API]({{% ref "../gateway-api/" %}}) — its official successor — available since **Fission v1.26.0**.
+The Ingress flow documented below keeps working for the deprecation window; see [Migrating from Ingress]({{% ref "../gateway-api/_index.md#migrating-from-ingress" %}}) when you are ready to switch.
+{{% /alert %}}
+
 Ingress is a Kubernetes built-in resource that allows accessing Kubernetes services from outside of cluster with help of a ingress controller.
 There are many ingress controllers available to use [webpage](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#additional-controllers).
 

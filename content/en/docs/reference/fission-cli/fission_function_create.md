@@ -26,6 +26,14 @@ fission function create [flags]
       --idletimeout int             The length of time (in seconds) that a function is idle before pod(s) are eligible for recycling (default 120)
       --concurrency poolmgr         --con |:|: Maximum number of pods specialized concurrently to serve requests (Only valid for executortype; poolmgr) (default 500)
       --requestsperpod poolmgr      --rpp |:|: Maximum number of concurrent requests that can be served by a specialized pod (Only valid for executortype; poolmgr) (default 1)
+      --streaming                   Enable streaming (SSE/chunked/WebSocket) responses for this function; the response is flushed incrementally and not cut by the function timeout
+      --streamingprotocol string    Streaming protocol when --streaming is set; one of 'auto', 'sse', 'chunked', 'websocket' (default "auto")
+      --streamingidletimeout int    Idle timeout (seconds) for a streaming response before it is aborted; reset on each chunk (default 60)
+      --streamingmaxduration int    Hard ceiling (seconds) on total streaming response lifetime; 0 means no ceiling (the idle timeout governs)
+      --expose-as-mcp               Advertise this function as a Model Context Protocol (MCP) tool on the MCP server
+      --tool-description string     Agent-facing tool description (required with --expose-as-mcp)
+      --tool-input-schema string    Path to a JSON Schema file describing the tool's arguments; advertised verbatim as the MCP tool inputSchema
+      --tool-name string            Override the advertised MCP tool name (defaults to <namespace>-<function name>)
       --onceonly poolmgr            --yolo |:|: Specifies if specialized pod will serve exactly one request in its lifetime (Only valid for executortype; poolmgr)
       --labels string               Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
       --annotation stringArray      Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
@@ -36,6 +44,7 @@ fission function create [flags]
       --srcchecksum string          SHA256 checksum of source archive when providing URL
       --deploychecksum string       SHA256 checksum of deploy archive when providing URL
       --insecure                    Skip generating SHA256 checksum for file integrity validation
+      --oci string                  Pre-built OCI image reference containing the deployment code (registry/repo:tag[@digest])
       --buildcmd string             Package build command for builder to run with
       --url string                  URL pattern (See gorilla/mux supported patterns) [DEPRECATED for 'fn create', use 'route create' instead]
       --prefix string               Prefix with which functions are exposed. NOTE: Prefix takes precedence over URL/RelativeURL [DEPRECATED for 'fn create', use 'route create' instead]
