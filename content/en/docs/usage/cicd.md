@@ -13,7 +13,7 @@ It builds on two pieces that work together:
 - **Declarative [YAML specs]({{% ref "spec/_index.md" %}})** — your functions, environments, and triggers as version-controlled YAML, reconciled onto the cluster with one idempotent command. This is the CI/CD *control plane*.
 - **[OCI image packages]({{% ref "function/oci-packages.md" %}})** — ship function code as a digest-pinned container image your pipeline already knows how to build, push, sign, and scan. This makes the deployed *artifact* registry-native.
 
-Use specs alone to deploy from source, or add OCI delivery for an immutable, promote-by-digest GitOps flow.
+Use specs alone to deploy from source, or add OCI delivery for an immutable, promote-by-digest GitOps flow — and because an OCI package carries no archive to upload, you can apply it with the Fission CLI, plain `kubectl`, or Argo CD / Flux.
 
 ## The foundation: `fission spec apply`
 
@@ -149,6 +149,75 @@ Delivering code as an image gives the pipeline:
 {{% notice tip %}}
 Prefer the cluster to publish images for you?
 Set `packageRegistry.enabled` (see [OCI image packages]({{% ref "function/oci-packages.md" %}}#automatic-oci-delivery-for-built-packages)) and every on-cluster build publishes a digest-pinned image automatically — your pipeline keeps running `fission spec apply` and gets registry-native delivery without building images itself.
+{{% /notice %}}
+
+### Apply with `kubectl` — no Fission CLI required
+
+`fission spec apply` exists mainly to do one thing the Kubernetes API cannot: package your local source, upload it to the cluster's storage service, and rewrite the spec's `archive://` URLs into real ones.
+An OCI package has **no archive to upload** — its code already lives in a registry — so the `Package` and `Function` are ordinary Kubernetes custom resources.
+That means you can manage them with `kubectl apply` (or Argo CD / Flux) directly, with **no Fission CLI in the pipeline at all**:
+
+```yaml
+# fission-app.yaml
+apiVersion: fission.io/v1
+kind: Environment
+metadata:
+  name: nodejs
+spec:
+  version: 3
+  runtime:
+    image: ghcr.io/fission/node-env
+---
+apiVersion: fission.io/v1
+kind: Package
+metadata:
+  name: hello
+spec:
+  environment:
+    name: nodejs
+  deployment:
+    type: oci
+    oci:
+      image: ghcr.io/myorg/hello-code
+      digest: sha256:<digest>          # pin to the image your pipeline pushed
+---
+apiVersion: fission.io/v1
+kind: Function
+metadata:
+  name: hello
+spec:
+  environment:
+    name: nodejs
+  package:
+    packageref:
+      name: hello
+    # functionName: <entrypoint>       # optional, e.g. "hello.main"
+---
+apiVersion: fission.io/v1
+kind: HTTPTrigger
+metadata:
+  name: hello
+spec:
+  functionref:
+    type: name
+    name: hello
+  methods: [GET]
+  relativeurl: /hello
+```
+
+The deploy step is then just `kubectl`:
+
+```bash
+kubectl apply -f fission-app.yaml
+kubectl wait --for=condition=Ready function/hello
+```
+
+This works because {{< release-version >}} validates these resources with API-server CEL and ships server-side-apply markers, so `kubectl apply --server-side`, `--dry-run=server`, Argo CD, and Flux reconcile Fission resources like any other manifest, and `kubectl wait --for=condition=Ready` blocks until the function is live.
+Two prerequisites: install the CRDs once (`kubectl create -k "github.com/fission/fission/crds/v1?ref={{% release-version %}}"`), and keep the environment, package, and function in the same namespace.
+
+{{% notice info %}}
+This is OCI-only.
+A source or pre-built-archive package still needs `fission spec apply` (or `fission package create`) to upload the archive — `kubectl` cannot perform that upload.
 {{% /notice %}}
 
 ## Promote across environments by digest
