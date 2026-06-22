@@ -30,6 +30,7 @@ Operational and advanced topics:
 * [Stream function responses]({{% ref "function/streaming.md" %}}) — return SSE, chunked, or WebSocket responses incrementally for LLM tokens, chat, and long-running calls.
 * [Expose functions as MCP tools]({{% ref "function/mcp-tools.md" %}}) — let LLM agents discover and invoke functions over the Model Context Protocol.
 * [Expose functions with the Gateway API]({{% ref "gateway-api/_index.md" %}}) — route external traffic through a Kubernetes Gateway (the successor to Ingress).
+* [Multi-namespace tenancy]({{% ref "multi-namespace-tenancy.md" %}}) — onboard and offboard namespaces at runtime with `fission tenant enable`/`disable`, each isolated by its own keys and RBAC.
 * [Pull from a private registry]({{% ref "function/private-registry.md" %}})
 * [Use a URL as an archive source]({{% ref "function/url-as-archive-source.md" %}})
 * [Enable Istio on Fission]({{% ref "function/enabling-istio-on-fission.md" %}})

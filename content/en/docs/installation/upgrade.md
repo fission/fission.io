@@ -38,6 +38,7 @@ _See [configuration](#configuration) below._
 
 v1.27.0 adds opt-in multi-namespace tenancy and a function-developer observability toolkit (invocation correlation, `fission function describe`, and local `run-local` development).
 Tenancy is off by default — `tenancy.mode: static` renders byte-identical RBAC and keeps the existing auth model — so a single-namespace or `additionalFissionNamespaces` install upgrades with just the routine CRD/CLI/chart steps above, and the minimum Kubernetes version is unchanged at **1.32**.
+To onboard namespaces at runtime with `fission tenant enable` instead of editing `additionalFissionNamespaces`, see [Multi-namespace tenancy](/docs/usage/multi-namespace-tenancy/).
 
 Two runtime defaults change visibly and are worth reviewing first:
 

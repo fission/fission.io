@@ -58,10 +58,11 @@ The `fission-core` chart was removed in the 1.15 release; use the `fission-all` 
 See the [1.15 release notes]({{% ref "../releases/v1.15.0.md" %}}) for details, and the [Upgrade Guide]({{% ref "upgrade.md" %}}) if you are upgrading.
 {{% /notice %}}
 
-{{% notice warning %}}
-Since the 1.18 release, Fission watches functions created in the `defaultNamespace` Helm chart value.
-To watch additional namespaces, list them in the `additionalFissionNamespaces` Helm chart value.
-See the [1.18 release notes]({{% ref "../releases/v1.18.0.md" %}}) for details.
+{{% notice info %}}
+By default Fission serves functions in the `defaultNamespace` Helm chart value.
+To serve more namespaces, the recommended approach since v1.27.0 is **tenant mode** — onboard each namespace at runtime with `fission tenant enable`, no control-plane restart.
+See [Multi-namespace tenancy]({{% ref "../usage/multi-namespace-tenancy.md" %}}).
+The older static approach — listing namespaces in the `additionalFissionNamespaces` chart value (introduced in the [1.18 release]({{% ref "../releases/v1.18.0.md" %}})) — still works and remains the default.
 {{% /notice %}}
 
 {{% notice warning %}}
