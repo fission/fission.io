@@ -15,7 +15,7 @@ fission httptrigger create [flags]
 
 ```
       --function stringArray            Name(s) of the function for this trigger. (If 2 functions are supplied with this flag, traffic gets routed to them based on weights supplied with --weight flag.)
-      --url string                      URL pattern (See gorilla/mux supported patterns) [DEPRECATED for 'fn create', use 'route create' instead]
+      --url string                      URL pattern (supports {var} and {var:regexp} path templates) [DEPRECATED for 'fn create', use 'route create' instead]
       --name string                     HTTP trigger name
       --method stringArray              HTTP Methods: GET,POST,PUT,DELETE,HEAD. To mention single method: --method GET and for multiple methods --method GET --method POST. [DEPRECATED for 'fn create', use 'route create' instead] (default [GET])
       --createingress                   Creates ingress with same URL [DEPRECATED: the Kubernetes Ingress API is frozen, use --route-provider gateway instead]
