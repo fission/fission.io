@@ -85,7 +85,7 @@ New triggers should use `mqtkind: keda`.
 
 Before KEDA integration, Fission ran message queue consumers directly inside the `mqtrigger` component.
 That built-in path now retains Kafka in-tree only, and it does not provide event-driven autoscaling or scale-to-zero.
-The error topic in the legacy path is supported by a limited set of queues (NATS, Kafka, and Redis lists).
+The error topic in the legacy path is therefore Kafka-only; the earlier built-in NATS Streaming and Azure Queue Storage consumers have been removed.
 Prefer the KEDA-based trigger for all supported queues, broader connector coverage, and queue-depth autoscaling.
 
 ## Related

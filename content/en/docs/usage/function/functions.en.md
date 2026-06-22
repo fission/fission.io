@@ -306,6 +306,6 @@ hello 34234b50-12f5-11e8-85c9-42010aa00010 node
 $ fission fn list
 
 NAME   UID                                  ENV  EXECUTORTYPE MINSCALE MAXSCALE TARGETCPU
-hello  34234b50-12f5-11e8-85c9-42010aa00010 node poolmgr      0        1        80
+hello  34234b50-12f5-11e8-85c9-42010aa00010 node poolmgr      1        1        80
 hello2 e37a46e3-12f4-11e8-85c9-42010aa00010 node newdeploy    1        5        80
 ```

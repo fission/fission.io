@@ -65,7 +65,7 @@ helm install fission fission-charts/fission-all -n fission \
 With `enabled=false` the chart skips the `Secret` and the env mounts.
 Every signer/verifier short-circuits to pass-through — no signing, no verification — so the cluster falls back to `NetworkPolicy` + namespace isolation alone for in-cluster trust.
 
-This is the **recommended setting if you rely on stock upstream KEDA connector images** (`fission/kafka-http-connector` and friends) — see [Caveats](#caveats) below.
+This is the **recommended setting if you rely on stock upstream KEDA connector images** (`ghcr.io/fission/keda-kafka-http-connector` and the other `keda-*-http-connector` images) — see [Caveats](#caveats) below.
 
 The router's two-listener split is independent of this toggle: `/fission-function/<ns>/<name>` remains on the internal listener regardless.
 With `internalAuth.enabled=false` the internal listener still accepts unsigned requests; with `internalAuth.enabled=true` it requires signatures.
@@ -108,7 +108,7 @@ The chart applies the toggle wholesale, so the "ON / OFF" failure mode only surf
 
 ### KEDA connector signing gap
 
-Upstream `fission/kafka-http-connector` (and the other Fission KEDA connector images) **do not yet sign their `/fission-function/...` invocations**.
+Upstream `ghcr.io/fission/keda-kafka-http-connector` (and the other `keda-*-http-connector` images) **do not yet sign their `/fission-function/...` invocations**.
 With `internalAuth.enabled=true` (the default), KEDA-driven message-queue triggers will receive `401` from the router internal listener.
 
 Operators have two options until signing-aware KEDA images ship:

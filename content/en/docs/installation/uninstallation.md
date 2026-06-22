@@ -26,6 +26,7 @@ kubectl get crd | grep "fission.io"
 NAME                                       CREATED AT
 canaryconfigs.fission.io                   2022-01-17T05:47:28Z
 environments.fission.io                    2022-01-17T05:47:29Z
+fissiontenants.fission.io                  2022-01-17T05:47:29Z
 functions.fission.io                       2022-01-17T05:47:29Z
 httptriggers.fission.io                    2022-01-17T05:47:29Z
 kuberneteswatchtriggers.fission.io         2022-01-17T05:47:29Z

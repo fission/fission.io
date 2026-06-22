@@ -34,10 +34,17 @@ The chart translates each value into a standard `OTEL_*` environment variable th
 | `openTelemetry.tracesSampler` | `OTEL_TRACES_SAMPLER` | Sampler for traces |
 | `openTelemetry.tracesSamplingRate` | `OTEL_TRACES_SAMPLER_ARG` | Argument for the sampler |
 | `openTelemetry.propagators` | `OTEL_PROPAGATORS` | Propagator(s) used to generate and read the trace-id header |
+| `openTelemetry.logsEnabled` | `OTEL_LOGS_ENABLED` | `true`/`false` (default `false`). When enabled alongside a collector endpoint, control-plane components also push their structured logs (carrying `trace_id`) to the OTLP collector, not just traces. |
 
 If you have not configured collector endpoint, you won't be able to visualize traces.
 Based on sampler configuration, you can observed `trace_id` in Fission component logs.
 You can search with `trace_id` across Fission services logs in case of debugging or troubleshooting.
+
+{{% notice info %}}
+Since v1.27.0 the head sampler is taken from `OTEL_TRACES_SAMPLER` / `OTEL_TRACES_SAMPLER_ARG` (these were previously ignored).
+Spans for failed invocations are always exported regardless of the sampler decision, so error traces are never dropped.
+With the chart default (`parentbased_traceidratio` at `0.1`), successful-trace export drops to 10% while every error trace is kept; set `OTEL_TRACES_SAMPLER=parentbased_always_on` to export 100%.
+{{% /notice %}}
 
 Many of the observability platforms such as DataDog, Dynatrace, Honeycomb, Lightstep, New Relic, Signoz, Splunk etc. support OpenTelemetry out-of-box, `otlpHeaders` can be used to configure the headers required by the observability platform.
 You don't need to setup up Opentelemtry Collector from scratch in that case.

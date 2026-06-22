@@ -400,7 +400,7 @@ then
 fi
 
 cd ${srcDir}
-go build -buildmode=plugin -i -o ${DEPLOY_PKG} .
+go build -buildmode=plugin -o ${DEPLOY_PKG} .
 ```
 
 There are environment variables as shown above:
@@ -465,7 +465,7 @@ pkgpath=$(basename ${SRC_PKG})
 timestamp=$(date +%s)
 
 cd ${srcDir}
-go build -ldflags "-X ${pkgpath}.Timestamp=$timestamp" -buildmode=plugin -i -o ${DEPLOY_PKG} .
+go build -ldflags "-X ${pkgpath}.Timestamp=$timestamp" -buildmode=plugin -o ${DEPLOY_PKG} .
 ```
 
 At this moment, the directory structure would be like:

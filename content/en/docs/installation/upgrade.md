@@ -100,7 +100,7 @@ Audit before upgrading and migrate any such caller to use a proper `HTTPTrigger`
 ### KEDA message-queue triggers and the connector signing gap
 
 `internalAuth.enabled` defaults to `true` in v1.23.0.
-Upstream `fission/kafka-http-connector` (and the other Fission KEDA connector images) do not yet sign their `/fission-function/...` invocations, so KEDA-driven message-queue triggers will receive `401` from the new router internal listener.
+Upstream `ghcr.io/fission/keda-kafka-http-connector` (and the other `keda-*-http-connector` images) do not yet sign their `/fission-function/...` invocations, so KEDA-driven message-queue triggers will receive `401` from the new router internal listener.
 
 If your installation uses KEDA-backed `MessageQueueTrigger` resources, **set `internalAuth.enabled=false` at upgrade time** until signing-aware KEDA connector images ship:
 

@@ -41,7 +41,7 @@ flowchart TB
   buildermgr -->|"<b>5.</b> builds source"| builderPod
   builderPod -->|"<b>6.</b> uploads archive"| storage
   executor -->|"<b>7.</b> creates"| fnPod
-  router -->|"<b>8.</b> asks for address"| executor
+  router -->|"<b>8.</b> cold start: asks"| executor
   router -->|"<b>9.</b> forwards request"| fnPod
   fnPod -->|"<b>10.</b> fetches archive"| storage
 

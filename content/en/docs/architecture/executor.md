@@ -7,7 +7,7 @@ description: >
 
 **The executor turns a function reference into a running, network-addressable pod.**
 
-When the [router]({{% ref "/docs/architecture/router.md" %}}) needs to serve a function and has no cached address, it calls the executor's `GetServiceForFunction` endpoint.
+When the [router]({{% ref "/docs/architecture/router.md" %}}) has no ready endpoint for a function — on a cold start, when the existing pods are saturated, or for a strict-concurrency function — it calls the executor to obtain or grow capacity.
 The executor reads the `Function` and `Environment` resources from the Kubernetes API, picks the executor type configured on the function, and drives one of three strategies to deliver a ready address.
 It returns a function service record holding the pod or Service address, which the router then uses to forward the request.
 
