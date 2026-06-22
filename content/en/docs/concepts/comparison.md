@@ -3,11 +3,12 @@ title: "Fission vs Knative, OpenFaaS, and other Kubernetes serverless frameworks
 linkTitle: "Comparison"
 weight: 6
 description: >
-  How Fission compares to Knative, OpenFaaS, Kubeless, and managed FaaS like AWS Lambda — cold starts, operational weight, triggers, and when to choose each.
+  How Fission compares to Knative, OpenFaaS, Kubeless, and managed FaaS — cold starts, operational weight, extensibility, and when to choose each.
 ---
 
-**Fission is a function-as-a-service framework for Kubernetes that optimizes for fast cold starts and a simple developer loop.**
+**Fission is a function-as-a-service framework for Kubernetes that optimizes for fast cold starts, a simple developer loop, and extensibility.**
 It keeps a pool of warm, generic pods and specializes one on the first request, so cold-start latency is typically around 100 ms — without you managing a service mesh or autoscaler.
+Every language runtime is a Fission *environment* — a container image implementing a small interface that you can modify or build from scratch — and the framework's own subsystems (executors, triggers, route providers, and log backends) are pluggable, so you adapt Fission to your stack without forking it.
 Compared with the main alternatives: Fission is lighter to operate than [Knative](https://knative.dev/), comparable in simplicity to [OpenFaaS](https://www.openfaas.com/) while staying fully Kubernetes-native, an actively maintained successor to the archived [Kubeless](https://github.com/vmware-archive/kubeless), and a self-hosted alternative to managed FaaS such as AWS Lambda that runs on any cluster with no per-invocation vendor pricing.
 
 The table below summarizes the differences; the sections after it answer each "Fission vs X" question directly.
@@ -20,6 +21,7 @@ The table below summarizes the differences; the sections after it answer each "F
 | Scale to zero | Yes (newdeploy / container executors) | Yes (core feature) | Yes (with add-ons) | Limited |
 | Triggers built in | HTTP, timer, message queue (KEDA), Kubernetes watch | HTTP + CloudEvents (Eventing) | HTTP + async (connectors) | HTTP, event, cron |
 | Autoscaling | Per-function HPA / KEDA, warm pool | KPA / HPA | HPA / KEDA | HPA |
+| Extensibility | Custom/modifiable environments; pluggable executors, triggers, route & log backends | Composable building blocks; bring your own images | Template-based function images | Fixed runtimes (archived) |
 | Maintenance status | Active | Active (CNCF) | Active | Archived (2021) |
 
 ## Fission vs Knative
@@ -49,9 +51,18 @@ With a managed platform you write a function and the provider runs it, but you a
 Fission runs the same workload on your own Kubernetes — any cloud, multiple clouds, or on-premise — so you keep portability, run any language as an environment, and pay for cluster capacity rather than per request.
 The trade-off is that you operate the cluster; if you have no Kubernetes and want zero operations, a managed FaaS is simpler, while Fission fits teams already standardized on Kubernetes.
 
+## Extensibility
+
+**A common reason teams choose Fission is how easily they can extend it.**
+Language support comes from *environments* — small container images that implement a load/specialize interface — so adding or customizing a runtime (a new language, extra system packages, a private base image, or a pinned version) means building or editing an environment image, not patching Fission.
+The framework's subsystems are pluggable too: you pick an executor per function (poolmgr, newdeploy, or container), choose a route provider (Gateway API or Ingress), add message-queue triggers through KEDA, and select a log backend (Kubernetes, Loki, or InfluxDB) from a driver registry.
+Because the core is small and these seams are well defined, you can shape Fission to your platform without forking it.
+See [Building a Custom Environment](/docs/usage/function/building-environment/) and [Environments]({{% ref "/docs/concepts/environments.md" %}}).
+
 ## When to choose Fission
 
 - You run on Kubernetes and want functions without operating a service mesh.
+- You want to customize the runtime — a new language, system packages, or a private base image — by building or modifying an [environment](/docs/usage/function/building-environment/) image instead of forking the framework.
 - Cold-start latency matters and you want a warm pool rather than scale-from-zero on every idle period.
 - You want a code-first loop — edit, [run locally]({{% ref "/docs/usage/function/run-local.md" %}}), deploy — instead of building a container image per change.
 - You need portability across clouds or on-premise, and want to avoid managed-FaaS lock-in.
