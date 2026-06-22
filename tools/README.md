@@ -3,6 +3,7 @@
 - `environments.py` updates `static/data/environments.json`.
 - `examples.py` updates `static/data/examples.json`.
 - `notes.py` generates content for changelog section in release notes.
+- `seo_audit.py` crawls the built `public/` site and scores SEO/GEO health (crawlability, indexation, titles/descriptions, internal links, structured data, source citations, answer-first content) plus a priority-query "answer-ready" benchmark. Build first, then run `python3 tools/seo_audit.py public`.
 
 ## Environments
 ### Updating the existing environments

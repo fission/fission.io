@@ -3,7 +3,7 @@ title: "Local development with run-local"
 draft: false
 weight: 8
 description: >
-  Run a function locally in Docker against its real environment image — no cluster round-trip — with hot reload, a builder pass for compiled languages, and secret/configmap mounts.
+  Run a Fission function locally in Docker against its real environment image — no cluster round-trip — with hot reload, a builder pass, and config mounts.
 ---
 
 `fission function run-local` runs a single function on your laptop in Docker, against the **same environment runtime image** the cluster uses, so you can iterate without a build-and-deploy round-trip.

@@ -1,7 +1,7 @@
 {{ if .Params.canonicalUrl }}
 <link rel="canonical" href="{{ .Params.canonicalUrl }}">
 {{ else }}
-<link rel="canonical" href="{{ .RelPermalink }}">
+<link rel="canonical" href="{{ .Permalink }}">
 {{ end }}
 
 {{ if hugo.IsProduction }}

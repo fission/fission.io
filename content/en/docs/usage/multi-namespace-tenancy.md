@@ -3,7 +3,7 @@ title: "Multi-namespace tenancy"
 linkTitle: "Multi-namespace tenancy"
 weight: 55
 description: >
-  Onboard and offboard Kubernetes namespaces as Fission tenants at runtime with `fission tenant enable`/`disable` — no control-plane restart — and isolate each namespace with its own derived keys and RBAC.
+  Onboard and offboard namespaces at runtime with fission tenant enable/disable — no control-plane restart — each tenant isolated by its own keys and RBAC.
 ---
 
 Fission can serve functions in more than one namespace.

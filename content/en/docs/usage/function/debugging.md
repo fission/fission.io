@@ -3,7 +3,7 @@ title: "Debugging and diagnosing functions"
 draft: false
 weight: 9
 description: >
-  Diagnose a failing function with fission function describe, read structured failure attribution from fission function test, and trace a single invocation by its request id.
+  Diagnose a failing Fission function with fission function describe, failure attribution from fission function test, and per-invocation request-id tracing.
 ---
 
 When a function misbehaves, the question is usually *where* it broke — the function code, the build, the executor, or a timeout — and *which* call it was.

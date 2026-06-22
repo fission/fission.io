@@ -57,6 +57,7 @@ Read the pages in order — they build on each other.
 - **[Executors]({{% ref "/docs/concepts/executors.md" %}})** — how Fission provisions and scales function pods (poolmgr vs newdeploy vs container).
 - **[Triggers]({{% ref "/docs/concepts/triggers.md" %}})** — the event sources that invoke your functions.
 - **[Packages and builds]({{% ref "/docs/concepts/packages-and-builds.md" %}})** — source and deployment archives, and the build pipeline.
+- **[Comparison]({{% ref "/docs/concepts/comparison.md" %}})** — how Fission compares to Knative, OpenFaaS, Kubeless, and managed FaaS, and when to choose each.
 
 ## Specs: declarative configuration
 
