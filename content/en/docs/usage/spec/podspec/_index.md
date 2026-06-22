@@ -38,7 +38,6 @@ spec:
   restartPolicy: Always
   schedulerName: default-scheduler
   securityContext: {}
-  serviceAccount: fission-svc
 ```
 
 In this section we will look at various use cases that are possible with PodSpec support in Fission.

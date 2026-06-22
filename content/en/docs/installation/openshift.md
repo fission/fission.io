@@ -22,10 +22,10 @@ Optionally a database file can be used so the plugin can have a history of track
 
 Once the logger restarted, it ensures no duplicate logs will be sent to log database.
 
-You may need to add `privileged` permission to service account `fission-svc`.
+You may need to add `privileged` permission to the logger's service account `fission-fluentbit`.
 
 ```bash
-oc adm policy add-scc-to-user privileged -z fission-svc
+oc adm policy add-scc-to-user privileged -z fission-fluentbit -n fission
 ```
 
 * Reference: https://github.com/fluent/fluentd-kubernetes-daemonset#running-on-openshift

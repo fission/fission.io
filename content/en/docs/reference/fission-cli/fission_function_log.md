@@ -16,13 +16,16 @@ fission function log [flags]
 ```
       --name string            Function name
   -f, --follow                 -f |:|: Specify if the logs should be streamed
-  -r, --reverse                -r |:|: Specify the log reverse query base on time, it will be invalid if the 'follow' flag is specified. valid for dbtype as influxdb
+  -r, --reverse                -r |:|: Specify the log reverse query base on time, it will be invalid if the 'follow' flag is specified. valid for dbtype as influxdb or loki
       --recordcount int        Get N most recent log records (default 20)
   -d, --detail                 -d |:|: Display detailed information
       --pod string             Function pod name (use the latest pod name if unspecified)
-      --dbtype string          Log database type, e.g. influxdb (currently influxdb and kubernetes logs are supported) (default "kubernetes")
+      --dbtype string          Log database type: kubernetes (default), loki, or influxdb (deprecated) (default "kubernetes")
       --pod-namespace string   Namespace in which function's pod are created. If not specified, function's namespace is used. Note: version <1.18 used fission-function as pod's default ns.
       --all-pods               Get all pod's logs in the function.
+      --request-id string      Filter logs to a single invocation by its X-Fission-Request-ID (loki dbtype)
+      --trace-id string        Filter logs by trace id (loki dbtype)
+      --level string           Filter logs by level, e.g. error (loki dbtype)
   -h, --help                   help for log
 ```
 

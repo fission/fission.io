@@ -46,7 +46,7 @@ fission function create [flags]
       --insecure                    Skip generating SHA256 checksum for file integrity validation
       --oci string                  Pre-built OCI image reference containing the deployment code (registry/repo:tag[@digest])
       --buildcmd string             Package build command for builder to run with
-      --url string                  URL pattern (See gorilla/mux supported patterns) [DEPRECATED for 'fn create', use 'route create' instead]
+      --url string                  URL pattern (supports {var} and {var:regexp} path templates) [DEPRECATED for 'fn create', use 'route create' instead]
       --prefix string               Prefix with which functions are exposed. NOTE: Prefix takes precedence over URL/RelativeURL [DEPRECATED for 'fn create', use 'route create' instead]
       --method stringArray          HTTP Methods: GET,POST,PUT,DELETE,HEAD. To mention single method: --method GET and for multiple methods --method GET --method POST. [DEPRECATED for 'fn create', use 'route create' instead] (default [GET])
       --mincpu int                  Minimum CPU to be assigned to pod (In millicore, minimum 1)

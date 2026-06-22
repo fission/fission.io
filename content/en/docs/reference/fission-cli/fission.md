@@ -36,6 +36,7 @@ Fission: Fast and Simple Serverless Functions for Kubernetes
 * [fission package](/docs/reference/fission-cli/fission_package/)	 - Create, update and manage packages
 * [fission spec](/docs/reference/fission-cli/fission_spec/)	 - Manage a declarative application specification
 * [fission support](/docs/reference/fission-cli/fission_support/)	 - Collect diagnostic information for support
+* [fission tenant](/docs/reference/fission-cli/fission_tenant/)	 - Manage multi-namespace tenancy (onboard/offboard namespaces)
 * [fission timetrigger](/docs/reference/fission-cli/fission_timetrigger/)	 - Create, update and manage time triggers
 * [fission token](/docs/reference/fission-cli/fission_token/)	 - Create a JWT token for function invocation
 * [fission version](/docs/reference/fission-cli/fission_version/)	 - Show client/server version information

@@ -213,6 +213,26 @@ Loki is great for performing metrics over the logs, for example:
 
 - Count of all logs in Fission Router with "error" over span of 5 mins `count_over_time({svc="router"} |= "error" [5m])`.
 
+### Querying logs from the Fission CLI
+
+You do not have to open Grafana to read function logs.
+With Loki configured, `fission function logs --dbtype loki` queries it directly, and a few filters make it easy to follow a single function or a single invocation:
+
+```bash
+# Stream a function's logs as they arrive
+$ fission function logs --name hello --dbtype loki --follow
+
+# Just the logs for one invocation, by its X-Fission-Request-ID
+$ fission function logs --name hello --dbtype loki --request-id 6f1c2a9e-1c2b-4f0a-9d2e-7b3c2a1d4e5f
+
+# Filter by trace id or level
+$ fission function logs --name hello --dbtype loki --trace-id 4bf92f3577b34da6a3ce929d0e0e4736
+$ fission function logs --name hello --dbtype loki --level error
+```
+
+`--request-id`, `--trace-id`, and `--level` are applied by the `loki` driver only; the default `kubernetes` driver ignores them.
+The request id comes from the `X-Fission-Request-ID` response header or from `fission function test` — see [Debugging and diagnosing functions]({{% ref "/docs/usage/function/debugging.md" %}}) for how to get it and attribute a failure to a component.
+
 ## Fission Logs Dashboard
 
 Grafana provides a great way to build visual dashboards by aggregating queries.

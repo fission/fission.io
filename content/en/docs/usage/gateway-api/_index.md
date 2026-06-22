@@ -14,7 +14,7 @@ Fission runs in **attach mode**: it creates only the `HTTPRoute` and points it a
 Fission never creates or owns the `Gateway` or `GatewayClass`, so it works with any conformant Gateway API implementation and keeps its RBAC minimal.
 
 {{% alert title="Availability" color="info" %}}
-The Gateway API route provider is available starting with **Fission v1.26.0** (unreleased at the time of writing).
+The Gateway API route provider is available starting with **Fission v1.26.0**.
 {{% /alert %}}
 
 {{% alert title="Ingress is deprecated" color="warning" %}}

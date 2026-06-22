@@ -18,6 +18,8 @@ Package v1 contains API Schema definitions for the fission.io v1 API group
 ### Resource Types
 - [CanaryConfig](#canaryconfig)
 - [Environment](#environment)
+- [FissionTenant](#fissiontenant)
+- [FissionTenantList](#fissiontenantlist)
 - [Function](#function)
 - [HTTPTrigger](#httptrigger)
 - [KubernetesWatchTrigger](#kuberneteswatchtrigger)
@@ -381,6 +383,89 @@ _Appears in:_
 | Field | Description |
 | --- | --- |
 | `status-code` | failure type currently supported is http status code. This could be extended<br />in the future.<br /> |
+
+
+#### FissionTenant
+
+
+
+FissionTenant onboards a Kubernetes namespace for Fission. It is the
+cluster-scoped source of truth the tenant-lifecycle controller reconciles
+into the live resource-namespace set (and, in later phases, per-namespace
+RBAC, service accounts, and auth keys). Setting the label
+fission.io/enabled=true on a Namespace is sugar the controller
+materializes into one of these. See docs/multiple-namespace/prd.md.
+
+
+
+_Appears in:_
+- [FissionTenantList](#fissiontenantlist)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `apiVersion` _string_ | `fission.io/v1` | | |
+| `kind` _string_ | `FissionTenant` | | |
+| `kind` _string_ | Kind is a string value representing the REST resource this object represents.<br />Servers may infer this from the endpoint the client submits requests to.<br />Cannot be updated.<br />In CamelCase.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
+| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `spec` _[FissionTenantSpec](#fissiontenantspec)_ |  |  |  |
+| `status` _[FissionTenantStatus](#fissiontenantstatus)_ |  |  |  |
+
+
+#### FissionTenantList
+
+
+
+FissionTenantList is a list of FissionTenants.
+
+
+
+
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `apiVersion` _string_ | `fission.io/v1` | | |
+| `kind` _string_ | `FissionTenantList` | | |
+| `kind` _string_ | Kind is a string value representing the REST resource this object represents.<br />Servers may infer this from the endpoint the client submits requests to.<br />Cannot be updated.<br />In CamelCase.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds |  |  |
+| `apiVersion` _string_ | APIVersion defines the versioned schema of this representation of an object.<br />Servers should convert recognized schemas to the latest internal value, and<br />may reject unrecognized values.<br />More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources |  |  |
+| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `items` _[FissionTenant](#fissiontenant) array_ |  |  |  |
+
+
+#### FissionTenantSpec
+
+
+
+FissionTenantSpec declares which namespace Fission manages and, optionally,
+where that tenant's function and builder workloads run.
+
+
+
+_Appears in:_
+- [FissionTenant](#fissiontenant)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `namespace` _string_ | Namespace is the Kubernetes namespace this tenant onboards. It is the<br />immutable join key to the live Namespace. |  | MaxLength: 63 <br />MinLength: 1 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
+| `functionNamespace` _string_ | FunctionNamespace, if set, is where this tenant's function pods and<br />Services run; empty means they run in spec.namespace. Generalizes the<br />deprecated cluster-global FISSION_FUNCTION_NAMESPACE to a per-tenant<br />mapping. |  | MaxLength: 63 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
+| `builderNamespace` _string_ | BuilderNamespace, if set, is where this tenant's builder pods run;<br />empty means they run in spec.namespace. |  | MaxLength: 63 <br />Pattern: `^[a-z0-9]([-a-z0-9]*[a-z0-9])?$` <br /> |
+
+
+#### FissionTenantStatus
+
+
+
+FissionTenantStatus reports the controller's progress onboarding the tenant.
+
+
+
+_Appears in:_
+- [FissionTenant](#fissiontenant)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `observedGeneration` _integer_ | ObservedGeneration is the spec generation the controller last reconciled. |  |  |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#condition-v1-meta) array_ | Conditions are the latest observations of the tenant's state:<br />RBACProvisioned, ServiceAccountsReady, AuthKeyProvisioned, WatchActive,<br />and the Ready rollup. |  |  |
 
 
 #### Function

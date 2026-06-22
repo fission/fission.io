@@ -30,7 +30,7 @@ flowchart LR
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
 ```
 
-1. You create a watch trigger naming a resource type, a namespace, and (optionally) a label selector.
+1. You create a watch trigger naming a resource type and a namespace.
 2. `kubewatcher` opens a watch on that resource against the Kubernetes API server.
 3. For each event, `kubewatcher` POSTs the serialized object as the request body to your function.
 4. The function processes the event and returns a response.
@@ -45,7 +45,7 @@ Each request carries the event and object type as HTTP headers so your function 
 The following creates a watch on Pods in the `default` namespace and invokes the `pod-logger` function on every Pod event:
 
 ```bash
-$ fission watch create --name podwatch --function pod-logger --type pod --ns default
+$ fission watch create --name podwatch --function pod-logger --type pod --namespace default
 ```
 
 You can watch any of the following resource types (case-insensitive) via the `--type` flag:

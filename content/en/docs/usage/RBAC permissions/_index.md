@@ -27,18 +27,21 @@ Components that run controller-runtime reconcilers also get `coordination.k8s.io
 
 | Component | Fission CRDs (`fission.io`) | Native Kubernetes resources |
 | --------- | --------------------------- | --------------------------- |
-| executor | `environments`, `functions`, `packages` (full CRUD); `functions/status` (update) | `pods`, `services`, `deployments`, `deployments/scale`, `replicasets`, `horizontalpodautoscalers`, `events`, `configmaps`/`secrets` (read), `customresourcedefinitions` (read), `metrics.k8s.io/pods` (read) |
-| router | `environments`, `functions`, `httptriggers`, `packages` (full CRUD); `httptriggers/status` (update) | `networking.k8s.io/ingresses` (full CRUD), `customresourcedefinitions` (read) |
+| executor | `environments`, `functions`, `packages` (full CRUD); `functions/status` (update) | `pods`, `services`, `deployments`, `deployments/scale`, `replicasets`, `replicationcontrollers`, `horizontalpodautoscalers`, `events`, `configmaps`/`secrets` (read), `customresourcedefinitions` (read), `metrics.k8s.io/pods` (read) |
+| router | `environments`, `functions`, `httptriggers`, `packages` (full CRUD); `httptriggers/status` (update) | `networking.k8s.io/ingresses` (full CRUD), `customresourcedefinitions` (read); with `gatewayAPI.enabled`, also `gateway.networking.k8s.io/httproutes` (CRUD) and `referencegrants` (read) |
 | buildermgr | `environments`, `functions`, `packages` (full CRUD); `functions/status`, `packages/status` (update) | `pods`, `services` (create/delete/read/patch), `deployments` (list/create/delete), `configmaps`/`secrets` (read), `events`, `customresourcedefinitions` (read) |
 | kubewatcher | `environments`, `functions`, `kuberneteswatchtriggers`, `packages` (full CRUD); `kuberneteswatchtriggers/status` (update) | `configmaps`, `pods`, `secrets`, `services`, `replicationcontrollers`, `events`, `batch/jobs` (read), `customresourcedefinitions` (read) |
 | timer | `environments`, `functions`, `packages`, `timetriggers` (full CRUD); `timetriggers/status` (update) | leases + events only |
 | mqtrigger (KEDA) | `environments`, `functions`, `messagequeuetriggers`, `packages` (full CRUD); `messagequeuetriggers/status` (update) | `pods`, `services`, `deployments`, `keda.sh/scaledobjects`, `keda.sh/scaledjobs`, `keda.sh/triggerauthentications` (full CRUD), `customresourcedefinitions` (read), `metrics.k8s.io/pods` (read) |
 | canaryconfig | `canaryconfigs`, `httptriggers` (get/list/watch/update); `canaryconfigs/status` (update) | `services` (list), `pods` (read), `customresourcedefinitions` (read) |
-| storagesvc | `packages` (get/list) | leases + events for leader election |
+| storagesvc | `packages` (get/list) | — (no native Kubernetes role) |
 
 {{% notice info %}}
-The chart binds these roles in the install namespace (`defaultNamespace`, typically `fission`) and in any namespace listed in `additionalFissionNamespaces`.
+This is the model for the default `static` tenancy mode: the chart binds these roles in the install namespace (`defaultNamespace`, typically `fission`) and in any namespace listed in `additionalFissionNamespaces`.
 The older `builderNamespace` and `functionNamespace` values are deprecated; prefer `additionalFissionNamespaces`.
+
+With `tenancy.mode: dynamic` or `cluster`, namespaces are onboarded at runtime (via `fission tenant enable` or the `fission.io/enabled` label) and a tenant controller provisions the equivalent per-namespace RBAC — plus a per-namespace derived signing key — without a control-plane restart.
+See [Multi-namespace tenancy]({{% ref "../multi-namespace-tenancy.md" %}}).
 {{% /notice %}}
 
 ## RBAC for Fission CLI users

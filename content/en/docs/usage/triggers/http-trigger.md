@@ -75,9 +75,36 @@ It also may not collide with router-owned paths (`/router-healthz`, `/readyz`, `
 Because the rules now run in the API server, a trigger written via `kubectl apply` or GitOps is rejected just like one created with the CLI.
 {{% /notice %}}
 
-## Ingress
+## Exposing a trigger externally
 
-To expose an HTTP trigger through a Kubernetes Ingress, pass `--createingress` and set the host and path with `--ingressrule host=path`.
+By default a trigger is reachable at the router's address.
+To expose it on its own host and path, attach a route provider with the `--route-provider` flag.
+
+{{% notice info %}}
+The Kubernetes Ingress API is frozen, so the **Gateway API is the recommended way** to expose a trigger externally.
+The `--createingress` / `--ingress*` flags still work but are deprecated — the CLI prints a deprecation warning when you use them, and `--route-provider` takes precedence over `--createingress`.
+{{% /notice %}}
+
+### Gateway API (recommended)
+
+Point the trigger at a parent [Gateway](https://gateway-api.sigs.k8s.io/) with `--route-provider gateway`; Fission creates a `gateway.networking.k8s.io` `HTTPRoute` attached to it:
+
+```bash
+fission httptrigger create --url /hello --method GET --function hello \
+  --route-provider gateway --gateway my-gateway --route-host acme.com --route-path /hello
+```
+
+- `--gateway name` (or `namespace/name`, repeatable) — the parent Gateway the `HTTPRoute` attaches to.
+- `--route-host demo.example.com` (repeatable) — the hostname the route matches; empty matches all hosts.
+- `--route-path /hello` — the request path the route matches; defaults to the trigger URL/prefix.
+- `--route-annotation key=value` (repeatable) — annotation added to the generated route object.
+
+Set `gatewayAPI.enabled=true` in the chart first, and run a Gateway API implementation (Envoy Gateway, Istio, NGINX Gateway Fabric, …).
+See [Exposing functions with the Gateway API]({{% ref "../gateway-api/_index.md" %}}) for the full setup.
+
+### Ingress (deprecated)
+
+To expose a trigger through a Kubernetes Ingress, pass `--createingress` and set the host and path with `--ingressrule host=path`.
 If you create an Ingress without a rule, the host defaults to `*`, a wildcard host.
 
 ```bash
@@ -89,21 +116,16 @@ NAME                                 METHOD HOST     URL      INGRESS FUNCTION_N
 94cd5163-30dd-4fb2-ab3c-794052f70841 GET    acme.com /hello   true    hello
 ```
 
-You can attach annotations and TLS to the generated Ingress:
-
 - `--ingressrule host=path` — set the Ingress host and path rule.
 - `--ingressannotation key=value` — add an annotation (repeatable); the format depends on your Ingress controller.
 - `--ingresstls secretName` — reference a Secret holding the TLS key and certificate.
 
-For Ingress to work, you must deploy an Ingress controller in your cluster, for example:
-
-- [NGINX Ingress Controller](https://github.com/kubernetes/ingress-nginx)
-- [GCE Ingress Controller](https://github.com/kubernetes/ingress-gce)
-
-Other controllers such as [F5](http://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/v1.5/) and [Kong](https://konghq.com/blog/kubernetes-ingress-controller-for-kong/) also work.
+For Ingress to work, you must deploy an Ingress controller in your cluster.
+See [Exposing functions with Ingress]({{% ref "../ingress/_index.md" %}}) for controller examples and extra settings.
 
 ## Related
 
 - [Triggers overview]({{% ref "_index.md" %}})
+- [Exposing functions with the Gateway API]({{% ref "../gateway-api/_index.md" %}})
 - [Accessing URL parameters]({{% ref "../function/accessing-url-params.md" %}})
 - [Router architecture]({{% ref "/docs/architecture/router.md" %}})

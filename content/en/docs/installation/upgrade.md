@@ -34,6 +34,19 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 
 _See [configuration](#configuration) below._
 
+## Upgrade to 1.27.x release
+
+v1.27.0 adds opt-in multi-namespace tenancy and a function-developer observability toolkit (invocation correlation, `fission function describe`, and local `run-local` development).
+Tenancy is off by default — `tenancy.mode: static` renders byte-identical RBAC and keeps the existing auth model — so a single-namespace or `additionalFissionNamespaces` install upgrades with just the routine CRD/CLI/chart steps above, and the minimum Kubernetes version is unchanged at **1.32**.
+To onboard namespaces at runtime with `fission tenant enable` instead of editing `additionalFissionNamespaces`, see [Multi-namespace tenancy](/docs/usage/multi-namespace-tenancy/).
+
+Two runtime defaults change visibly and are worth reviewing first:
+
+- The router now returns a structured JSON error body for attributed failures (status codes are unchanged). A client that parses the literal old plain-text body should read the JSON instead, or set `ROUTER_STRUCTURED_ERRORS=false` to restore it.
+- Trace sampling now honors `OTEL_TRACES_SAMPLER`, so if you export traces over OTLP, successful-trace volume drops to the documented `0.1` ratio (all error traces are still kept). Set `OTEL_TRACES_SAMPLER=parentbased_always_on` to keep 100% export.
+
+See the [v1.27.0 release notes](/docs/releases/v1.27.0/#upgrade-notes) for the full list of behavioral changes and the action each one requires.
+
 ## Upgrade to 1.26.x release
 
 v1.26.0 is a large feature release: OCI-native package delivery, the Kubernetes Gateway API route provider, streaming responses, functions as MCP tools, and an EndpointSlice-native router data plane.
@@ -87,7 +100,7 @@ Audit before upgrading and migrate any such caller to use a proper `HTTPTrigger`
 ### KEDA message-queue triggers and the connector signing gap
 
 `internalAuth.enabled` defaults to `true` in v1.23.0.
-Upstream `fission/kafka-http-connector` (and the other Fission KEDA connector images) do not yet sign their `/fission-function/...` invocations, so KEDA-driven message-queue triggers will receive `401` from the new router internal listener.
+Upstream `ghcr.io/fission/keda-kafka-http-connector` (and the other `keda-*-http-connector` images) do not yet sign their `/fission-function/...` invocations, so KEDA-driven message-queue triggers will receive `401` from the new router internal listener.
 
 If your installation uses KEDA-backed `MessageQueueTrigger` resources, **set `internalAuth.enabled=false` at upgrade time** until signing-aware KEDA connector images ship:
 
