@@ -98,7 +98,7 @@ def crawl():
             elif h.startswith("http"): ext.add(h)
         pages[rel]=dict(title=(p.title or "").strip(), desc=p.desc, canonical=p.canonical,
                         robots=p.robots, h1=p.h1, ld=lds, words=words, ext=ext,
-                        first_p=p._first_p, out=out, url="/"+rel.replace("index.html","").rstrip("/")+"/" if rel!="index.html" else "/")
+                        first_p=p._first_p, out=out)
     return pages
 
 def url_of(rel): return "/"+rel[:-len("index.html")] if rel.endswith("index.html") else "/"+rel
@@ -109,7 +109,7 @@ def main():
     # inlink graph for orphan detection (content pages only: under /docs/, /blog/, etc.)
     inlinks={rel:0 for rel in pages}
     relurl={url_of(rel).rstrip("/")+"/":rel for rel in pages}
-    relurl["/"]=pages.get("index.html") and "index.html"
+    if "index.html" in pages: relurl["/"]="index.html"
     for rel,p in pages.items():
         for o in p["out"]:
             key=o.rstrip("/")+"/"
@@ -161,15 +161,7 @@ def main():
         depth=rel.count("/")
         if inlinks[rel]==0 and depth>=2:
             add("med","internal-links",f"orphan (0 inlinks): {url_of(rel)}")
-    # --- answer-first & citations (priority targets only, to stay high-signal) ---
-    def has_citation(rel,p):
-        # does the page link to an authoritative source (github repo, RFC, GHSA, k8s, CRD)?
-        for o in p["out"]:
-            pass
-        # outlinks were same-site only; check raw via text markers + external link scan
-        return None
-
-    # --- PRIORITY QUERY BENCHMARK ---
+    # --- PRIORITY QUERY BENCHMARK (answer-first + citations checked inline below) ---
     print("=== PRIORITY QUERY BENCHMARK ===")
     bench_gaps=0
     for q,target,kind in PRIORITY_QUERIES:
