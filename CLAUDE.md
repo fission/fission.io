@@ -14,7 +14,8 @@ Work here is almost always content edits (Markdown under `content/en/`), templat
 - `npm install` — install PostCSS toolchain (autoprefixer for the Docsy theme).
 - `hugo server` — local preview on http://localhost:1313/.
 - `./build.sh` — what Netlify runs (`hugo --minify --printPathWarnings --gc`).
-- Netlify pins exact versions in `netlify.toml` (currently **Hugo 0.157.0** extended and **Go 1.26.3**) — treat that file as the source of truth and match it locally when reproducing CI builds; Hugo behavior differs across versions.
+- Netlify pins the exact `HUGO_VERSION` (extended) and `GO_VERSION` in `netlify.toml` — treat that file as the source of truth and match it locally; Hugo behavior differs across versions, so don't assume the latest works.
+- **Local Homebrew Hugo breaks this build.** Hugo 0.158+ wraps the PostCSS pipeline in Node's permission model with a restricted filesystem scope, so `hugo --minify` hangs/fails. Use the `netlify.toml`-pinned Hugo (not the Homebrew one); see the `verify-hugo-docsy-build` skill.
 - The Docsy theme is pulled as a **Hugo Module** via `go.mod` (`github.com/google/docsy`), not a git submodule.
 The `.gitmodules` file is empty and the `git submodule update` line in `CONTRIBUTING.md` is stale — ignore it.
 - There are no unit tests. CI (`.github/workflows/main.yml`) runs reviewdog misspell + languagetool on changed `*.md` files only.
@@ -50,25 +51,26 @@ Don't assume they move together.
 
 ## Design system & site conventions
 
-The site follows a documented design language (navy/blue palette, white cards with hover lift, light-blue pills) and strict authoring rules (absolute URLs not `relref`, version shortcodes, lazy-loaded images with dimensions, no inline styles).
-The details live in `.claude/resources/`:
+Strict authoring rules (absolute URLs not `relref`, version shortcodes not literals, lazy-loaded images with dimensions, no inline styles) and the visual language are documented in `.claude/resources/`:
 
-- [.claude/resources/design-system.md](.claude/resources/design-system.md) — palette, card pattern, SCSS namespaces in `_variables_project.scss`, Bootstrap 5 gotchas, image/SVG rules.
-- [.claude/resources/mermaid-diagrams.md](.claude/resources/mermaid-diagrams.md) — diagram color kit, the <900px width rule, step-number style, lightbox/partial-cache gotchas.
-- [.claude/resources/page-patterns.md](.claude/resources/page-patterns.md) — docs nav order, page skeletons, catalog/blog/homepage/support page structures and their traps.
-- [.claude/resources/automation-ideas.md](.claude/resources/automation-ideas.md) — backlog of process automation worth building.
-- [.claude/resources/seo.md](.claude/resources/seo.md) — SEO/LLM rules: required front-matter descriptions, JSON-LD partial, llms.txt + markdown-mirror outputs, title/heading conventions.
+- [design-system.md](.claude/resources/design-system.md) — palette, card pattern, SCSS namespaces in `_variables_project.scss`, Bootstrap 5 gotchas, image/SVG rules.
+- [page-patterns.md](.claude/resources/page-patterns.md) — docs nav order, page skeletons, catalog/blog/homepage/support structures and their traps.
+- [seo.md](.claude/resources/seo.md) — required front-matter descriptions, JSON-LD partial, llms.txt + markdown-mirror outputs, title/heading conventions.
+- [mermaid-diagrams.md](.claude/resources/mermaid-diagrams.md) — the fission diagram palette and styling hooks (generic mermaid mechanics live in the `author-mermaid-docsy-diagram` skill).
 
 Consult the matching resource file before styling or restructuring a page.
 
 ## Skills
 
-Recurring workflows are codified as skills in `.claude/skills/` — use them instead of rediscovering the process:
+Recurring workflows are codified as skills — use them instead of rediscovering the process.
 
-- **cutting-fission-release-docs** — preparing the site for a new Fission release (version bumps, release-notes page, compatibility matrix, What's New card, upgrade guide).
-- **bumping-hugo-docsy-site** — bumping the pinned Hugo/Go/Docsy versions safely.
-- **updating-environments-and-examples** — adding or refreshing entries on the environments/examples catalog pages.
-- **writing-blog-posts** — authoring a blog post with correct front matter and featured image.
+Project-local (`.claude/skills/`, fission-specific):
+
+- **cut-fission-release** — orchestrates a Fission release doc cut (version bumps, release-notes page, compatibility matrix, What's New card); composes the reference-regen and build-verify skills.
+- **regen-fission-reference-docs** — regenerate and check in the CLI/CRD reference from a new `fission` binary.
+- **update-environments-catalog** / **update-examples-catalog** — add or refresh entries on the environments / examples catalog pages.
+
+Generic Hugo/Docsy skills (shared via the harness repo, available here too): **bump-hugo-docsy-versions**, **verify-hugo-docsy-build**, **author-mermaid-docsy-diagram**, **write-hugo-blog-post**, **optimize-svg**.
 
 ## Redirects and URL stability
 

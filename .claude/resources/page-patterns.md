@@ -31,19 +31,14 @@ New top-level sections must slot into this learning path, not append at the end.
 - Keep on any change: search box, language filter, live results count (`aria-live="polite"`), empty-state messages.
 - Card markup is built in JS template literals — style hooks are the `.env-card*` / `.example-card*` / `.catalog-*` SCSS namespaces, **no inline styles**.
 - Examples page groups by language with `.example-group__header` (logo + name + count); groups with zero visible examples are hidden.
-- Data schemas + update flow: see the `updating-environments-and-examples` skill.
+- Data schemas + update flow: see the `update-environments-catalog` and `update-examples-catalog` skills.
 
 ## Blog
 
-- Front matter: `title`, `date` (ISO-8601 with TZ), `author`, `categories` (usually `["Tutorials"]` or `["Fission"]`), `description`, `type: "blog"`, optional `images = ["images/featured/<slug>.png"]`.
-- Featured image: PNG ≈1000×563 in `static/images/featured/`; referencing it in `images` makes it the list-card thumbnail and the OG image.
-Posts without one get a branded navy fallback automatically.
-- List page is a card grid: local override `layouts/blog/list.html`; thumbnail resolution order is front-matter `images` → page-bundle resource matching `*featured*` → fallback.
-- **Single-post layout trap**: Docsy v0.15 renders `layouts/blog/_td-content.html` (via `.Render "_td-content"`).
-A `layouts/blog/content.html` override is dead code — that file was deleted for exactly this reason.
-- Byline (date · author link · reading time) and the lightbox are automatic; don't add reading time manually.
+- **Categories** (fission enum): reuse `["Tutorials"]` (how-tos) or `["Fission"]` (project/release news) — don't invent new ones (lonely taxonomy pages).
+- List page is a card grid: local override `layouts/blog/list.html`; thumbnail resolution order is front-matter `images` → page-bundle resource matching `*featured*` → branded navy fallback.
 - Docs-only meta links ("Create child page", doc issues) are hidden on blog via `.td-blog .td-page-meta__*` CSS in `_variables_project.scss` (needs `!important`); "Edit this page" stays.
-- Authoring walkthrough: see the `writing-blog-posts` skill.
+- Authoring mechanics (front matter, featured image ≈1000×563 → list-card + OG, the Docsy `_td-content.html` layout trap, automatic byline/reading-time): see the **`write-hugo-blog-post`** skill.
 
 ## Homepage (`content/en/_index.html`)
 

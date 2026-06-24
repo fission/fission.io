@@ -59,6 +59,6 @@ Detailed conventions (design system, Mermaid diagram rules, page skeletons, SEO 
 
 ## Common content tasks
 
-- **Blog post** — front-matter template, featured-image workflow, and category conventions: see `.claude/skills/writing-blog-posts/`.
-- **New language environment or example** — both catalog pages are data-driven from `static/data/*.json`: see `.claude/skills/updating-environments-and-examples/` and [`tools/README.md`](tools/README.md).
-- **Docs for a new Fission release** — version bumps, release-notes page, compatibility matrix: see `.claude/skills/cutting-fission-release-docs/`.
+- **Blog post** — front-matter, featured-image workflow, and the fission category enum: see the Blog section of [`.claude/resources/page-patterns.md`](.claude/resources/page-patterns.md).
+- **New language environment or example** — both catalog pages are data-driven from `static/data/*.json`: see `.claude/skills/update-environments-catalog/`, `.claude/skills/update-examples-catalog/`, and [`tools/README.md`](tools/README.md).
+- **Docs for a new Fission release** — version bumps, release-notes page, compatibility matrix: see `.claude/skills/cut-fission-release/`.
