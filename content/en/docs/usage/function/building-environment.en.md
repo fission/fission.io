@@ -274,7 +274,7 @@ Then:
 8. Open a PR against [fission/environments](https://github.com/fission/environments).
    On merge, CI builds and publishes `ghcr.io/fission/mylang-env` (and the builder) at the version in `envconfig.json`.
 
-Finally, surface the new language on this website's [Environments catalog](/environments/) by running `tools/environments.py` to regenerate `static/data/environments.json` — see the **updating-environments-and-examples** workflow and [tools/README.md](https://github.com/fission/fission.io/blob/main/tools/README.md).
+Finally, surface the new language on this website's [Environments catalog](/environments/) by running `tools/environments.py` to regenerate `static/data/environments.json` — see [tools/README.md](https://github.com/fission/fission.io/blob/main/tools/README.md) for the `env_dict` mapping step.
 
 ## Build and test locally
 
