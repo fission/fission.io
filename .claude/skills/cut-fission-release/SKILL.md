@@ -23,7 +23,7 @@ Version values are decoupled: `release_version` (app, e.g. `v1.24.0`) and `chart
 | `content/en/docs/installation/compatibility.md` | Add a literal row for the **previous** release; update the top shortcode row's columns for the new one (see step 5) |
 | `content/en/_index.html` | Replace a What's New card with the release announcement (see step 6) |
 | `content/en/docs/reference/fission-cli/*`, `crd-reference.md` | Regenerated from the new `fission` binary **only if** the CLI/CRDs changed (run `regen-fission-reference-docs` skill) |
-| `static/data/environments.json` | Refresh via `tools/environments.py` **only if** environment images changed with the release |
+| `static/data/environments.json` | Refresh via the `update-environments-catalog` skill **only if** environment images changed with the release |
 
 ## Procedure
 
