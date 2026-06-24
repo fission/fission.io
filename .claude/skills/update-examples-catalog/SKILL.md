@@ -42,6 +42,7 @@ Key points:
 Use the `optimize-svg` skill for logo SVG optimization.
 Place the optimized file at `static/images/lang-logo/<name>-logo.svg`.
 If a suitable logo is unavailable, omit the `logo` field — the page falls back to `misc-logo.svg`.
+Card styling (`.example-card*`) lives in `assets/scss/_variables_project.scss` — see `.claude/resources/design-system.md`.
 
 ## Verify
 

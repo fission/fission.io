@@ -61,6 +61,7 @@ Use the `optimize-svg` skill for logo SVG optimization (don't restate svgo flags
 Place the optimized file at `static/images/lang-logo/<name>-logo.svg`.
 Target well under 10 KB.
 If a suitable logo is unavailable, omit the `logo` field — the page falls back to `misc-logo.svg`.
+Card styling (`.env-card*`) lives in `assets/scss/_variables_project.scss` — see `.claude/resources/design-system.md`.
 
 ## Verify
 

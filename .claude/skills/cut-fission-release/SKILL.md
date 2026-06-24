@@ -181,5 +181,5 @@ The only acceptable RFC mentions are inside the verbatim "What's Changed" PR-tit
 
 - About to commit a release page whose Highlights are just the raw PR list → write real highlights.
 - The new release page's weight is ≥ the previous release's → you have the direction backwards.
-- A `{{< relref >}}` appears in a content page you edited → switch to an absolute URL.
-- You verified with anything other than `verify-hugo-docsy-build` (pinned Hugo) → re-verify properly.
+
+(These are the silent failures — they ship without an error. The loud ones, `{{< relref >}}` build errors and using the wrong build command, are in Common Mistakes above.)
