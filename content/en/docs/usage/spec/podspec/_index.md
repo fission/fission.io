@@ -5,6 +5,8 @@ description: >
   Customize the Kubernetes PodSpec of Fission function and environment pods to control containers, volumes, scheduling, and security context.
 ---
 
+**Fission lets you set the Kubernetes PodSpec for a function or environment's pods, so you can control containers, scheduling, and security context beyond what the Fission CLI exposes directly.**
+
 ## What is PodSpec
 
 A pod in Kubernetes is basic unit of deployment.
@@ -40,7 +42,6 @@ spec:
   securityContext: {}
 ```
 
-In this section we will look at various use cases that are possible with PodSpec support in Fission.
 To learn more about specs, check [the spec documentation]({{% ref "../_index.md" %}}).
 
 {{% notice warning %}}
@@ -51,13 +52,13 @@ The following are also rejected: `hostNetwork`, `hostPID`, `hostIPC`, `hostPath`
 Keep your PodSpec additions within these bounds, or `fission spec apply` (and the admission webhook) will reject the Environment or Function.
 {{% /notice %}}
 
-## Many More!
+## More Ways to Use PodSpec
 
 Here are some ideas for how you can use PodSpec to enhance your function pods:
 
-- You can add a **custom scheduler** to be used for specific functions.
-- Additional security policies and settings can be set with **security context** field in PodSpec.
-- Introduced in Kubernetes 1.11 **readiness gates** allow extra feedback to the pod status and enable advanced mechanism to signal to Kubernetes that the pod can now serve production traffic.
-- **Priority and priority Class Name** are used with a custom admission controller so you can set the priorities of the pods and effectively allocate resources to pods/functions with higher priority.
+- You can add a **custom scheduler** for specific functions.
+- Additional security policies and settings can be set with the **security context** field in PodSpec.
+- Introduced in Kubernetes 1.11, **readiness gates** allow extra feedback on pod status and give Fission an advanced mechanism to signal to Kubernetes that the pod can now serve production traffic.
+- **Priority and priorityClassName** work with a custom admission controller so you can set pod priorities and effectively allocate resources to pods/functions with higher priority.
 - **Node selector** allows scheduling function pods on specific nodes of the cluster.
-- **Image Pull Secrets** will enable using private registries for all your images!
+- **Image pull secrets** let you use private registries for your images.

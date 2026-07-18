@@ -5,9 +5,9 @@ description: >
   Pull environment images from a private registry by passing an imagePullSecret to fission environment create with --imagepullsecret.
 ---
 
-With 1.7.0+, you can specify which credential to use for kubelet to pull images from the private registry.
+**With 1.7.0+, you can specify which credential kubelet uses to pull images from a private registry.**
 
-First, you need to follow the [kubernetes guide](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) to create the secret.
+First, follow the [kubernetes guide](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) to create the secret.
 
 {{% notice warning %}}
 The secret must be created in the namespace where the function pods run.
@@ -16,14 +16,14 @@ By default this is the namespace where your Fission resources live (for example,
 
 Then, specify the secret when creating the environment.
 
-For example, if we want to create a nodejs environment and use secret `docker-secret` as credential.  
+For example, this creates a nodejs environment using secret `docker-secret` as credential.  
 
 ```bash
 $ fission environment create --name nodejs --image ghcr.io/fission/node-env \
     --imagepullsecret "docker-secret"
 ```
 
-You should see `imagePullSecrets` in the environment deployment like following.
+You should see `imagePullSecrets` in the environment deployment, like the following.
 
 ```bash
 $ kubectl -n fission-function get deploy -l environmentName=nodejs -o yaml
@@ -48,6 +48,6 @@ items:
 ```
 
 {{% notice warning %}}
-Fission won't check if a secret exists nor examining whether the secret setting works as expected.<br>
-You have to check the pod status to ensure everything works as expected.
+Fission won't check that the secret exists, nor verify that the setting works.<br>
+Check the pod status yourself to ensure everything works as expected.
 {{% /notice %}}

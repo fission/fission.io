@@ -17,15 +17,15 @@ The logs from the components and from the function pods together tell the full s
 Loki is a horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus.
 The main components are a client to fetch the logs, an aggregator, and a visualizing tool (Grafana).
 
-The stack supports multiple clients, for the case here we will use Promtail which is the recommended client when using the stack in Kubernetes.
-Here is a quick overview of components that make up the Loki platform:
+The stack supports multiple clients; this guide uses Promtail, the recommended client for Kubernetes because it automatically picks up pod labels as metadata.
 
-- **Loki** - Loki is a horizontally scalable, highly available, multi-tenant log aggregation system inspired by Prometheus.
-- **Promtail** - Promtail is the client which fetches and forwards the logs to Loki.
-  It is a good fit for Kubernetes as it automatically fetches metadata such as pod labels.
-- **Grafana** - A visualization tool that supports Loki as a data source.
+| Component | Role |
+|-----------|------|
+| **Loki** | Aggregates and stores the logs. |
+| **Promtail** | Fetches logs from each pod and forwards them to Loki. |
+| **Grafana** | Visualizes Loki data through dashboards and queries. |
 
-The stack is depicted briefly in the below image
+The diagram below shows how the three connect: Promtail ships pod logs to Loki, and Grafana queries Loki to visualize them.
 
 ![Loki-Grafana stack](../assets/stack.png)
 
@@ -44,7 +44,9 @@ For this case, we'll use Helm.
 
 #### Install Grafana and Loki
 
-Create a values.yaml file. We are installing [monolithic Loki](https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/). Check Loki's [deployment modes](https://grafana.com/docs/loki/latest/get-started/deployment-modes/).
+Create a values.yaml file.
+We are installing [monolithic Loki](https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/).
+Check Loki's [deployment modes](https://grafana.com/docs/loki/latest/get-started/deployment-modes/) for other options.
 
 ```bash
 cat > loki-config.yaml <<EOF
@@ -84,15 +86,16 @@ $ helm upgrade -n monitoring --create-namespace --install loki grafana/loki -f l
 ```
 
 This will install Loki in the monitoring namespace.
-Check if there're pods running for Loki.
+Check if there are pods running for Loki.
 
 
 #### Install Promtail
 
-You'll notice that the Promtail installation is disabled above. This is because custom configuration
-is required to effectively tail logs. The default Promtail configuration follow the [kubernetes recommended labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/) and filter out everything that doesn't conform to those rules.
+You'll notice that the Promtail installation is disabled above.
+This is because custom configuration is required to effectively tail logs.
+The default Promtail configuration follows the [kubernetes recommended labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/) and filters out everything that doesn't conform to those rules.
 
-Create a values.yaml file. This configuration will allow Promtail to tail and forward all labels. This is a necessity since fission adds additional labels when a pod is specialized. 
+Create a values.yaml file that lets Promtail tail and forward all labels — this is necessary because Fission adds extra labels when a pod is specialized.
 ```bash
 cat > promtail-config.yaml <<EOF
 config:
@@ -147,6 +150,8 @@ config:
 EOF
 ```
 
+Install Promtail with this configuration:
+
 ```bash
 $ helm upgrade -n monitoring --install promtail grafana/promtail -f promtail-config.yaml
 ```
@@ -154,7 +159,7 @@ $ helm upgrade -n monitoring --install promtail grafana/promtail -f promtail-con
 This will install Promtail in the `monitoring` namespace.
 Check that a Promtail pod is running.
 
-We can access the Promtail UI at `localhost:3101` to see all of the pods logs being tailed along with the labels assigned to them.
+The Promtail UI at `localhost:3101` shows all of the pods' logs being tailed, along with the labels assigned to them.
 ```bash
 $ kubectl --namespace monitoring port-forward $(kubectl  --namespace monitoring get daemonset -l app.kubernetes.io/instance=promtail -o name) 3101:3101
 ```
@@ -169,20 +174,22 @@ helm repo update
 helm upgrade --install grafana grafana/grafana --create-namespace -n grafana
 ```
 
-This will install Grafana in the `grafana` namespace
+This will install Grafana in the `grafana` namespace.
 
 
 ## Accessing Grafana UI
 
-The installation above creates a Service in `grafana` namespace. To access this, you can
+The installation above creates a Service in the `grafana` namespace.
+To access this, you can:
 - Create an [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) for this service
 - Use Kubernetes port forwarding
     ```
     kubectl port-forward svc/grafana -n grafana 3000:80
     ```
 ## Fetching Credentials of Grafana
-Default user is “admin”
-For password, run the below command
+
+The default user is `admin`.
+Fetch the password with:
 ```
 kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode
 ```
@@ -197,10 +204,9 @@ Click on `Save and Test` and there should be a notification of the data source a
 
 ### Running Log Queries
 
-From the options in left pane, navigate to `Explore`.
+From the options in the left pane, navigate to `Explore`.
 Here you can run log queries using [LogQL](https://grafana.com/docs/loki/latest/logql/).
-Since Loki auto scrapes labels, there will be example log queries presented.
-There also will be list of log labels that you can select from.
+Since Loki auto-scrapes labels, example log queries are presented, along with a list of log labels you can select from.
 
 You can run queries for Fission components such as:
 
@@ -235,17 +241,15 @@ The request id comes from the `X-Fission-Request-ID` response header or from `fi
 
 ## Fission Logs Dashboard
 
-Grafana provides a great way to build visual dashboards by aggregating queries.
-These dashboards are a set of individual panels each showing visuals of some queries.
-Metrics over this logs can be seen in real time.
-The dashboards are also easily shareable.
+Grafana dashboards aggregate queries into panels, each visualizing a metric over your logs in real time.
+Dashboards are easily shareable.
 
-Multiple panel with queries over Fission can be put together to get overall view of Fission components as well the Functions running within.
+Multiple panels with queries over Fission can be combined for an overall view of Fission's components and the functions running within them.
 An exported JSON of one such dashboard can be found [here](https://github.com/fission/examples/blob/main/miscellaneous/dashboards/loki-grafana-summary.json).
 This dashboard shows log metrics from all the major components of Fission.
 
-Once imported, the dashboard will look similar to below image.
+Once imported, the dashboard looks like this:
 
 ![Loki-Grafana dashboard](../assets/loki-grafana-dashboard.png)
 
-Watch the same [location](https://github.com/fission/examples/tree/main/miscellaneous/dashboards) for more dashboards which will be added over time.
+Watch the same [location](https://github.com/fission/examples/tree/main/miscellaneous/dashboards) for more dashboards, which will be added over time.

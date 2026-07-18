@@ -4,9 +4,8 @@ description: "Writing Node.js functions with fission"
 weight: 10
 ---
 
-Fission supports functions written in Nodejs.
-Current fission nodejs runtime environment supports node version greater than 7.6.0.
-In this usage guide we'll cover how to use this environment, write functions, and work with dependencies.
+**Write, deploy, and test Node.js functions on Fission, and manage the npm dependencies they need.**
+The Fission Node.js runtime environment supports Node.js versions greater than 7.6.0.
 
 ### Before you start
 
@@ -415,7 +414,7 @@ Next, the user function is loaded according to the entry point specified with `f
 If you'd like to do more than just `npm install` in the build step, you could customize the `build.sh`.
 Here's the link to the source code of [fission nodejs builder](https://github.com/fission/environments/tree/master/nodejs/builder)
 
-As you can see, the build.sh performs a `npm install` inside a directory defined by the environment variable SRC_PKG and copies the built archive into a directory defined by environment variable DEPLOY_PKG.
+The build.sh performs a `npm install` inside a directory defined by the environment variable SRC_PKG and copies the built archive into a directory defined by environment variable DEPLOY_PKG.
 You could create a customized version of this build.sh with whatever additional commands needed to be run during the build step.
 
 Finally the image can be built with `docker build -t <USER>/nodejs-custom-builder .` and pushed to docker hub with `docker push <USER>/nodejs-custom-builder`.
@@ -428,15 +427,19 @@ If you wish to modify the nodejs runtime image to add more dependencies without 
 
 Here's the link to the source code of [fission nodejs runtime](https://github.com/fission/environments/tree/master/nodejs/)
 
-As you can see, there is a package.json in the directory with a list of node modules listed under dependencies section.
+There is a package.json in the directory with a list of node modules listed under dependencies section.
 You can add the node modules required to this list and then build the docker image with `docker build -t <USER>/nodejs-custom-runtime .` and push the image `docker push <USER>/nodejs-custom-runtime`.
 
 You are now ready to create a nodejs env with your image supplied to `--image` flag.
 
 ### Resource usage
 
-Currently the nodejs environment containers are run with default memory limit of 512 MiB and a memory request of 256 MiB.
-Also, a default CPU limit of 1 and a CPU request of 0.5 cores.
+By default, nodejs environment containers run with these resource requests and limits:
+
+| Resource | Request | Limit |
+|----------|---------|-------|
+| Memory   | 256 MiB | 512 MiB |
+| CPU      | 0.5 cores | 1 core |
 
 If you wish to create functions with higher resource requirements, you could supply `--mincpu`, `--maxcpu`, `--minmemory` and `--maxmemory` flags during `fission fn create`.
 Also supply `--executortype newdeploy` to the CLI.

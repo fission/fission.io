@@ -51,11 +51,15 @@ You can grant these cluster-wide with a `ClusterRole`, or scope them to one name
 
 ### What a user needs
 
-- **Fission CRDs** — `functions`, `environments`, `packages`, and the trigger kinds (`httptriggers`, `timetriggers`, `messagequeuetriggers`, `kuberneteswatchtriggers`, `canaryconfigs`) in the `fission.io` group. Grant the verbs that match the commands the user will run (`get`/`list`/`create`/`update`/`delete`).
-- **`pods` and `pods/log`** (`get`/`list`) — for `fission function log` and `fission function pod`.
-- **`pods/portforward`** (`create`) — for `fission function test`, which port-forwards to the router.
-- **`services`** (`list`) — to discover the router service.
-- **`configmaps` and `secrets`** (`get`) — for functions that reference them.
+The table below lists each resource a CLI user needs, the verbs to grant, and which commands require it.
+
+| Resource | Verbs | Needed for |
+| --- | --- | --- |
+| Fission CRDs (`functions`, `environments`, `packages`, and the trigger kinds `httptriggers`, `timetriggers`, `messagequeuetriggers`, `kuberneteswatchtriggers`, `canaryconfigs`) in the `fission.io` group | Match the commands the user will run: `get`/`list`/`create`/`update`/`delete` | All `fission` CRD commands |
+| `pods`, `pods/log` | `get`, `list` | `fission function log`, `fission function pod` |
+| `pods/portforward` | `create` | `fission function test` (port-forwards to the router) |
+| `services` | `list` | Discovering the router service |
+| `configmaps`, `secrets` | `get` | Functions that reference them |
 
 ### Sample ClusterRole
 
@@ -200,6 +204,8 @@ roleRef:
   name: fission-docs-user
   apiGroup: rbac.authorization.k8s.io
 ```
+
+Apply it:
 
 ```bash
 kubectl apply -f fission-docs-user-role.yaml

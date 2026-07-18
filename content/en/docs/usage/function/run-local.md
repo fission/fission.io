@@ -16,6 +16,8 @@ It reproduces the cluster's behavior faithfully — the runtime image, the speci
 It needs a running Docker engine and is meant for the local inner loop, not for production traffic.
 {{% /notice %}}
 
+The inner loop it replaces — edit, run, invoke, save, repeat — looks like this:
+
 ```mermaid
 flowchart LR
   edit["Edit code"]:::user --> run["fission function<br/>run-local --watch"]:::fission

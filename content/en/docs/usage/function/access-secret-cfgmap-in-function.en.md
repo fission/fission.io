@@ -6,11 +6,11 @@ description: >
   Mount Kubernetes Secrets and ConfigMaps into a Fission function and read their values for API keys and configuration.
 ---
 
-Functions can access Kubernetes [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) and [ConfigMaps](https://kubernetes.io/docs/concepts/storage/volumes/#configmap).
-Use secrets for things like API keys, authentication tokens, and so on.
-Use config maps for any other configuration that doesn't need to be a secret.
+**Fission functions can mount Kubernetes [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) and [ConfigMaps](https://kubernetes.io/docs/concepts/storage/volumes/#configmap) as files, so your code can read API keys and other configuration at runtime.**
+Use Secrets for sensitive values like API keys and authentication tokens.
+Use ConfigMaps for any other configuration that doesn't need to be secret.
 
-## Create a Secret or a Configmap
+## Create a Secret or a ConfigMap
 
 You can create a Secret or ConfigMap with the Kubernetes CLI:
 
@@ -44,9 +44,8 @@ data:
 
 ## Accessing Secrets and ConfigMaps
 
-Secrets and configmaps are accessed similarly.
-Each secret or configmap is a set of key value pairs.
-Fission sets these up as files you can read from your function.
+Secrets and ConfigMaps are accessed the same way.
+Each is a set of key-value pairs, and Fission exposes each key as a file your function can read.
 
 ```text
 # Secret path
@@ -66,7 +65,7 @@ From the previous example, the paths are:
 /configs/default/my-configmap/TEST_KEY
 ```
 
-Now, let's create a simple python function (leaker.py) that returns the value of Secret `my-secret` and ConfigMap `my-configmap`.
+This Python function (`leaker.py`) reads both files and returns the Secret `my-secret` and ConfigMap `my-configmap` values:
 
 ```python
 # leaker.py
@@ -97,7 +96,7 @@ $ fission env create --name python --image ghcr.io/fission/python-env
 $ fission fn create --name leaker --env python --code leaker.py --secret my-secret --configmap my-configmap
 ```
 
-You can provide multiple configmaps or secrets while creating a fission function through command line, below syntax can be used to provide more than one configmaps or secrets.
+To attach multiple ConfigMaps or Secrets, repeat the flag:
 
 ```bash
 # Provide multiple Configmaps
@@ -107,7 +106,7 @@ $ fission fn create --name <fn-name> --env <env-name> --code <your-source> --con
 $ fission fn create --name <fn-name> --env <env-name> --code <your-source> --secret <secret-one> --secret <secret-two>
 ```
 
-Run the function, and the output should look like this:
+Run the function to confirm both values are readable:
 
 ```bash
 $ fission function test --name leaker
@@ -118,14 +117,13 @@ Secret: TESTVALUE
 ## Updating Secrets and ConfigMaps
 
 {{% notice note %}}
-If you have a large number of functions using a configmap or secret, updating that configmap or secret will cause a large number of pods getting re-created.
-Please make sure that the cluster has enough capacity to accommodate the short spike of many pods getting terminated and new once getting created.
+If a large number of functions use the same ConfigMap or Secret, updating it will cause a large number of pods to be re-created at once.
+Make sure the cluster has enough capacity to absorb that short spike of pods terminating and starting.
 {{% /notice %}}
 
-If you update the configmap or secret - the same will be updated in the function pods and newer value of configmap/secret will be used for executing functions.
-The time it takes for the change to reflect depends on the time it takes for rolling update to finish.
+Updating a ConfigMap or Secret updates the function pods, and the new value is used for subsequent function executions.
+How long the change takes to reflect depends on how long the rolling update takes to finish.
 
 {{% notice note %}}
-In Fission version prior to 1.4.
-If the Secret or ConfigMap value is updated, the function will not get the updated and may get a cached older value.
+In Fission versions prior to 1.4, an updated Secret or ConfigMap value may not reach the function, which can keep reading a cached, older value.
 {{% /notice %}}

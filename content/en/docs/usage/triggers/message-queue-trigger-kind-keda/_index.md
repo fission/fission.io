@@ -29,6 +29,8 @@ Each connector is documented on its own page:
 
 ## Architecture
 
+The diagram below traces a message from the event source to your function and back, with KEDA scaling the connector deployment in between.
+
 ```mermaid
 flowchart TB
   source["Event Source"]:::user

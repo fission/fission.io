@@ -10,20 +10,20 @@ This page covers the legacy Fission-kind Kafka trigger, which was removed in the
 Use the [KEDA-based Kafka trigger]({{% ref "../message-queue-trigger-kind-keda/kafka.md" %}}) instead.
 {{% /notice %}}
 
-This tutorial will demonstrate how to use a Kafka trigger to invoke a function.
+**This tutorial shows how to trigger a Fission function from a Kafka topic using the legacy Fission-kind message queue trigger.**
 We'll assume you have Fission and Kubernetes installed with Kafka MQ integration installed.
-If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
+If not, see the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
 
-You will also need Kafka setup which is reachable from the Fission Kubernetes cluster.
-If you want to setup Kafka on the Kubernetes cluster, you can refer to this [Fission Kafka Example](https://github.com/fission/fission-kafka-sample#setup).
+You will also need a Kafka setup reachable from the Fission Kubernetes cluster.
+To set up Kafka on the Kubernetes cluster, see this [Fission Kafka example](https://github.com/fission/fission-kafka-sample#setup).
 
 ## Installation
 
-You can [install Kafka](https://github.com/helm/charts/tree/master/incubator/kafka) through the incubator helm chart .
+You can [install Kafka](https://github.com/helm/charts/tree/master/incubator/kafka) through the incubator helm chart.
 
 ## Overview
 
-Before we dive into details, let's walk through overall flow of event and functions involved.
+Before the details, here's the overall flow of events and functions involved.
 
 1. A Go producer function (producerfunc) acts as a producer and drops a message in a Kafka topic named `input`.
 2. Fission kafka trigger activates and invokes another function (consumerfunc) with body of Kafka message.
@@ -104,8 +104,8 @@ The resulting directory structure will look like below:
 ```
 
 We are now ready to package this code and create a function so that we can execute it later.
-Following commands will create a environment, package and function.
-Verify that build for package succeeded before proceeding.
+The following commands create an environment, package, and function.
+Verify that the package build succeeded before proceeding.
 
 ```sh
 $ fission env create --name goenv --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
@@ -123,7 +123,7 @@ Building in directory /usr/src/kafka-zip-tzsu-1bicov
 
 ### Consumer function
 
-The consumer function is nodejs function which takes the body of the request, appends a "Hello" and returns the resulting string.
+The consumer function is a Node.js function which takes the body of the request, appends a "Hello" and returns the resulting string.
 
 ```js
 module.exports = async function (context) {
@@ -193,7 +193,7 @@ Hello {"name":"value 2018-10-29T10:46:12Z "}
 
 ## Introducing an error
 
-Let's introduce an error scenario - instead of consumer function returning a 200, you can return 400 which will cause an error:
+Let's introduce an error scenario - instead of the consumer function returning a 200, you can return 400 which will cause an error:
 
 ```js
 module.exports = async function (context) {
@@ -232,5 +232,5 @@ Request returned failure: 400
 
 ## More examples
 
-- The [Kafka sample available here](https://github.com/fission/fission-kafka-sample) uses Kafka integration to build a IoT fleet management.
-  It also uses JVM Java environment to create functions.
+- The [Kafka sample available here](https://github.com/fission/fission-kafka-sample) uses Kafka integration to build an IoT fleet management system.
+  It also uses a JVM Java environment to create functions.

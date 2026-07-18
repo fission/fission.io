@@ -6,8 +6,8 @@ description: >
   Gradually shift HTTP traffic to a new function version with a CanaryConfig, using Prometheus health checks to auto-rollback on failure.
 ---
 
-This tutorial walks you through setting up a canary config to roll out a new version of a function with minimal risk.
-Traffic to the new version is increased gradually, starting at 0% and going all the way to 100%, and is rolled back automatically if the new version becomes unhealthy.
+**A CanaryConfig gradually shifts HTTP traffic to a new function version, using Prometheus health checks to roll back automatically if the new version becomes unhealthy.**
+Traffic starts at 0% and increases in steps up to 100%, unless the failure threshold is exceeded first.
 
 ### Setup & pre-requisites
 
@@ -20,23 +20,17 @@ If no reachable Prometheus endpoint is configured, the canary deployment feature
 
 #### Canary Config parameters
 
-A Canary Config has the following parameters :
+A Canary Config has the following parameters:
 
-* **duration**: Specifies how frequently user traffic needs to be incremented for the new version of function
-  
-* **failurethreshold**: Specifies the threshold in percentage beyond which the new version of a function is declared unhealthy
-  
-* **newfunction**: Specifies the name of the latest version of the function
-  
-* **oldfunction**: Specifies the name of the current stable version of the function
-  
-* **trigger**: Specifies the name of the http trigger object
-  
-* **weightincrement**: Specifies the percentage increase of user traffic towards the new version of the function
-  
-* **failureType**: Specifies how the health of the new version of a function is checked.
-  The only supported type is `status-code` (the HTTP status code), so a function that returns a status code other than 200 is considered unhealthy.
-  This field is set in the CanaryConfig spec; the CLI does not expose a flag for it.
+| Parameter | Description |
+|---|---|
+| `duration` | How frequently user traffic is incremented for the new version of the function |
+| `failurethreshold` | The percentage threshold beyond which the new version of a function is declared unhealthy |
+| `newfunction` | Name of the latest version of the function |
+| `oldfunction` | Name of the current stable version of the function |
+| `trigger` | Name of the HTTP trigger object |
+| `weightincrement` | Percentage increase of user traffic toward the new version at each step |
+| `failureType` | How the health of the new version is checked. The only supported type is `status-code` (the HTTP status code), so a function that returns a status code other than 200 is considered unhealthy. Set in the CanaryConfig spec — the CLI does not expose a flag for it. |
 
 For example, suppose the current stable version of a function is `fn-a-v1` and the new version is `fn-a-v2`.
 We want to increment traffic towards the new version in steps of 30% every 1m, with a failure threshold of 10%.
@@ -95,20 +89,24 @@ $ fission canary create --name canary-1 --newfunction fna-v2 --oldfunction fna-v
 
 #### Steps to verify the status of a canary deployment
 
+Check the status of the canary deployment of the new version of the function:
+
 ```bash
 $ fission canary get --name canary-1
 ```
 
-This prints the status of the canary deployment of the new version of the function.
+The status is one of:
 
-1. The status is "Pending" if the canary deployment is in progress.
-2. The status is "Succeeded" if the new version of the function is receiving 100% of the user traffic.
-3. The status is "Failed" if the failure threshold reached for the new version of the function and as a result 100% of the traffic gets routed to the old version of the function(rollback).
-4. The status is "Aborted" if there were some failures during the canary deployment.
+| Status | Meaning |
+|---|---|
+| `Pending` | The canary deployment is in progress |
+| `Succeeded` | The new version of the function is receiving 100% of the user traffic |
+| `Failed` | The failure threshold was reached, so 100% of the traffic was routed back to the old version of the function (rollback) |
+| `Aborted` | There were some failures during the canary deployment |
 
-#### Note
+#### Running canaries faster than the default scrape interval
 
 The `scrape_interval` for Prometheus server is 1m by default.
 If the "duration" parameter needs to be less than 1m, the `scrape_interval` parameter needs to configured to a much lower value.
 This can be done by updating the config map for prometheus server.
-Just updating the config map is enough, prometheus server need not be restarted.
+Updating the config map is enough; the prometheus server does not need to be restarted.

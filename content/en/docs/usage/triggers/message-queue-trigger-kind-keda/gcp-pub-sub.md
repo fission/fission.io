@@ -6,13 +6,10 @@ date: 2022-01-25T11:39:35+05:30
 weight: 4
 ---
 
-Fission supports Message Queue Trigger using Google Cloud Platform's Pub Sub via Keda.
-GCP PubSub is a global messaging system for event driven systems and streaming analytics.
-With Fission's Keda based message queue trigger, you can leverage GCP's PubSub system to create an event driven application.
+**This guide shows you how to invoke a Fission function from a message in a GCP Pub/Sub topic, using Fission's Keda-based message queue trigger.**
+GCP Pub/Sub is a global messaging system for event-driven systems and streaming analytics.
 
-In this document we will demonstrate how to use a GCP PubSub trigger to invoke a Fission function.
-
-## Pre requisites
+## Prerequisites
 
 We'll assume you have Fission and Kubernetes installed.
 If not, please head over to the [Fission install guide]({{% ref "../../../installation/_index.en.md" %}}).
@@ -40,11 +37,9 @@ Creating Topics in Google Cloud Platform Pub Sub
 
 #### Setting up Authentication
 
-When dealing with an external system, authentication is extremely important.
-In this section we will setup authentication to ensure that only our Fission function can send & receive messages from the message queue.
-You can refer to the detailed [Steps to Setup Authentication](https://cloud.google.com/pubsub/docs/reference/libraries#setting_up_authentication) for GCP PubSub.
-
-If you followed this correctly, you will have a `json` file downloaded to your system with the credentials.
+Authentication ensures that only your Fission function can send and receive messages on the queue.
+Follow GCP's [Steps to Setup Authentication](https://cloud.google.com/pubsub/docs/reference/libraries#setting_up_authentication) for Pub/Sub.
+This downloads a `json` file with the credentials, which you'll use below.
 
 ## Overview
 
@@ -64,9 +59,9 @@ You can get the source code for the sample app explained in this document in our
 
 ### Secret
 
-We will first create a `secret.yaml` file that will contain the credentials for our function to connect to GCP queue to send and receive messages.
-This demo requires `GoogleApplicationCredentials` env variable to be set.
-Using the following command, we'll create the required secret.
+We'll create a Kubernetes secret holding the credentials our function needs to connect to the GCP queue.
+This demo requires the `GoogleApplicationCredentials` env variable to be set.
+The following command creates the secret:
 
 ```bash
 kubectl create secret generic pubsub-secret --from-file=GoogleApplicationCredentials=filename.json --from-literal=PROJECT_ID=project_id
@@ -160,7 +155,7 @@ Parameter list:
 ### Specs
 
 You can also use the following Fission spec.
-Read our giude on how to use [Fission spec](https://fission.io/docs/usage/spec/).
+Read our guide on how to use [Fission spec](https://fission.io/docs/usage/spec/).
 
 ```bash
 fission spec init
@@ -207,10 +202,9 @@ Messages in the GCP Pub/Sub response queue
 
 ## Debugging
 
-For debugging, you can check the logs of the pods created in the `fission` and `default` namespace.
+For debugging, check the logs of the pods created in the `fission` and `default` namespace.
 
-Typically, all function pods would be created in the `default` namespace.
-Based on the environment name, the pods would be created in the `default` namespace.
-You can check consumer and producer function logs.
+Function pods are typically created in the `default` namespace, named based on the environment.
+Check both the consumer and producer function logs.
 
 Try out the [Sample app](#sample-app) to see it in action.

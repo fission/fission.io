@@ -5,6 +5,8 @@ description: >
   Source Code Organization and Your Development Workflow
 ---
 
+**Specify your whole Fission application — environments, functions, triggers — as version-controlled YAML, and deploy it with a single idempotent `fission spec apply`.**
+
 You've made a Hello World function in your favorite language, and you've run it on your Fission deployment.
 What's next?
 
@@ -36,7 +38,7 @@ Applying a Fission spec goes through these steps:
   (This deletion is limited to resources that were created by a previous _apply_; this makes sure that Fission doesn't delete unrelated resources.
   See below for how this calculation works.)
 
-Note that running _apply_ more than once is equivalent to running it once: in other words, it's ***idempotent***.
+Running _apply_ more than once is equivalent to running it once: in other words, it's ***idempotent***.
 
 ## Usage Summary
 
@@ -87,9 +89,11 @@ This tutorial assumes you've already set up Fission, and tested a simple hello w
 To learn how to do that, head over to the [installation guide]({{% ref "../../installation" %}}).
 
 We'll make a small calculator app with one python environment and two functions, all of which will be declaratively specified using YAML files.
-This is a somewhat contrived example, but it is just meant as an illustration.
+This is a contrived example, meant purely as an illustration.
 
 ### Make an empty directory
+
+Create a working directory for the tutorial:
 
 ```bash
 $ mkdir spec-tutorial
@@ -106,15 +110,15 @@ This creates a `specs/` directory.
 You'll see a `fission-config.yaml` in there.
 This file has a unique ID (deployment ID) in it; everything created on the cluster from these specs will be annotated with that deployment ID.
 
-Note that the deployment ID is generated automatically whenever you initialized the specs directory.
-In some cases you may want to do initialization for multiple times.
-In order to update to the same set of resources, you can specify the deployment ID by adding `--deployid`.
+The deployment ID is generated automatically when you initialize the specs directory.
+In some cases you may want to run initialization multiple times.
+To update the same set of resources each time, specify the deployment ID with `--deployid`.
 
 ```bash
 $ fission spec init --deployid xxxx-yyyy-zzzz
 ```
 
-### Setup a Python environment
+### Set up a Python environment
 
 ```bash
 $ fission env create --spec --name python --image ghcr.io/fission/python-env --builder ghcr.io/fission/python-builder
@@ -139,7 +143,7 @@ We will put the functions in their own directory with the requirements.txt file.
 
 ```
 
-First function simply returns a simple web form, here are the contents of the file `form.py`:
+The first function returns a simple web form; here are the contents of the file `form.py`:
 
 ```python
 def main():
@@ -213,7 +217,7 @@ You should see no errors.
 
 ## Apply: deploy your functions to Fission
 
-You can simply use apply to deploy the environment, functions and HTTP triggers to the cluster.
+You can use apply to deploy the environment, functions, and HTTP triggers to the cluster.
 This command will wait for builds of both functions to complete before exiting:
 
 ```bash
@@ -269,7 +273,7 @@ Let's try modifying a function: let's change the `calc-eval` function to support
 ```
 
 You can add the above lines to `eval.py`.
-To deploy your changes, simply apply the specs again:
+To deploy your changes, apply the specs again:
 
 ```bash
 $ fission spec apply --wait
@@ -328,7 +332,7 @@ To improve the portability, you can specify a URL that points to the target arch
 
 ## Custom Resources References
 
-You can refer latest definitions for Fission Custom Resources at [doc.crds.dev/github.com/fission/fission](https://doc.crds.dev/github.com/fission/fission)
+You can find the latest definitions for Fission Custom Resources at [doc.crds.dev/github.com/fission/fission](https://doc.crds.dev/github.com/fission/fission)
 
 ## More Examples
 

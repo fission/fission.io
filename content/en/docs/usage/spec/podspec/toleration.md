@@ -5,15 +5,14 @@ description: >
   Add tolerations to a Fission environment's PodSpec so functions schedule onto tainted nodes reserved for specific hardware or workloads.
 ---
 
-**Taints and tolerations** are mechanisms to influence scheduling of pods in Kubernetes.
-There are use cases where you want to schedule specific pods onto machines with certain hardware or specific capabilities such as CPU intensive instances.
-The basic mechanism works by applying taints on nodes of a cluster and tolerations on pods.
-The pods with tolerations matching a certain taint can get scheduled on those nodes.
+**Add tolerations to a function's PodSpec so it schedules only onto nodes with matching taints.**
 
-Now you can specify tolerations on functions in the function specification.
-Let's start with tainting two nodes with "reservation=fission" and two nodes with "reservation=microservices" as shown below.
-The intent is that two nodes are optimized for functions and other two nodes in cluster are better optimized for long running microservices.
-We want to schedule functions on nodes with taints meant for functions.
+Taints and tolerations control pod scheduling in Kubernetes.
+A taint on a node repels pods; a toleration on a pod lets it land on a node with a matching taint.
+This is useful when specific pods need machines with certain hardware or capabilities, such as CPU-intensive instances.
+
+You specify tolerations on a function's PodSpec in the environment spec.
+The example below taints two nodes with `reservation=fission` and two nodes with `reservation=microservices`, so that functions schedule onto the nodes reserved for them and long-running microservices schedule onto the others.
 
 ```bash
 $ kubectl taint nodes gke-fission-dev-default-pool-87c8b616-549c \
@@ -27,13 +26,13 @@ node "gke-fission-dev-default-pool-87c8b616-pg05" tainted
 node "gke-fission-dev-default-pool-87c8b616-t5q1" tainted
 ```
 
-First, we create a nodejs environment spec file.
+Create a nodejs environment spec file:
 
 ```bash
 $ fission env create --spec --name nodejs --image ghcr.io/fission/node-env --builder ghcr.io/fission/node-builder
 ```
 
-Let's add PodSpec and toleration for "reservation=fission" to `.spec.runtime`:
+Add the PodSpec toleration for `reservation=fission` to `.spec.runtime`:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -49,7 +48,7 @@ spec:
         effect: "NoSchedule"
 ```
 
-You should env have an environment spec file like this:
+You should now have an environment spec file like this:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -77,7 +76,7 @@ spec:
   version: 2
 ```
 
-Once we apply fission specs and run the function - you will notice that the pods go only on nodes with taints that match the toleration:
+After applying the specs and running the function, the pods land only on nodes with taints that match the toleration:
 
 ```bash
 $ kubectl get pod -o wide

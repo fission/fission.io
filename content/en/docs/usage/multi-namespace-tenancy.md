@@ -6,8 +6,8 @@ description: >
   Onboard and offboard namespaces at runtime with fission tenant enable/disable — no control-plane restart — each tenant isolated by its own keys and RBAC.
 ---
 
-Fission can serve functions in more than one namespace.
-Since v1.27.0 the recommended way to control **which** namespaces Fission manages is the **tenant mode**: you onboard or offboard a namespace at runtime with a single `fission tenant` command, and the control plane keeps running — no restart, no re-specialization of existing functions.
+**Onboard or offboard a namespace at runtime with a single `fission tenant` command — the control plane keeps running, with no restart and no re-specialization of existing functions.**
+Fission can serve functions in more than one namespace, and since v1.27.0 this *tenant mode* is the recommended way to control which namespaces it manages.
 
 Each onboarded namespace (a *tenant*) gets its own narrow RBAC and its own derived signing key, so one namespace cannot read another's Secrets or invoke as another's identity.
 
@@ -78,7 +78,7 @@ fission tenant disable --namespace team-a
 ```
 
 This tears down the namespace's Fission RBAC and derived key.
-Your Functions, Packages, and Triggers are left in place — they simply stop being served — so re-enabling the tenant later restores them.
+Your Functions, Packages, and Triggers are left in place, not deleted — they stop being served, so re-enabling the tenant later restores them.
 If the namespace still has functions, `disable` refuses unless you pass `--force`:
 
 ```sh

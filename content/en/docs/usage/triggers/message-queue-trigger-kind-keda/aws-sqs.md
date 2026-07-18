@@ -5,9 +5,9 @@ draft: false
 weight: 2
 ---
 
-This tutorial will demonstrate how to use a AWS SQS trigger to invoke a function.
+**This tutorial shows you how to connect an AWS SQS queue to a Fission function using a KEDA-based message queue trigger.**
 We'll assume you have Fission and Kubernetes installed.
-If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
+If not, head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
 
 You will also need AWS SQS setup which is reachable from the Fission Kubernetes cluster.
 
@@ -15,11 +15,11 @@ You will also need AWS SQS setup which is reachable from the Fission Kubernetes 
 
 If you want to setup SQS on the Kubernetes cluster, you can use the [information here](https://github.com/localstack/localstack) or you can create queue using your aws account [docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-setting-up.html).  
 
-Also note that, if you are using localstack then it is only good for testing and dev environments and not for production usage.
+Localstack is only for testing and dev environments — not for production usage.
 
 ## Overview
 
-Before we dive into details, let's walk through overall flow of event and functions involved.
+Here's the overall flow of events and functions involved.
 
 1. A Go producer function (producerfunc) or aws cli command which acts as a producer and drops a message in a SQS queue named `input`.
 2. Fission SQS trigger activates and invokes another function (consumerfunc) with body of SQS message.
@@ -28,8 +28,9 @@ Before we dive into details, let's walk through overall flow of event and functi
    If there is an error, the message is dropped in error queue named `error`.
 
 {{% notice info %}}
-When communicating to localstack we need aws cli installed in the respactive container(deployment). This is because it uses aws configuration to connect to localstack.
-Below are the command to create and send the message to a queue
+When communicating to localstack we need aws cli installed in the respective container (deployment).
+This is because it uses aws configuration to connect to localstack.
+Below are the commands to create a queue and send a message to it.
 
 ```bash
 aws sqs create-queue --queue-name input
@@ -45,7 +46,7 @@ aws sqs send-message --queue-url https://sqs.ap-south-1.amazonaws.com/xxxxxxxx/i
 
 ### Producer Function
 
-The producer function is a go program which creates a message with timestamp and drops into a queue `input`.
+The producer function is a Go program which creates a message with a timestamp and drops it into the `input` queue.
 For brevity all values have been hard coded in the code itself.
 
 ``` go
@@ -89,11 +90,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {​
 }
 ```
 
-Since the go program uses SQS queue, we need to create the input queue to run the above program.
+Since the Go program writes to the SQS queue, you need to create the `input` queue before running it.
 
 We are now ready to package this code and create a function so that we can execute it later.
-Following commands will create a environment, package and function.
-Verify that build for package succeeded before proceeding.
+The following commands create an environment, package, and function.
+Verify that the package build succeeded before proceeding.
 
 ```sh
 $ mkdir sqs && cd sqs
@@ -116,7 +117,7 @@ Building in directory /usr/src/sqs-zip-xpoi-1bicov
 
 ### Consumer function
 
-The consumer function is nodejs function which takes the body of the request, appends a "Hello" and returns the resulting string.
+The consumer function is a Node.js function which takes the body of the request, appends "Hello", and returns the resulting string.
 
 ```js
 module.exports = async function (context) {
@@ -148,18 +149,21 @@ fission mqt create  --name sqstest --function consumerfunc --mqtype aws-sqs-queu
 
 Parameter list:
 
-- queueURL - Full URL for the SQS Queue
-- awsRegion - AWS Region for the SQS Queue
-- secret - AWS credentials require to connect the queue e.g. below
+| Parameter | Description |
+|---|---|
+| `queueURL` | Full URL for the SQS queue |
+| `awsRegion` | AWS region for the SQS queue |
+| `secret` | AWS credentials required to connect to the queue (example below) |
 
 {{% notice info %}}
-If we are using localstack we don't have to give secret but if we are using aws SQS we need to provide the secret, below is the example to create secret
+With localstack you don't need to provide a secret.
+With AWS SQS you do — here's an example of creating one.
 
 ```bash
 kubectl create secret generic awsSecrets --from-env-file=./secret.yaml
 ```
 
-and secret.yaml file should contain values which should correspond with `parameter` name in `TriggerAuthentication.spec.secretTargetRef` like
+The `secret.yaml` file should contain values that correspond to the `parameter` name in `TriggerAuthentication.spec.secretTargetRef`, for example:
 
 ```yaml
 awsAccessKeyID=foo 
@@ -188,11 +192,11 @@ There are a couple of ways you can verify that the consumerfunc is called:
 {"level":"info","ts":1602057917.4880567,"caller":"app/main.go:165","msg":"message deleted"}
 ```
 
-- Go to aws SQS queue and check if messages are coming in output queue.
+- Go to the AWS SQS queue and check if messages are coming in on the `output` queue.
 
 ## Introducing an error
 
-Let's introduce an error scenario - instead of consumer function returning a 200, you can return 400 which will cause an error:
+Let's introduce an error scenario - instead of the consumer function returning a 200, you can return 400 which will cause an error:
 
 ```js
 module.exports = async function (context) {
@@ -214,6 +218,6 @@ $ fission fn test --name producerfunc
 Successfully sent to input
 ```
 
-We can verify the message in error queue as we did earlier:
+We can verify the message in the error queue as we did earlier:
 
-- Go to aws SQS queue and check if messages are coming in error queue.
+- Go to the AWS SQS queue and check if messages are coming in on the `error` queue.

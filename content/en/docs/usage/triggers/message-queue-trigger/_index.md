@@ -14,33 +14,36 @@ The Fission-kind message queue trigger was removed in the 1.20 release — use t
 
 ## How Message Queue Trigger Works
 
-A message queue trigger invokes a function based on messages from an message queue.
-It allows users to invoke function in an asynchronous  way by sending messages.
-Since all functions are invoked by HTTP calls, in order to support message queuing a component called `Message Queue Trigger`, which sits between message queue and user function, is introduced to subscribe to different message topics and invoke function when needed.
+**A message queue trigger invokes a function when a message arrives on a message queue.**
+Since all functions are invoked over HTTP, a component called `Message Queue Trigger` sits between the message queue and the user function to support message queuing.
+It subscribes to message topics and invokes the function when needed.
 
 {{< img "../assets/message-queue-trigger.png" "Fig.1 Overview" "45em" "1" >}}
 
-The Message Queue Trigger keeps watching the CRD changes of message queue trigger (messagequeuetriggers.fission.io).
+The Message Queue Trigger watches for changes to the message queue trigger CRD (`messagequeuetriggers.fission.io`).
+The command below creates a trigger that subscribes to the topic `foobar` and invokes the function `node` for each message it receives:
 
 ```bash
 $ fission mqtrigger create --name hello --function node --topic foobar
 ```
 
-When a message queue trigger was created with the command above, the Message Queue Trigger first subscribes to the topic `foobar` and waits for messages being published to message queue.
-As long as Message Queue Trigger receives a message from certain topic, it then sends a **POST** HTTP call to function `node` with the content body of message.
+When a message queue trigger is created with the command above, the Message Queue Trigger first subscribes to the topic `foobar` and waits for messages being published to the message queue.
+As long as the Message Queue Trigger receives a message on that topic, it sends a **POST** HTTP call to function `node` with the message content as the body.
 
-We may also want to receive success/error response after each function invocation. To achieve this, you can add additional `--resptopic` and `--errortopic` flags when creating message queue trigger.
+To receive a success or error response after each function invocation, add the `--resptopic` and `--errortopic` flags when creating the trigger:
 
 ```bash
 $ fission mqtrigger create --name hello --function node --topic foobar \
     --resptopic foo --errortopic bar --maxretries 3
 ```
 
-If a function returns with 200 HTTP status code, the MQTrigger will send the response body to `resptopic`; otherwise, MQTrigger will retry multiple times until reach `maxretries` and sends to `errortopic` if all invocations failed.
+If a function returns a 200 HTTP status code, the MQTrigger sends the response body to `resptopic`; otherwise, the MQTrigger retries until it reaches `maxretries` and sends to `errortopic` if all invocations failed.
 
 {{% notice warning %}}
 Currently, only **NATS Streaming** and **Kafka** type of message queue trigger supports error topic.
 {{% /notice %}}
+
+The following example creates a NATS Streaming trigger with a response topic:
 
 ```bash
 $ fission mqt create --name hellomsg --function hello --mqtype nats-streaming --topic newfile --resptopic newfileresponse

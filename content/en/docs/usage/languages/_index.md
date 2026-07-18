@@ -9,7 +9,7 @@ An **environment is the language-specific runtime in which your function execute
 
 Every Fission function references exactly one environment.
 The environment supplies a container image with the language runtime, a small web server that loads your code, and (optionally) a builder image that compiles source and fetches dependencies.
-This page lists the runtimes Fission ships, explains the environment interface versions, and links to per-language guides.
+Fission ships pre-built environments for several languages, and interface versions control how your code loads into each one.
 
 ## Supported language images
 

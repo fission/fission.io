@@ -6,16 +6,16 @@ description: >
   Define path parameters in an HTTP trigger URL with gorilla/mux patterns and read their values inside a function via request headers.
 ---
 
-To develop an application consists with REST APIs, we may want to access URL parameters in functions.
+**Define placeholders in the trigger URL, then read their values from the HTTP request header inside your function.**
 
-For example, a REST API with URL parameters like following  
+A REST API often carries its parameters in the URL path itself, for example:
 
 ```bash
 http://192.168.0.1/guestbook/{name}/{age}
 ```
 
-You can put parameter placeholders in value of `--url` flag.
-Since fission uses gorilla/mux as underlying URL router, you can also write regular expression to filter out illegal API requests.
+Put parameter placeholders in the value of the `--url` flag.
+Fission uses gorilla/mux as its underlying URL router, so you can also write a regular expression to filter out illegal API requests.
 
 ```bash
 $ fission httptrigger create --method GET \
@@ -25,9 +25,7 @@ $ fission httptrigger create --method GET \
     --url "/guestbook/{name}/{age:[0-9]+}" --function restapi-get
 ```
 
-Next step is to access the value of URL parameters.
-
-Due to some internal mechanism, the value of URL parameters will be attached to the HTTP request header like following.
+Fission attaches the value of each URL parameter to the HTTP request header, as shown below.
 
 ```text
 Accept-Encoding: gzip
@@ -48,9 +46,9 @@ X-Fission-Params-Name: Alice
 X-Fission-Params-Age: 23
 ```
 
-The header with key prefix `X-Fission-Params-` are the actual fields contain value of URL parameters we want to access to.
+The headers with key prefix `X-Fission-Params-` are the fields that hold the URL parameter values.
 
-One thing worth to notice is in some language like Go the header key will be displayed as `MIME canonical format`.
+In some languages, such as Go, the header key is displayed in `MIME canonical format`.
 For example:
 
 ```bash
@@ -61,6 +59,6 @@ url: /guestbook/{FooBar}
 header key: X-Fission-Params-Foobar
 ```
 
-You have to check the letter case of header key and do conversion if necessary in order to get the right parameter value.
+Check the letter case of the header key and convert it if necessary to get the right parameter value.
 
-(In Go, you can call `request.Header.Get()` to get the header value without worrying about the key cases.)
+(In Go, call `request.Header.Get()` to get the header value without worrying about the key case.)

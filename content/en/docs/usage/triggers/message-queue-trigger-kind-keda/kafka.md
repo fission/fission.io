@@ -7,12 +7,12 @@ weight: 1
 ---
 
 You can use the Kafka message queue trigger to receive messages from Apache Kafka and process them via Fission Function.
-Kafka can be onpremise, hosted on Kubernetes with [Strimzi](https://strimzi.io/) or cloud based such as [Confluent Cloud](https://www.confluent.io/confluent-cloud/).
+Kafka can be on-premise, hosted on Kubernetes with [Strimzi](https://strimzi.io/), or cloud based such as [Confluent Cloud](https://www.confluent.io/confluent-cloud/).
 
-We demonstrate how to use a Kafka trigger to invoke a Fission function.
+**This tutorial shows you how to use a Kafka trigger to invoke a Fission function.**
 We'll assume you have Fission and Kubernetes installed.
-If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
-Please install the [Keda Helm Chart](https://keda.sh/docs/latest/deploy/#helm) in your cluster for Fission Keda Kafka trigger to work.
+If not, head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
+Install the [Keda Helm Chart](https://keda.sh/docs/latest/deploy/#helm) in your cluster for the Fission Keda Kafka trigger to work.
 
 You will also need Kafka setup which is reachable from the Fission Kubernetes cluster.
 
@@ -24,7 +24,7 @@ You can also use service like [Confluent Cloud](https://www.confluent.io/conflue
 
 ## Overview
 
-Before we dive into details, let's walk through overall flow of event and functions involved.
+Here's the overall flow of events and functions involved.
 
 1. A Go producer function (producer) which acts as a producer and drops a message in a Kafka queue named `request-topic`.
 2. Fission Kafka trigger activates and invokes another function (consumer) with message received from producer.
@@ -44,7 +44,7 @@ We have two samples if you want to quickly try out the trigger.
 ### Kafka Topics
 
 If you are using Strimzi Kafka, you need to create the following topics in Kafka.
-Please replace namespace and cluster accordingly.
+Replace the namespace and cluster accordingly.
 
 1. Kafka `request-topic` for function invocation
 
@@ -62,7 +62,7 @@ Please replace namespace and cluster accordingly.
     EOF
     ```
 
-2. Kafta `response-topic` for function response
+2. Kafka `response-topic` for function response
 
     ```shell
     cat << EOF | kubectl create -n kafka -f -
@@ -78,7 +78,7 @@ Please replace namespace and cluster accordingly.
     EOF
     ```
 
-3. Kafta topic for error response
+3. Kafka topic for error response
 
     ```shell
     cat << EOF | kubectl create -n kafka -f -
@@ -94,7 +94,7 @@ Please replace namespace and cluster accordingly.
     EOF
     ```
 
-4. Please ensure your topics are created in Kafka and show ready status.
+4. Ensure your topics are created in Kafka and show ready status.
 
 ### Producer Function
 
@@ -164,8 +164,8 @@ If you want to use spec with SASL, you can check out this [example](https://gith
 {{% /notice %}}
 
 We are now ready to package this code and create a function so that we can execute it later.
-Following commands will create a environment, package and function.
-Verify that build for package succeeded before proceeding.
+The following commands create an environment, package, and function.
+Verify that the package build succeeded before proceeding.
 
 ```shell
 $ mkdir kafka_test && cd kafka_test
@@ -188,7 +188,7 @@ Building in directory /usr/src/kafka-zip-s2pj-wbk3yr
 
 ### Consumer function
 
-The consumer function is nodejs function which takes the body of the request, appends a "Hello" and returns the resulting string.
+The consumer function is a nodejs function which takes the body of the request, appends a "Hello", and returns the resulting string.
 
 ```js
 module.exports = async function (context) {
@@ -218,11 +218,13 @@ The response will be sent to `response-topic` queue and in case of consumer func
 fission mqt create --name kafkatest --function consumer --mqtype kafka --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata bootstrapServers=my-cluster-kafka-bootstrap.kafka.svc:9092 --metadata consumerGroup=my-group --metadata topic=request-topic  --cooldownperiod=30 --pollinginterval=5 --secret keda-kafka-secrets
 ```
 
-Parameter list:
+The `--metadata` flags above set these parameters:
 
-- bootstrapServers - Kafka brokers “hostname:port” to connect to for bootstrap.
-- consumerGroup - Name of the consumer group used for checking the offset on the topic and processing the related lag.
-- topic - Name of the topic on which processing the offset lag.
+| Parameter | Description |
+| --- | --- |
+| `bootstrapServers` | Kafka brokers "hostname:port" to connect to for bootstrap. |
+| `consumerGroup` | Name of the consumer group used for checking the offset on the topic and processing the related lag. |
+| `topic` | Name of the topic on which processing the offset lag. |
 
 {{% notice info %}}
 
@@ -273,11 +275,9 @@ There are a couple of ways you can verify that the consumer is called:
 
 ## Debugging
 
-For debugging, you can check the logs of the pods created in the `fission` and `default` namespace.
-
-Typically, all function pods would be created in the `default` namespace.
-Based on the environment name, the pods would be created in the `default` namespace.
-You can check consumer and producer function logs.
+For debugging, check the logs of pods in the `fission` and `default` namespaces.
+Function pods are typically created in the `default` namespace, named after the environment.
+Check both the consumer and producer function logs.
 
 ## Introducing an error
 

@@ -6,7 +6,7 @@ description: >
   Build or modify a Fission environment: implement the specialize HTTP contract, write the runtime and builder images, test locally, and add a new language.
 ---
 
-This guide walks through building a Fission environment from scratch, modifying an existing one, and adding support for a brand-new language.
+**This guide builds a Fission environment: from scratch, by modifying an existing one, or by adding support for a brand-new language.**
 It is the hands-on companion to the [Environments concept guide]({{% ref "/docs/concepts/environments.md" %}}), which explains *what* an environment is; here we cover *how* to build one.
 
 By the end you will understand the runtime HTTP contract every environment must implement, how the optional builder turns source into a deployment package, and the exact files you need to ship a new language.
@@ -84,11 +84,13 @@ Implement **both** `/specialize` (v1) and `/v2/specialize` (v2) — v2 is the mo
 
 The `functionName` field in the v2 body is language-specific — it is your environment's contract with function authors:
 
-- **Python** — `module.function` (loaded with `importlib`, e.g. `hello.main`).
-- **Node.js** — `filename.funcname`, or a bare filename for the default export.
-- **Go** — a symbol exported by the compiled plugin (`.so`), looked up with `plugin.Lookup`.
-- **JVM** — a fully-qualified class implementing `io.fission.Function`.
-- **Rust** — the name of a compiled binary in the deploy package, spawned as a child process.
+| Language | `functionName` convention |
+| --- | --- |
+| Python | `module.function`, loaded with `importlib` (e.g. `hello.main`) |
+| Node.js | `filename.funcname`, or a bare filename for the default export |
+| Go | a symbol exported by the compiled plugin (`.so`), looked up with `plugin.Lookup` |
+| JVM | a fully-qualified class implementing `io.fission.Function` |
+| Rust | the name of a compiled binary in the deploy package, spawned as a child process |
 
 Pick a convention that is natural for your language and document it in your environment's README.
 

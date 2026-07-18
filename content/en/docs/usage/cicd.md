@@ -7,7 +7,7 @@ description: >
   Automate Fission function deployment from CI/CD with declarative `fission spec apply`, a GitHub Actions pipeline, and registry-native OCI image delivery.
 ---
 
-This guide shows how to deploy Fission functions from a CI/CD pipeline instead of by hand.
+**Deploy Fission functions from a CI/CD pipeline instead of by hand.**
 It builds on two pieces that work together:
 
 - **Declarative [YAML specs]({{% ref "spec/_index.md" %}})** — your functions, environments, and triggers as version-controlled YAML, reconciled onto the cluster with one idempotent command. This is the CI/CD *control plane*.
