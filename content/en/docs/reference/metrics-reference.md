@@ -5,6 +5,8 @@ description: >
   Fission Metrics - List of Prometheus metrics in Fission
 ---
 
+**Fission exports Prometheus metrics for requests, cold starts, function calls, archive storage, and message-queue triggers, so you can monitor and alert on your deployment.**
+
 {{< notice info >}}
 To access these metrics, you'll need to install Fission 1.16 or higher.
 {{< /notice >}}
@@ -12,6 +14,8 @@ To access these metrics, you'll need to install Fission 1.16 or higher.
 {{< notice info >}}
 To access `fission_mqt_inprocess` and `fission_mqt_status` metrics, you'll need to install Fission 1.20.3 or higher.
 {{< /notice >}}
+
+The table below lists every metric, the component that emits it, its labels, and what it measures.
 
 | Metric Name | Component | Labels | Description |
 | ------------------- | --------- | ------------------ | -------------------- |

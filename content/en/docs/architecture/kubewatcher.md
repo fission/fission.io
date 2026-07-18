@@ -5,7 +5,7 @@ description: >
   Invoke functions on Kubernetes resource changes
 ---
 
-KubeWatcher is the Fission component that watches Kubernetes API resources and invokes a function whenever a watched object changes.
+**KubeWatcher is the Fission component that watches Kubernetes API resources and invokes a function whenever a watched object changes.**
 
 It lets you treat the cluster itself as an event source: create a `KubernetesWatchTrigger` that names a resource type and a target function, and KubeWatcher streams add, update, and delete events from the Kubernetes API to that function.
 This is useful for cluster automation tasks such as reacting to new Pods, Services, or completed Jobs without polling.

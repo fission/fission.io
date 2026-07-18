@@ -5,7 +5,7 @@ description: >
   Invoke functions on a cron schedule
 ---
 
-Timer is the Fission component that invokes a function on a recurring schedule defined by a cron expression.
+**Timer invokes a function on a recurring schedule defined by a cron expression.**
 
 It behaves like a Kubernetes CronJob, but instead of creating a Pod for each run it sends an HTTP request to the [Router]({{% ref "/docs/architecture/router.md" %}}) to invoke your function.
 This makes it well suited to lightweight, periodic background work such as cleanup jobs, polling, and scheduled reports.

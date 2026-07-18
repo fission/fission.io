@@ -5,7 +5,7 @@ description: >
   Where a function's source is compiled into a deployment archive
 ---
 
-The builder pod is the per-environment workload that compiles a source archive into a deployment archive used by the [function pod]({{% ref "/docs/architecture/function-pod.md" %}}).
+**The builder pod is the per-environment workload that compiles a source archive into a deployment archive** used by the [function pod]({{% ref "/docs/architecture/function-pod.md" %}}).
 
 {{% notice info %}}
 A builder pod exists only for environments that declare a builder image.
@@ -18,6 +18,8 @@ Each builder pod runs two containers that share a volume:
 - **Fetcher** — a sidecar that downloads the source archive from [StorageSvc]({{% ref "/docs/architecture/storagesvc.md" %}}), verifies its checksum, and uploads the resulting deployment archive back to StorageSvc after the build.
 
 ## Build pipeline
+
+The builder manager drives the fetcher and builder container through this sequence to turn a source archive into a deployment archive:
 
 ```mermaid
 sequenceDiagram

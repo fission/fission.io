@@ -17,6 +17,8 @@ This catches mistakes early — at `kubectl apply` or `fission ... create` time 
 
 ## Validation flow
 
+The diagram traces a create/update request through both validation gates to the point it is either persisted or denied.
+
 ```mermaid
 flowchart TB
   client["kubectl / CLI"]

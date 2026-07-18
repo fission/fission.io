@@ -5,6 +5,8 @@ description: >
   Environment variables used by Fission CLI
 ---
 
+**Fission CLI reads a small set of environment variables to find your Fission installation and its router, without you passing flags on every command.**
+
 ## Namespaces
 
 {{% notice info %}}
@@ -27,7 +29,7 @@ $ export FISSION_FUNCTION_NAMESPACE=<namespace>
 ## Fission Router Address
 
 {{% notice info %}}
-You don't need to set this if you're simply running `fission function test --name <fn>`, because Fission CLI uses **local port-forward** mechanism to talk to router pod.  
+You don't need to set this if you're running `fission function test --name <fn>`, because Fission CLI uses a **local port-forward** mechanism to talk to the router pod.  
 {{% /notice %}}
 
 {{% notice warning %}}
@@ -35,7 +37,7 @@ Fission CLI uses value in `FISSION_ROUTER_URL` if it's not empty instead of usin
 You need to ensure that the IP address in it is **accessible** from the public network.
 {{% /notice %}}
 
-It's convenient to set the `FISSION_ROUTER_URL` environment variable to the **externally-visible** address of the Fission router.
+Set the `FISSION_ROUTER_URL` environment variable to the **externally-visible** address of the Fission router.
 
 ### Clusters that only support NodePort
 
@@ -61,7 +63,7 @@ router           LoadBalancer   10.107.80.21     <pending>     80:31314/TCP     
 If the field `EXTERNAL-IP` shows `<pending>`, it means that kubernetes is waiting for cloud provider to allocate the public IP address.
 It often takes a few minutes to get an IP address.
 
-Then:
+Then export `FISSION_ROUTER_URL` from the hostname (AWS) or IP (GCP) field:
 
 ``` bash
 # AWS

@@ -7,17 +7,17 @@ description: >
 
 ## Docker desktop with Kubernetes
 
+**This page walks through installing and running Fission on Docker Desktop's built-in Kubernetes, including known issues and workarounds.**
 [Docker desktop](https://www.docker.com/products/docker-desktop) allows you to run and manage Docker and Kubernetes on workstations for local development.
-This tutorial will walk through setting up and using Fission on Docker for desktop and known issues and workarounds.
 
-You will need to enable Kubernetes by going to Kubernetes tab in preferences.
-If you are doing this first time then the downloading of Kubernetes binaries will take a few minutes.
-Once Kubernetes is fully running - you should see green icon and the text "Kubernetes is running" as shown in screenshot below.
+You will need to enable Kubernetes by going to the Kubernetes tab in preferences.
+If this is your first time, downloading the Kubernetes binaries will take a few minutes.
+Once Kubernetes is fully running, you should see a green icon and the text "Kubernetes is running" as shown in the screenshot below.
 
 ![Docker Desktop](../assets/docker-desktop.png)
 
-It should also configure Kubectl installed on your machine. For more details check documentation 
-specific to [Docker for Windows](https://docs.docker.com/docker-for-windows/) or [Docker for Mac](https://docs.docker.com/docker-for-mac/)
+Docker Desktop also configures `kubectl` on your machine.
+For more details, check the documentation specific to [Docker for Windows](https://docs.docker.com/docker-for-windows/) or [Docker for Mac](https://docs.docker.com/docker-for-mac/).
 
 ## Installing Fission
 
@@ -25,14 +25,14 @@ See [Fission installation]({{%ref "_index.en.md" %}}) to learn more how to insta
 
 ## Accessing Routes
 
-If you look at router service - it is exposed as random NodePort on host machine.
-The port can be found with the command below:
+The router service is exposed as a random NodePort on the host machine.
+Find the port with the command below:
 
 ```bash
 $ export PORT=$(kubectl get svc router -n fission -o jsonpath='{.spec.ports[0].nodePort}')
 ```
 
-So if we create a route to function, we should be able to access it as shown below:
+Create a route to the function and access it as shown below:
 
 ```bash
 $ fission route create --name helloscale --function helloscale --url helloscale
@@ -41,14 +41,13 @@ trigger 'helloscale' created
 $ curl http://localhost:$PORT/helloscale
 ```
 
-If you are using the `serviceType` as LoadBalancer, access router on its external IP address, by default using port `80`.
+If you are using `serviceType` LoadBalancer, access the router on its external IP address, using port `80` by default.
 
 ## Autoscaling
 
-Docker for desktop by default does not ship with metric server.
-So if you create a function of newdeployment executor type, you will see that autoscaling does not work as expected.
-This is because the HPA does not get actual consumption of pods and the value remains `<unknown>`.
-This can be fixed by installing the metric server.
+Docker for Desktop does not ship with a metrics server by default.
+So if you create a function with the `newdeployment` executor type, autoscaling will not work as expected, because the HPA cannot read actual pod consumption and the value remains `<unknown>`.
+For example, `kubectl get hpa` shows the target stuck at `<unknown>`:
 
 ```bash
 $ kubectl get hpa
@@ -56,13 +55,13 @@ NAME                                    REFERENCE                               
 newdeploy-helloscale-default-ql0uqiwp   Deployment/newdeploy-helloscale-default-ql0uqiwp   <unknown>/50%   1         6         1          20h
 ```
 
-Install the [metrics-server](https://github.com/kubernetes-sigs/metrics-server) from its latest release:
+This can be fixed by installing the [metrics-server](https://github.com/kubernetes-sigs/metrics-server), starting with its latest release:
 
 ```bash
 $ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
 
-On Docker Desktop, the kubelet serving certificate is self-signed, so you must let metrics-server skip TLS verification.
+On Docker Desktop, the kubelet serving certificate is self-signed, so you must let the metrics server skip TLS verification.
 Patch the deployment to add the `--kubelet-insecure-tls` flag:
 
 ```bash
@@ -71,7 +70,7 @@ $ kubectl -n kube-system patch deployment metrics-server \
     -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
 ```
 
-After a few minutes you can validate that metrics-server is working by running:
+After a few minutes, validate that the metrics server is working by running:
 
 ```bash
 $ kubectl top node
@@ -79,7 +78,7 @@ NAME                 CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
 docker-for-desktop   662m         16%    1510Mi          79%
 ```
 
-You will also notice that HPA has picked up the values from pod and now you can do autoscaling!
+The HPA now picks up the pod values, so autoscaling works:
 
 ```bash
 $ kubectl get hpa
@@ -87,11 +86,11 @@ NAME                                    REFERENCE                               
 newdeploy-helloscale-default-gkxdkl8y   Deployment/newdeploy-helloscale-default-gkxdkl8y   20%/50%   1         6         1          48s
 ```
 
-Even after installing metric server if the HPA does not show the current usage of pod - please check if you have given limit as well as request limit for CPU while creating function:
+If the HPA still does not show current pod usage after installing the metrics server, check that you set both a limit and a request for CPU when creating the function:
 
 ```bash
 $ fission fn create --name helloscale --env nodescale  --code hello.js --executortype newdeploy \
                     --minmemory 64 --maxmemory 128 --mincpu 100 --maxcpu 500 --minscale 1 --maxscale 6  --targetcpu 50
 ```
 
-For more details on autoscaling please [check this section of documentation]({{% ref "../usage/function/executor.en.md" %}}#autoscaling)
+See [the autoscaling section of the documentation]({{% ref "../usage/function/executor.en.md" %}}#autoscaling) for more details.

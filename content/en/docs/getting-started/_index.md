@@ -6,7 +6,7 @@ description: >
   Your first Fission function in 5 minutes.
 ---
 
-This guide takes you from an empty Kubernetes cluster to a running serverless function in about five minutes.
+**This guide takes you from an empty Kubernetes cluster to a running serverless function in about five minutes.**
 You will install Fission, create a Python environment, write a one-line function, and call it two ways.
 
 This is the single happy path.
@@ -101,6 +101,8 @@ The client and server versions should both report {{< release-version >}}.
 ```sh
 fission version
 ```
+
+Then confirm the control plane components are healthy.
 
 ```sh
 fission check

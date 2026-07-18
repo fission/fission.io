@@ -11,8 +11,6 @@ Every function names an executor through its `InvokeStrategy.ExecutionStrategy.E
 The executor is the part of Fission that turns "this function needs to run" into a concrete Kubernetes pod serving HTTP.
 Fission ships exactly three executor types — `poolmgr`, `newdeploy`, and `container` — and your choice trades cold-start latency against resource isolation and scaling control.
 
-This page is the definitive comparison of the three executors, with a provisioning diagram for each and a function-lifecycle state diagram.
-
 ## Why it matters
 
 The executor is the single biggest lever over your function's latency and cost.

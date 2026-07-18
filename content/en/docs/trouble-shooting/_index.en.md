@@ -5,7 +5,7 @@ description: >
   Self-diagnose Fission problems: health checks, support dumps, component logs, and a symptom-to-fix map.
 ---
 
-This section helps you diagnose and fix problems with a running Fission installation.
+**This section helps you diagnose and fix problems with a running Fission installation.**
 Start here when a function returns errors, a build fails, a trigger does not fire, or a component pod is unhealthy.
 
 The fastest path to a root cause is almost always the same: confirm the control plane is healthy, then read the logs of the one component that owns the failing step.

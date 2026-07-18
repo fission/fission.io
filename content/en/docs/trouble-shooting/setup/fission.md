@@ -5,7 +5,7 @@ description: >
   Diagnose and fix problems installing or upgrading Fission: Helm, CRDs, and the admission webhook.
 ---
 
-This page covers problems that surface while installing or upgrading Fission itself with Helm — failed releases, CRD mismatches, and admission-webhook certificate errors.
+**This page helps you diagnose failed Helm installs and upgrades, CRD mismatches, and admission-webhook certificate errors.**
 For problems with a running function, build, or trigger, see [Troubleshooting]({{% ref "/docs/trouble-shooting/_index.en.md" %}}).
 For cluster-level problems (DNS, kubeconfig, volumes), see [Troubleshoot your Kubernetes cluster]({{% ref "/docs/trouble-shooting/setup/kubernetes.md" %}}).
 

@@ -5,7 +5,7 @@ description: >
   The Fission mental model: how functions, environments, triggers, and packages fit together.
 ---
 
-Fission lets you run short-lived functions on Kubernetes without managing pods, deployments, or services yourself.
+**Fission lets you run short-lived functions on Kubernetes without managing pods, deployments, or services yourself.**
 You write a function, point it at a language environment, and bind it to an event with a trigger.
 Fission turns that into running, autoscaled pods on demand.
 
@@ -24,6 +24,8 @@ Everything in Fission is built from four core objects, each backed by a Kubernet
 The relationship is simple: a Trigger fires, the request reaches your Function, and your Function runs inside a pod created from its Environment, using the code stored in its Package.
 
 ## How the objects relate
+
+The diagram below traces one request from event source to running pod:
 
 ```mermaid
 flowchart TB

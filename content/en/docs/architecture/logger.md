@@ -5,7 +5,7 @@ description: >
   Expose function pod logs for collection
 ---
 
-The logger makes each function pod's container logs discoverable on the node so a log shipper can collect them.
+**The logger makes each function pod's container logs discoverable on the node so a log shipper can collect them.**
 
 {{% notice info %}}
 The logger runs as a <a href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/" target="_blank">DaemonSet</a> — one replica per node — so every node manages the logs of the function pods scheduled on it.
@@ -18,6 +18,8 @@ The logger itself does not ship logs to a database.
 It maintains stable symlinks to function pod log files; a Fluent Bit sidecar container (using the `fission-fluentbit` ServiceAccount and config) runs alongside the logger in the same DaemonSet, tails those symlinks, and forwards the logs to a backend such as InfluxDB.
 
 ## How it works
+
+The reconciler watches function pods on its node, symlinks their log files under `/var/log/fission`, and the Fluent Bit sidecar tails those symlinks to ship logs onward:
 
 ```mermaid
 flowchart LR

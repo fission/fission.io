@@ -12,7 +12,12 @@ Please upvote [issue #1856](https://github.com/fission/fission/issues/1856) so w
 
 ## Upgrade to the latest Fission version
 
+**Every upgrade needs three steps, in order: replace the CRDs, update the CLI, then upgrade the chart.**
+Check the version-specific sections below for anything extra your target release requires.
+
 ### Upgrade/Replace the CRDs
+
+Apply the CRD manifest for the version you're upgrading to:
 
 ```sh
 kubectl replace -k "github.com/fission/fission/crds/v1?ref={{% release-version %}}"
@@ -20,11 +25,12 @@ kubectl replace -k "github.com/fission/fission/crds/v1?ref={{% release-version %
 
 ### Install the latest Fission CLI
 
-Please make sure you have the latest CLI installed. Refer to [Fission CLI Installation]({{< ref "_index.en.md#install-fission-cli">}})
+Make sure you have the latest CLI installed.
+Refer to [Fission CLI Installation]({{< ref "_index.en.md#install-fission-cli">}}).
 
 ### Upgrade Fission chart
 
- Update the helm repo and upgrade by mentioning the namespace Fission is installed in :
+Update the Helm repo, then upgrade by specifying the namespace Fission is installed in:
 
 ```sh
 export FISSION_NAMESPACE="fission"
@@ -115,24 +121,26 @@ See [Internal Service Authentication]({{% ref "internal-auth.md" %}}) for the fu
 
 ## Upgrade to 1.15.x release from 1.14.x release
 
-With 1.15.x release, following changes are made:
+**v1.15.0 merges the `fission-core` chart into `fission-all` and disables four previously-default components.**
 
-- `fission-core` chart is removed
-- `fission-all` chart is made similar `fission-core` chart
-- In the `fission-all` chart, the following components are disabled which were enabled by default earlier. If you want to enable them, please use `--set` flag.
+- The `fission-core` chart is removed.
+- The `fission-all` chart now covers what `fission-core` did.
+- In the `fission-all` chart, the components below are disabled by default (they were enabled before); re-enable any of them with the matching `--set` flag.
 
-  - nats - Set `nats.enabled=true` to enable Fission Nats integration
-  - influxdb - Set `influxdb.enabled=true` to enable Fission InfluxDB and logger component
-  - prometheus - Set `prometheus.enabled=true` to install Prometheus with Fission
-  - canaryDeployment - Set `canaryDeployment.enabled=true` to enable Canary Deployment
+| Component | Flag to re-enable | Effect |
+|---|---|---|
+| nats | `nats.enabled=true` | Fission NATS integration |
+| influxdb | `influxdb.enabled=true` | Fission InfluxDB and logger component |
+| prometheus | `prometheus.enabled=true` | Installs Prometheus with Fission |
+| canaryDeployment | `canaryDeployment.enabled=true` | Canary Deployment |
 
 _See [configuration](#configuration) below._
 
 ### Migrating from `fission-core` chart to `fission-all` chart
 
-`Fission-all` chart is now exactly similar to `fission-core` chart and can be used to migrate from `fission-core`.
+The `fission-all` chart is now chart-for-chart identical to `fission-core`, so it can replace it directly.
 
-If you are upgrading from the fission-core chart, you can use the following command to migrate with required changes.
+If you're upgrading from the `fission-core` chart, migrate with:
 
 ```console
 helm upgrade [RELEASE_NAME] fission-charts/fission-all --namespace fission
@@ -140,10 +148,11 @@ helm upgrade [RELEASE_NAME] fission-charts/fission-all --namespace fission
 
 ## Configuration
 
-See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). To see all configurable options with detailed comments:
+See [Customizing the Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing).
+To see all configurable options with detailed comments:
 
 ```console
 helm show values fission-charts/fission-all
 ```
 
-You may also `helm show values` on chart's dependencies for additional options.
+You may also run `helm show values` on the chart's dependencies for additional options.

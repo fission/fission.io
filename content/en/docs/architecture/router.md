@@ -18,6 +18,8 @@ It is served by the `fission-bundle` binary as the `router` service.
 
 ## Request flow
 
+This is the path a request takes from the client through the router's warm and cold paths to a function pod.
+
 ```mermaid
 flowchart TB
   client(["Client"]):::user

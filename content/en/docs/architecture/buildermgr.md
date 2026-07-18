@@ -71,11 +71,12 @@ A cross-namespace environment reference is rejected during the build as defense 
 
 The builder manager reads a few environment variables, set on the `buildermgr` deployment by the Helm chart:
 
-- `BUILDERMGR_PACKAGE_CONCURRENCY` — how many package builds run concurrently (default `5`).
-Each build holds a reconcile worker for the duration of the fetch, build, and upload.
-- `BUILDER_IMAGE_PULL_POLICY` — image pull policy for the builder container.
-- `LEADER_ELECTION_ENABLED` — enables leader election so only one `buildermgr` replica reconciles at a time.
-- `ENABLE_ISTIO` — adjusts builder pod annotations when running under Istio.
+| Variable | Default | Purpose |
+|:---------|:--------|:--------|
+| `BUILDERMGR_PACKAGE_CONCURRENCY` | `5` | How many package builds run concurrently; each build holds a reconcile worker for the duration of the fetch, build, and upload. |
+| `BUILDER_IMAGE_PULL_POLICY` | — | Image pull policy for the builder container. |
+| `LEADER_ELECTION_ENABLED` | — | Enables leader election so only one `buildermgr` replica reconciles at a time. |
+| `ENABLE_ISTIO` | — | Adjusts builder pod annotations when running under Istio. |
 
 ## Related
 
