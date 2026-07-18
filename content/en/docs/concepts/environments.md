@@ -26,6 +26,8 @@ An environment has up to two parts:
 - The **builder container** is optional.
   It compiles source code and gathers dependencies, turning a source archive into a runnable deployment archive.
 
+The diagram below traces that path end-to-end, from source archive to serving pod.
+
 ```mermaid
 flowchart TB
   subgraph env["Environment"]
@@ -99,12 +101,16 @@ The field accepts only `single` or `infinite`.
 
 ### Other spec fields worth knowing
 
-- **`poolsize`** — initial size of the pre-warm pool (relevant to v3 and the poolmgr executor).
-- **`resources`** — CPU/memory requests and limits for pre-warm pool pods.
-- **`terminationGracePeriod`** — seconds a pod may drain connections before termination; defaults to 360.
-- **`keeparchive`** — keep the extracted archive instead of a single unarchived file (used by the JVM environment because a `.jar` is itself a zip archive).
-- **`allowAccessToExternalNetwork`** — set to `true` to allow egress when Istio blocks external traffic by default.
-- **`imagepullsecret`** — secret used to pull the environment image from a private registry.
+The remaining spec fields each control one aspect of pool sizing, resource limits, or image access:
+
+| Field | Controls |
+| --- | --- |
+| **`poolsize`** | Initial size of the pre-warm pool (relevant to v3 and the poolmgr executor). |
+| **`resources`** | CPU/memory requests and limits for pre-warm pool pods. |
+| **`terminationGracePeriod`** | Seconds a pod may drain connections before termination; defaults to 360. |
+| **`keeparchive`** | Keep the extracted archive instead of a single unarchived file (used by the JVM environment because a `.jar` is itself a zip archive). |
+| **`allowAccessToExternalNetwork`** | Set to `true` to allow egress when Istio blocks external traffic by default. |
+| **`imagepullsecret`** | Secret used to pull the environment image from a private registry. |
 
 ## Related
 

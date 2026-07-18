@@ -5,7 +5,7 @@ description: >
   Invoke functions from message queue events
 ---
 
-A Message Queue Trigger binds a message queue topic to a function so that each message on that topic invokes the function with the message as the request body.
+**A Message Queue Trigger binds a message queue topic to a function so that each message on that topic invokes the function with the message as the request body.**
 
 The current architecture is built on [KEDA](https://keda.sh) (Kubernetes Event-Driven Autoscaling).
 For each `MessageQueueTrigger` of kind `keda`, Fission provisions a KEDA `ScaledObject` and a connector Deployment that consumes the queue, calls your function through the [Router]({{% ref "/docs/architecture/router.md" %}}), and scales with the depth of the queue, including scaling to zero when the topic is idle.
@@ -68,13 +68,15 @@ See the [Message Queue Trigger (KEDA) usage guides]({{% ref "/docs/usage/trigger
 
 These fields on the `MessageQueueTrigger` spec map to KEDA `ScaledObject` settings:
 
-- `pollingInterval` - how often KEDA checks the queue and adjusts the connector Deployment.
-- `cooldownPeriod` - how long to wait after the last active reading before scaling back to zero.
-- `minReplicaCount` / `maxReplicaCount` - the bounds KEDA scales the connector Deployment between.
-- `metadata` - scaler-specific trigger metadata passed through to KEDA.
-- `secret` - the name of a secret used to build a KEDA `TriggerAuthentication`.
-- `respTopic` / `errorTopic` - topics for function output and error responses.
-- `maxRetries` - how many times the connector retries a failed invocation.
+| Field | Purpose |
+|:------|:--------|
+| `pollingInterval` | How often KEDA checks the queue and adjusts the connector Deployment. |
+| `cooldownPeriod` | How long to wait after the last active reading before scaling back to zero. |
+| `minReplicaCount` / `maxReplicaCount` | The bounds KEDA scales the connector Deployment between. |
+| `metadata` | Scaler-specific trigger metadata passed through to KEDA. |
+| `secret` | The name of a secret used to build a KEDA `TriggerAuthentication`. |
+| `respTopic` / `errorTopic` | Topics for function output and error responses. |
+| `maxRetries` | How many times the connector retries a failed invocation. |
 
 ## Legacy built-in trigger
 

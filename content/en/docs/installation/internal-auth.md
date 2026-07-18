@@ -5,8 +5,8 @@ description: >
   HMAC-signed authentication for Fission's internal control-plane RPCs
 ---
 
-Starting with [v1.23.0]({{% ref "../releases/v1.23.0.md" %}}), Fission ships **application-layer HMAC authentication** for the internal HTTP channels between its control-plane services.
-This is distinct from the end-user [function-invocation authentication]({{% ref "authentication.md" %}}) (JWT, opt-in): internal auth protects in-cluster RPCs and is **enabled by default**.
+**Fission signs internal control-plane RPCs with application-layer HMAC authentication, enabled by default since [v1.23.0]({{% ref "../releases/v1.23.0.md" %}}).**
+This is distinct from the end-user [function-invocation authentication]({{% ref "authentication.md" %}}) (JWT, opt-in), which protects function invocations rather than in-cluster RPCs.
 
 ## What it protects
 
@@ -48,6 +48,8 @@ Every Fission control-plane component (storagesvc, executor, router, buildermgr,
 
 ## Bring your own master secret
 
+Pass an explicit master secret at install time to skip the auto-generated key:
+
 ```bash
 helm install fission fission-charts/fission-all -n fission \
   --set internalAuth.secret="$(openssl rand -base64 32)"
@@ -56,6 +58,8 @@ helm install fission fission-charts/fission-all -n fission \
 If `internalAuth.secret` is set, the chart honours it instead of auto-generating one.
 
 ## Disable everywhere
+
+Turn off signing across all five channels at install time:
 
 ```bash
 helm install fission fission-charts/fission-all -n fission \
@@ -94,6 +98,8 @@ helm upgrade fission fission-charts/fission-all -n fission \
 Because every per-service key is derived from the master via HKDF, this single sequence rotates the key for all five channels atomically.
 
 ## Toggle interaction matrix
+
+The verifier (server) and signer (client) toggles are set independently per rollout, so mixed states are possible; this table shows the outcome of each combination:
 
 | Server (verifier) | Client (signer) | Outcome |
 |---|---|---|

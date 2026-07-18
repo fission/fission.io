@@ -5,10 +5,9 @@ description: >
   Generated reference material: the Fission CLI, custom resources, metrics, and a glossary of terms.
 ---
 
-This section is the lookup desk for Fission.
-Most pages here are generated directly from the {{< release-version >}} source, so they track the product exactly rather than describing how it once behaved.
+**Come here when you already know what you want and need the exact flag, field, or metric name — not a walkthrough.**
+Most pages in this section are generated directly from the {{< release-version >}} source, so they track the product exactly rather than describing how it once behaved.
 
-Reach for reference material when you already know what you want to do and just need the precise flag, field, or metric name.
 For task walkthroughs and explanations, start in [Usage]({{% ref "/docs/usage/_index.en.md" %}}) or [Concepts]({{% ref "/docs/concepts/_index.md" %}}) instead.
 
 ## What you'll find here

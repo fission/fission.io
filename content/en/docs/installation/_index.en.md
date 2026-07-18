@@ -5,7 +5,7 @@ weight: 4
 description: >
   Installation guide for Fission installation
 ---
-Welcome! This guide will get you up and running with Fission on a Kubernetes cluster.
+**This guide installs Fission on a Kubernetes cluster, from prerequisites to your first running function.**
 
 ## Prerequisites
 
@@ -146,11 +146,11 @@ helm install --version {{% chart-version %}} --namespace $FISSION_NAMESPACE fiss
 ### Without helm
 
 This method uses `kubectl apply` to install Fission.
-You can edit the YAML file before applying it to your cluster, if you want to change anything in it.
-
+You can edit the YAML file before applying it to your cluster.
 
 {{% notice info %}}
-'fission' is the recommended namespace to install fission. If you want to install in another namespace, please consider to use `helm` or generate yaml for first with `helm template` command.
+`fission` is the recommended namespace for installing Fission.
+To install into another namespace, use `helm`, or generate the YAML first with `helm template`.
 {{% /notice %}}
 
 Choose _one_ of the following commands to run:
@@ -196,7 +196,8 @@ kubectl config set-context --current --namespace=default #to change context to d
 
 ## Install Fission CLI
 
-Fission CLI helps you to operate Fission. Checkout [Fission CLI reference]({{< ref "fission-cli" >}}) for more.
+The Fission CLI operates Fission from the command line.
+See the [Fission CLI reference]({{< ref "fission-cli" >}}) for more.
 
 {{% notice info %}}
 Pick the asset that matches your CPU architecture: use `arm64` on Apple Silicon Macs and ARM Linux, `amd64` on Intel/AMD.
@@ -249,9 +250,10 @@ Alternatively, you can use the Linux binary on WSL, or download this windows exe
 
 
 ## Verify fission installation
-Once you are done with fission installation, run these commands to make sure fission is installed successfully and all core components of fission are working properly.
 
-To check fission is installed successfully, run this command and verify both client and server version should be same. 
+These two commands confirm Fission is installed and its core components are healthy.
+
+Run this command and verify the client and server versions match.
 
 ```shell
 $ fission version
@@ -268,7 +270,7 @@ server:
 
 ```
 
-To check fission core components are working properly, run this command.
+Run this command to check that Fission's core components are working properly.
 
 ```shell
 $ fission check
@@ -286,17 +288,16 @@ fission-version
 ```
 
 {{% notice info %}}
-If you have enabled authentication while installing fission, mentioned above commands won't show proper result. You need to generate token to make it work.
-
-See [How to generate auth token]({{% ref "authentication.md" %}}#generating-auth-token), if authentication is enabled.
+If you enabled authentication while installing Fission, the commands above won't show a proper result until you generate an auth token.
+See [How to generate auth token]({{% ref "authentication.md" %}}#generating-auth-token).
 {{% /notice %}}
 
 ## Run an example
 
-Finally, you're ready to use Fission!
+You're ready to use Fission.
 
 {{% notice info %}}
-It might take one or two mintues for fission to start running. check the status using `kubectl get pods -n fission`. 
+It might take one or two minutes for Fission to start running. Check the status using `kubectl get pods -n fission`.
 {{% /notice %}}
 
 {{% notice info %}}
@@ -407,6 +408,4 @@ For more language tutorials, visit [Language]({{< ref "../usage/languages/" >}})
 
 If something went wrong, we'd love to help -- please [drop by the Fission slack](/slack) and ask for help.
 
-Check out the
-[examples](https://github.com/fission/examples/tree/main)
-for some example functions.
+Check out the [examples](https://github.com/fission/examples/tree/main) for some example functions.

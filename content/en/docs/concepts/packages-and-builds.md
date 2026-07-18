@@ -73,6 +73,7 @@ flowchart TB
 3. The builder pod runs the build command, producing a deployment archive.
 4. The deployment archive is uploaded to the **storage service**, which stores it (S3 or local backend, via the minio-go client).
 5. The builder manager records the upload result, sets `buildstatus: succeeded`, and updates dependent functions so they pick up the new archive.
+6. The function pod fetches the deployment archive from the package when it starts.
 
 {{% notice warning %}}
 As of v1.24.0, builder pods no longer inherit the builder service-account token, and cross-namespace Environment or Package references are rejected.

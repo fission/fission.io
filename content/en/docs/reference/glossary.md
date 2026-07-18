@@ -5,6 +5,8 @@ description: >
   Fission Glossary - List of terms used in Fission.
 ---
 
+**Look up a Fission-specific term used across these docs, from *archive* to *time trigger*.**
+
 [A](#a) | [B](#b) | [C](#c) | [D](#d) | [E](#e) | [F](#f) | [G](#g) | [H](#h) | [I](#i) | [J](#j) | [K](#k) | [L](#l) | [M](#m) | [N](#n) | [O](#o) | [P](#p) | [Q](#q) | [R](#r) | [S](#s) | [T](#t) | [U](#u) | [V](#v) | [W](#w) | [X](#x) | [Y](#y) | [Z](#z)
 
 ## A
@@ -25,7 +27,7 @@ An archive is a zip file containing the source code or compiled binaries.
 
 ### Builder Pod
 
-Builder pod is a specialized pod that builds the source archive and generate a deployment archive.
+Builder pod is a specialized pod that builds the source archive and generates a deployment archive.
 
 ### Build Container
 
@@ -33,7 +35,7 @@ Builder Container compiles function source code into executable binary/files and
 
 ### Builder Manager
 
-In a nutshell, the builder Manager manages the builds of function source code.
+The builder manager manages the builds of function source code.
 
 Once an environment that contains a builder image is created, the builder manager will then create the Kubernetes service and deployment under the `default` namespace to start the environment builder. And once a package that contains a source archive is created, the builder manager talks to the environment builder to build the function’s source archive into a deploy archive for function deployment.
 
@@ -55,7 +57,7 @@ A canary config is a custom resource used to configure a canary deployment for F
 
 ### Canary Deployment
 
-Canary Deployment is a deployment strategy to deploy a new version of your Fission function to a cluster incrementally with minimal risk in a way that it gradually serves user traffic from 0% to 100%.
+Canary Deployment is a deployment strategy that rolls out a new version of your Fission function to a cluster incrementally, with minimal risk, gradually shifting user traffic from 0% to 100%.
 
 ### CEL Validation
 
@@ -64,7 +66,7 @@ They reject invalid resources early — for example, an unknown executor type, a
 
 ### Cold Start
 
-It is defined as the setup time that is required for a function to be up and running when it is invoked for the first time in a defined period to serve user requests.
+The setup time required for a function to be up and running when it is invoked for the first time in a defined period to serve user requests.
 
 ### Concurrency
 
@@ -153,8 +155,6 @@ Function pod is where a Fission function is loaded and executed. A function pod 
 
 It is a type of trigger that invokes a Fission function whenever there is an HTTP request. You can specify a relative URL and HTTP method for an HTTP trigger.
 
----
-
 ## I
 
 ---
@@ -195,27 +195,29 @@ Logger is a daemonset that forwards function logs to a centralized database serv
 
 ### Max CPU
 
-Maximum CPU to be assigned to pod *(function in case of New Deploy)* *(In millicore, minimum 1)*
+Maximum CPU to be assigned to a pod — a function pod, in the case of New Deploy — in millicores (minimum 1).
 
 ### Min CPU
 
-Minimum CPU to be assigned to pod *(function in case of New Deploy)* *(In millicore, minimum 1)*
+Minimum CPU to be assigned to a pod — a function pod, in the case of New Deploy — in millicores (minimum 1).
 
 ### Max Memory
 
-Maximum memory to be assigned to pod *(function in case of New Deploy)* *(In megabyte)*
+Maximum memory to be assigned to a pod — a function pod, in the case of New Deploy — in megabytes.
 
 ### Min Memory
 
-Minimum memory to be assigned to pod *(function in case of New Deploy)**(In megabyte)*
+Minimum memory to be assigned to a pod — a function pod, in the case of New Deploy — in megabytes.
 
 ### Max Scale
 
-Maximum number of pods *(Uses resource inputs to configure HPA)*
+Maximum number of pods.
+Uses the resource inputs to configure the HPA.
 
 ### Min Scale
 
-Minimum number of pods *(Uses resource inputs to configure HPA)*
+Minimum number of pods.
+Uses the resource inputs to configure the HPA.
 
 ### Message Queue Trigger
 
@@ -227,7 +229,7 @@ A message queue trigger listens to messages in a message queue and invokes a fun
 
 ### New Deploy
 
-New Deploy is a type of [executor](#executor) that creates a Kubernetes deployment along with a service and a Horizontal Pod Autoscalar (HPA) for function execution.
+New Deploy is a type of [executor](#executor) that creates a Kubernetes deployment along with a service and a Horizontal Pod Autoscaler (HPA) for function execution.
 
 ### New Function - *Canary Config*
 
@@ -263,7 +265,7 @@ PoolManager manages pools of generic containers and function containers.
 
 ### Pool Size
 
-The size of pool i.e.: number of pods in a pool.
+The number of pods in a pool.
 
 ## Q
 
@@ -356,7 +358,7 @@ Specifies the name of the http trigger object.
 
 ### Volume
 
-A volume is Kubernetes represents a directory with data that is accessible across multiple containers in a pod.
+A volume in Kubernetes represents a directory with data that is accessible across multiple containers in a pod.
 
 ## W
 

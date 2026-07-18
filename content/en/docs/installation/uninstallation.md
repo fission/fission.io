@@ -5,8 +5,8 @@ weight: 71
 description: >
   Uninstallation guide for Fission
 ---
-If you want to completely uninstall Fission from your cluster, the following command will help you do that.
-This might be required in situations where in you want to uninstall the current version and [install Fission](/docs/installation/) as a fresh instance.
+**This command removes Fission from your cluster.**
+Use it when you want to uninstall the current version and [install Fission](/docs/installation/) as a fresh instance.
 
 ```bash
 helm uninstall <release name>

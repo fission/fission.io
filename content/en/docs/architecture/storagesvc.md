@@ -5,7 +5,7 @@ description: >
   The home for source and deployment archives
 ---
 
-The storage service is where Fission keeps the **source** and **deployment archives** of packages that are too large to embed inline.
+**The storage service is where Fission keeps the source and deployment archives of packages that are too large to embed inline.**
 
 {{% notice info %}}
 StorageSvc is a core Fission component, running as the `storagesvc` deployment inside `fission-bundle`.
@@ -69,10 +69,14 @@ The pruner is enabled by default and can be turned off with `storagesvc.archiveP
 
 Set under `persistence` and `storagesvc` in the Helm chart:
 
-- `persistence.storageType` — `local` or `s3`.
-- `persistence.s3` — bucket, region, and `endPoint` for the S3-compatible backend.
-- `persistence.enabled` / `persistence.storageClass` — PersistentVolumeClaim settings for the `local` backend.
-- `storagesvc.archivePruner.enabled` / `storagesvc.archivePruner.interval` — orphaned-archive garbage collection.
+| Value | Default | Purpose |
+|:------|:--------|:--------|
+| `persistence.storageType` | — | Backend selector: `local` or `s3`. |
+| `persistence.s3` | — | Bucket, region, and `endPoint` for the S3-compatible backend. |
+| `persistence.enabled` | — | Enables the PersistentVolumeClaim for the `local` backend. |
+| `persistence.storageClass` | — | StorageClass for the `local` backend's PersistentVolumeClaim. |
+| `storagesvc.archivePruner.enabled` | `true` | Turns the archive pruner on or off. |
+| `storagesvc.archivePruner.interval` | `60 minutes` | How often the pruner runs. |
 
 ## Related
 

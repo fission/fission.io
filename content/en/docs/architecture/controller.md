@@ -11,7 +11,7 @@ It was deprecated in 1.18.0 and removed from the default install in 1.20.0.
 This page is kept for reference and migration guidance only.
 {{% /notice %}}
 
-The Controller was a standalone REST API server that the Fission CLI used to talk to.
+The **Controller** was a standalone REST API server that the Fission CLI used to talk to.
 It exposed CRUD endpoints for Fission resources and proxied requests to internal services.
 
 Every Fission resource has always been stored as a [Kubernetes Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), so the Controller was an extra hop in front of the Kubernetes API server.

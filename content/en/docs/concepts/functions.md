@@ -18,7 +18,7 @@ This page covers what a function looks like, how it is invoked, and the essentia
 Functions are the reason to use Fission at all.
 Understanding the entry-point contract and the always-HTTP invocation model explains both how to write functions and how they behave at runtime — including cold starts, concurrency, and scaling.
 
-## A function is just an entry point
+## A function is an entry point
 
 Most environments expect a module that exposes one entry-point function with a language-specific interface.
 Here is a minimal NodeJS function:

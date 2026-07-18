@@ -6,11 +6,10 @@ description: >
   How Fission's components fit together to build, route, and run your functions on Kubernetes.
 ---
 
+**This page maps how Fission's components fit together and how a request flows through them, so you know which ones to learn first.**
+
 Fission is built from a set of small components that run inside your Kubernetes cluster.
 Together they turn a function's source code into a running pod and route requests to it on demand.
-
-This page gives you the big picture so you know what each component does and how a request flows through the system.
-From there you can dive into the per-component pages for the details.
 
 It helps to split the components into two groups.
 **Core components** are the ones you should understand to use Fission effectively.

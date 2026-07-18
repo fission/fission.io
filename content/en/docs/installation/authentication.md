@@ -7,15 +7,14 @@ description: >
 
 ## Authentication for Fission Functions
 
-When using Fission, if you are using an ingress, you might already have some form of authentication in place for external calls.
-But if you aren't, Fission didn't provide a way to configure authentication for your API calls.
+Starting with [v1.16.0]({{% ref "../releases/v1.16.0.md" %}}), Fission lets you enable an **authentication mechanism for Fission function invocations**.
+If you're using an ingress, you might already have some authentication in place for external calls.
+This feature instead protects direct calls to Fission's own function endpoints, which previously had no authentication option.
 
-Starting with [v1.16.0]({{% ref "../releases/v1.16.0.md" %}}), Fission allows you to have an **authentication mechanism in place for Fission function invocations**.
-
-## Understanding Authentication for Fission Functions
+## How Authentication Works
 
 Fission does so by enabling authentication for Fission Router.
-This is an optional feature that can be enabled/disable depending on your requirement.
+This is an optional feature that can be enabled or disabled depending on your requirement.
 
 When enabled, a new endpoint for authentication will be registered in the router.
 All the API calls to Fission functions will now be routed through function endpoints using authentication token.
@@ -24,6 +23,8 @@ Fission also creates a Secret named `router` in the `fission` namespace with a d
 This Secret is mounted as a volume on the router pod.
 You first create an auth token by providing the `username` and `password`.
 The generated token must then be passed in the `Authorization` header of every subsequent function call.
+
+The sequence below traces this end to end, from login to an authenticated function call:
 
 ```mermaid
 sequenceDiagram
@@ -114,7 +115,7 @@ fission function test --name hello
 hello, world!
 ```
 
-If the environment variable is not set, you need to pass it using the `--header` flag
+If the environment variable is not set, you need to pass it using the `--header` flag:
 
 ```bash
 fission function test --name hello --header "Authorization: Bearer <token>"
@@ -130,21 +131,21 @@ Error: Error calling function hello: 401; Please try again or fix the error: {"m
 
 ### Fission Function API call
 
-In order to execute Fission functions over API calls, you need to first ensure that your fission function has an associate `route` created.
+To execute Fission functions over API calls, you need to first ensure that your fission function has an associated `route` created.
 
-Creating a route for your Fission function
+Create a route for your Fission function:
 
 ```bash
 fission route create --name sample --method GET --url /hello --function hello
 ```
 
-The next step is to forward the port
+The next step is to forward the port:
 
 ```bash
 kubectl port-forward svc/router 8888:80 -nfission
 ```
 
-Using `curl` you can invoke the function by passing the `auth token` in the header
+Using `curl`, you can invoke the function by passing the `auth token` in the header:
 
 ```bash
 curl http://localhost:8888/hello -H "Authorization: Bearer ${FISSION_AUTH_TOKEN}"

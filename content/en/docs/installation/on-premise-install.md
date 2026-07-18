@@ -5,10 +5,9 @@ description: >
   Installation guide for offline on-premise.  
 ---
 
-There are certain use cases where the Kubernetes cluster might be in an environment with restricted internet or no internet access at all due to business or compliance reasons.
+**Deploy and run Fission in a Kubernetes cluster with restricted or no internet access — for example due to business or compliance reasons — by mirroring every required image into a registry the cluster can reach.**
 
-This guide explains the way to deploy and use a Fission instance in such a cluster.
-It is assumed that the CI/CD tooling which deploys to Kubernetes will have internet access, but not the Kubernetes cluster itself.
+This guide assumes your CI/CD tooling has internet access, even though the Kubernetes cluster itself does not.
 
 ## Cloning Fission Images
 
@@ -47,27 +46,29 @@ ghcr.io/fission/node-env
 
 ### With Helm
 
-If Kubernetes cluster has Helm installed then you can download the charts of appropriate versions from [charts repo](https://github.com/fission/fission-charts). You can then install the chart by passing the tar file or by extracting the chart into a directory. The key here is to update the image references in values.yaml to images in your internal docker registry.
+If the Kubernetes cluster has Helm installed, download the chart for the version you want from the [charts repo](https://github.com/fission/fission-charts) and install it by passing the tar file or by extracting the chart into a directory.
+The key step is to update the image references in `values.yaml` to point at your internal registry.
 
 ```bash
 $ helm install ./fission-all-{{% chart-version %}}.tgz
 ```
 
-On an on premise environment where a LoadBalancer can not be provisioned, the services should be exposed with type "NodePort" instead of default LoadBalancer.
+On-premise environments generally can't provision a LoadBalancer, so expose the services as type `NodePort` instead:
 
 ```yaml
 routerServiceType: NodePort
 serviceType: NodePort
 ```
 
-If you want to enable Prometheus with Fission, then you will have to download the chart for Prometheus and related images in registry before you can install Fission.
+To enable Prometheus with Fission, download the Prometheus chart and mirror its images into your registry before installing Fission.
 
 ### Without Helm
 
-If you are not using Helm then you can use the YAML files from [Fission releases](https://github.com/fission/fission/releases) to install Fission.
-Once you have downloaded the YAML you will have to change the references to Fission images and prometheus images if you want to enable prometheus.
+If you are not using Helm, use the YAML files from [Fission releases](https://github.com/fission/fission/releases) to install Fission instead.
+Once downloaded, edit the YAML to point at your mirrored Fission images, and at your mirrored Prometheus images if you want to enable Prometheus.
 
-For all services that use the type `LoadBalancer` it should be changed to NodePort. The service then can be accessed on the host's IP and NodePort.
+Change every service of type `LoadBalancer` to `NodePort`.
+The service is then reachable on the host's IP and NodePort.
 
 ```yaml
 type: NodePort
@@ -77,12 +78,13 @@ type: NodePort
 
 ### Builder
 
-In a offline setup the builder won't work if it has to fetch dependencies from the internet.
-If you are using a private artifact manager such as Artifactory or Nexus to fetch dependencies, then the URLs for those servers have to be configured in the respective build tool.
-Please check the build tool's documentation to configure the custom artifact server from which dependencies can be fetched.
+In an offline setup, the builder can't fetch dependencies from the internet.
+If you use a private artifact manager such as Artifactory or Nexus, configure its URL in the respective build tool.
+Check that build tool's documentation for how to point it at a custom artifact server.
 
 ### LoadBalancer & Accessing Fission Functions
 
-As mentioned earlier, in an on premise environment a LoadBalancer can not be provisioned, hence the services should be exposed with type "NodePort" instead of default LoadBalancer.
+As with the install step above, on-premise environments can't provision a LoadBalancer, so services are exposed as type `NodePort` instead.
 
-If you are exposing functions outside the cluster using an ingress controller then you would have to use `--createingress` flags when creating routes. You can then access functions on ingress controllers nodeport and the function path.
+To expose functions outside the cluster through an ingress controller, use the `--createingress` flag when creating routes.
+Functions are then reachable on the ingress controller's NodePort plus the function path.

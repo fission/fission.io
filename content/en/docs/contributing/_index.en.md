@@ -6,10 +6,10 @@ description: >
   Set up a development environment, build and deploy Fission from source, and open your first pull request.
 ---
 
-Thanks for helping make Fission better 😍!
+**This page gets you from a fresh clone to a running, hand-built cluster and your first pull request.**
 
+Thanks for helping make Fission better 😍!
 Fission is a community project, and contributions are welcome across the board: code, documentation, feature proposals, issue triage, samples, and content.
-This page gets you from a fresh clone to a running, hand-built cluster and your first pull request.
 
 Before you start, please read the [code of conduct](https://github.com/fission/.github/blob/main/CODE_OF_CONDUCT.md).
 By participating, you agree to uphold it.
