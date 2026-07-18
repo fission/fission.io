@@ -4,9 +4,9 @@ description: "Writing Go functions with fission"
 weight: 10
 ---
 
-With Go plugin mechanism, fission supports Go as one of function languages.
+**Write, build, and deploy Go functions on Fission using its native Go plugin mechanism.**
 
-In this usage guide we'll cover how to use this environment, write functions, and work with dependencies.
+This guide covers setting up the Go environment, writing functions, handling HTTP requests/responses, and managing dependencies.
 
 ### Before you start
 
@@ -20,9 +20,8 @@ fission version
 
 ### Add the Go environment to your cluster
 
-Unlike Python, Go is a compiled language that means we need to compile source code before running it.
-Fortunately, builder manager within fission does all this hard work automatically when a Go function/package is created.
-The Go builder will convert a source package into a deployable package.
+Unlike Python, Go is a compiled language, so source code must be compiled before it can run.
+Fission's builder manager handles this automatically when a Go function/package is created, converting a source package into a deployable package.
 
 Due to the Go plugin mechanism, the Go plugin can only be loaded by the server with the exact same Go version.
 Please use the `fission release version` as image tag instead of `latest` when adding a Go environment, so that you won't experience the compatibility issue once we bump up the Go version.
@@ -63,15 +62,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-The entrypoint of function let go server to know how to load-in plugin file correctly.
-Here, our first hello world function's entrypoint is simply the name of function: `Handler`.
+The entrypoint tells the Go server how to load the plugin file correctly.
+Here, our first hello world function's entrypoint is the name of the function: `Handler`.
 
 ```bash
 # Create golang env with builder image to build go plugin
 $ fission fn create --name helloworld --env go --src hw.go --entrypoint Handler
 ```
 
-Before accessing function, need to ensure deploy package of function is in _succeeded_ state.
+Before accessing the function, ensure the deployed package is in the _succeeded_ state.
 
 ```bash
 fission pkg info --name <pkg-name>
@@ -96,7 +95,7 @@ See [here]({{% ref "../triggers/_index.md" %}}) for how to setup different trigg
 
 ### HTTP requests and HTTP responses
 
-From the sample above we know that go server passes HTTP `Request` and `ResponseWriter` to user function for further processing.
+The sample above shows the Go server passing the HTTP `Request` and `ResponseWriter` to the function for further processing.
 
 ``` go
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -104,7 +103,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-Following we will go through steps for how to accessing/controlling the requests/responses.
+The following sections show how to access requests and control responses.
 
 #### Accessing HTTP Requests
 
@@ -144,8 +143,8 @@ $ curl -X GET http://$FISSION_ROUTER/<url> -H 'HEADER_KEY_1: foo' -H 'HEADER_KEY
 v1: foo, v2: [bar]
 ```
 
-One thing worth to notice is all header key will be converted to the canonical format of the MIME header key.
-You can access to header value by calling `request.Header.Get()`.
+All header keys are converted to the canonical format of the MIME header key.
+You can access the header value by calling `request.Header.Get()`.
 However, if you prefer to access the value by map index you must convert key format with `textproto.CanonicalMIMEHeaderKey()`.
 
 ##### Query string
@@ -288,8 +287,8 @@ Date: Sat, 27 Oct 2018 15:00:14 GMT
 Otherwise, the client may receive unexpected status code.
 {{% /notice %}}
 
-You can set response status code by calling function `writer.WriteHeader()`.
-However, one thing wroth to notice is if a function writes response body before status code, the client will receive HTTP 200 OK no matter what actual status code is.
+You can set the response status code by calling `writer.WriteHeader()`.
+If a function writes the response body before the status code, the client receives HTTP 200 OK regardless of the actual status code.
 
 ```go
 package main
@@ -351,14 +350,14 @@ $ fission pkg create --env go --src go.zip
 
 #### Add dependencies to vendor directory
 
-**`This part is for the old Go environment that doesn't support Go Moudle`**
+**`This part is for the old Go environment that doesn't support Go Module`**
 
 Unlike pip for Python has been widely adopted by community, there are various dependency management tools for Go like *gb*, *dep* and *glide*.
 Hence fission Go builder image doesn't contain a default tool for downloading dependencies during build processes.
 
-In order to support 3rd party dependencies, users need to put all necessary packages to `vendor` directory and archive it into source archive.
+To support 3rd party dependencies, users need to put all necessary packages into the `vendor` directory and archive it into the source archive.
 
-Following I will use **glide** to demonstrate how to add dependencies to source archive.
+The example below uses **glide** to demonstrate how to add dependencies to a source archive.
 
 ```bash
 $ mkdir example
@@ -435,8 +434,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-To set build timestamp we can set it through `ldflags` during build process.
-But it's not supported with original build script.
+The build timestamp can be set through `ldflags` during the build process.
+The original build script doesn't support this, so it needs to be modified.
 
 Since we understand how a build script (customBuild.sh) works, let's try to modify it a little bit.
 
@@ -516,9 +515,9 @@ $ fission fn create --name g1 --env go --src example.zip --entrypoint Handler \
                     --mincpu 20 --maxcpu 100 --minmemory 128 --maxmemory 256
 ```
 
-So what's the reasonable resource setting for a function? It really depends on what type of your function is.
+The right resource setting for a function depends on what the function does.
 
-Here's a tip, use `kubectl top` to get actual resource consumption of pod when doing benchmarking. Then you will know what's the best setting for a Go function.
+Use `kubectl top` to get the actual resource consumption of the pod while benchmarking, so you know the best setting for a Go function.
 
 ```bash
 $ kubectl top pod -l functionName=g1

@@ -94,10 +94,12 @@ fission httptrigger create --url /hello --method GET --function hello \
   --route-provider gateway --gateway my-gateway --route-host acme.com --route-path /hello
 ```
 
-- `--gateway name` (or `namespace/name`, repeatable) — the parent Gateway the `HTTPRoute` attaches to.
-- `--route-host demo.example.com` (repeatable) — the hostname the route matches; empty matches all hosts.
-- `--route-path /hello` — the request path the route matches; defaults to the trigger URL/prefix.
-- `--route-annotation key=value` (repeatable) — annotation added to the generated route object.
+| Flag | Description |
+|------|-------------|
+| `--gateway` | Parent Gateway to attach to: `name` or `namespace/name`. Repeatable. |
+| `--route-host` | Hostname the route matches, e.g. `demo.example.com`. Repeatable. Empty matches all hosts. |
+| `--route-path` | Request path the route matches, e.g. `/hello`. Defaults to the trigger URL/prefix. |
+| `--route-annotation` | `key=value` annotation added to the generated route object. Repeatable. |
 
 Set `gatewayAPI.enabled=true` in the chart first, and run a Gateway API implementation (Envoy Gateway, Istio, NGINX Gateway Fabric, …).
 See [Exposing functions with the Gateway API]({{% ref "../gateway-api/_index.md" %}}) for the full setup.
@@ -116,9 +118,11 @@ NAME                                 METHOD HOST     URL      INGRESS FUNCTION_N
 94cd5163-30dd-4fb2-ab3c-794052f70841 GET    acme.com /hello   true    hello
 ```
 
-- `--ingressrule host=path` — set the Ingress host and path rule.
-- `--ingressannotation key=value` — add an annotation (repeatable); the format depends on your Ingress controller.
-- `--ingresstls secretName` — reference a Secret holding the TLS key and certificate.
+| Flag | Description |
+|------|-------------|
+| `--ingressrule` | `host=path` — sets the Ingress host and path rule. |
+| `--ingressannotation` | `key=value` annotation. Repeatable. Format depends on your Ingress controller. |
+| `--ingresstls` | Name of the Secret holding the TLS key and certificate. |
 
 For Ingress to work, you must deploy an Ingress controller in your cluster.
 See [Exposing functions with Ingress]({{% ref "../ingress/_index.md" %}}) for controller examples and extra settings.

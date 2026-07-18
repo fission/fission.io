@@ -15,20 +15,20 @@ These metrics let you monitor the health of both your functions and the Fission 
 Prometheus is a monitoring and alerting tool.
 It uses a multi-dimensional data model with time series data identified by metric name and key/value pairs.
 
-Fission exposes metrics which are pulled and operated by Prometheus at regular intervals.
+Fission exposes metrics that Prometheus scrapes at regular intervals.
 
 ### Grafana
 
 Grafana is a visualization tool which can query, visualize, alert on and understand metrics.
-It supports Prometheus as it's data source.
+It supports Prometheus as its data source.
 
 ## Setting up
 
 There are different ways to install Prometheus.
-It can be installed and run in and outside containers.
-Since Fission itself runs in Kubernetes, we'll use the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator) which is a way of installing Prometheus as Kubernetes Custom Resource.
+It can run in or outside containers.
+Since Fission itself runs in Kubernetes, we'll use the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator), which installs Prometheus as a Kubernetes Custom Resource.
 
-### Prerequisite
+### Prerequisites
 
 - Kubernetes cluster
 - Fission [installed in the cluster](/docs/installation/)
@@ -82,6 +82,8 @@ grafana:
     enable: true
 ```
 
+Apply it with a Helm upgrade:
+
 ```bash 
 helm upgrade fission fission-charts/fission-all --namespace fission -f values.yaml
 ```
@@ -134,9 +136,9 @@ There are a few more Fission metrics available which are listed in [Metrics Refe
 
 ## Fission Dashboard
 
-With Grafana, visuals dashboards can be created to monitor multiple metrics in an organized way.
+With Grafana, visual dashboards can be created to monitor multiple metrics in an organized way.
 
-You can refer to the two dashboards in the Fission Helm chart [Fission user dashboard](https://github.com/fission/fission/blob/main/charts/fission-all/dashboards/fission-user-dashboard.json) and [Fission admin dashboard](https://github.com/fission/fission/blob/main/charts/fission-all/dashboards/fission-admin-dashboard.json) that shows metrics from all the major components of Fission.
+You can refer to the two dashboards in the Fission Helm chart [Fission user dashboard](https://github.com/fission/fission/blob/main/charts/fission-all/dashboards/fission-user-dashboard.json) and [Fission admin dashboard](https://github.com/fission/fission/blob/main/charts/fission-all/dashboards/fission-admin-dashboard.json) that show metrics from all the major components of Fission.
 
 Once imported with the earlier step [Enabling Prometheus Service Monitors and Grafana Dashboards in Fission](/docs/usage/observability/prometheus/#enabling-prometheus-service-monitors-and-grafana-dashboards-in-fission), the dashboards will look similar to images below.
 

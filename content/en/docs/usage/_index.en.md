@@ -31,8 +31,8 @@ Operational and advanced topics:
 * [Expose functions as MCP tools]({{% ref "function/mcp-tools.md" %}}) — let LLM agents discover and invoke functions over the Model Context Protocol.
 * [Expose functions with the Gateway API]({{% ref "gateway-api/_index.md" %}}) — route external traffic through a Kubernetes Gateway (the successor to Ingress).
 * [Multi-namespace tenancy]({{% ref "multi-namespace-tenancy.md" %}}) — onboard and offboard namespaces at runtime with `fission tenant enable`/`disable`, each isolated by its own keys and RBAC.
-* [Pull from a private registry]({{% ref "function/private-registry.md" %}})
-* [Use a URL as an archive source]({{% ref "function/url-as-archive-source.md" %}})
-* [Enable Istio on Fission]({{% ref "function/enabling-istio-on-fission.md" %}})
+* [Pull from a private registry]({{% ref "function/private-registry.md" %}}) — authenticate image pulls with an `imagePullSecret` when an environment image lives in a private registry.
+* [Use a URL as an archive source]({{% ref "function/url-as-archive-source.md" %}}) — embed a remote URL directly in a package archive instead of uploading the file, for faster, more portable package creation.
+* [Enable Istio on Fission]({{% ref "function/enabling-istio-on-fission.md" %}}) — install Fission alongside the Istio service mesh with sidecar injection enabled.
 
 For reproducible, version-controlled deployments, also read about the [spec-based workflow]({{% ref "/docs/usage/spec/_index.md" %}}) and how to [deploy from CI/CD]({{% ref "cicd.md" %}}).

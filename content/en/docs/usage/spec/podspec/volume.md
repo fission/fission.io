@@ -5,13 +5,10 @@ description: >
   Define and mount Kubernetes volumes on Fission function containers through PodSpec so stateful functions can access attached data.
 ---
 
-Functions are great for stateless things but there are use cases where functions deal with data, that is best attached as volume.
-For example, functions used in data pipelines would benefit a lot from volumes being attached to functions.
-
-With PodSpec you can now attach a volume to a function.
-You have to **define a volume** and then **mount it on specific container**.
-In the following example we create a simple volume with Kubernetes downward API which dumps information of labels in a file.
-The volume is then mounted on the function container at `/etc/funcdata`.
+**PodSpec lets you attach a Kubernetes volume to a function's container.**
+Functions are typically stateless, but workloads like data pipelines need access to attached data.
+You **define a volume** and then **mount it on a specific container**.
+The example below creates a volume with the Kubernetes downward API, which dumps pod label information into a file, and mounts it on the function container at `/etc/funcdata`.
 
 ```yaml
 apiVersion: fission.io/v1

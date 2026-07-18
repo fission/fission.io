@@ -6,9 +6,9 @@ description: >
   Install Fission with the Istio service mesh and enable automatic sidecar injection for Fission and function pods.
 ---
 
-This tutorial sets up Fission with [Istio](https://istio.io/), a service mesh for Kubernetes.
-It was originally tried on GKE but should work on any equivalent setup.
-We assume you already have a working Kubernetes cluster.
+**Install Fission with [Istio](https://istio.io/) so the router, executor, and function pods each get an automatically injected sidecar proxy.**
+This was originally tried on GKE but should work on any equivalent setup.
+It assumes you already have a working Kubernetes cluster.
 
 {{% notice info %}}
 The command output below was captured on an older Fission and Istio release, so version strings and the exact set of pods will differ on a current install.
@@ -18,8 +18,8 @@ Treat the listings as illustrative of the sidecar-injection behavior rather than
 
 #### Set up Istio
 
-For installing Istio, please follow the setup guides [here](https://istio.io/docs/setup/kubernetes/install/).
-You can use a setup that works for you, we used the Helm install for Istio for this tutorial as [detailed here](https://istio.io/latest/docs/setup/install/helm/).
+Follow the Istio setup guides [here](https://istio.io/docs/setup/kubernetes/install/); any installation method works.
+This tutorial uses the Helm install for Istio, [detailed here](https://istio.io/latest/docs/setup/install/helm/).
 
 #### Install fission
 
@@ -29,7 +29,7 @@ Set default namespace for helm installation, here we use `fission` as example na
 $ export FISSION_NAMESPACE=fission
 ```
 
-Create namespace & add label for Istio sidecar injection, this will ensure that the the Istio sidecar is auto injected with Fission pods.
+Create the namespace and label it for Istio sidecar injection, so the Istio sidecar is automatically injected into Fission pods.
 
 ```bash
 $ kubectl create namespace $FISSION_NAMESPACE
@@ -45,13 +45,13 @@ $ helm install --namespace $FISSION_NAMESPACE --set enableIstio=true --name isti
 
 #### Create & test a function
 
-Let's first create the environment for nodejs function we want to create:
+Create the Node.js environment for the function:
 
 ```bash
 $ fission env create --name nodejs --image ghcr.io/fission/node-env
 ```
 
-Let's create a simple function with Node.js environment and a simple hello world example below:
+Write a simple hello-world function:
 
 ```js
 # hello.js
@@ -64,17 +64,19 @@ module.exports = async function(context) {
 }
 ```
 
+Create the function from that file:
+
 ```bash
 $ fission fn create --name h1 --env nodejs --code hello.js --method GET
 ```
 
-Now let's create route for the function:
+Create a route for the function:
 
 ```bash
 $ fission route create --method GET --url /h1 --function h1
 ```
 
-Access function:
+Access the function:
 
 ```bash
 $ curl http://$FISSION_ROUTER/h1
@@ -83,8 +85,9 @@ Hello, World!
 
 #### Under the hood
 
-Now that a Fission function did work with Istio, let's check under the hood see how Istio is interacting with system seamlessly.
-After installation, you will see that all components such as executor, router etc. now have an additional sidecar for istio-proxy and they also had a istio-init as a init container.
+Now that a Fission function works with Istio, here's what changed under the hood.
+After installation, Fission's core components (executor, router, and others) each gain an additional istio-proxy sidecar container and an istio-init init container.
+The pod listing shows the extra `2/2` ready count from that added sidecar:
 
 ```bash
 $ kubectl get pods -n fission
@@ -93,6 +96,8 @@ buildermgr-86858f4f6c-drhlv                              2/2       Running      
 controller-78cbdfc4fb-vdjsj                              2/2       Running            0          7m
 executor-97c7fc96d-9tclp                                 2/2       Running            1          7m
 ```
+
+Inspecting the pod spec confirms the injected container is the Istio proxy:
 
 ```yaml
   containers:
@@ -104,7 +109,7 @@ executor-97c7fc96d-9tclp                                 2/2       Running      
     name: istio-proxy
 ```
 
-Also all function pods now have 3 containers - the function container, fetcher and now additionally the the istio-proxy container and we can see the istio-proxy logs for function containers.
+Function pods gain the same sidecar on top of their existing function and fetcher containers, bringing them to 3 containers total, and the istio-proxy logs are visible like any other container's:
 
 ```bash
 $ kubectl get pods
@@ -125,7 +130,8 @@ discoveryRefreshDelay: 1s
 
 #### Install Istio Add-ons
 
-Istio comes with additional addons for features such as monitoring, distributed tracing etc. If you have installed Istio with Helm, you can decide which addons to enable in values.yaml:
+Istio comes with add-ons for features such as monitoring and distributed tracing.
+If you installed Istio with Helm, you can choose which add-ons to enable in `values.yaml`:
 
 ```yaml
 #
@@ -147,9 +153,9 @@ kiali:
   enabled: true
 ```
 
-We will explore few addons that we enabled and tried out in the following sections.
-For each of addons you can port-forward the service and watch the UI console of the respective service.
-For example for Jaeger, you can run the port-forward:
+The sections below walk through three add-ons: Prometheus, Grafana, and Jaeger.
+For each, port-forward its service and open the UI console.
+For example, port-forward the Jaeger service:
 
 ```bash
 $ kubectl port-forward service/jaeger-query -nistio-system 3000:16686
@@ -157,23 +163,22 @@ $ kubectl port-forward service/jaeger-query -nistio-system 3000:16686
 
 #### Prometheus
 
-Prometheus can scrapes the metrics from Fission and Istio components.
-Assuming Prometheus installation was done correctly and Fission components are being scraped by the Prometheus instance, you can see graphs related to Fission metrics in Prometheus graph:
+Prometheus scrapes metrics from both Fission and Istio components.
+Once Fission's components are being scraped correctly, its metrics show up as graphs in the Prometheus console:
 
 ![Prometheus](../assets/prometheus_fission.png)
 
 #### Grafana
 
-Grafana is used for visualization of metrics and Istio installed Grafana comes with a few dashboards built in.
-We can see the visualization of mixer stats in below screenshot:
+Grafana visualizes metrics, and the Grafana instance Istio installs comes with a few dashboards built in.
+The screenshot below shows mixer stats visualized:
 
 ![Grafana](../assets/grafana.png)
 
 #### Jaeger
 
-Jaeger allows distributed tracing of requests for function calls.
-We can see the details of each call to it's granular detail in Jaeger.
-You have to enable jaeger in Fission installation and point to appropriate URL of the Jaeger collector.
-You can find more details on [how to configure Jaeger to work with Fission here](/blog/monitor-fission-serverless-functions-with-opentracing/).
+Jaeger provides distributed tracing of requests for function calls, down to the details of each individual call.
+Enable Jaeger in the Fission installation and point it to the Jaeger collector's URL.
+See [how to configure Jaeger to work with Fission here](/blog/monitor-fission-serverless-functions-with-opentracing/) for details.
 
 ![jaeger min](../assets/jaeger.png)

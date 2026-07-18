@@ -7,10 +7,9 @@ description: >
 
 ## Init container
 
-Functions could also benefit from an **initialization process** before actually executing the functions.
-The initialization could allow you to fetch data from a remote bucket, for example, before actually starting the processing.
+**Init containers run setup work — such as fetching data from a remote bucket — before the function container starts.**
 
-PodSpec allow you to **define init containers** and also use volumes like we did in the previous example.
+PodSpec lets you **define init containers** and use volumes, as shown in the previous example.
 
 ```yaml
 apiVersion: fission.io/v1
@@ -36,7 +35,7 @@ spec:
                   fieldPath: metadata.labels
 ```
 
-We can see that the init container runs first, before the actual function containers run:
+The init container runs first, before the function containers start:
 
 ```bash
 $ kubectl get pod
@@ -46,7 +45,7 @@ poolmgr-python-default-9eik2gxd-6fdc8d9696-lpmgl   0/2       PodInitializing   0
 poolmgr-python-default-9eik2gxd-6fdc8d9696-tkmdc   0/2       PodInitializing   0          10s
 ```
 
-And the init container here is simply printing the file which was mounted and we can verify the same by looking at logs of the init container:
+The init container prints the mounted file; verify this in its logs:
 
 ```bash
 $ kubectl logs -f poolmgr-python-default-9eik2gxd-6fdc8d9696-lpmgl -c init-py
@@ -60,7 +59,7 @@ pod-template-hash="2987485252"
 
 ## Sidecar container
 
-You can also **add a sidecar** to the function container with PodSpec:
+**Sidecar containers run alongside the function container** by adding an extra entry to PodSpec's `containers` list:
 
 ```yaml
     podspec:

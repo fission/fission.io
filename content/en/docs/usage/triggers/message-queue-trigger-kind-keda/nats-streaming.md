@@ -14,10 +14,12 @@ You will also need NATS Streaming server setup which is reachable from the Fissi
 ## Installation
 
 If you want to setup NATS Streaming server on the Kubernetes cluster, you can use the [information here](https://github.com/nats-io/nats-streaming-server) or you can check the documentation for nats streaming [docs](https://docs.nats.io/running-a-nats-service/nats-kubernetes).  
-You can also setup NATS streaming server with this [yaml](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/nats-streaming-server/nats-dep.yaml) file.(Monitoring is already configured)
+You can also setup NATS streaming server with this [yaml](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/nats-streaming-server/nats-dep.yaml) file.
+(Monitoring is already configured.)
 
 {{% notice info %}}
-NATS streaming keda connector uses NATS monitoring to scale the deployment, to enable monitoring in nats we need to pass flags as below, you can get more [information here](https://docs.nats.io/nats-server/configuration/monitoring)
+The NATS Streaming KEDA connector uses NATS monitoring to scale the deployment.
+To enable monitoring, pass the flags below (see [NATS monitoring docs](https://docs.nats.io/nats-server/configuration/monitoring) for details):
 
 ```bash
 -m, --http_port PORT             HTTP PORT for monitoring
@@ -26,15 +28,15 @@ NATS streaming keda connector uses NATS monitoring to scale the deployment, to e
 
 {{% /notice %}}
 
+Apply the manifest and confirm the pod comes up:
+
 ```sh
 $ kubectl apply -f nats-dep.yaml
 NAME                                         READY   STATUS    RESTARTS   AGE
 nats-streaming-deployment-646768fcfd-qtpmk   1/1     Running   0          8s
 ```
 
-You can find the above file [here](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/nats-streaming-server/nats-dep.yaml).
-
-Verify if monitoring endpoint is reachable by exec into any container
+Verify that the monitoring endpoint is reachable by exec'ing into any container:
 
 ```sh
 $ kubectl create deployment test --image=nginx
@@ -65,7 +67,7 @@ $ curl nats.default.svc.cluster.local:8222
 
 ## Overview
 
-Before we dive into details, let's walk through overall flow of event and functions involved.
+Before we dive into details, let's walk through the overall flow of events and functions involved.
 
 1. A Go producer function (producer) which acts as a producer and drops a message in a NATS queue named `request`.
 2. Fission NATS Streaming trigger activates and invokes another function (consumer) with message received from producer.
@@ -89,7 +91,7 @@ kind load docker-image producer --name kind
 kubectl apply -f deployment.yaml //replicas is set to 0 when deployed
 ```
 
-[Go file](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/producer/main.go)
+The producer implementation ([full source](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/producer/main.go)):
 
 ```go
 package main
@@ -147,7 +149,7 @@ COPY --from=builder /go/bin/main /
 ENTRYPOINT ["/main"]
 ```
 
-[deployment.yaml](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/producer/deployment.yaml)
+The deployment manifest ([source](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/producer/deployment.yaml)):
 
 ```yaml
 apiVersion: apps/v1
@@ -183,7 +185,8 @@ nats-pub   0/0     0            0
 
 ### Consumer function
 
-The consumer function is golang function which takes the body of the request, appends a "Hello" and returns the resulting string. The file is present [here](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/consumer/hello.go).
+The consumer function is a Go function that takes the body of the request, appends "Hello", and returns the resulting string.
+The file is present [here](https://github.com/fission/keda-connectors/blob/master/nats-streaming-http-connector/test/consumer/hello.go).
 
 ```go
 package main
@@ -225,14 +228,16 @@ The response will be sent to `response` queue and in case of consumerfunc invoca
 fission mqt create --name natstest --function helloworld --mqtype stan --topic hello --resptopic response --mqtkind keda --errortopic error --maxretries 3 --metadata subject=hello --metadata queueGroup=grp1 --metadata durableName=due --metadata natsServerMonitoringEndpoint=nats.default.svc.cluster.local:8222 --metadata clusterId=test-cluster --metadata natsServer=nats://nats:4222
 ```
 
-Parameter list:
+The trigger accepts the following metadata parameters:
 
-- natsServerMonitoringEndpoint - Location of the Nats Streaming Monitoring
-- queueGroup - Queue group name of the subscribers
-- durableName - Must identify the durability name used by the subscribers
-- subject - Name of channel
-- natsServer - Location of the Nats Streaming
-- clusterId - StanClusterID to form a connection to the NATS Streaming subsystem // it will be same as in producer function
+| Parameter | Description |
+|---|---|
+| `natsServerMonitoringEndpoint` | Location of the NATS Streaming monitoring endpoint |
+| `queueGroup` | Queue group name of the subscribers |
+| `durableName` | Must identify the durability name used by the subscribers |
+| `subject` | Name of the channel |
+| `natsServer` | Location of the NATS Streaming server |
+| `clusterId` | StanClusterID used to connect to the NATS Streaming subsystem — same value as in the producer function |
 
 ### Testing it out
 

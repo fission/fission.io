@@ -6,8 +6,9 @@ description: >
   Ship Fission function code as an OCI image instead of an archive: build a code-only image, create a package with --oci, and pin digests for fast cold starts.
 ---
 
-Starting with Fission v1.26.0, a package's deployment archive can be an **OCI image** instead of a zip archive.
-You build an image whose filesystem contains your function code, push it to any OCI registry, and reference it when creating the package:
+**Ship Fission function code as an OCI image instead of a zip archive: build a code-only image, push it to any OCI registry, and reference it when creating the package.**
+Available starting with Fission v1.26.0.
+Create the package with `--oci`:
 
 ```bash
 $ fission package create --name hello --env python \
@@ -15,6 +16,8 @@ $ fission package create --name hello --env python \
 ```
 
 Everything else — environments, functions, triggers, entry points — works exactly as with archive-based packages.
+
+The code image moves from your build to the registry to the function pod, the same registry path a builder-published image takes:
 
 ```mermaid
 flowchart TB
@@ -49,11 +52,15 @@ def main():
     return "Hello, world!\n"
 ```
 
+Package it with a minimal Dockerfile that copies only the code:
+
 ```dockerfile
 # Dockerfile
 FROM scratch
 COPY hello.py /
 ```
+
+Build and push it like any other image:
 
 ```bash
 $ docker build -t registry.example.com/myteam/hello-code:v1 .

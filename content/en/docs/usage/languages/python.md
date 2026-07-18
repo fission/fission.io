@@ -4,9 +4,8 @@ description: "Writing Python functions with fission"
 weight: 10
 ---
 
-Fission supports functions written in Python3.7+.
-In this usage guide we'll cover how to set up and use a Python environment on Fission, write functions, and work with dependencies.
-We'll also cover basic troubleshooting.
+**Write, deploy, and manage dependencies for Python3.7+ functions on Fission.**
+Fission's Python integration runs functions through a Flask-based request/response interface.
 
 ### Before you start
 
@@ -67,10 +66,8 @@ Hello, world!
 
 ### Function input and output interface
 
-In this section we'll describe the input and output interfaces of Python functions in Fission.
 Fission's Python integration is built on the Flask framework.
-You can access HTTP requests and responses as you do in Flask.
-We'll provide some examples below.
+You access HTTP requests and responses the same way you would in Flask, as the examples below show.
 
 #### Accessing HTTP Requests
 
@@ -128,16 +125,16 @@ Value for myKey: myValue
 
 ##### Body
 
-HTTP POST and PUT requests can have a request body.
-Once again, you can access this body through the request object.
+HTTP POST and PUT requests can have a request body, which you access through the request object.
+The accessor depends on the Content-Type:
 
-For requests with a JSON Content-Type, you can directly get a parsed object with `request.get_json()` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.get_json).  
+| Content-Type | Accessor |
+|---|---|
+| JSON | `request.get_json()` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.get_json) — returns a parsed object |
+| `application/x-www-form-urlencoded` | `request.form.get('key')` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.form) |
+| Anything else | `request.data` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.data) — the full body as a string of bytes |
 
-For form-encoded requests ( application/x-www-form-urlencoded), use `request.form.get('key')` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.form).
-
-For all other requests, use `request.data` [[docs]](http://flask.pocoo.org/docs/1.0/api/#flask.Request.data) to get the full request body as a string of bytes.
-
-You can find the full docs on the request object in [the flask docs](http://flask.pocoo.org/docs/1.0/api/#incoming-request-data).
+The full request object API is documented in [the flask docs](http://flask.pocoo.org/docs/1.0/api/#incoming-request-data).
 
 #### Controlling HTTP Responses
 
@@ -146,6 +143,8 @@ This implicitly says that your function succeeded with a status code of 200; the
 However, you can control the response more closely using the Flask `response` object.
 
 ##### Setting Response Headers
+
+Set a custom header on the response object before returning it:
 
 ```python
 import flask
@@ -158,6 +157,8 @@ def main():
 
 ##### Setting Status Codes
 
+Set the status code explicitly on the response object:
+
 ```python
 import flask
 
@@ -168,6 +169,8 @@ def main():
 ```
 
 ##### HTTP Redirects
+
+Return a `flask.redirect()` response to redirect the caller:
 
 ```python
 import flask
@@ -184,6 +187,8 @@ def main():
 ```
 
 #### Logging
+
+Write log messages through the Flask app logger:
 
 ```python
 from flask import current_app
@@ -311,7 +316,7 @@ b: {c: 3, d: 4}
 
 ### Modifying the runtime environment image
 
-The base runtime image of the Python can also be modified to include dependencies.
+The Python environment's base runtime image can also be modified to include dependencies.
 You can do this for dependencies that all your functions need, thus reducing the size of your function packages (and improving cold-start times).
 
 First, get a copy of the Fission source, which includes the Python environment:
@@ -326,11 +331,9 @@ Get to the Python environment:
 cd environments/python
 ```
 
-To add package dependencies, edit `requirements.txt` to add what you need, and rebuild this image as follows:
-
-Next, build and push the container image.
-To push your image you'll need access to a Docker registry.
-Let's assume you have a DockerHub account called "USER".  (You could use any other registry too.)
+To add package dependencies, edit `requirements.txt` to add what you need.
+Then build and push the image — you'll need access to a Docker registry.
+This example assumes a DockerHub account called "USER" (you could use any other registry too):
 
 ```sh
 docker build -t USER/python-env .

@@ -57,5 +57,5 @@ flowchart TB
 
 - **Metrics** — Fission exposes Prometheus-format metrics from every component and function. See [Metrics with Prometheus]({{% ref "prometheus.md" %}}).
 - **Traces** — Fission instruments request flows with OpenTelemetry and can export to any OTLP backend such as Jaeger. See [Tracing with OpenTelemetry]({{% ref "opentelemetry.md" %}}).
-- **Logs** — function and component logs can be aggregated with Loki and queried in Grafana. See [Logs with Loki]({{% ref "loki.md" %}}).
+- **Logs** — Function and component logs can be aggregated with Loki and queried in Grafana. See [Logs with Loki]({{% ref "loki.md" %}}).
 - **Service mesh** — Linkerd can mesh function and Fission pods to add request-level metrics. See [Observability with Linkerd]({{% ref "linkerd.md" %}}).

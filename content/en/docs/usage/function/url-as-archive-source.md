@@ -5,21 +5,23 @@ description: >
   Embed a remote URL directly in a package archive when creating functions or packages to cut creation time and improve spec portability.
 ---
 
-Previously, the CLI tends to download the file and upload it to internal storagsvc to persist when a  user provides URL as archive source while creating the package.
-This approach increases the total package creation time if the file size is large.
+**Embedding a URL directly in the package archive skips the download-and-upload step, cutting package creation time.**
+Previously, when a user provided a URL as the archive source, the CLI downloaded the file and uploaded it to internal storagsvc to persist it.
+This approach increased the total package creation time if the file size was large.
 
-With 1.7.0+, the CLI embeds the given URL in package archive directly.
-This approach brings couple benefits:
+With 1.7.0+, the CLI embeds the given URL in the package archive directly, bringing two benefits:
 
 * Shorten package creation time.
 * Increase the portability of fission spec file.
+
+For example, creating a package from a remote URL:
 
 ```bash
 $ fission pkg create --spec --name dummy-package2 --env nodejs \
     --code https://raw.githubusercontent.com/fission/examples/main/nodejs/hello.js
 ```
 
-which results in:
+This produces a package spec that references the URL directly rather than an uploaded copy:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -36,8 +38,5 @@ spec:
     ....
 ```
 
-You will notice the CLI still tends to download the file in order to generate the SHA256 checksum to prevent the file changed.
-
-Downloading file to generate SHA256 checksum. To skip this step, please use `--srcchecksum` / `--deploychecksum` / `--insecure`.
-
-You can either use `--srcchecksum` or `--deploychecksum` or `--insecure` to bypass the download steps.
+The CLI still downloads the file once, to generate the SHA256 checksum that detects if the file changes.
+To skip this download step, use `--srcchecksum`, `--deploychecksum`, or `--insecure`.

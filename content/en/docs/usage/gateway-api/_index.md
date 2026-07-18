@@ -7,8 +7,8 @@ description: >
   Expose a Fission function through the Kubernetes Gateway API by attaching a generated HTTPRoute to an operator-managed Gateway — the successor to Ingress.
 ---
 
-The [Gateway API](https://gateway-api.sigs.k8s.io/) is the successor to the (now frozen) Kubernetes Ingress API.
-Fission's router can manage a Gateway API `HTTPRoute` for an HTTPTrigger, tied to the trigger's lifecycle, the same way it managed an `Ingress` for `--createingress`.
+**Fission's router manages a [Gateway API](https://gateway-api.sigs.k8s.io/) `HTTPRoute` for an HTTPTrigger, tied to the trigger's lifecycle** — the same way it managed an `Ingress` for `--createingress`.
+The Gateway API is the successor to the (now frozen) Kubernetes Ingress API.
 
 Fission runs in **attach mode**: it creates only the `HTTPRoute` and points it at a `Gateway` that the cluster operator owns.
 Fission never creates or owns the `Gateway` or `GatewayClass`, so it works with any conformant Gateway API implementation and keeps its RBAC minimal.
@@ -252,7 +252,7 @@ fission route create --name hello --function hello --url /hello \
 ### Istio
 
 [Istio](https://istio.io/latest/docs/tasks/traffic-management/ingress/gateway-api/) supports the Gateway API natively for ingress.
-With Istio installed, its `GatewayClass` (`istio`) is available; just create a `Gateway` and Fission route.
+With Istio installed, its `GatewayClass` (`istio`) is available; create a `Gateway` and Fission route.
 
 ```bash
 kubectl apply -f - <<'EOF'

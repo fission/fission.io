@@ -4,7 +4,7 @@ description: "Writing Java functions with fission"
 weight: 10
 ---
 
-Fission supports functions written in Java and runs them on the JVM.
+**Fission supports functions written in Java and runs them on the JVM.**
 The JVM environment runs on Java 25 (LTS, eclipse-temurin) and uses Spring Boot 3.5.x as its framework.
 A `jvm-jersey` variant is also available that runs the Jersey RESTful Web Services framework on Java 25.
 
@@ -24,6 +24,8 @@ Fission language support is enabled by creating an _Environment_.
 An environment is the language-specific part of Fission.
 It has a container image in which your function will run.
 
+Create it with:
+
 ``` sh
 fission environment create --name java --image ghcr.io/fission/jvm-env --builder ghcr.io/fission/jvm-builder
 ```
@@ -33,7 +35,7 @@ fission environment create --name java --image ghcr.io/fission/jvm-env --builder
 A function needs to implement the `io.fission.Function` class and override the `call` method.
 The call method receives the `RequestEntity` and `Context` as inputs and needs to return `ResponseEntity` object.
 Both `RequestEntity` and `ResponseEntity` are from `org.springframework.http` package and provide a fairly high level and rich API to interact with request and response objects.
-The function code responds with "Hello World" in response body looks as shown below:
+The function below responds with "Hello World" in the response body:
 
 ```java
 package io.fission;
@@ -63,7 +65,7 @@ Java function provides easy access to the Request and Response using Spring fram
 ##### Headers
 
 You can access headers object from the request object and then use various methods on header object to retrieve a specific header or get a collection of all headers.
-Please note that the header keys will be converted to canonical MIME format header key.
+The header keys will be converted to canonical MIME format header key.
 
 ```java
 HttpHeaders headers = req.getHeaders();
@@ -72,7 +74,7 @@ List<String> values = headers.get("keyname");
 
 ##### Query string
 
-You can use the URI object in request object and parse the query parameters as shown below.
+You can use the URI object in the request object and parse the query parameters as shown below.
 
 ```java
   Map<String, String> query_pairs = new LinkedHashMap<String, String>();
@@ -118,9 +120,9 @@ return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
 #### Dependencies
 
 JVM environment can accept any executable JAR with entrypoint method that implements the interface of `io.fission.Function`.
-Currently the dependencies in the JVM environment are managed with Maven so we will take that as an example but you can use the others tools as well such as Gradle.
+Currently the dependencies in the JVM environment are managed with Maven so we will take that as an example but you can use the other tools as well such as Gradle.
 
-First you have to define the the basic information about the function:
+First you have to define the basic information about the function:
 
 ```xml
 <modelVersion>4.0.0</modelVersion>
@@ -255,7 +257,8 @@ You might have noticed that we did not provide any build command to package for 
 The build still worked because the builder used the default built in command to build the source.
 You can override this build command to suit your needs.
 The only requirement is to instruct the builder on how to copy resulting Jar file to function by using the environment variables `$SRC_PKG` and  `$DEPLOY_PKG`.
-The `$SRC_PKG` is the root from where build will be run so you can form a relative oath to Jar file and copy the file to `$DEPLOY_PKG` Fission will at runtime inject these variables and copy the Jar file.
+The `$SRC_PKG` is the root from where build will be run so you can form a relative path to the Jar file and copy the file to `$DEPLOY_PKG`.
+Fission will at runtime inject these variables and copy the Jar file.
 
 ```sh
 $ cat build.sh
@@ -274,7 +277,7 @@ Package 'java-src-pkg-zip-dqo5' created
 
 ### Modifying the environment images
 
-If you only want to add libraries to the OS or add some additional files etc. to environment, it would be easier to simply extend the official [Fission JVM environment](https://github.com/fission/environments/tree/master/jvm) image and use it.
+If you only want to add libraries to the OS or add some additional files etc. to environment, it would be easier to extend the official [Fission JVM environment](https://github.com/fission/environments/tree/master/jvm) image and use it.
 
 The JVM builder image source code is [available here](https://github.com/fission/environments/tree/master/jvm) and could be extended or written from scratch to use other tools such as Gradle etc.
 It would be easier to extend the Fission official image and then add tools.

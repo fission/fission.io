@@ -4,10 +4,10 @@ description: "Writing Rust functions with fission"
 weight: 10
 ---
 
-Fission supports Rust as a first-class function language.
-Rust functions are compiled by the builder into native server binaries built on [axum](https://docs.rs/axum) and [tokio](https://tokio.rs), so invocations run at native speed with no per-request process startup.
+**Write, build, and deploy Rust functions on Fission, compiled by the builder into native server binaries for native-speed invocations with no per-request process startup.**
 
-In this usage guide we'll cover how to use this environment, write functions, and work with dependencies.
+The runtime is built on [axum](https://docs.rs/axum) and [tokio](https://tokio.rs).
+This guide covers setting up the environment, writing functions, handling HTTP requests/responses, and working with dependencies.
 
 ### Before you start
 
@@ -85,6 +85,8 @@ The function receives every request routed to it; axum extractors give you typed
 
 ##### Headers
 
+Read a request header with an axum extractor:
+
 ```rust
 use fission_rust::IntoResponse;
 use fission_rust::axum::http::HeaderMap;
@@ -111,6 +113,8 @@ x-my-header: foo
 
 ##### Query string
 
+Read query-string parameters into a map:
+
 ```rust
 use std::collections::HashMap;
 use fission_rust::IntoResponse;
@@ -130,6 +134,8 @@ $ curl "http://$FISSION_ROUTER/<url>?key-name=123"
 
 ###### Plain text
 
+Read the raw request body as a string:
+
 ```rust
 use fission_rust::IntoResponse;
 
@@ -144,6 +150,8 @@ foobar
 ```
 
 ###### JSON
+
+Deserialize a JSON request body into a struct:
 
 ```rust
 use fission_rust::IntoResponse;

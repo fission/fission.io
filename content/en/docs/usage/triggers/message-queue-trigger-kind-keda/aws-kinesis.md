@@ -5,21 +5,18 @@ draft: false
 weight: 3
 ---
 
-This tutorial will demonstrate how to use a AWS Kinesis trigger to invoke a function.
-We'll assume you have Fission and Kubernetes installed.
-If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
-
-You will also need AWS Kinesis setup which is reachable from the Fission Kubernetes cluster.
+**This guide connects an AWS Kinesis stream to a Fission function using a KEDA-based message queue trigger.**
+It assumes Fission and Kubernetes are already installed — see the [install guide]({{% ref "../../../installation/_index.en.md" %}}) if not.
+You'll also need an AWS Kinesis stream reachable from the Fission Kubernetes cluster.
 
 ## Installation
 
-If you want to setup Kinesis on the Kubernetes cluster, you can use the [information here](https://github.com/localstack/localstack) or you can create streams using your aws account [docs](https://aws.amazon.com/kinesis/data-streams/getting-started/?nc=sn&loc=3).  
-
-Also note that, if you are using localstack then it is only good for testing and dev environments and not for production usage.
+To set up Kinesis on the Kubernetes cluster, use [localstack](https://github.com/localstack/localstack), or create streams directly in AWS using the [Kinesis getting-started docs](https://aws.amazon.com/kinesis/data-streams/getting-started/?nc=sn&loc=3).
+localstack is suited to testing and dev only — not production.
 
 ## Overview
 
-Before we dive into details, let's walk through overall flow of event and functions involved.
+The trigger wires together four steps:
 
 1. A Go producer function (producerfunc) or aws cli command which acts as a producer and drops a message in a Kinesis stream named `request`.
 2. Fission Kinesis trigger activates and invokes another function (consumerfunc) with body of Kinesis message.
@@ -28,8 +25,8 @@ Before we dive into details, let's walk through overall flow of event and functi
    If there is an error, the message is dropped in error stream named `error`.
 
 {{% notice info %}}
-When communicating to localstack we need aws cli installed in the respactive container(deployment). This is because it uses aws configuration to connect to localstack.
-Below are the command to create and send the message to a stream
+When communicating with localstack, the aws CLI must be installed in the respective container (deployment) because it uses aws configuration to connect to localstack.
+Below are the commands to create the streams and send a message:
 
 ```bash
 $ aws kinesis create-stream --shard-count 2  --stream-name request
@@ -106,9 +103,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 Since the go program uses Kinesis stream, we need to create the request stream to run the above program.
 
-We are now ready to package this code and create a function so that we can execute it later.
-Following commands will create a environment, package and function.
-Verify that build for package succeeded before proceeding.
+The following commands create an environment, package, and function.
+Verify that the package build succeeded before proceeding.
 
 ```sh
 $ fission env create --name goenv --image ghcr.io/fission/go-env --builder ghcr.io/fission/go-builder
@@ -148,29 +144,31 @@ fission fn create --name consumerfunc --env nodeenv --code hellokinesis.js
 
 ### Connecting via trigger
 
-We have both the functions ready but the connection between them is the missing glue.
-Let's create a message queue trigger which will invoke the consumerfunc every time there is a message in `request` stream.
-The response will be sent to `response` stream and in case of consumerfunc invocation fails, the error is written to `error` stream.
+Both functions exist but aren't yet connected.
+The message queue trigger below invokes consumerfunc every time a message lands in the `request` stream, sends its response to the `response` stream, and writes errors to the `error` stream.
 
 ```bash
 fission mqt create  --name kinesisdeployment --function helloworld --mqtype aws-kinesis-stream --topic request --resptopic response --mqtkind keda --errortopic error --maxretries 3 --metadata streamName=request --metadata shardCount=2 --metadata awsRegion=ap-south-1 --secret awsSecrets
 ```
 
-Parameter list:
+The trigger accepts these metadata parameters:
 
-- streamName - Name of AWS Kinesis Stream
-- awsRegion - AWS Region for the Kinesis Stream
-- shardCount - The target value that a Kinesis data streams consumer can handle.
-- secret - AWS credentials require to connect the stream e.g. below
+| Parameter | Description |
+|---|---|
+| `streamName` | Name of the AWS Kinesis stream. |
+| `awsRegion` | AWS region for the Kinesis stream. |
+| `shardCount` | The target value that a Kinesis data streams consumer can handle. |
+| `secret` | AWS credentials required to connect to the stream — see below. |
 
 {{% notice info %}}
-if we are using localstack we don't have to give secret but if we are using aws to create kinesis stream we need to provide the secret, below is the example to create secret
+With localstack, no secret is needed.
+With AWS-managed Kinesis streams, provide a secret — for example:
 
 ```bash
 kubectl create secret generic awsSecrets --from-env-file=./secret.yaml
 ```
 
-and secret.yaml file should contain values like
+The secret.yaml file should contain values like:
 
 ```yaml
 AWS_ACCESS_KEY_ID=foo
@@ -181,7 +179,7 @@ AWS_SECRET_ACCESS_KEY=bar
 
 ### Testing it out
 
-Let's invoke the producer function so that the stream `request` gets some messages and we can see the consumer function in action.
+Invoke the producer function to put messages on the `request` stream and trigger the consumer function:
 
 ```bash
 $ fission fn test --name  
@@ -203,7 +201,7 @@ There are a couple of ways you can verify that the consumerfunc is called:
 
 ## Introducing an error
 
-Let's introduce an error scenario - instead of consumer function returning a 200, you can return 400 which will cause an error:
+To trigger an error scenario, change the consumer function to return 400 instead of 200:
 
 ```js
 module.exports = async function (context) {
@@ -225,6 +223,6 @@ $ fission fn test --name producerfunc
 Successfully sent to input
 ```
 
-We can verify the message in error stream as we did earlier:
+Verify the message landed in the error stream the same way as before:
 
 - Go to aws Kinesis stream and check if messages are coming in error stream

@@ -19,7 +19,7 @@ OpenTelemetry is a set of APIs, SDKs, tooling and integrations that are designed
 The project provides a vendor-agnostic implementation that can be configured to send telemetry data to the backend(s) of your choice.
 It supports a variety of popular open-source projects including Jaeger and Prometheus.
 
-## Fission Opentelemetry Integration
+## Fission OpenTelemetry Integration
 
 If you have OpenTelemetry installed, you can use it to collect traces and metrics from Fission.
 
@@ -36,9 +36,9 @@ The chart translates each value into a standard `OTEL_*` environment variable th
 | `openTelemetry.propagators` | `OTEL_PROPAGATORS` | Propagator(s) used to generate and read the trace-id header |
 | `openTelemetry.logsEnabled` | `OTEL_LOGS_ENABLED` | `true`/`false` (default `false`). When enabled alongside a collector endpoint, control-plane components also push their structured logs (carrying `trace_id`) to the OTLP collector, not just traces. |
 
-If you have not configured collector endpoint, you won't be able to visualize traces.
-Based on sampler configuration, you can observed `trace_id` in Fission component logs.
-You can search with `trace_id` across Fission services logs in case of debugging or troubleshooting.
+Without a configured collector endpoint, you won't be able to visualize traces.
+Depending on your sampler configuration, you can still observe `trace_id` in Fission component logs.
+Search by `trace_id` across Fission service logs to debug or troubleshoot a specific request.
 
 {{% notice info %}}
 Since v1.27.0 the head sampler is taken from `OTEL_TRACES_SAMPLER` / `OTEL_TRACES_SAMPLER_ARG` (these were previously ignored).
@@ -46,48 +46,49 @@ Spans for failed invocations are always exported regardless of the sampler decis
 With the chart default (`parentbased_traceidratio` at `0.1`), successful-trace export drops to 10% while every error trace is kept; set `OTEL_TRACES_SAMPLER=parentbased_always_on` to export 100%.
 {{% /notice %}}
 
-Many of the observability platforms such as DataDog, Dynatrace, Honeycomb, Lightstep, New Relic, Signoz, Splunk etc. support OpenTelemetry out-of-box, `otlpHeaders` can be used to configure the headers required by the observability platform.
-You don't need to setup up Opentelemtry Collector from scratch in that case.
+Many observability platforms — DataDog, Dynatrace, Honeycomb, Lightstep, New Relic, Signoz, Splunk, and others — support OpenTelemetry out of the box.
+Use `otlpHeaders` to configure the headers those platforms require, and you can send traces to them directly without standing up an OpenTelemetry Collector yourself.
 
-If you feel any of the above options are not adequate, feel free to raise an issue or open a pull request.
+If none of the above options are adequate, feel free to raise an issue or open a pull request.
 
 ### Types of samplers
 
-- `always_on` - Sampler that always samples spans, regardless of the parent span's sampling decision.
-- `always_off` - Sampler that never samples spans, regardless of the parent span's sampling decision.
-- `traceidratio` - Sampler that samples probabalistically based on rate.
-- `parentbased_always_on` - (default if empty) Sampler that respects its parent span's sampling decision, but otherwise always samples.
-- `parentbased_always_off` - Sampler that respects its parent span's sampling decision, but otherwise never samples.
-- `parentbased_traceidratio` - (default in chart) Sampler that respects its parent span's sampling decision, but otherwise samples probabalistically based on rate.
+Set `OTEL_TRACES_SAMPLER` to one of the following:
 
-#### Sampler Arguments
+| Sampler | Behavior |
+| ------- | -------- |
+| `always_on` | Always samples spans, regardless of the parent span's sampling decision. |
+| `always_off` | Never samples spans, regardless of the parent span's sampling decision. |
+| `traceidratio` | Samples probabilistically based on rate. |
+| `parentbased_always_on` | Respects the parent span's sampling decision, but otherwise always samples. Default if `OTEL_TRACES_SAMPLER` is empty. |
+| `parentbased_always_off` | Respects the parent span's sampling decision, but otherwise never samples. |
+| `parentbased_traceidratio` | Respects the parent span's sampling decision, but otherwise samples probabilistically based on rate. Default in the chart. |
 
-Each Sampler type defines its own expected input, if any.
-Currently we get trace ratio for the case of following samplers,
+#### Sampler arguments
 
-- `traceidratio`
-- `parentbased_traceidratio`
-
-Sampling probability, a number in the [0..1] range, e.g. "0.1". Default is 0.1.
+Only `traceidratio` and `parentbased_traceidratio` take an argument, set via `OTEL_TRACES_SAMPLER_ARG`: a sampling probability in the [0..1] range, e.g. `"0.1"`.
+Default is 0.1.
 
 ### Types of propagators
 
-Based on the propagator type, OpenTelemetry will generate a trace id header.
+The propagator type determines which header OpenTelemetry uses to generate and read the trace ID.
+Set `OTEL_PROPAGATORS` to one of the following:
 
-- `tracecontext` - W3C Trace Context
-- `baggage` - W3C Baggage
-- `b3` - B3 Single
-- `b3multi` - B3 Multi
-- `jaeger` - Jaeger uber-trace-id header
-- `xray` - AWS X-Ray (third party)
-- `ottrace` - OpenTracing Trace (third party)
+| Propagator | Header |
+| ---------- | ------ |
+| `tracecontext` | W3C Trace Context |
+| `baggage` | W3C Baggage |
+| `b3` | B3 Single |
+| `b3multi` | B3 Multi |
+| `jaeger` | Jaeger `uber-trace-id` header |
+| `xray` | AWS X-Ray (third party) |
+| `ottrace` | OpenTracing Trace (third party) |
 
-Propogator config is uselful, if you want to use different header from W3C Trace Context.
-E.g. If you are using OpenTracing/Jaeger, you can set propagator to `jaeger`.
+Change the propagator when you need a header other than W3C Trace Context — for example, set it to `jaeger` if you're integrating with OpenTracing/Jaeger.
 
 ## Sample OTEL Collector
 
-We will be using the [OpenTelemetry Operator for Kubernetes](https://github.com/open-telemetry/opentelemetry-operator) to setup OTEL collector.
+This example uses the [OpenTelemetry Operator for Kubernetes](https://github.com/open-telemetry/opentelemetry-operator) to set up the OTEL collector.
 To install the operator in an existing cluster, `cert-manager` is required.
 
 Use the following commands to install `cert-manager` and the operator:
@@ -102,7 +103,7 @@ kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releas
 
 Once the `opentelemetry-operator` deployment is ready, we need to create an OpenTelemetry Collector instance.
 
-The following configuration provides a good starting point, however, you may change as per your requirement:
+The following configuration provides a good starting point; change it as needed:
 
 ```sh
 kubectl apply -f - <<EOF
@@ -245,7 +246,7 @@ Note: The above configuration is borrowed from the [OpenTelemetry Collector trac
 
 ### Jaeger
 
-We will using the [Jaeger Operator for Kubernetes](https://github.com/jaegertracing/jaeger-operator) to deploy Jaeger.
+This example uses the [Jaeger Operator for Kubernetes](https://github.com/jaegertracing/jaeger-operator) to deploy Jaeger.
 To install the operator, run:
 
 ```sh
@@ -255,7 +256,7 @@ kubectl create -n observability -f https://github.com/jaegertracing/jaeger-opera
 
 Note that you'll need to download and customize the Role Bindings if you are using a namespace other than observability.
 
-Once the jaeger-operator deployment in the namespace observability is ready, create a Jaeger instance, like:
+Once the jaeger-operator deployment in the observability namespace is ready, create a Jaeger instance:
 
 ```sh
 kubectl apply -n observability -f - <<EOF
@@ -266,7 +267,7 @@ metadata:
 EOF
 ```
 
-Check if the `otel-collector` and `jaeger-query` service has been created:
+Check that the `otel-collector` and `jaeger-query` services have been created:
 
 ```sh
 kubectl get svc --all-namespaces
@@ -286,7 +287,7 @@ opentelemetry-operator-system   opentelemetry-operator-webhook-service          
 opentelemetry-operator-system   otel-collector                                              NodePort    10.96.107.99    <none>        4317:30080/TCP,8889:30898/TCP            2m22s
 ```
 
-Now, setup a port forward to the `jaeger-query` service:
+Now, set up a port forward to the `jaeger-query` service:
 
 ```sh
 kubectl port-forward service/jaeger-query -n observability 8080:16686 &
@@ -296,8 +297,8 @@ You should now be able to access Jaeger at [http://localhost:8080/](http://local
 
 ### Installing Fission
 
-At the time of writing this document, the Fission installation does not have OpenTelemetry enabled by default.
-In order to enable OpenTelemetry collector, we need to explicitly set the value of `openTelemetry.otlpCollectorEndpoint`:
+Fission does not enable OpenTelemetry by default.
+To enable it, explicitly set `openTelemetry.otlpCollectorEndpoint` to your collector's address:
 
 ```sh
 export FISSION_NAMESPACE=fission
@@ -313,8 +314,8 @@ Note: You may have to change the `openTelemetry.otlpCollectorEndpoint` value as 
 
 ## Testing
 
-In order to verify that our setup is working and we are able to receive traces, we will deploy and test a fission function.
-For this test we will be using a simple NodeJS based function.
+To verify the setup and confirm traces are being received, deploy and test a Fission function.
+This test uses a simple NodeJS-based function.
 
 ```sh
 # create an environment
@@ -346,7 +347,7 @@ You should be able to see the request flow similar to the one below:
 
 If you enable OpenTelemetry tracing within your function, you can capture spans and events for the function request.
 
-Following are few samples of spans and events captured by invoking a Go base function:
+The following are a few samples of spans and events captured by invoking a Go-based function:
 
 ![Fission Spans](../assets/fission-go-func-trace.png)
 

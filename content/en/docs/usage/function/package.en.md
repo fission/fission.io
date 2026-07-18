@@ -26,7 +26,7 @@ environment 'pythonsrc' created
 
 Let's take a simple python function which has a dependency on the `pyyaml` module.
 We can specify the dependencies in `requirements.txt` and a simple command to build from source.
-The tree structure of directory and contents of the file would look like:
+The directory structure and file contents look like this:
 
 ```text
 sourcepkg/
@@ -36,7 +36,7 @@ sourcepkg/
 └── user.py
 ```
 
-And the file contents:
+The file contents:
 
 * user.py
 
@@ -91,7 +91,7 @@ $ fission package create --sourcearchive demo-src-pkg.zip --env pythonsrc --buil
 Package 'demo-src-pkg-zip-8lwt' created
 ```
 
-Since we are working with a source package, we provided the build command.
+This is a source package, so the create command above included a build command.
 Once you create the package, the build process will start and you can see the build logs with the `fission package info` command:
 
 ```bash
@@ -109,10 +109,9 @@ Installing collected packages: pyyaml
 Successfully installed pyyaml-3.12
 ```
 
-Using the package above you can create the function.
-Since package already is associated with a source package, environment and build command, these will be ignored when creating a function. 
-
-The only additional thing you'll need to provide is the Function's entrypoint:
+Create the function from this package.
+The package already carries its source archive, environment, and build command, so `fission fn create` ignores those flags if you pass them.
+You only need to supply the entrypoint:
 
 ```bash
 $ fission fn create --name srcpy --pkg demo-src-pkg-zip-8lwt --entrypoint "user.main"
@@ -127,7 +126,7 @@ b: {c: 3, d: 4}
 
 #### Creating a Deployment Package
 
-Before you create a package you need to create an environment with the builder image:
+Before you create a package, you need to create an environment with the builder image:
 
 ```bash
 $ fission env create --name pythondeploy --image ghcr.io/fission/python-env \
@@ -139,7 +138,7 @@ $ fission env create --name pythondeploy --image ghcr.io/fission/python-env \
 environment 'pythondeploy' created
 ```
 
-We will use a simple Python example which outputs "Hello World!" in a directory to create a deployment archive:
+We'll create a deployment archive from a directory containing a simple Python script that outputs "Hello, world!":
 
 ```bash
 $ cat testDir/hello.py
@@ -158,7 +157,7 @@ $ fission package create --deployarchive demo-deploy-pkg.zip --env pythondeploy
 Package 'demo-deploy-pkg-zip-whzl' created
 ```
 
-Since it is a deployment archive, there is no need to build it, so the build logs for the package will be empty:
+A deployment archive skips the build step, so its build logs are empty:
 
 ```bash
 $ fission package info --name demo-deploy-pkg-zip-whzl

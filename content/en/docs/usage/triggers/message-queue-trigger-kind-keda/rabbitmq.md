@@ -6,13 +6,11 @@ date: 2022-01-21T15:39:35+05:30
 weight: 7
 ---
 
-You can use the RabbitMQ message queue trigger to receive messages from RabbitMQ and process them via Fission Function.
+**A RabbitMQ message queue trigger invokes a Fission function whenever a message arrives in a RabbitMQ queue.**
 Your RabbitMQ instance can be on prem or hosted on any of the cloud service providers like [AWS](https://aws.amazon.com/marketplace/pp/prodview-o7lo2xvhbhnde), [Azure](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/bitnami.rabbitmq-cluster?tab=overview) or [GCP](https://console.cloud.google.com/marketplace/details/click-to-deploy-images/rabbitmq).
 
-
-In this document we will demonstrate how to use a RabbitMQ trigger to invoke a Fission function.
 We'll assume you have Fission and Kubernetes installed.
-If not, please head over to the [Fission install guide]({{% ref "../../../installation/_index.en.md" %}}).
+If not, head over to the [Fission install guide]({{% ref "../../../installation/_index.en.md" %}}).
 
 > To enable KEDA integration, set the flag `mqt_keda.enabled` to `true` while installing Fission with helm chart.
 
@@ -23,7 +21,7 @@ You will also need RabbitMQ setup which is reachable from the Fission Kubernetes
 ## Installation
 
 If you want to setup RabbitMQ on a Kubernetes cluster, you can use the [HELM chart](https://artifacthub.io/packages/helm/bitnami/rabbitmq).
-Once RabbitMQ is installed, use the `helm status my-release` (*Replace my-release with your release name*) command to get the details like the username, password, host etc. and you will get the details as shown below.
+Once RabbitMQ is installed, run `helm status my-release` (*replace `my-release` with your release name*) to get the username, password, host, and other connection details, shown below.
 
 ```bash
 NAME: my-release
@@ -67,7 +65,7 @@ Use the credentials and login to the web portal which can be accessed at: `http:
 
 ## Overview
 
-Before we dive into details, let us walk through the overall flow of events and functions involved.
+The flow below shows the events and functions involved.
 
 1. A Go producer function (*producer*) that drops a message in a RabbitMQ queue named `request-topic`.
 2. Fission RabbitMQ trigger activates upon message arrival in `request-topic` and invokes another function (*consumer*) with message received from producer.
@@ -83,7 +81,7 @@ You can get the source code for the sample app explained in this document in our
 
 ### RabbitMQ Topics
 
-As mentioned, we need to create 3 topics for our example.
+We need to create 3 topics for our example.
 Follow the steps below to create the required topics:
 
 1. On the web portal, navigate to `Queues`
@@ -225,7 +223,7 @@ fission fn create --spec --name rabbitmq-producer --env go --pkg rabbitmq-produc
 
 ### Consumer Function
 
-The consumer function is a go program which takes the body of the request, process the message and drops it in the `response-queue`
+The consumer function is a go program which takes the body of the request, processes the message, and returns a response that the trigger drops into `response-topic`
 
 ```go
 package main
@@ -270,15 +268,17 @@ fission mqt create --name rabbitmq-test --function rabbitmq-consumer --mqtype ra
     --pollinginterval=5 --secret keda-rabbitmq-secret
 ```
 
-Parameter list:
+The `--metadata` flags above accept these parameters:
 
-- queueName - Name of the RabbitMQ queue on which the trigger is created.
-- topic - Name of the topic on which processing the offset lag.
+| Parameter | Description |
+| --- | --- |
+| `queueName` | Name of the RabbitMQ queue on which the trigger is created. |
+| `topic` | Name of the topic on which offset lag is processed. |
 
 ### Specs
 
 You can also use the following Fission spec.
-Read our giude on how to use [Fission spec](https://fission.io/docs/usage/spec/).
+Read our guide on how to use [Fission spec](https://fission.io/docs/usage/spec/).
 
 ```bash
 fission spec init
@@ -330,8 +330,7 @@ poolmgr-go-default-3304406-8695f6fdd8-5jcx4 go 2022/01/21 06:55:27 Received mess
 
 For debugging, you can check the logs of the pods created in the `fission` and `default` namespace.
 
-Typically, all function pods would be created in the `default` namespace.
-Based on the environment name, the pods would be created in the `default` namespace.
+Typically, function pods are created in the same namespace as their environment, `default` in this example.
 You can check consumer and producer function logs.
 
 Try out the [Sample app](#sample-app) to see it in action.

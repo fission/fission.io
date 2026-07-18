@@ -6,6 +6,7 @@ description: >
   Diagnose a failing Fission function with fission function describe, failure attribution from fission function test, and per-invocation request-id tracing.
 ---
 
+**Diagnose a failing function down to the component and the exact invocation, without reading server logs.**
 When a function misbehaves, the question is usually *where* it broke — the function code, the build, the executor, or a timeout — and *which* call it was.
 Fission answers both: `fission function describe` shows a function's health in one view, `fission function test` attributes a failure to a component and hands you a request id, and `fission function logs --request-id` pulls that one invocation's logs.
 
@@ -38,10 +39,12 @@ PODS:
 
 The **`Invocable`** line answers "can I call this right now?":
 
-* `Yes (N of M warm pod(s) serving)` — warm pods are published and serving traffic.
-* `Yes (N warm pod(s))` — warm, ready pods exist.
-* `Yes (cold start on first call)` — Ready, but the first call pays a cold start.
-* `No - function not Ready (see CONDITIONS)` — not invocable; the `CONDITIONS` table says why.
+| `Invocable` value | Meaning |
+| --- | --- |
+| `Yes (N of M warm pod(s) serving)` | Warm pods are published and serving traffic. |
+| `Yes (N warm pod(s))` | Warm, ready pods exist. |
+| `Yes (cold start on first call)` | Ready, but the first call pays a cold start. |
+| `No - function not Ready (see CONDITIONS)` | Not invocable; the `CONDITIONS` table says why. |
 
 Each section is sourced independently, so an unavailable source degrades to `<none>` rather than failing the whole view.
 On a **failed build**, the `PACKAGE` section additionally prints the build log inline — the one place you most need it:
@@ -104,7 +107,7 @@ The **reason** is a stable value you can match on:
 | `stream_idle` / `stream_max_duration` | A [streaming]({{% ref "streaming.md" %}}) response hit its idle or max-duration limit. |
 
 The body never includes raw internal error text by default.
-To get verbose detail for a single call, send `X-Fission-Debug: true`; the router then fills in a `message` field, and only when it runs in debug mode.
+To get verbose detail for a single call, send `X-Fission-Debug: true`; the router fills in a `message` field only when it is running in debug mode.
 
 {{% notice info %}}
 **Operators:** structured error bodies are on by default and can be turned off with `ROUTER_STRUCTURED_ERRORS=false` on the router, which restores the legacy plain-text error body.

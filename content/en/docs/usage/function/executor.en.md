@@ -6,7 +6,7 @@ description: >
   Choose and configure a function executor (poolmgr, newdeploy, or container) with --executortype to control cold starts and per-function autoscaling.
 ---
 
-This guide shows how to choose and configure an executor when you create a function.
+**Choose and configure a function's executor to control cold starts and per-function autoscaling.**
 For the concepts and trade-offs behind each executor type, read [Executors]({{% ref "/docs/concepts/executors.md" %}}).
 
 Fission has three executor types:
@@ -43,7 +43,8 @@ $ fission fn create --name foobar --env nodejs --code hello.js --executortype po
 ```
 
 When an environment is created, poolmgr creates a pool of generic pods with **default pool size 3**.
-We may want to adjust the size of pools based on our need (e.g. resource efficiency), for some [historic reason](https://github.com/fission/fission/issues/506) fission now only supports to adjust pool size by giving `--version 3` flag when creating an environment.
+You may want to adjust pool size for resource efficiency.
+For [historic reasons](https://github.com/fission/fission/issues/506), Fission only supports adjusting pool size via the `--poolsize` flag when creating an environment with `--version 3`.
 
 ```bash
 $ fission env create --name python --version 3 --poolsize 1 --image ghcr.io/fission/python-env
@@ -51,14 +52,14 @@ $ fission env create --name python --version 3 --poolsize 1 --image ghcr.io/fiss
 $ kubectl get pod -l environmentName=test
 ```
 
-Now, you shall see only one pod for the environment we just created.
+You should now see only one pod for the environment you just created.
 
 {{% notice warning %}}
 With `--poolsize 0`, the executor will not be able to specialize any function due to no generic pod in pool.
 {{% /notice %}}
 
-If you want to set resource requests/limits for all functions use the same environment, you can provide extra min/max cpu & memory flags to set them at **environment-level**.
-For example, we want to limit an environment's min/max cpu to 100m/200m and min/max memory to 128Mi/256Mi.
+If you want to set resource requests/limits for all functions that use the same environment, you can provide extra min/max cpu & memory flags to set them at **environment-level**.
+For example, to limit an environment's min/max cpu to 100m/200m and min/max memory to 128Mi/256Mi:
 
 ```bash
 $ fission env create --name python --version 3 --poolsize 1 --image ghcr.io/fission/python-env \
@@ -127,7 +128,7 @@ For the `newdeploy` and `container` executors the API server validates these val
 A request that violates these rules is rejected at create or update time.
 {{% /notice %}}
 
-So if we want to limit a function's min/max cpu to 100m/200m and min/max memory to 128Mi/256Mi.
+For example, to limit a function's min/max cpu to 100m/200m and min/max memory to 128Mi/256Mi:
 
 ```bash
 $ fission fn create --name foobar --env nodejs --code hello.js --executortype newdeploy \
@@ -148,8 +149,8 @@ With `--minscale 0`, a function will experience **long** cold-start time since i
 
 #### Eliminating cold start
 
-If you want to eliminate the cold start for a function, you can run the function with executortype as "newdeploy" and minscale set to 1.
-This will ensure that at least one replica of function is always running and there is no cold start in request path.
+If you want to eliminate the cold start for a function, run it with `--executortype newdeploy` and `--minscale 1`.
+This ensures at least one replica of the function is always running, so there is no cold start in the request path.
 
 ```bash
 $ fission fn create --name hello --env node --code hello.js --minscale 1 --executortype newdeploy
@@ -157,9 +158,7 @@ $ fission fn create --name hello --env node --code hello.js --minscale 1 --execu
 
 #### Autoscaling
 
-Let's create a function to demonstrate the autoscaling behavior in Fission.
-We create a simple function which outputs "Hello World" in using NodeJS.
-We have kept the CPU request and limit purposefully low to simulate the load and also kept the target CPU percent to 50%.
+This example creates a simple NodeJS function that outputs "Hello World", with CPU request/limit set purposefully low to simulate load and target CPU set to 50%, to demonstrate the autoscaling behavior below.
 
 ```bash
 $ fission fn create --name hello --env node --code hello.js --executortype newdeploy \
@@ -214,15 +213,13 @@ Status code distribution:
   [200] 10000 responses
 ```
 
-While the load is being generated, we will watch the HorizontalPodAutoscaler and how it scales over a period of time.
-As you can notice, the number of pods is scaled from 1 to 3 after the load rises from 8 - 103%.
-After the load generator stops, it takes a few iterations to scale down from 3 to 1 pod.
+While the load is generated, watch the HorizontalPodAutoscaler scale over time in the output below.
+The number of pods scales from 1 to 3 as load rises from 8% to 103%, then takes a few iterations to scale back down to 1 once the load generator stops.
 
 When testing the scaling behavior, do keep in mind that the scaling event has an initial delay of up to a minute and waits for the average CPU to reach 110% above the threshold before scaling up.
 It is best to maintain a minimum number of pods which can handle initial load and scale as needed.
 
-You will notice that the scaling up and down has different behavior in terms of response time.
-This behavior is governed by the frequency at which the controller watches (which defaults to 30s) and parameters set on controller-manager for upscale/downscale delay.
+Scaling up and down have different response-time behavior, governed by the frequency at which the controller watches (which defaults to 30s) and the controller-manager's upscale/downscale delay parameters.
 More details can be found [here](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-cooldowndelay)
 
 ```bash

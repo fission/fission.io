@@ -5,6 +5,8 @@ description: >
   Configure ingress host rules, paths, annotations, and TLS on a Fission route using --ingressrule, --ingressannotation, and --ingresstls.
 ---
 
+**Fission lets you configure ingress host rules, paths, annotations, and TLS on a route using `--ingressrule`, `--ingressannotation`, and `--ingresstls`.**
+
 ### Annotations (`--ingressannotation`)
 
 You can specify annotations to ingress when creating the HTTP trigger.
@@ -18,11 +20,12 @@ $ fission route create --name foo \
 ```
 
 **NOTE**: The format of annotation depends on the underlying ingress controller being used.
-You should check the respective documentation for details.
+Check the respective documentation for details.
 
 ### Host Rule (`--ingressrule`)
 
-The format of rule is `host=path`, you have to give host and API endpoint path with delimiter `=` between them.
+The format of rule is `host=path`.
+You provide the host and the API endpoint path, separated by the `=` delimiter.
 If the rule is not provided, fission uses path specified by `--url` and allows requests from all hosts.
 For example, if you want to expose your function to the path **/foobar** and allow access from all hosts, you can do:
 
@@ -30,7 +33,7 @@ For example, if you want to expose your function to the path **/foobar** and all
 $ fission route create --name foobar --method GET --function nodejs --url "/foobar" --createingress --ingressrule "*=/foobar"
 ```  
 
-Which results in ingress definition like below:
+This results in the following ingress definition:
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -52,7 +55,7 @@ spec:
               number: 80
 ```
 
-If you want to limit the accessibility of function to a specific hosts, specify the host rule like `--ingressrule "example.com=/foobar"`:
+If you want to limit the function's accessibility to specific hosts, specify the host rule like `--ingressrule "example.com=/foobar"`:
 
 ```yaml
 spec:
@@ -86,7 +89,7 @@ $ fission route create --name foo \
 ### TLS (`--ingresstls`)
 
 To enable TLS termination, you need to follow the [guide](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) to create the secret that contains TLS private key and certificate.
-For Fission you just have to specify the secret name when creating HTTP trigger.
+For Fission, specify the secret name when creating the HTTP trigger.
 
 ```bash
 $ fission route create --name foo \

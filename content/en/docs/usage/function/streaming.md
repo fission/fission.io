@@ -6,9 +6,9 @@ description: >
   Stream a Fission function's response incrementally over Server-Sent Events, HTTP chunked transfer, or WebSocket — for LLM tokens, chat, and long-running calls.
 ---
 
-By default a function buffers its full response and the router cuts the request off at `functionTimeout`.
-Starting with Fission {{< release-version >}} a function can instead **stream its response incrementally** — over Server-Sent Events (SSE), HTTP chunked transfer, or a WebSocket upgrade.
+**Starting with Fission {{< release-version >}}, a function can stream its response incrementally — over Server-Sent Events (SSE), HTTP chunked transfer, or a WebSocket upgrade — instead of buffering the whole response behind `functionTimeout`.**
 The response is flushed to the client as it is produced and is **not** bound by `functionTimeout`.
+By default, though, a function still buffers its full response and the router cuts the request off at that limit.
 
 Streaming is **per-function and opt-in**: omit the `spec.streaming` object (or the `--streaming` flag) and the function keeps the existing buffered behavior exactly.
 Typical use cases are LLM token streaming, AI agent runs, chat, SSE feeds, and other long-running or bidirectional responses.

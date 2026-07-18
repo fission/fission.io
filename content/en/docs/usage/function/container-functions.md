@@ -11,7 +11,7 @@ Support for running containers as functions is in **alpha**.
 We plan to improve the experience over the coming releases, and your feedback is most welcome.
 {{% /notice %}}
 
-Fission can run an existing container image as a function using the `container` executor type.
+**Fission can run an existing container image as a function using the `container` executor type.**
 This is useful when you already have a containerized HTTP service and want to invoke it through Fission's router and triggers.
 For how this executor compares to `poolmgr` and `newdeploy`, see [Controlling Function Execution]({{% ref "executor.en.md" %}}).
 
@@ -24,7 +24,7 @@ $ fission function run-container --name cn-hello --image gcr.io/google-samples/n
 function 'cn-hello' created
 ```
 
-Listing functions,
+List functions to see the one just created:
 
 ```bash
 $ fission function list
@@ -32,7 +32,7 @@ NAME     ENV    EXECUTORTYPE MINSCALE MAXSCALE MINCPU MAXCPU MINMEMORY MAXMEMORY
 cn-hello        container    1        1        0      0      0         0         80
 ```
 
-Test container function,
+Test the container function:
 
 ```bash
 $ fission fn test --name cn-hello
@@ -47,7 +47,7 @@ To explore the available fields:
 kubectl explain functions.spec.podspec
 ```
 
-You can also generate function spec with Fission CLI.
+You can also generate a function spec with the Fission CLI.
 
 ```sh
 $ fission spec init
@@ -92,7 +92,7 @@ spec:
 
 ### Running Next.js app container with Fission
 
-You can run a sample Next.js based app.
+You can run a sample Next.js-based app with the same executor.
 
 ```sh
 $ fission fn run-container --name=nextapp --image fission/next-sample-app:1.0.0 --port 3000
@@ -101,9 +101,9 @@ $ fission route create --name nextapp --function nextapp --prefix /nextapp --kee
 trigger 'nextapp' created
 ```
 
-Visit app URL, `http://<router_url>/nextapp/`
+Visit the app at `http://<router_url>/nextapp/`.
 
-You can refer it source for the application [here](https://github.com/fission/examples/tree/main/miscellaneous/container-functions/next-app).
+You can refer to the source for this application [here](https://github.com/fission/examples/tree/main/miscellaneous/container-functions/next-app).
 
 ### Command options
 

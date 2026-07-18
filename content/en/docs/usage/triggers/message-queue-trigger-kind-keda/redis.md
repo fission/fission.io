@@ -5,9 +5,9 @@ description: "Keda based Message Queue Trigger for Redis"
 weight: 8
 ---
 
-This tutorial will demonstrate how to use a Redis List trigger to invoke a function.
+**This tutorial shows how to trigger a Fission function from messages on a Redis list.**
 We'll assume you have Fission and Kubernetes installed.
-If not, please head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
+If not, head over to the [install guide]({{% ref "../../../installation/_index.en.md" %}}).
 
 You will also need Redis setup which is reachable from the Fission Kubernetes cluster.
 
@@ -17,7 +17,7 @@ If you want to setup Redis server on the Kubernetes cluster, you can use the [in
 
 ## Overview
 
-Before we dive into details, let's walk through overall flow of event and functions involved.
+The flow connects two functions through a Redis trigger:
 
 1. A Go producer function (producerfunc) which acts as a producer and drops a message in a Redis queue named `request-topic`.
 2. Fission Redis trigger activates and invokes another function (consumerfunc) with message received from producerfunc.
@@ -29,7 +29,7 @@ Before we dive into details, let's walk through overall flow of event and functi
 
 ### Producer Function
 
-The producer function is a go program which creates a message with timestamp and drops into a queue `request-topic`.
+The producer function is a Go program which creates a message with timestamp and drops into a queue `request-topic`.
 For brevity all values have been hard coded in the code itself.
 
 ```go
@@ -84,9 +84,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-We are now ready to package this code and create a function so that we can execute it later.
-Following commands will create a environment, package and function.
-Verify that build for package succeeded before proceeding.
+Package this code and create a function.
+The following commands create an environment, package, and function.
+Verify that the package build succeeded before proceeding.
 
 ```sh
 $ mkdir redis_test && cd redis_test
@@ -109,7 +109,7 @@ Building in directory /usr/src/redis-zip-zlre-2gucll
 
 ### Consumer function
 
-The consumer function is nodejs function which takes the body of the request, appends a "Hello" and returns the resulting string.
+The consumer function is a Node.js function which takes the body of the request, appends a "Hello" and returns the resulting string.
 
 ```js
 module.exports = async function (context) {
@@ -131,19 +131,21 @@ fission fn create --name consumerfunc --env nodeenv --code hello.js
 
 ### Connecting via trigger
 
-We have both the functions ready but the connection between them is the missing glue.
-Let's create a message queue trigger which will invoke the consumerfunc every time there is a message in `request-topic` queue.
-The response will be sent to `response-topic` queue and in case of consumerfunc invocation fails, the error is written to `error-topic` queue.
+Both functions exist, but nothing connects them yet.
+Create a message queue trigger that invokes consumerfunc every time a message arrives in the `request-topic` queue.
+The response goes to the `response-topic` queue; if the consumerfunc invocation fails, the error goes to the `error-topic` queue.
 
 ```bash
 fission mqt create --name redistest --function consumerfunc --mqtype redis --mqtkind keda --topic request-topic --resptopic response-topic --errortopic error-topic --maxretries 3 --metadata address=redis-headless.ot-operators.svc.cluster.local:6379 --metadata listLength=10 --metadata listName=request-topic
 ```
 
-Parameter list:
+The `--metadata` flags above configure the trigger:
 
-- address - Host and port of redis server
-- listLength - Length of list after which the function should be triggered
-- listName - The list to be monitored
+| Parameter | Description |
+|---|---|
+| `address` | Host and port of the Redis server |
+| `listLength` | Length of list after which the function should be triggered |
+| `listName` | The list to be monitored |
 
 ### Testing it out
 
@@ -191,6 +193,6 @@ $ fission fn test --name producerfunc
 Successfully sent to input
 ```
 
-We can verify the message in error queue as we did earlier:
+We can verify the message in the error queue as we did earlier:
 
 - Connect to your redis server and check if messages are coming in `error-topic` queue.

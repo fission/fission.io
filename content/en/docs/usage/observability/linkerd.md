@@ -12,10 +12,10 @@ This guide walks you through meshing function and Fission pods so you can view s
 
 ### Prerequisites
 
-You need to install Fission and Linkerd in the cluster. 
+You need to install Fission and Linkerd in the cluster.
 
 - Install [Linkerd](https://linkerd.io/2/getting-started/)
-- Install [Fisson](/docs/installation/)
+- Install [Fission](/docs/installation/)
 
 ### Deploy a function in Fission
 
@@ -37,20 +37,21 @@ module.exports = async function(context) {
 
 ```
 
-- Deploy the function 
+- Deploy the function:
 
 ```
 fission fn create --name hello --code hello.js --env node
 ```
 
-- Test the function
+- Test the function:
 
 ```
 fission fn test --name hello
 ```
 
-## Linkerd Dashboard
-- Linkerd has an amazing dashboard which can be launched by:
+## Linkerd dashboard
+
+Launch Linkerd's dashboard to see the cluster's meshed and unmeshed deployments:
 
 ```
 linkerd dashboard &
@@ -58,14 +59,14 @@ linkerd dashboard &
 
 ![Linkerd dashboard](../assets/linkerd-dashboard.png)
 
-- Under namespaces, select default and check the existing deployments
+Under namespaces, select `default` and check the existing deployments — none are meshed yet:
 
 ![Linkerd before mesh](../assets/linkerd-before.png)
 
-
 ## Inject sidecar into deployments
 
-Linkerd injects a side car proxy to add the deployment to it's data plane. We can do this at namespace level so that all deployments in a namespace are meshed.
+Linkerd injects a sidecar proxy to add the deployment to its data plane.
+We can do this at namespace level so that all deployments in a namespace are meshed.
 
 ```
 kubectl get deploy -o yaml \
@@ -73,35 +74,37 @@ kubectl get deploy -o yaml \
 | kubectl apply -f -
 ```
 
-We can check if the deployment is "meshed" i.e if the side car proxy is injected within the dashboard
+The dashboard shows whether the deployment is "meshed", i.e. whether the sidecar proxy was injected:
 
 ![Linkerd after mesh](../assets/linkerd-after.png)
 
-Notice the metrics like Request Per Second(RPS) and PX Latency
+Notice the metrics like Request Per Second (RPS) and PX Latency.
 
 ## Generate traffic and view metrics
 
-Let's generate some traffic to the function by:
+Generate some traffic to the function:
 
 ```
 while true; do sleep 1; curl http://${FISSION_ROUTER}/hello; echo -e '\n\n\n\n'$(date);done 
 
 ```
-We can now view the grafana dashboard near the deployments
+
+With traffic flowing, the Grafana dashboard next to the deployment shows live metrics:
 
 ![Linkerd Grafana](../assets/linkerd-grafana.png)
 
-We can now visualize success rate, rate per requests and latency of functions at one place
-
+Success rate, request rate, and latency of the function are now all visible in one place.
 
 ## Observing Fission components
 
-Similar to functions, we can also mesh the Fission namespace so that we can observe the Fission components. We can similarly use the Grafana dashboard to get details of other metrics.
+Mesh the `fission` namespace the same way to observe Fission's own components, not just your functions:
 
 ```
 kubectl get -n  fission deploy -o yaml \
 | linkerd inject - \
 | kubectl apply -f -
 ```
+
+The same Grafana dashboard now reports success rate, request rate, and latency for Fission's control-plane deployments:
 
 ![Fission Components](../assets/fission-linkerd.png)

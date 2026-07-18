@@ -6,7 +6,7 @@ description: >
   Create a function with fission fn create, route HTTP traffic to it, test it, and update its code through the everyday function workflow.
 ---
 
-This page walks you through the everyday function workflow: create a function, route HTTP traffic to it, test it, update its code, and inspect it.
+**This page walks you through the everyday function workflow: create a function, route HTTP traffic to it, test it, update its code, and inspect it.**
 To choose how a function runs and scales, see [Controlling Function Execution]({{% ref "executor.en.md" %}}).
 
 #### Create a function
@@ -153,9 +153,9 @@ $ fission fn logs --name hello
 
 #### Fission builds & compiled artifacts
 
-Most real world functions will require more than one source files.
-It is also easier to simply provide source files and let Fission take care of building from source files.
-Fission provides first class support for building from source as well as using compiled artifacts to create functions.
+Most real-world functions span more than one source file.
+Fission provides first-class support for building from source, so you can hand it source files directly instead of precompiling a deployment artifact yourself.
+It also supports using compiled artifacts to create functions.
 
 You can attach the source/deployment packages to a function or explicitly create packages and use them across functions.
 Check documentation for [package]({{% ref "package.en.md" %}}) for more information.
@@ -295,7 +295,7 @@ Hello, world!
 
 #### View function information
 
-You can retrieve metadata information of a single function or list all functions to look at basic information of functions:
+You can retrieve metadata for a single function, or list all functions to see their basic information:
 
 ```bash
 $ fission fn getmeta --name hello

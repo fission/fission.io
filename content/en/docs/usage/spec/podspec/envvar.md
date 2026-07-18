@@ -5,17 +5,18 @@ description: >
   Set environment variables on Fission environment pods via PodSpec, including exposing Kubernetes Secrets and ConfigMaps to your function.
 ---
 
-Functions sometimes require to pass-in parameter through environment variable to control internal behavior of a function like `GOMAXPROCS` for Go or you may want to expose secret/configmap as environment variable.
-In such cases, we can add `env` to PodSpec.
+**Set environment variables on a function's PodSpec to control runtime behavior or expose Kubernetes Secrets and ConfigMaps.**
+For example, set `GOMAXPROCS` to tune a Go function's runtime, or inject a secret value without hardcoding it.
+Add an `env` field to the PodSpec to do either.
 
 {{% notice info %}}
-As Docker doesn't support to change configuration of a container once it's created.
-To ensure different executor types have consistent behavior, Fission only supports to set environment variable at Environment-level now.
+Docker doesn't support changing a container's configuration after it's created.
+To keep behavior consistent across executor types, Fission currently only supports setting environment variables at the Environment level.
 {{% /notice %}}
 
 ## Add environment variable
 
-Let's try to add environment variable setting to `fetcher` container:
+Add an `env` entry to the `fetcher` container in the environment spec:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -31,7 +32,7 @@ spec:
           value: info
 ```
 
-Now, you shall see the environment variable in container:
+The container now has the variable set:
 
 ```sh
 $ kubectl exec -it <pod> -c fetcher sh
@@ -41,13 +42,13 @@ LOG_LEVEL=info
 
 ## Expose Secret/ConfigMap as environment variable
 
-Let's create a ConfigMap called `my-configmap`.
+First, create a ConfigMap called `my-configmap`:
 
 ```bash
 $ kubectl create configmap my-configmap --from-literal=TEST_KEY="TESTVALUE"
 ```
 
-And add PodSpec with `configMapKeyRef` to environment spec file.
+Then reference it from the environment spec's PodSpec using `configMapKeyRef`:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -65,6 +66,8 @@ spec:
                 name: my-configmap
                 key: TEST_KEY
 ```
+
+The ConfigMap value is now available as an environment variable in the container:
 
 ```sh
 $ kubectl exec -it <pod> -c fetcher sh

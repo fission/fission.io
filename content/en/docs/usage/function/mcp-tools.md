@@ -6,10 +6,13 @@ description: >
   Expose a Fission function as a Model Context Protocol (MCP) tool so LLM agents can discover and invoke it, with a JSON Schema for inputs and JWT-scoped access.
 ---
 
+**Expose a Fission function as an MCP tool so any LLM agent that speaks MCP can discover and invoke it, with no hand-written adapter code.**
 The [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) is an open protocol that lets LLM agents discover and call external tools.
-Starting with Fission {{< release-version >}} you can advertise a function as an MCP tool: any agent that speaks MCP (for example Claude) can then list it and invoke it over Fission's existing internal invocation path, with no hand-written adapter code.
+Starting with Fission {{< release-version >}}, an agent that speaks MCP (for example Claude) can list an advertised function and invoke it over Fission's existing internal invocation path.
 
 Exposing a function as a tool is **opt-in per function** and additive — functions you don't mark stay private.
+
+The request travels from agent to MCP server to router to function pod:
 
 ```mermaid
 flowchart TB
@@ -71,6 +74,8 @@ When omitted, the tool advertises an open object schema (`{"type":"object"}`).
 | `--tool-name` | Override the advertised tool name (defaults to `<namespace>-<function name>`; must match `^[a-zA-Z0-9_-]{1,64}$`). |
 
 ## List exposed tools
+
+`fission function tools` lists every tool-exposed function in the current namespace:
 
 ```bash
 $ fission function tools
