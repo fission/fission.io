@@ -11,18 +11,19 @@ images: ["images/og-image-fission.png"]
       <h1>Examples</h1>
       <p class="catalog-intro">
         Ready-to-run Fission functions from the team and the community, grouped by language.
-        Every card links to the source in the
+        Filter by language, trigger, or level to find a starting point, then open the card to read the source in the
         <a href="https://github.com/fission/examples" target="_blank" rel="noopener">fission/examples</a> repository.
       </p>
     </div>
   </div>
+
   <div class="catalog-toolbar">
     <input type="search" placeholder="Search examples&hellip;" class="form-control" aria-label="Search examples"
       id="search" oninput="updateExampleItems()">
-    <select class="form-select" id="filter-lang" aria-label="Filter by language" onchange="updateExampleItems()">
-      <option value="" selected disabled>Loading&hellip;</option>
-    </select>
   </div>
+
+  <div class="catalog-facets" id="facets" role="group" aria-label="Filter examples"></div>
+
   <div class="catalog-count" id="example-count" aria-live="polite"></div>
 
   <div class="row" id="example-list"></div>
@@ -31,10 +32,98 @@ images: ["images/og-image-fission.png"]
 <script type="text/javascript">
   const examples = {{< readfile file="/static/data/examples.json" >}};
 
-  let languageOptions = [`<option value="">All languages</option>`].concat(
-    examples.filter(e => e.examples.length > 0).map(e => `<option value="${e.language}">${e.language}</option>`));
-  document.getElementById("filter-lang").innerHTML = languageOptions.join(' ');
+  // --- Facet taxonomy -----------------------------------------------------
+  // Curated map from the free-form tags in examples.json onto three discovery
+  // axes. Language is keyed off each group's authoritative `language` field;
+  // Trigger and Level are derived from tags (matched case-insensitively).
+  // When the upstream fission/examples repo adds a new tag, slot it into a
+  // value below to make it filterable — unmapped tags still appear as
+  // searchable card pills. See the update-examples-catalog skill.
+  const TAG_FACETS = [
+    {
+      key: "trigger", label: "Trigger",
+      values: [
+        { label: "HTTP", tags: ["request response", "api", "webhook"] },
+        { label: "Message Queue", tags: ["message queue trigger", "keda", "kafka", "rabbit mq", "nats", "redis", "kinesis", "sqs", "pubsub"] },
+        { label: "WebSocket", tags: ["websocket"] },
+      ],
+    },
+    {
+      key: "level", label: "Level",
+      values: [
+        { label: "Starter", tags: ["hello world"] },
+        { label: "Application", tags: ["application"] },
+        { label: "Spec", tags: ["spec"] },
+      ],
+    },
+  ];
 
+  // Distinct group languages that actually have examples, in data order.
+  const LANGUAGES = examples.filter(e => e.examples.length > 0).map(e => e.language);
+
+  // Active selections, keyed by facet -> Set of selected value labels.
+  const active = { language: new Set(), trigger: new Set(), level: new Set() };
+
+  // Lower-cased tag set for one example (its own tags plus its group's tags).
+  function exampleTags(group, example) {
+    return new Set([...(group.tags || []), ...(example.tags || [])].map(t => t.toLowerCase()));
+  }
+
+  // Does an example satisfy the selections for one tag-derived facet?
+  function matchesTagFacet(facet, tags) {
+    const selected = active[facet.key];
+    if (selected.size === 0) return true;
+    return facet.values.some(v =>
+      selected.has(v.label) && v.tags.some(t => tags.has(t)));
+  }
+
+  function matchesLanguage(group, example) {
+    if (active.language.size === 0) return true;
+    return active.language.has(group.language) || active.language.has(example.language);
+  }
+
+  // --- Facet chip rendering ----------------------------------------------
+  function chip(facetKey, value) {
+    const isOn = active[facetKey].has(value);
+    return `<button type="button" class="catalog-chip${isOn ? " is-active" : ""}"
+      aria-pressed="${isOn}" data-facet="${facetKey}" data-value="${value.replace(/"/g, "&quot;")}"
+      onclick="toggleFacet('${facetKey}', this.dataset.value)">${value}</button>`;
+  }
+
+  function facetRow(key, label, values) {
+    const chips = values.map(v => chip(key, v)).join(" ");
+    return `<div class="catalog-facets__row">
+      <span class="catalog-facets__label">${label}</span>
+      <div class="catalog-facets__chips">${chips}</div>
+    </div>`;
+  }
+
+  function renderFacets() {
+    const rows = [facetRow("language", "Language", LANGUAGES)]
+      .concat(TAG_FACETS.map(f => facetRow(f.key, f.label, f.values.map(v => v.label))));
+    document.getElementById("facets").innerHTML = rows.join("");
+  }
+
+  function toggleFacet(key, value) {
+    const set = active[key];
+    set.has(value) ? set.delete(value) : set.add(value);
+    renderFacets();
+    updateExampleItems();
+  }
+
+  function clearAll() {
+    Object.values(active).forEach(s => s.clear());
+    document.getElementById("search").value = "";
+    renderFacets();
+    updateExampleItems();
+  }
+
+  function anyActive() {
+    return document.getElementById("search").value.trim() !== "" ||
+      Object.values(active).some(s => s.size > 0);
+  }
+
+  // --- Card rendering -----------------------------------------------------
   function exampleCard(example, logo) {
     const tags = example.tags.map(tagText => `<span class="example-tag">${tagText}</span>`);
 
@@ -53,24 +142,25 @@ images: ["images/og-image-fission.png"]
 
   function updateExampleItems() {
     const searchQuery = document.getElementById("search").value.trim().toLowerCase();
-    const selectedLanguageFilter = document.getElementById("filter-lang").value;
 
     let totalCount = 0;
 
     const groups = examples.map(e => {
-      let filteredLangExamples = e.examples;
+      const filteredLangExamples = e.examples.filter(example => {
+        const tags = exampleTags(e, example);
 
-      if (searchQuery) {
-        filteredLangExamples = filteredLangExamples.filter(example => example.name.toLowerCase().includes(searchQuery) ||
-        example.description.toLowerCase().includes(searchQuery) ||
-        example.tags.find(tag => tag.toLowerCase().includes(searchQuery)) ||
-        e.tags.find(tag => tag.toLowerCase().includes(searchQuery)));
-      }
+        if (!matchesLanguage(e, example)) return false;
+        if (!TAG_FACETS.every(f => matchesTagFacet(f, tags))) return false;
 
-      if (selectedLanguageFilter) {
-        filteredLangExamples = filteredLangExamples.filter(example => e.language === selectedLanguageFilter ||
-          example.language === selectedLanguageFilter);
-      }
+        if (searchQuery) {
+          const inText = example.name.toLowerCase().includes(searchQuery) ||
+            example.description.toLowerCase().includes(searchQuery) ||
+            example.tags.some(tag => tag.toLowerCase().includes(searchQuery)) ||
+            e.tags.some(tag => tag.toLowerCase().includes(searchQuery));
+          if (!inText) return false;
+        }
+        return true;
+      });
 
       if (filteredLangExamples.length === 0) return '';
 
@@ -91,11 +181,16 @@ images: ["images/og-image-fission.png"]
       return header + exampleCards.join(' ');
     }).filter(group => group);
 
-    document.getElementById("example-count").textContent =
-      `${totalCount} example${totalCount === 1 ? '' : 's'}`;
+    const clear = anyActive()
+      ? ` &middot; <button type="button" class="catalog-clear" onclick="clearAll()">Clear all</button>`
+      : "";
+    document.getElementById("example-count").innerHTML =
+      `${totalCount} example${totalCount === 1 ? '' : 's'}${clear}`;
 
     document.getElementById("example-list").innerHTML = groups.length > 0 ?
       groups.join(' ') : `<div class="col-12">No examples match the search filters</div>`;
   }
+
+  renderFacets();
   updateExampleItems();
 </script>
