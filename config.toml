@@ -184,11 +184,20 @@ slackurl = "/slack"
 twitter = 'fissionio'
 
 [[params.whatsnew]]
+badge = 'NEW'
+body = 'Durable & async Fission: a statestore substrate, fire-and-forget asynchronous invocation with retries and a dead-letter queue, and durable workflows that orchestrate functions as a resumable state machine.'
+heading = 'Durable & Async Workflows'
+[params.whatsnew.button]
+hero_class = 'mid'
+text = 'Explore Workflows'
+url = '/docs/usage/workflows/'
+
+[[params.whatsnew]]
 badge = 'RELEASE'
 body = 'Fission v1.27.0 is out! Zero-restart multi-namespace tenancy with per-namespace isolation, plus a developer toolkit — invocation correlation and failure attribution, fission function describe, and local development with run-local.'
 heading = 'Announcing Fission v1.27.0'
 [params.whatsnew.button]
-hero_class = 'mid'
+hero_class = 'mid-2'
 text = 'Read Release Notes'
 url = '/docs/releases/v1.27.0/'
 

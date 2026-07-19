@@ -100,6 +100,9 @@ Invokes functions on a cron schedule.
 ### Canary Config
 Shifts traffic gradually between two function versions and rolls back automatically on failures.
 
+### [Statestore]({{% ref "statestore.md" %}})
+A durable state substrate (key/value, event log, queue) that backs durable workflows, asynchronous invocation, and eventing.
+
 ## Deprecated components
 
 ### [Controller]({{% ref "controller.md" %}})

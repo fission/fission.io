@@ -31,6 +31,7 @@ fission httptrigger update [flags]
       --weight ints                     Weight for each function supplied with --function flag, in the same order. Used for canary deployment
       --prefix string                   Prefix with which functions are exposed. NOTE: Prefix takes precedence over URL/RelativeURL [DEPRECATED for 'fn create', use 'route create' instead]
       --keepprefix                      Keep the prefix in the URL while forwarding request to the function
+      --invocation-mode string          RFC-0024: 'async' makes every request through this trigger asynchronous (durable 202 + invocation id); empty is the default synchronous mode
   -h, --help                            help for update
 ```
 

@@ -25,6 +25,11 @@ Work through the function workflow in roughly this order:
 * [Access URL parameters]({{% ref "function/accessing-url-params.md" %}}) — read path parameters from REST-style routes.
 * [Canary deployments]({{% ref "function/canary-deployments.md" %}}) — roll out a new function version gradually and roll back automatically on failure.
 
+Durable and asynchronous execution:
+
+* [Asynchronous invocation]({{% ref "function/async-invocation.md" %}}) — invoke a function fire-and-forget with a durable id, background retries, a dead-letter queue, and result destinations.
+* [Workflows]({{% ref "workflows/_index.md" %}}) — orchestrate several functions as one durable, resumable state machine with parallelism, retries, and durable waits.
+
 Operational and advanced topics:
 
 * [Stream function responses]({{% ref "function/streaming.md" %}}) — return SSE, chunked, or WebSocket responses incrementally for LLM tokens, chat, and long-running calls.

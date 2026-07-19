@@ -14,51 +14,57 @@ fission function create [flags]
 ### Options
 
 ```
-      --name string                 Function name
-      --env string                  Environment name for function
-      --entrypoint string           --entry |:|: Entry point for environment v2 to load with
-      --pkgname string              --pkg |:|: Name of the existing package (--deploy and --src and --env will be ignored), should be in the same namespace as the function
-      --executortype string         Executor type for execution; one of 'poolmgr', 'newdeploy' (default "poolmgr")
-      --configmap stringArray       Function access to configmap, should be present in the same namespace as the function. You can provide multiple configmaps using multiple --configmap flags. In case of fn update the configmaps will be replaced by the provided list of configmaps.
-      --secret stringArray          Function access to secret, should be present in the same namespace as the function. You can provide multiple secrets using multiple --secrets flags. In the case of fn update the secrets will be replaced by the provided list of secrets.
-      --specializationtimeout int   --st |:|: Timeout for executor to wait for function pod creation (default 120)
-      --fntimeout int               --ft |:|: Maximum time for a request to wait for the response from the function (default 60)
-      --idletimeout int             The length of time (in seconds) that a function is idle before pod(s) are eligible for recycling (default 120)
-      --concurrency poolmgr         --con |:|: Maximum number of pods specialized concurrently to serve requests (Only valid for executortype; poolmgr) (default 500)
-      --requestsperpod poolmgr      --rpp |:|: Maximum number of concurrent requests that can be served by a specialized pod (Only valid for executortype; poolmgr) (default 1)
-      --streaming                   Enable streaming (SSE/chunked/WebSocket) responses for this function; the response is flushed incrementally and not cut by the function timeout
-      --streamingprotocol string    Streaming protocol when --streaming is set; one of 'auto', 'sse', 'chunked', 'websocket' (default "auto")
-      --streamingidletimeout int    Idle timeout (seconds) for a streaming response before it is aborted; reset on each chunk (default 60)
-      --streamingmaxduration int    Hard ceiling (seconds) on total streaming response lifetime; 0 means no ceiling (the idle timeout governs)
-      --expose-as-mcp               Advertise this function as a Model Context Protocol (MCP) tool on the MCP server
-      --tool-description string     Agent-facing tool description (required with --expose-as-mcp)
-      --tool-input-schema string    Path to a JSON Schema file describing the tool's arguments; advertised verbatim as the MCP tool inputSchema
-      --tool-name string            Override the advertised MCP tool name (defaults to <namespace>-<function name>)
-      --onceonly poolmgr            --yolo |:|: Specifies if specialized pod will serve exactly one request in its lifetime (Only valid for executortype; poolmgr)
-      --labels string               Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
-      --annotation stringArray      Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
-      --retainpods int              Number of pods to retain after pods specialization.
-      --code string                 URL or local path for single file source code
-      --sourcearchive stringArray   --source |:|: --src |:|: URL or local paths for source archive
-      --deployarchive stringArray   --deploy |:|: URL or local paths for binary archive
-      --srcchecksum string          SHA256 checksum of source archive when providing URL
-      --deploychecksum string       SHA256 checksum of deploy archive when providing URL
-      --insecure                    Skip generating SHA256 checksum for file integrity validation
-      --oci string                  Pre-built OCI image reference containing the deployment code (registry/repo:tag[@digest])
-      --buildcmd string             Package build command for builder to run with
-      --url string                  URL pattern (supports {var} and {var:regexp} path templates) [DEPRECATED for 'fn create', use 'route create' instead]
-      --prefix string               Prefix with which functions are exposed. NOTE: Prefix takes precedence over URL/RelativeURL [DEPRECATED for 'fn create', use 'route create' instead]
-      --method stringArray          HTTP Methods: GET,POST,PUT,DELETE,HEAD. To mention single method: --method GET and for multiple methods --method GET --method POST. [DEPRECATED for 'fn create', use 'route create' instead] (default [GET])
-      --mincpu int                  Minimum CPU to be assigned to pod (In millicore, minimum 1)
-      --maxcpu int                  Maximum CPU to be assigned to pod (In millicore, minimum 1)
-      --minmemory int               Minimum memory to be assigned to pod (In megabyte)
-      --maxmemory int               Maximum memory to be assigned to pod (In megabyte)
-      --minscale int                Minimum number of pods (Uses resource inputs to configure HPA) (default 1)
-      --maxscale int                Maximum number of pods (Uses resource inputs to configure HPA) (default 1)
-      --targetcpu int               Target average CPU usage percentage across pods for scaling (default 80)
-      --spec                        Save to the spec directory instead of creating on cluster
-      --dry                         View the generated specs
-  -h, --help                        help for create
+      --name string                     Function name
+      --env string                      Environment name for function
+      --entrypoint string               --entry |:|: Entry point for environment v2 to load with
+      --pkgname string                  --pkg |:|: Name of the existing package (--deploy and --src and --env will be ignored), should be in the same namespace as the function
+      --executortype string             Executor type for execution; one of 'poolmgr', 'newdeploy' (default "poolmgr")
+      --configmap stringArray           Function access to configmap, should be present in the same namespace as the function. You can provide multiple configmaps using multiple --configmap flags. In case of fn update the configmaps will be replaced by the provided list of configmaps.
+      --secret stringArray              Function access to secret, should be present in the same namespace as the function. You can provide multiple secrets using multiple --secrets flags. In the case of fn update the secrets will be replaced by the provided list of secrets.
+      --specializationtimeout int       --st |:|: Timeout for executor to wait for function pod creation (default 120)
+      --fntimeout int                   --ft |:|: Maximum time for a request to wait for the response from the function (default 60)
+      --idletimeout int                 The length of time (in seconds) that a function is idle before pod(s) are eligible for recycling (default 120)
+      --concurrency poolmgr             --con |:|: Maximum number of pods specialized concurrently to serve requests (Only valid for executortype; poolmgr) (default 500)
+      --requestsperpod poolmgr          --rpp |:|: Maximum number of concurrent requests that can be served by a specialized pod (Only valid for executortype; poolmgr) (default 1)
+      --streaming                       Enable streaming (SSE/chunked/WebSocket) responses for this function; the response is flushed incrementally and not cut by the function timeout
+      --streamingprotocol string        Streaming protocol when --streaming is set; one of 'auto', 'sse', 'chunked', 'websocket' (default "auto")
+      --streamingidletimeout int        Idle timeout (seconds) for a streaming response before it is aborted; reset on each chunk (default 60)
+      --streamingmaxduration int        Hard ceiling (seconds) on total streaming response lifetime; 0 means no ceiling (the idle timeout governs)
+      --expose-as-mcp                   Advertise this function as a Model Context Protocol (MCP) tool on the MCP server
+      --tool-description string         Agent-facing tool description (required with --expose-as-mcp)
+      --tool-input-schema string        Path to a JSON Schema file describing the tool's arguments; advertised verbatim as the MCP tool inputSchema
+      --tool-name string                Override the advertised MCP tool name (defaults to <namespace>-<function name>)
+      --async-retry-max-attempts int    Async delivery attempt budget before dead-lettering (RFC-0024)
+      --async-max-age duration          Max time an async invocation may wait for successful delivery before it is dead-lettered (RFC-0024)
+      --async-on-success string         Same-namespace function to invoke with the result after a successful async delivery (RFC-0024); empty clears it
+      --async-on-failure string         Same-namespace function to invoke with the result after a permanent async failure (RFC-0024); empty clears it
+      --async-on-success-topic string   Statestore topic to publish the result envelope to after a successful async delivery (RFC-0027); empty clears it
+      --async-on-failure-topic string   Statestore topic to publish the result envelope to after a permanent async failure (RFC-0027); empty clears it
+      --onceonly poolmgr                --yolo |:|: Specifies if specialized pod will serve exactly one request in its lifetime (Only valid for executortype; poolmgr)
+      --labels string                   Comma separated labels to apply to the function. E.g. --labels="environment=dev,application=analytics"
+      --annotation stringArray          Annotation to apply to the function. To mention multiple annotations --annotation="abc.com/team=dev" --annotation="foo=bar"
+      --retainpods int                  Number of pods to retain after pods specialization.
+      --code string                     URL or local path for single file source code
+      --sourcearchive stringArray       --source |:|: --src |:|: URL or local paths for source archive
+      --deployarchive stringArray       --deploy |:|: URL or local paths for binary archive
+      --srcchecksum string              SHA256 checksum of source archive when providing URL
+      --deploychecksum string           SHA256 checksum of deploy archive when providing URL
+      --insecure                        Skip generating SHA256 checksum for file integrity validation
+      --oci string                      Pre-built OCI image reference containing the deployment code (registry/repo:tag[@digest])
+      --buildcmd string                 Package build command for builder to run with
+      --url string                      URL pattern (supports {var} and {var:regexp} path templates) [DEPRECATED for 'fn create', use 'route create' instead]
+      --prefix string                   Prefix with which functions are exposed. NOTE: Prefix takes precedence over URL/RelativeURL [DEPRECATED for 'fn create', use 'route create' instead]
+      --method stringArray              HTTP Methods: GET,POST,PUT,DELETE,HEAD. To mention single method: --method GET and for multiple methods --method GET --method POST. [DEPRECATED for 'fn create', use 'route create' instead] (default [GET])
+      --mincpu int                      Minimum CPU to be assigned to pod (In millicore, minimum 1)
+      --maxcpu int                      Maximum CPU to be assigned to pod (In millicore, minimum 1)
+      --minmemory int                   Minimum memory to be assigned to pod (In megabyte)
+      --maxmemory int                   Maximum memory to be assigned to pod (In megabyte)
+      --minscale int                    Minimum number of pods (Uses resource inputs to configure HPA) (default 1)
+      --maxscale int                    Maximum number of pods (Uses resource inputs to configure HPA) (default 1)
+      --targetcpu int                   Target average CPU usage percentage across pods for scaling (default 80)
+      --spec                            Save to the spec directory instead of creating on cluster
+      --dry                             View the generated specs
+  -h, --help                            help for create
 ```
 
 ### Options inherited from parent commands

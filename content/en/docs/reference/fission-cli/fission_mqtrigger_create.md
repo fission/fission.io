@@ -17,8 +17,8 @@ fission mqtrigger create [flags]
       --function string        Function name
       --topic string           Message queue Topic the trigger listens on
       --name string            Message queue trigger name
-      --mqtype string          For mqtype "fission" => kafka
-                               					 For mqtype "keda" => kafka, aws-sqs-queue, aws-kinesis-stream, gcp-pubsub, stan, nats-jetstream, rabbitmq, redis (default "kafka")
+      --mqtype string          For mqtkind "fission" => kafka, statestore (the RFC-0027 built-in, no broker)
+                               					 For mqtkind "keda" => kafka, aws-sqs-queue, aws-kinesis-stream, gcp-pubsub, stan, nats-jetstream, rabbitmq, redis (default "kafka")
       --resptopic string       Topic that the function response is sent on (response discarded if unspecified)
       --errortopic string      Topic that the function error messages are sent to (errors discarded if unspecified
       --maxretries int         Maximum number of times the function will be retried upon failure

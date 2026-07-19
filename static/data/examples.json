@@ -913,6 +913,34 @@
         "tags": [
           "spec"
         ]
+      },
+      {
+        "name": "Workflow: Order Pipeline",
+        "description": "Durable checkout workflow: parallel fraud/stock screening, data-driven routing, and payment charge with retry and typed-error catch.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/workflows/order-pipeline",
+        "tags": [
+          "workflow",
+          "parallel",
+          "choice"
+        ]
+      },
+      {
+        "name": "Workflow: Batch Lead Enrichment",
+        "description": "Map fan-out workflow: enrich a batch of leads one record per array element, bounded concurrency, ordered join into a summary step.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/workflows/batch-enrichment",
+        "tags": [
+          "workflow",
+          "map"
+        ]
+      },
+      {
+        "name": "Workflow: Payment Dunning",
+        "description": "Durable Wait-timer workflow: retry a declined subscription charge after a grace period, then cancel — the timer survives controller restarts.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/workflows/payment-dunning",
+        "tags": [
+          "workflow",
+          "wait"
+        ]
       }
     ]
   }

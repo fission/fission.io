@@ -27,6 +27,7 @@ Create, update and manage functions
 * [fission function create](/docs/reference/fission-cli/fission_function_create/)	 - Create a function (and optionally, an HTTP route to it)
 * [fission function delete](/docs/reference/fission-cli/fission_function_delete/)	 - Delete a function
 * [fission function describe](/docs/reference/fission-cli/fission_function_describe/)	 - Describe a function's health in one view (summary, conditions, build, pods)
+* [fission function dlq](/docs/reference/fission-cli/fission_function_dlq/)	 - Inspect and manage the async invocation dead-letter queue
 * [fission function get](/docs/reference/fission-cli/fission_function_get/)	 - Get function source code
 * [fission function getmeta](/docs/reference/fission-cli/fission_function_getmeta/)	 - Get function metadata
 * [fission function list](/docs/reference/fission-cli/fission_function_list/)	 - List functions
