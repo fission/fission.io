@@ -30,7 +30,7 @@ The function stays simple; the workflow owns the fan-out, throttling, retries, a
 
 ## Payment dunning — durable Wait timers
 
-Subscription renewal with a grace period: if a charge is declined, the run **waits out a grace period on a durable timer** and tries once more before cancelling.
+Subscription renewal with a grace period: if a charge is declined, the run **waits out a grace period on a durable timer** and tries once more before canceling.
 The run consumes no pod, memory, or connection while waiting — the timer lives in the statestore and survives controller restarts.
 
 - **Shows:** `Wait` as a durable delay, and a `catch` route that changes behavior on the second attempt.

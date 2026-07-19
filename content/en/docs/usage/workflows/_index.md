@@ -47,13 +47,13 @@ stateDiagram-v2
   screening --> decision
   decision --> reject: high risk / out of stock
   decision --> charge
-  charge --> fulfil
+  charge --> fulfill
   charge --> reject: PaymentDeclined
-  fulfil --> [*]
+  fulfill --> [*]
   reject --> [*]
 ```
 
-`fission workflow graph --name <workflow>` renders exactly this diagram from a workflow's definition, and `--open` serves it in a local day/night viewer.
+`fission workflow graph --name <workflow>` renders this diagram from a workflow's definition, and `--open` serves it in a local day/night viewer.
 
 ## In this section
 

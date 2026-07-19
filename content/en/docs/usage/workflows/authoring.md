@@ -54,7 +54,7 @@ charge:
       next: reject
       resultPath: $.error
   resultPath: $.charge                      # where the function result lands in the document
-  next: fulfil
+  next: fulfill
 ```
 
 | Field | Meaning |

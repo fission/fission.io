@@ -8,7 +8,7 @@ description: >
 **A workflow is a durable state machine that orchestrates several functions as one reliable unit of work.**
 
 A single function is the right tool for one step.
-Real processes are usually several steps with logic between them — validate an order, screen it for fraud, charge the card, fulfil or reject — where some steps run in parallel, some are conditional, and some can fail transiently and must be retried.
+Real processes are usually several steps with logic between them — validate an order, screen it for fraud, charge the card, fulfill or reject — where some steps run in parallel, some are conditional, and some can fail transiently and must be retried.
 You *can* wire that together by having functions call each other, but then the orchestration lives in your code, nothing records how far a given execution got, and a crash midway leaves you guessing.
 A workflow makes the orchestration a first-class, durable object instead.
 

@@ -78,7 +78,7 @@ fission workflow runs graph --name order-pipeline-7k2p9 --open
 
 {{% notice info %}}
 `--open` serves the diagram from an ephemeral local web server and renders it in your own browser — the workflow never leaves your machine.
-In a run overlay, states that only route (a `Choice`) emit no step events and are labelled "not tracked" rather than colored as a status.
+In a run overlay, states that only route (a `Choice`) emit no step events and are labeled "not tracked" rather than colored as a status.
 {{% /notice %}}
 
 ## Related
