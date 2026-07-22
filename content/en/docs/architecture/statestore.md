@@ -11,10 +11,11 @@ It exposes three capabilities behind one interface — a **key/value** store, an
 Fission itself never deploys a database product: you either use the bundled embedded driver for development, or point the external driver at a database you already run.
 
 The statestore is what makes Fission's newer durable features possible.
-Starting with Fission {{< release-version >}}, three subsystems build on it:
+Starting with Fission {{< release-version >}}, several subsystems build on it:
 
 - **[Durable Workflows]({{% ref "/docs/usage/workflows/_index.md" %}})** record every step of a run in the event log, so a run survives a controller restart and resumes exactly where it stopped.
 - **[Asynchronous invocation]({{% ref "/docs/usage/function/async-invocation.md" %}})** enqueues each fire-and-forget call on the queue and delivers it in the background with retries and a dead-letter queue.
+- **[Function state]({{% ref "/docs/usage/function/keyed-state.md" %}})** gives a function a private keyspace of durable key/value entries — counters, sessions, carts, agent memory — with no external Redis or database.
 - **Eventing** uses the event log and queue as its zero-broker transport.
 
 The statestore is off by default; a feature that needs it will tell you to enable it.
