@@ -49,7 +49,9 @@ Add `--state` at create (or update) time:
 fission function create --name cart --env nodejs --code cart.js --state
 ```
 
-That is all a function needs. By default its keyspace is named after the function, values are capped at 256&nbsp;KiB, and it may hold up to 10,000 live keys. You can tune those:
+That is all a function needs.
+By default its keyspace is named after the function, values are capped at 256&nbsp;KiB, and it may hold up to 10,000 live keys.
+You can tune those:
 
 ```bash
 fission function create --name sessions --env nodejs --code sessions.js \
@@ -69,7 +71,9 @@ Fission injects two things into the function pod:
 - `FISSION_STATE_URL` — the base URL of the state API (an environment variable).
 - `FISSION_STATE_TOKEN_PATH` — the path to a small JSON file holding this function's scoped credentials: `{ "namespace": "...", "keyspace": "...", "token": "..." }`.
 
-You present the token as a bearer header along with the namespace and keyspace it was minted for. There is no client library to install — it is plain HTTP. A ~20-line helper is all any language needs.
+You present the token as a bearer header along with the namespace and keyspace it was minted for.
+There is no client library to install — it is plain HTTP.
+A ~20-line helper is all any language needs.
 
 {{< tabs >}}
 {{< tab "Node.js" >}}
@@ -152,7 +156,9 @@ def state_client():
 
 ### A per-user counter
 
-The simplest useful pattern: increment a value keyed by user id. Because two requests for the same user can race, use the version returned by `get` as a **compare-and-swap** token on the `set` — the write only lands if nobody changed the value in between, and you retry on a conflict. No lost increments, no locks.
+The simplest useful pattern: increment a value keyed by user id.
+Because two requests for the same user can race, use the version returned by `get` as a **compare-and-swap** token on the `set` — the write only lands if nobody changed the value in between, and you retry on a conflict.
+No lost increments, no locks.
 
 ```javascript
 module.exports = async function (context) {
@@ -213,7 +219,8 @@ await state.set(key, JSON.stringify(history), { ifVersion: cur ? cur.version : 0
 ## Keep an in-memory cache coherent with sticky routing
 
 Everything above is durable and correct no matter which pod serves a request.
-If your function also keeps an **in-memory cache** on top of that durable state — to avoid a round trip on hot keys — you want all requests for one key to keep landing on the same pod so that cache stays warm and coherent. Turn on **sticky routing** by telling Fission where the key lives in the request:
+If your function also keeps an **in-memory cache** on top of that durable state — to avoid a round trip on hot keys — you want all requests for one key to keep landing on the same pod so that cache stays warm and coherent.
+Turn on **sticky routing** by telling Fission where the key lives in the request:
 
 ```bash
 fission function create --name game-room --env nodejs --code room.js --state \
@@ -221,9 +228,12 @@ fission function create --name game-room --env nodejs --code room.js --state \
   --state-sticky-name X-Room-Id
 ```
 
-Now requests carrying the same `X-Room-Id` are consistent-hashed onto the same ready pod while the pod set is stable. Sources can be a `header` or a `queryparam`.
+Now requests carrying the same `X-Room-Id` are consistent-hashed onto the same ready pod while the pod set is stable.
+Sources can be a `header` or a `queryparam`.
 
-Sticky routing is a **performance optimization, not a correctness guarantee**: on a scale event or pod replacement a key may move to another pod, and its in-memory cache warms up again from the state API. The durable truth always lives in the state API, so a request that lands on a different pod is never wrong — only, briefly, colder. Requests that don't carry the key fall back to normal routing.
+Sticky routing is a **performance optimization, not a correctness guarantee**: on a scale event or pod replacement a key may move to another pod, and its in-memory cache warms up again from the state API.
+The durable truth always lives in the state API, so a request that lands on a different pod is never wrong — only, briefly, colder.
+Requests that don't carry the key fall back to normal routing.
 
 ## Inspect and manage state from the CLI
 
@@ -238,10 +248,18 @@ fission function state delete  --name cart --key demo-cart
 
 ## Lifecycle, limits, and cleanup
 
-- **Deleting a function purges its keyspace** by default, so state doesn't leak after the function is gone. Annotate the function with `fission.io/state-retain: "true"` to keep the data (for example to re-attach a replacement function to the same keyspace).
-- **Quotas are enforced for you.** A value larger than `--state-max-value-bytes` is rejected; creating a key past `--state-max-keys` is rejected — atomically, so concurrent writers can't overshoot the budget.
-- **This is key/value, not a database.** There are no cross-key transactions, no secondary indexes, and values are capped (256&nbsp;KiB by default) — large blobs belong in object storage, relational data in a real database. It is exactly the right tool for the "remember a small thing per key" workloads above.
-- **Executor type.** State works with the `poolmgr` (default) and `newdeploy` executors. The container executor and the `infinite` functions-per-container environment mode aren't supported, because a scoped per-function token can't be delivered to them.
+- **State is shared across [function versions]({{% ref "versions-aliases.md" %}}).**
+  The keyspace belongs to the function, not to any one published version, so repointing or rolling back an alias rolls back code — never data — and both sides of a weighted split read and write the same keyspace.
+- **Deleting a function purges its keyspace** by default, so state doesn't leak after the function is gone.
+  Annotate the function with `fission.io/state-retain: "true"` to keep the data (for example to re-attach a replacement function to the same keyspace).
+- **Quotas are enforced for you.**
+  A value larger than `--state-max-value-bytes` is rejected; creating a key past `--state-max-keys` is rejected — atomically, so concurrent writers can't overshoot the budget.
+- **This is key/value, not a database.**
+  There are no cross-key transactions, no secondary indexes, and values are capped (256&nbsp;KiB by default) — large blobs belong in object storage, relational data in a real database.
+  It is exactly the right tool for the "remember a small thing per key" workloads above.
+- **Executor type.**
+  State works with the `poolmgr` (default) and `newdeploy` executors.
+  The container executor and the `infinite` functions-per-container environment mode aren't supported, because a scoped per-function token can't be delivered to them.
 
 ## Multi-namespace tenancy
 

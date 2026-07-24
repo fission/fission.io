@@ -23,6 +23,8 @@ Work through the function workflow in roughly this order:
 * [Run a container as a function]({{% ref "function/container-functions.md" %}}) — turn any existing container image into a Fission function.
 * [Access secrets and ConfigMaps]({{% ref "function/access-secret-cfgmap-in-function.en.md" %}}) — read Kubernetes Secrets and ConfigMaps from inside a function.
 * [Access URL parameters]({{% ref "function/accessing-url-params.md" %}}) — read path parameters from REST-style routes.
+* [Function versions and aliases]({{% ref "function/versions-aliases.md" %}}) — publish immutable versions, route traffic through movable aliases like `prod` and `staging`, split traffic between two versions, and roll back instantly.
+* [Version lifecycle and interactions]({{% ref "function/versions-lifecycle.md" %}}) — automatic publishing, retention, environment drift, and how versions interact with the rest of Fission.
 * [Canary deployments]({{% ref "function/canary-deployments.md" %}}) — roll out a new function version gradually and roll back automatically on failure.
 
 Durable and asynchronous execution:

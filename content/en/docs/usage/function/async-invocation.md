@@ -85,6 +85,10 @@ fission fn update --name resize-image \
 | `--async-retry-max-attempts` | Maximum delivery attempts before dead-lettering. |
 | `--async-max-age` | Maximum age of an invocation before dead-lettering, regardless of attempts. |
 
+{{% notice info %}}
+When the function is invoked through a [function alias]({{% ref "versions-aliases.md" %}}), the invocation is pinned to the version resolved at enqueue time — retries re-run that same version even if the alias moves or is rolled back in between, so retries stay deterministic.
+{{% /notice %}}
+
 ## Result destinations
 
 An async invocation has no caller waiting for its result, so you can route the result to another function in the same namespace:
@@ -141,6 +145,7 @@ See [Statestore]({{% ref "/docs/architecture/statestore.md" %}}).
 ## Related
 
 - [Statestore]({{% ref "/docs/architecture/statestore.md" %}}) — the durable queue behind async delivery.
+- [Function versions and aliases]({{% ref "versions-aliases.md" %}}) — async retries pin the version resolved at enqueue time.
 - [Durable Workflows]({{% ref "/docs/usage/workflows/_index.md" %}}) — orchestrate multiple functions with the same durable substrate.
 - [Create and run functions]({{% ref "functions.en.md" %}}) — the everyday function workflow.
 - [Custom Resource Definition Specification]({{% ref "/docs/reference/crd-reference.md" %}}) — the async delivery fields on the `Function` resource.

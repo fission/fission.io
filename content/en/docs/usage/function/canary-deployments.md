@@ -9,6 +9,12 @@ description: >
 **A CanaryConfig gradually shifts HTTP traffic to a new function version, using Prometheus health checks to roll back automatically if the new version becomes unhealthy.**
 Traffic starts at 0% and increases in steps up to 100%, unless the failure threshold is exceeded first.
 
+{{% notice tip %}}
+Starting with Fission {{< release-version >}}, the recommended way to canary is over [function versions and aliases]({{% ref "versions-aliases.md" %}}): point the trigger at an alias and name two published **versions** of the same function as `--newfn`/`--oldfn`, instead of deploying the new code as a second function.
+See [canary rollouts over an alias]({{% ref "versions-lifecycle.md#canary-rollouts-over-an-alias" %}}).
+The classic two-function pattern below keeps working unchanged.
+{{% /notice %}}
+
 ### Setup & pre-requisites
 
 Enable the canary feature by setting `canaryDeployment.enabled` to `true` in the Helm chart during Fission installation.
