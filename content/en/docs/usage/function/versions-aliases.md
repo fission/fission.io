@@ -37,17 +37,20 @@ A trigger that references a bare function name keeps meaning "the live function"
 
 ```bash
 $ fission fn update --name orders --code orders-v2.js
-function 'orders' updated
+Function 'orders' updated
 
 $ fission fn publish --name orders --description "checkout rounding fix"
 created orders-v3
+next: fission alias create --function orders --name <alias> --version orders-v3
 ```
 
+The first line is machine-readable (`created <name>`); the `next:` breadcrumb suggests the usual follow-up — pointing an alias at the fresh version.
 Publishing is idempotent: if nothing runtime-affecting changed since the last publish, the existing newest version is returned instead of minting a duplicate:
 
 ```bash
 $ fission fn publish --name orders
 unchanged orders-v3
+next: fission alias create --function orders --name <alias> --version orders-v3
 ```
 
 | Flag | Meaning |
@@ -63,21 +66,31 @@ Versions can also be minted automatically on every runtime-affecting update — 
 
 ```bash
 $ fission fn versions --name orders
-NAME      SEQUENCE DIGEST              PUBLISHED            AGE
-orders-v1 1        sha256:1f8ac10f23c5 2026-07-10T09:14:02Z 14d
-orders-v2 2        sha256:60303ae22b99 2026-07-17T16:41:55Z 7d
-orders-v3 3        sha256:fd61a03af4f7 2026-07-24T08:03:11Z 2m
+NAME      SEQUENCE DIGEST              PUBLISHED            ALIASED-BY AGE
+orders-v1 1        sha256:1f8ac10f23c5 2026-07-10T09:14:02Z -          14d
+orders-v2 2        sha256:60303ae22b99 2026-07-17T16:41:55Z -          7d
+orders-v3 3        sha256:fd61a03af4f7 2026-07-24T08:03:11Z prod       2m
 ```
 
-The `DIGEST` column pins the exact package content of each version.
-The table truncates it; `-o wide` prints full digests and adds an `ENVDRIFT` column showing whether the version was published under an older generation of its environment (see [environment updates and drift]({{% ref "versions-lifecycle.md#environment-updates-and-drift" %}})).
-`-o json` / `-o yaml` print the full objects.
+The `DIGEST` column pins the exact package content of each version, and `ALIASED-BY` shows which aliases currently reference it — a `-` means the version is unreferenced and eligible for [retention GC]({{% ref "versions-lifecycle.md#retention" %}}).
+The table truncates digests; `-o wide` prints them in full and adds an `ENVDRIFT` column showing whether the version was published under an older generation of its environment (see [environment updates and drift]({{% ref "versions-lifecycle.md#environment-updates-and-drift" %}})), plus the `DESCRIPTION` recorded at publish time.
+`-o name` prints one version name per line, for scripting; `-o json` / `-o yaml` print the full objects.
+
+To read a version rather than list them, `fission fn get --version` prints the exact source snapshot the version froze:
+
+```bash
+$ fission fn get --name orders --version orders-v2
+module.exports = async (context) => {
+    // ...
+}
+```
 
 ## Point an alias at a version
 
 ```bash
-$ fission alias create --name prod --function orders --version orders-v3
+$ fission alias create --name prod --function orders --version orders-v3 --wait
 function alias 'prod' created
+function alias 'prod' resolved
 
 $ fission alias list
 NAME    FUNCTION VERSION   PACKAGE-DIGEST WEIGHT SECONDARY-VERSION RESOLVED-VERSION
@@ -85,7 +98,29 @@ prod    orders   orders-v3                <none>                   orders-v3
 staging orders   orders-v4                <none>                   orders-v4
 ```
 
-`fission alias get --name prod` shows the same row plus the alias's status conditions, and `fission alias delete --name prod` removes it.
+`--wait` blocks until the alias's `Resolved` condition confirms the target — the same flag `alias update` takes, so a CI job can gate on either.
+Without it, creation returns immediately and resolution completes asynchronously.
+
+`fission alias get --name prod` shows the same row plus the alias's status conditions and — once the alias has been repointed at least once — a `HISTORY` block listing its previous targets, most recent last:
+
+```bash
+$ fission alias get --name prod
+NAME FUNCTION VERSION   PACKAGE-DIGEST WEIGHT SECONDARY-VERSION RESOLVED-VERSION
+prod orders   orders-v4                <none>                   orders-v4
+
+CONDITIONS:
+TYPE     STATUS REASON     MESSAGE                                                 LASTTRANSITION
+Resolved True   Resolved   resolved to FunctionVersion "orders-v4"                 8s
+EnvDrift False  EnvCurrent environment default/node generation 5 matches version "orders-v4"'s recorded generation 5 8s
+
+HISTORY:
+VERSION   SWITCHED-AT
+orders-v2 2d
+orders-v3 8s
+```
+
+The last history entry is what a bare `fission fn rollback` returns to, so `alias get` is the fastest way to see where a rollback would land.
+`fission alias delete --name prod` removes the alias.
 An alias lives in the same namespace as its function, and one function can have any number of aliases.
 
 ## Testing an alias or version
@@ -111,13 +146,79 @@ Error: alias "staging" not found for function "orders": functionaliases.fission.
 `--async` works with either flag too.
 The invocation is enqueued against the resolved alias/version route, so it stays pinned to that target even if the alias moves before the function actually runs.
 
+## Inspecting versions, aliases, and their pods
+
+`fission fn describe` on a versioned function ends with a `VERSIONING` section — the versioning mode, the version count, and one row per alias — and its `PODS` table gains a `VERSION` column showing which version each specialized pod is serving:
+
+```bash
+$ fission fn describe --name orders
+...
+PODS:
+NAME                                        NAMESPACE READY STATUS  IP          EXECUTORTYPE MANAGED SERVED VERSION
+poolmgr-node-default-8750-844bd45565-9tvrj  default   2/2   Running 10.244.0.77 poolmgr      false   true   orders-v4
+poolmgr-node-default-8750-844bd45565-pg8rk  default   2/2   Running 10.244.0.78 poolmgr      false   true   orders-v3
+
+VERSIONING:
+Versioning: mode=auto retain=10
+Versions:   4
+NAME    TARGET    WEIGHT ENVDRIFT
+prod    orders-v3 <none> False
+staging orders-v4 <none> False
+```
+
+Add `--version` to describe one version instead of the function — an inspector over the immutable snapshot, including its digest, publish-time description, the environment generation it was published under, and which aliases reference it:
+
+```bash
+$ fission fn describe --name orders --version orders-v3
+Name:                    orders-v3
+Function:                orders
+Sequence:                3
+Digest:                  sha256:fd61a03af4f77d870fc21e05e7e80678095c92d808cfb3b5c279ee04c74aca13
+Description:             checkout rounding fix
+Published:               2026-07-24T08:03:11Z
+Age:                     2d
+Entrypoint:              <none>
+Environment:             node
+Env Observed Generation: 5
+Env Runtime Image:       ghcr.io/fission/node-env
+Env Drift:               current
+
+ALIASED-BY:
+NAME TARGET    WEIGHT ENVDRIFT
+prod orders-v3 <none> False
+```
+
+The same per-target filtering works on `fission fn pods` and `fission fn logs`: `--version` narrows to pods serving one pinned version, `--alias` follows an alias to whatever it currently resolves to.
+During a weighted split or an incident, that is the difference between reading interleaved logs from two versions and reading exactly the one you care about:
+
+```bash
+$ fission fn pods --name orders --version orders-v3
+NAME                                        NAMESPACE READY STATUS  IP          EXECUTORTYPE MANAGED SERVED VERSION
+poolmgr-node-default-8750-844bd45565-pg8rk  default   2/2   Running 10.244.0.78 poolmgr      false   true   orders-v3
+
+$ fission fn logs --name orders --alias prod
+...
+```
+
+`--version` and `--alias` are mutually exclusive on both commands.
+
 ## Route triggers through the alias
 
 A trigger targets an alias through the optional `alias` field on its function reference.
 The router resolves the alias **at request time**, so repointing the alias redirects traffic without touching the trigger.
 
-The `fission` CLI has no dedicated flag for this yet, so set the field declaratively.
-Either write the trigger with `--spec` and edit the generated file, or apply YAML directly:
+Create the route with `--function-alias`:
+
+```bash
+$ fission route create --name orders-api --url /api/orders --method POST \
+    --function orders --function-alias prod
+trigger 'orders-api' created
+```
+
+`--function-alias` requires exactly one `--function` and is mutually exclusive with `--function-version` and with weighted multi-function routing.
+The same flag works on `fission route update`, with one wrinkle: pass `--function` again alongside it — `route update` does not infer the target function from the existing route.
+
+For GitOps pipelines, the same field is settable declaratively — write the trigger with `--spec` and edit the generated file, or apply YAML directly:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -150,7 +251,7 @@ functionref:
   alias: staging
 ```
 
-To pin a route permanently to one immutable snapshot instead, set `functionref.version: orders-v3` — unlike an alias, a version pin never moves.
+To pin a route permanently to one immutable snapshot instead, pass `--function-version orders-v3` (or set `functionref.version: orders-v3` in YAML) — unlike an alias, a version pin never moves.
 `alias` and `version` are mutually exclusive, and both are valid on every trigger kind that embeds a function reference (HTTP, message queue, timer, Kubernetes watch).
 
 ## Deploy by moving the alias

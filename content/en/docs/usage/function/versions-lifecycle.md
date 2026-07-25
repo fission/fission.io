@@ -48,6 +48,14 @@ $ kubectl patch function orders --type merge -p '{"spec":{"versioning":{"mode":"
 
 In `auto` mode, Fission publishes a new version after every **runtime-affecting** update — a change to what actually runs or is observable by an invocation, such as new code, a changed entry point, or changed resources.
 Cosmetic edits (labels, annotations) do not mint versions.
+The CLI reminds you that the mint is pending after every such update:
+
+```bash
+$ fission fn update --name orders --code orders-v3.js
+Package 'orders-4c266a01-9182-4d40-b1b6-8a24b0e9e62b' updated
+Function 'orders' updated
+versioning=auto: a new version is minted once the build succeeds (fission fn versions --name orders)
+```
 
 The version is minted only **after the referenced package build succeeds**, so a broken build never becomes a version an alias could point at.
 If a build is in flight when you update, the version appears when the build completes.
@@ -72,6 +80,18 @@ deleted 3, skipped 1, retained 5
 ```
 
 `skipped` counts versions that were beyond the keep floor but protected by an alias reference.
+The `ALIASED-BY` column of `fission fn versions` shows exactly which alias protects which version.
+
+### Deleting the function
+
+Deleting a versioned function cascades: its versions and aliases go with it.
+`fission fn delete` says so before doing it, and calls out any triggers that route through the doomed aliases — those triggers are **not** deleted, but they stop resolving:
+
+```bash
+$ fission fn delete --name orders
+warning: deleting function 'orders' also deletes 4 versions and 2 aliases (prod, staging); HTTPTriggers [orders-api] reference these aliases and will stop resolving
+function 'orders' deleted
+```
 
 ## Environment updates and drift
 
@@ -108,7 +128,7 @@ reports  <none>  <none>         <none>           5        <none>
 ```
 
 `DRIFT` is `True` (published under an older environment generation), `False` (current), `OtherEnv` (the version was published when the function still used a different environment), or `<none>` (no alias or not assessable).
-`fission fn versions --name orders -o wide` shows the same verdict per version in its `ENVDRIFT` column.
+`fission fn versions --name orders -o wide` shows the same verdict per version in its `ENVDRIFT` column, and the per-version inspector (`fission fn describe --name orders --version orders-v2`) spells it out in full — the environment generation the version was published under, the live runtime image, and an `Env Drift` verdict.
 
 ## How other invocation paths behave
 
