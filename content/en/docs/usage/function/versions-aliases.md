@@ -202,6 +202,13 @@ function alias 'prod' rolled back: orders-v4 -> orders-v3
 function alias 'prod' resolved
 ```
 
+Confirm the alias is actually serving the rolled-back target with the same `--alias` flag `fn test` uses for smoke-testing:
+
+```bash
+$ fission fn test --name orders --alias prod
+{"order":"ok"}
+```
+
 By default the alias returns to its **previous target**, which Fission records in the alias's history on every switch.
 Pass `--to` to pick any version explicitly:
 
@@ -256,6 +263,14 @@ For pipelines that build content before versions exist, an alias can pin by **pa
 spec:
   functionName: orders
   packageDigest: sha256:fd61a03af4f77d870fc21e05e7e80678095c92d808cfb3b5c279ee04c74aca13
+```
+
+The same pin works imperatively with `--package-digest`, on either `alias create` or `alias update`:
+
+```bash
+$ fission alias create --name prod --function orders \
+    --package-digest sha256:fd61a03af4f77d870fc21e05e7e80678095c92d808cfb3b5c279ee04c74aca13
+function alias 'prod' created
 ```
 
 The pipeline commits the content hash it built; Fission resolves the digest to the version that recorded it, asynchronously, once that version exists.
