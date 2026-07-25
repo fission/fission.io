@@ -13,7 +13,21 @@ This page continues from [Function versions and aliases]({{% ref "versions-alias
 ## Automatic publishing
 
 Instead of calling `fission fn publish` after every deploy, a function can opt into minting versions automatically.
-Opt-in is a field on the function's spec — set it in a [spec file]({{% ref "/docs/usage/spec/_index.md" %}}) or with `kubectl`; there is no CLI flag for it:
+Opt in from the CLI with `--versioning`, on either `fission fn create` or `fission fn update`:
+
+```bash
+$ fission fn update --name orders --versioning auto
+Function 'orders' updated
+
+$ fission fn update --name orders --versioning auto --retain 10
+Function 'orders' updated
+```
+
+`--versioning` takes `auto` (the default once versioning is enabled), `manual`, or `off`.
+`off` is only meaningful on `fn update` — it clears the versioning config; on `fn create` there is nothing to clear yet, so omitting `--versioning` and passing `--versioning off` are equivalent.
+`--retain` sets the retention floor (see below) and requires versioning to already be enabled — pass `--versioning` in the same command, or add `--retain` on its own once the function already carries a `versioning` block.
+
+The same fields are also settable directly on the function's spec — in a [spec file]({{% ref "/docs/usage/spec/_index.md" %}}) or with `kubectl patch`, if you'd rather manage it that way:
 
 ```yaml
 apiVersion: fission.io/v1
@@ -27,13 +41,17 @@ spec:
     retain: 10    # optional; see retention below
 ```
 
+```bash
+$ kubectl patch function orders --type merge -p '{"spec":{"versioning":{"mode":"auto","retain":10}}}'
+```
+
 In `auto` mode, Fission publishes a new version after every **runtime-affecting** update — a change to what actually runs or is observable by an invocation, such as new code, a changed entry point, or changed resources.
 Cosmetic edits (labels, annotations) do not mint versions.
 
 The version is minted only **after the referenced package build succeeds**, so a broken build never becomes a version an alias could point at.
 If a build is in flight when you update, the version appears when the build completes.
 
-Set `mode: manual` to keep versioning opted in (retention GC, alias support) but mint versions only on explicit `fission fn publish`.
+Set `--versioning manual` (or `mode: manual` in the spec) to keep versioning opted in (retention GC, alias support) but mint versions only on explicit `fission fn publish`.
 `fission fn publish` itself works on any function, whether or not `spec.versioning` is set.
 
 ## Retention
