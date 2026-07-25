@@ -88,6 +88,29 @@ staging orders   orders-v4                <none>                   orders-v4
 `fission alias get --name prod` shows the same row plus the alias's status conditions, and `fission alias delete --name prod` removes it.
 An alias lives in the same namespace as its function, and one function can have any number of aliases.
 
+## Testing an alias or version
+
+`fission fn test` takes `--alias` and `--version` so you can smoke-test one alias or one pinned version directly, without touching a trigger and without waiting for the alias to actually see traffic:
+
+```bash
+$ fission fn test --name orders --alias prod
+{"order":"ok"}
+
+$ fission fn test --name orders --version orders-v3
+{"order":"ok"}
+```
+
+`--alias` and `--version` are mutually exclusive.
+Each is checked against the function before the request is sent, so a typo'd name fails immediately with a clear error instead of an opaque router 404:
+
+```bash
+$ fission fn test --name orders --alias staging
+Error: alias "staging" not found for function "orders": functionaliases.fission.io "staging" not found
+```
+
+`--async` works with either flag too.
+The invocation is enqueued against the resolved alias/version route, so it stays pinned to that target even if the alias moves before the function actually runs.
+
 ## Route triggers through the alias
 
 A trigger targets an alias through the optional `alias` field on its function reference.
