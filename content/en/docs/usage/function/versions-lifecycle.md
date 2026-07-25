@@ -19,13 +19,14 @@ Opt in from the CLI with `--versioning`, on either `fission fn create` or `fissi
 $ fission fn update --name orders --versioning auto
 Function 'orders' updated
 
-$ fission fn update --name orders --versioning auto --retain 10
+$ fission fn update --name orders --versioning auto --retain-versions 10
 Function 'orders' updated
 ```
 
 `--versioning` takes `auto` (the default once versioning is enabled), `manual`, or `off`.
 `off` is only meaningful on `fn update` — it clears the versioning config; on `fn create` there is nothing to clear yet, so omitting `--versioning` and passing `--versioning off` are equivalent.
-`--retain` sets the retention floor (see below) and requires versioning to already be enabled — pass `--versioning` in the same command, or add `--retain` on its own once the function already carries a `versioning` block.
+`--retain-versions` sets the retention floor (see below) and requires versioning to already be enabled — pass `--versioning` in the same command, or add `--retain-versions` on its own once the function already carries a `versioning` block.
+`--retain-versions` is distinct from `--retainpods`, which controls how many specialized pods stay warm — not how many function versions are kept.
 
 The same fields are also settable directly on the function's spec — in a [spec file]({{% ref "/docs/usage/spec/_index.md" %}}) or with `kubectl patch`, if you'd rather manage it that way:
 
