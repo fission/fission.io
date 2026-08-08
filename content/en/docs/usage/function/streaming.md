@@ -51,7 +51,7 @@ fission fn update --name chat --streaming=false
 | --- | --- | --- |
 | `--streaming` | off | Enable streaming responses for the function. Disable on update with `--streaming=false`. |
 | `--streamingprotocol` | `auto` | Streaming protocol: `auto`, `sse`, `chunked`, or `websocket`. `auto` covers all cases; `websocket` signals intent (the upgrade is detected from the request). |
-| `--streamingidletimeout` | `60` | Abort the stream if no bytes flow from the function for this many seconds; reset on each chunk. Also bounds time-to-first-byte. |
+| `--streamingidletimeout` | `60` | Abort the stream if no bytes flow from the function for this many seconds; reset on each chunk. Also bounds time-to-first-byte. Not applied after a WebSocket upgrade. |
 | `--streamingmaxduration` | `0` | Hard ceiling (seconds) on total stream lifetime; `0` means no ceiling. |
 
 ## How streaming changes timeouts
@@ -97,6 +97,9 @@ wscat -c ws://<router>/ws
 WebSocket is now first-class for **every** environment, not just the Python GEVENT environment.
 The router upgrades the connection and holds the function pod for the socket's whole lifetime (a router-driven keepalive), and the `main(ws, clients)` programming model is unchanged.
 
+After the `101` upgrade the router pipes bytes both ways and cannot observe idle time, so the idle timeout only bounds the time to upgrade.
+Set `--streamingmaxduration` to bound the socket's total lifetime.
+
 {{% notice warning %}}
 The legacy Python `socket_tracker.py` keepalive mechanism still works but is **deprecated in favor of the streaming approach** and is targeted for removal in a future release.
 New environment images should drop calls to the fetcher `/wsevent` endpoints and rely on the streaming WebSocket path.
@@ -124,8 +127,14 @@ spec:
 
 ## Cluster default
 
-The optional router environment variable `ROUTER_STREAM_IDLE_TIMEOUT` sets the cluster-wide default idle window, which per-function `idleTimeoutSeconds` overrides.
-It is a router (Helm) setting; see [Customizing the chart](/docs/installation/upgrade/#configuration).
+The optional router environment variable `ROUTER_STREAM_IDLE_TIMEOUT` sets the cluster-wide default idle window.
+Per-function `idleTimeoutSeconds` overrides it.
+The value is a Go duration string (for example `90s`) and must be positive — unlike the per-function flag, which takes integer seconds.
+The Helm chart does not surface this variable; set it on the router deployment directly:
+
+```bash
+kubectl set env deployment/router -n fission ROUTER_STREAM_IDLE_TIMEOUT=90s
+```
 
 ## Related
 
