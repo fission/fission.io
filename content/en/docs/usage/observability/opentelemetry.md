@@ -115,36 +115,38 @@ metadata:
 data:
   otel-collector-config: |
     receivers:
-      # Make sure to add the otlp receiver.
-      # This will open up the receiver on port 4317
+      # Add the otlp receiver.
+      # This opens the receiver on port 4317.
       otlp:
         protocols:
           grpc:
             endpoint: "0.0.0.0:4317"
     processors:
+      memory_limiter:
+        check_interval: 5s
+        limit_mib: 1500
+        spike_limit_mib: 512
+      batch: {}
     extensions:
-      health_check: {}
+      health_check:
+        endpoint: "0.0.0.0:13133"
     exporters:
-      jaeger:
-        endpoint: "jaeger-collector.observability.svc.cluster.local:14250"
-        insecure: true
-      prometheus:
-        endpoint: 0.0.0.0:8889
-        namespace: "testapp"
-      logging:
+      # Jaeger accepts OTLP natively since v1.35, so export over OTLP
+      # instead of the old jaeger exporter, which current collector
+      # builds no longer ship.
+      otlp/jaeger:
+        endpoint: "jaeger-collector.observability.svc.cluster.local:4317"
+        tls:
+          insecure: true
+      debug: {}
 
     service:
       extensions: [health_check]
       pipelines:
         traces:
           receivers: [otlp]
-          processors: []
-          exporters: [jaeger]
-
-        metrics:
-          receivers: [otlp]
-          processors: []
-          exporters: [prometheus, logging]
+          processors: [memory_limiter, batch]
+          exporters: [otlp/jaeger, debug]
 ---
 apiVersion: v1
 kind: Service
@@ -156,15 +158,11 @@ metadata:
     component: otel-collector
 spec:
   ports:
-    - name: otlp # Default endpoint for otlp receiver.
+    - name: otlp # Default endpoint for the otlp receiver.
       port: 4317
       protocol: TCP
       targetPort: 4317
       nodePort: 30080
-    - name: metrics # Default endpoint for metrics.
-      port: 8889
-      protocol: TCP
-      targetPort: 8889
   selector:
     component: otel-collector
   type: NodePort
@@ -187,10 +185,6 @@ spec:
   replicas: 1 # increase for higher trace throughput or collector high availability
   template:
     metadata:
-      annotations:
-        prometheus.io/path: "/metrics"
-        prometheus.io/port: "8889"
-        prometheus.io/scrape: "true"
       labels:
         app: opentelemetry
         component: otel-collector
@@ -199,12 +193,13 @@ spec:
         - command:
             - "/otelcol"
             - "--config=/conf/otel-collector-config.yaml"
-            # Memory Ballast size should be max 1/3 to 1/2 of memory.
-            - "--mem-ballast-size-mib=683"
           env:
-            - name: GOGC
-              value: "80"
-          image: otel/opentelemetry-collector:0.6.0
+            # GOMEMLIMIT replaces the old --mem-ballast-size-mib flag,
+            # which current collector builds no longer accept.
+            # Set it to about 80% of the memory limit below.
+            - name: GOMEMLIMIT
+              value: "1600MiB"
+          image: otel/opentelemetry-collector:0.158.0
           name: otel-collector
           resources:
             limits:
@@ -214,8 +209,7 @@ spec:
               cpu: 200m
               memory: 400Mi
           ports:
-            - containerPort: 4317 # Default endpoint for otlp receiver.
-            - containerPort: 8889 # Default endpoint for querying metrics.
+            - containerPort: 4317 # Default endpoint for the otlp receiver.
           volumeMounts:
             - name: otel-collector-config-vol
               mountPath: /conf
@@ -239,7 +233,13 @@ spec:
 EOF
 ```
 
-Note: the configuration above adapts the [OpenTelemetry Collector traces example](https://github.com/open-telemetry/opentelemetry-go/tree/main/example/otel-collector), with minor changes.
+The image tag above (`0.158.0`) was current at the time of writing.
+Check the [available tags](https://hub.docker.com/r/otel/opentelemetry-collector/tags) for a newer release before you deploy.
+
+This example uses the core `otel/opentelemetry-collector` image, which already includes the OTLP receiver, OTLP exporter, and health-check extension this pipeline needs.
+Use the `-contrib` image only if you add components it does not ship, such as vendor-specific receivers or exporters.
+
+Note: the configuration above adapts the [OpenTelemetry Collector Kubernetes example](https://github.com/open-telemetry/opentelemetry-collector/blob/main/examples/k8s/otel-config.yaml), with minor changes.
 
 ### Jaeger
 
@@ -264,6 +264,9 @@ metadata:
 EOF
 ```
 
+The jaeger-operator enables the collector's OTLP receiver by default.
+No extra flag is needed for `jaeger-collector` to accept the OTLP traffic from the OTEL collector on ports 4317 (gRPC) and 4318 (HTTP).
+
 Check that the `otel-collector` and `jaeger-query` services exist:
 
 ```sh
@@ -275,13 +278,13 @@ cert-manager                    cert-manager-webhook                            
 default                         kubernetes                                                  ClusterIP   10.96.0.1       <none>        443/TCP                                  9m35s
 kube-system                     kube-dns                                                    ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP                   9m33s
 observability                   jaeger-agent                                                ClusterIP   None            <none>        5775/UDP,5778/TCP,6831/UDP,6832/UDP      3s
-observability                   jaeger-collector                                            ClusterIP   10.96.48.27     <none>        9411/TCP,14250/TCP,14267/TCP,14268/TCP   3s
-observability                   jaeger-collector-headless                                   ClusterIP   None            <none>        9411/TCP,14250/TCP,14267/TCP,14268/TCP   3s
+observability                   jaeger-collector                                            ClusterIP   10.96.48.27     <none>        9411/TCP,14250/TCP,14267/TCP,14268/TCP,4317/TCP,4318/TCP   3s
+observability                   jaeger-collector-headless                                   ClusterIP   None            <none>        9411/TCP,14250/TCP,14267/TCP,14268/TCP,4317/TCP,4318/TCP   3s
 observability                   jaeger-operator-metrics                                     ClusterIP   10.96.164.206   <none>        8383/TCP,8686/TCP                        61s
 observability                   jaeger-query                                                ClusterIP   10.96.186.29    <none>        16686/TCP,16685/TCP                      3s
 opentelemetry-operator-system   opentelemetry-operator-controller-manager-metrics-service   ClusterIP   10.96.29.83     <none>        8443/TCP                                 6m11s
 opentelemetry-operator-system   opentelemetry-operator-webhook-service                      ClusterIP   10.96.74.0      <none>        443/TCP                                  6m11s
-opentelemetry-operator-system   otel-collector                                              NodePort    10.96.107.99    <none>        4317:30080/TCP,8889:30898/TCP            2m22s
+opentelemetry-operator-system   otel-collector                                              NodePort    10.96.107.99    <none>        4317:30080/TCP                           2m22s
 ```
 
 Set up a port forward to the `jaeger-query` service:
