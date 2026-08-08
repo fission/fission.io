@@ -6,7 +6,9 @@ description: >
 ---
 
 A **trigger binds an event source to a function**, so that the function runs whenever the event occurs.
-Every function in Fission is ultimately invoked over HTTP: the router exposes functions internally, and each trigger type turns its event into an HTTP request to that function.
+Fission ultimately invokes every function over HTTP.
+The router exposes functions internally.
+Each trigger type turns its event into an HTTP request to that function.
 
 Fission ships several trigger types, one per kind of event source.
 Pick the trigger that matches where your events come from.
@@ -30,7 +32,8 @@ See [Message Queue Trigger: KEDA]({{% ref "message-queue-trigger-kind-keda/_inde
 ## How triggers reach a function
 
 All trigger types converge on the same internal path: each one issues an HTTP request to the router, which routes it to a function pod.
-HTTP triggers are served directly by the router; the other trigger types run a dedicated component that watches its event source and calls the router on your behalf.
+The router serves HTTP triggers directly.
+The other trigger types run a dedicated component; it watches the event source and calls the router on your behalf.
 
 ```mermaid
 flowchart LR

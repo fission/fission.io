@@ -8,7 +8,9 @@ description: >
 **The statestore is the durable substrate the control plane writes to when a feature needs state that outlives a single request or a single pod.**
 
 It exposes three capabilities behind one interface — a **key/value** store, an append-only **event log**, and a visibility-timeout **queue** — served by a pluggable driver.
-Fission itself never deploys a database product: you either use the bundled embedded driver for development, or point the external driver at a database you already run.
+Fission itself never deploys a database product.
+For development, use the bundled embedded driver.
+For production, point the external driver at a database you already run.
 
 The statestore is what makes Fission's newer durable features possible.
 Starting with Fission {{< release-version >}}, several subsystems build on it:
@@ -18,7 +20,8 @@ Starting with Fission {{< release-version >}}, several subsystems build on it:
 - **[Function state]({{% ref "/docs/usage/function/keyed-state.md" %}})** gives a function a private keyspace of durable key/value entries — counters, sessions, carts, agent memory — with no external Redis or database.
 - **Eventing** uses the event log and queue as its zero-broker transport.
 
-The statestore is off by default; a feature that needs it will tell you to enable it.
+The statestore is off by default.
+A feature that needs it tells you to enable it.
 
 ```mermaid
 flowchart TB
@@ -52,7 +55,8 @@ flowchart TB
 ## Embedded vs external
 
 The driver is chosen with `statestore.mode`.
-The two modes differ only in where the state lives; the interface the features use is identical.
+The two modes differ only in where the state lives.
+The interface the features use is identical.
 
 | Mode | Driver | Where state lives | Use it for |
 | --- | --- | --- | --- |
@@ -98,8 +102,6 @@ helm upgrade --install fission fission-charts/fission-all \
 | `statestore.mode` | `embedded` | `embedded` (SQLite on a PVC) or `external` (a Postgres DSN Secret). |
 | `statestore.embedded.size` | `1Gi` | Size of the PVC backing the embedded SQLite file. |
 | `statestore.external` | — | Name of the DSN Secret for external mode (defaults to `statestore-postgres`, key `dsn`). |
-
-Fission runs no database of its own in either mode: embedded is a file on a volume, and external is a database you already operate.
 
 ## Related
 

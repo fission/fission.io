@@ -24,8 +24,10 @@ Function 'orders' updated
 ```
 
 `--versioning` takes `auto` (the default once versioning is enabled), `manual`, or `off`.
-`off` is only meaningful on `fn update` — it clears the versioning config; on `fn create` there is nothing to clear yet, so omitting `--versioning` and passing `--versioning off` are equivalent.
-`--retain-versions` sets the retention floor (see below) and requires versioning to already be enabled — pass `--versioning` in the same command, or add `--retain-versions` on its own once the function already carries a `versioning` block.
+`off` is only meaningful on `fn update`, where it clears the versioning config.
+On `fn create` there is nothing to clear yet, so omitting `--versioning` and passing `--versioning off` are equivalent.
+`--retain-versions` sets the retention floor (see below), and requires versioning to already be enabled.
+Pass `--versioning` in the same command, or add `--retain-versions` on its own once the function already carries a `versioning` block.
 `--retain-versions` is distinct from `--retainpods`, which controls how many specialized pods stay warm — not how many function versions are kept.
 
 The same fields are also settable directly on the function's spec — in a [spec file]({{% ref "/docs/usage/spec/_index.md" %}}) or with `kubectl patch`, if you'd rather manage it that way:
@@ -46,7 +48,8 @@ spec:
 $ kubectl patch function orders --type merge -p '{"spec":{"versioning":{"mode":"auto","retain":10}}}'
 ```
 
-In `auto` mode, Fission publishes a new version after every **runtime-affecting** update — a change to what actually runs or is observable by an invocation, such as new code, a changed entry point, or changed resources.
+In `auto` mode, Fission publishes a new version after every **runtime-affecting** update.
+That means a change to what runs, or what an invocation can observe — new code, a changed entry point, or changed resources.
 Cosmetic edits (labels, annotations) do not mint versions.
 The CLI reminds you that the mint is pending after every such update:
 
@@ -60,7 +63,8 @@ versioning=auto: a new version is minted once the build succeeds (fission fn ver
 The version is minted only **after the referenced package build succeeds**, so a broken build never becomes a version an alias could point at.
 If a build is in flight when you update, the version appears when the build completes.
 
-Set `--versioning manual` (or `mode: manual` in the spec) to keep versioning opted in (retention GC, alias support) but mint versions only on explicit `fission fn publish`.
+Set `--versioning manual` (or `mode: manual` in the spec) to keep versioning opted in — retention GC and alias support both still apply.
+Versions are then minted only on explicit `fission fn publish`.
 `fission fn publish` itself works on any function, whether or not `spec.versioning` is set.
 
 ## Retention
@@ -85,7 +89,8 @@ The `ALIASED-BY` column of `fission fn versions` shows exactly which alias prote
 ### Deleting the function
 
 Deleting a versioned function cascades: its versions and aliases go with it.
-`fission fn delete` says so before doing it, and calls out any triggers that route through the doomed aliases — those triggers are **not** deleted, but they stop resolving:
+`fission fn delete` warns before doing it, and calls out any triggers that route through the doomed aliases.
+Those triggers are **not** deleted, but they stop resolving:
 
 ```bash
 $ fission fn delete --name orders
@@ -96,7 +101,8 @@ function 'orders' deleted
 ## Environment updates and drift
 
 Versions snapshot the function's **code and configuration** — not the environment's runtime image.
-An environment update (say, bumping `node` to a new image) recycles pods under **every** version of every function using it; it sits outside the version boundary entirely.
+An environment update (say, bumping `node` to a new image) recycles pods under **every** version of every function using it.
+It sits outside the version boundary entirely.
 That has one operational consequence worth internalizing:
 
 {{% notice warning %}}
@@ -127,8 +133,12 @@ orders   staging orders-v3      5                5        False
 reports  <none>  <none>         <none>           5        <none>
 ```
 
-`DRIFT` is `True` (published under an older environment generation), `False` (current), `OtherEnv` (the version was published when the function still used a different environment), or `<none>` (no alias or not assessable).
-`fission fn versions --name orders -o wide` shows the same verdict per version in its `ENVDRIFT` column, and the per-version inspector (`fission fn describe --name orders --version orders-v2`) spells it out in full — the environment generation the version was published under, the live runtime image, and an `Env Drift` verdict.
+`DRIFT` is `True` when the version was published under an older environment generation, or `False` when it's current.
+It is `OtherEnv` when the version was published under a different environment.
+It is `<none>` when there is no alias, or drift cannot be assessed.
+`fission fn versions --name orders -o wide` shows the same verdict per version, in its `ENVDRIFT` column.
+The per-version inspector (`fission fn describe --name orders --version orders-v2`) spells it out in full.
+It shows the environment generation the version was published under, the live runtime image, and an `Env Drift` verdict.
 
 ## How other invocation paths behave
 
@@ -162,7 +172,8 @@ The canary controller then steps the alias's weight toward `orders-v4`, watching
 On success it promotes: the alias is repointed fully at the new version.
 On failure it rolls back: traffic returns to `orders-v3` — which is still warm, because the alias never stopped referencing it.
 
-Prefer this over the classic two-function canary pattern (deploying `orders-v2` as a separate function next to `orders`): with versions there is nothing to duplicate, the history stays on one function, and cleanup is automatic via retention.
+Prefer this over the classic two-function canary pattern (deploying `orders-v2` as a separate function next to `orders`).
+With versions there is nothing to duplicate, the history stays on one function, and cleanup is automatic via retention.
 The classic pattern keeps working unchanged.
 
 ## Related

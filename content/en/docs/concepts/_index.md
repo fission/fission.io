@@ -21,7 +21,8 @@ Everything in Fission is built from four core objects, each backed by a Kubernet
 - A **Trigger** binds an event source (an HTTP request, a timer, a message-queue message, a Kubernetes event) to a function invocation.
 - A **Package** holds your code as archives and ties it to an environment, optionally building source into a runnable artifact.
 
-The relationship is simple: a Trigger fires, the request reaches your Function, and your Function runs inside a pod created from its Environment, using the code stored in its Package.
+A Trigger fires and the request reaches your Function.
+Your Function runs inside a pod created from its Environment, using the code stored in its Package.
 
 ## How the objects relate
 

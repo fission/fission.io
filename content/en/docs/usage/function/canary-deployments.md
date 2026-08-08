@@ -39,8 +39,7 @@ A Canary Config has the following parameters:
 | `failureType` | How the health of the new version is checked. The only supported type is `status-code` (the HTTP status code), so a function that returns a status code other than 200 is considered unhealthy. Set in the CanaryConfig spec — the CLI does not expose a flag for it. |
 
 For example, suppose the current stable version of a function is `fn-a-v1` and the new version is `fn-a-v2`.
-We want to increment traffic towards the new version in steps of 30% every 1m, with a failure threshold of 10%.
-The sample canary config below captures this.
+This example increments traffic toward the new version in steps of 30% every 1m, with a failure threshold of 10%.
 
 ```yaml
 apiVersion: fission.io/v1
@@ -58,9 +57,9 @@ spec:
   weightincrement: 30
 ```
 
-Every 1m, the percentage of failed requests to `fn-a-v2` is calculated from Prometheus metrics.
-If it is under the configured failure threshold of 10%, the traffic to `fn-a-v2` is incremented by 30%.
-This cycle repeats until either the failure threshold is reached (the deployment is rolled back) or `fn-a-v2` is receiving 100% of user traffic.
+Every 1m, Fission calculates the percentage of failed requests to `fn-a-v2` from Prometheus metrics.
+If it is under the 10% failure threshold, Fission increments traffic to `fn-a-v2` by 30%.
+This cycle repeats until the failure rate crosses the threshold, which triggers a rollback, or `fn-a-v2` receives 100% of user traffic.
 
 #### Steps to setup a canary config
 
@@ -113,6 +112,6 @@ The status is one of:
 #### Running canaries faster than the default scrape interval
 
 The `scrape_interval` for Prometheus server is 1m by default.
-If the "duration" parameter needs to be less than 1m, the `scrape_interval` parameter needs to configured to a much lower value.
-This can be done by updating the config map for prometheus server.
-Updating the config map is enough; the prometheus server does not need to be restarted.
+If the "duration" parameter needs to be less than 1m, the `scrape_interval` parameter needs to be configured to a much lower value.
+Update the config map for the Prometheus server to do this.
+Updating the config map is enough — you do not need to restart the Prometheus server.

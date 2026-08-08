@@ -5,10 +5,15 @@ description: >
   Orchestrate several functions as one durable, resumable state machine — with parallel branches, data-driven routing, retries, durable waits, and typed-error handling.
 ---
 
-**A workflow orchestrates several functions as one durable state machine: it survives controller restarts, resumes exactly where it stopped, retries transient failures, and routes typed business errors — all recorded step by step in the statestore.**
+**A workflow orchestrates several functions as one durable state machine.
+It survives controller restarts and resumes exactly where it stopped.
+It retries transient failures and routes typed business errors.
+Every step is recorded in the statestore.**
 
-Starting with Fission {{< release-version >}}, you define a `Workflow` as a state machine over your functions and start a `WorkflowRun` each time you want it to execute.
-For the mental model behind the two resources and the durability guarantees, read the [Workflows concept]({{% ref "/docs/concepts/workflows.md" %}}); this guide is how to enable, author, run, and inspect them.
+Starting with Fission {{< release-version >}}, you define a `Workflow` as a state machine over your functions.
+You start a `WorkflowRun` each time you want it to execute.
+For the mental model behind the two resources and the durability guarantees, read the [Workflows concept]({{% ref "/docs/concepts/workflows.md" %}}).
+This guide covers how to enable, author, run, and inspect them.
 
 ## Prerequisites
 
@@ -53,7 +58,8 @@ stateDiagram-v2
   reject --> [*]
 ```
 
-`fission workflow graph --name <workflow>` renders this diagram from a workflow's definition, and `--open` serves it in a local day/night viewer.
+`fission workflow graph --name <workflow>` renders this diagram from a workflow's definition.
+`--open` serves it in a local day/night viewer.
 
 ## In this section
 

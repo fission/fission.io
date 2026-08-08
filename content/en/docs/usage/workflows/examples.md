@@ -12,7 +12,10 @@ Read them alongside the [authoring reference]({{% ref "authoring.md" %}}).
 
 ## Order pipeline — Parallel, Choice, retry, catch
 
-An e-commerce checkout: validate an order, screen it for fraud and stock **in parallel**, route on the results with a `Choice`, charge the card with **retry and a catch for declines**, then converge every failure onto one rejection path.
+An e-commerce checkout: validate an order, then screen it for fraud and stock **in parallel**.
+A `Choice` routes on the results.
+Charging the card includes **retry and a catch for declines**.
+Every failure converges onto one rejection path.
 It is the flagship example — the one the [`stateDiagram`]({{% ref "_index.md" %}}#state-types) on the overview page is drawn from.
 
 - **Shows:** `Parallel` with an ordered join, data-driven `Choice`, `Task` `retry` for transient gateway errors, and `catch` on a typed `PaymentDeclined` error.
@@ -21,8 +24,10 @@ It is the flagship example — the one the [`stateDiagram`]({{% ref "_index.md" 
 
 ## Batch enrichment — Map fan-out
 
-Enrich a batch of CRM leads: a `Map` state invokes a single-record scoring function once per element of `$.leads`, at most three concurrently, and the ordered join array feeds a summary step.
-The function stays simple; the workflow owns the fan-out, throttling, retries, and ordering.
+Enrich a batch of CRM leads: a `Map` state invokes a single-record scoring function once per element of `$.leads`, at most three concurrently.
+The ordered join array feeds a summary step.
+The function stays simple.
+The workflow owns the fan-out, throttling, retries, and ordering.
 
 - **Shows:** `Map` with `itemsPath` and `maxConcurrency`, and an ordered join feeding the next `Task`.
 - **Inputs:** `leads` — the array the Map iterates.
@@ -30,7 +35,8 @@ The function stays simple; the workflow owns the fan-out, throttling, retries, a
 
 ## Payment dunning — durable Wait timers
 
-Subscription renewal with a grace period: if a charge is declined, the run **waits out a grace period on a durable timer** and tries once more before canceling.
+Subscription renewal with a grace period: if a charge is declined, the run **waits out a grace period on a durable timer**.
+It tries once more before canceling.
 The run consumes no pod, memory, or connection while waiting — the timer lives in the statestore and survives controller restarts.
 
 - **Shows:** `Wait` as a durable delay, and a `catch` route that changes behavior on the second attempt.

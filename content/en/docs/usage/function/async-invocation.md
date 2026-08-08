@@ -9,11 +9,13 @@ description: >
 **Invoke a function fire-and-forget: the router accepts the call, returns a durable invocation id immediately, and delivers it in the background with retries — so the caller never waits for the work to finish.**
 
 A normal invocation is synchronous: the caller holds the connection open until the function returns a response.
-That is wrong for work that is slow, spiky, or must not be lost if a caller disconnects — sending email, processing an upload, calling a rate-limited third party.
+That is wrong for work that is slow, spiky, or must not be lost if a caller disconnects.
+Examples: sending email, processing an upload, calling a rate-limited third party.
 Starting with Fission {{< release-version >}}, an asynchronous invocation hands that work to Fission and returns right away.
 
 The caller sends `X-Fission-Invoke-Mode: async` (or uses `fission fn test --async`).
-The router **enqueues** the call on the [statestore]({{% ref "/docs/architecture/statestore.md" %}}) queue, returns **`202 Accepted`** with a durable invocation id, and a background worker delivers it — retrying transient failures, dead-lettering what it cannot deliver, and optionally invoking a destination function with the result.
+The router **enqueues** the call on the [statestore]({{% ref "/docs/architecture/statestore.md" %}}) queue and returns **`202 Accepted`** with a durable invocation id.
+A background worker then delivers it — retrying transient failures, dead-lettering what it cannot deliver, and optionally invoking a destination function with the result.
 
 ```mermaid
 flowchart TB
@@ -90,7 +92,8 @@ fission fn update --name resize-image \
 | `--async-max-age` | Maximum age of an invocation before dead-lettering, regardless of attempts. |
 
 {{% notice info %}}
-When the function is invoked through a [function alias]({{% ref "versions-aliases.md" %}}), the invocation is pinned to the version resolved at enqueue time — retries re-run that same version even if the alias moves or is rolled back in between, so retries stay deterministic.
+When the function is invoked through a [function alias]({{% ref "versions-aliases.md" %}}), the invocation is pinned to the version resolved at enqueue time.
+Retries re-run that same version even if the alias moves or is rolled back in between, so retries stay deterministic.
 {{% /notice %}}
 
 ## Result destinations
@@ -108,7 +111,8 @@ fission fn update --name resize-image \
 | `--async-on-success` | Same-namespace function invoked with the result when delivery succeeds. |
 | `--async-on-failure` | Same-namespace function invoked when the invocation is dead-lettered. |
 
-To fan the result out to an event topic instead of a single function, use the `--async-on-success-topic` / `--async-on-failure-topic` variants, which publish the result to a Fission eventing topic that any number of functions can subscribe to.
+To fan the result out to an event topic instead of a single function, use the `--async-on-success-topic` / `--async-on-failure-topic` variants.
+These publish the result to a Fission eventing topic that any number of functions can subscribe to.
 
 ## Dead-letter queue
 
@@ -140,7 +144,8 @@ A re-driven invocation starts with a fresh attempt budget.
 
 ## Autoscaling
 
-An opt-in KEDA `ScaledObject` scales the async workers on the queue backlog, so a burst of enqueued work spins up more delivery capacity and idles back down when the queue drains.
+An opt-in KEDA `ScaledObject` scales the async workers on the queue backlog.
+A burst of enqueued work spins up more delivery capacity, then idles back down when the queue drains.
 
 {{% notice warning %}}
 Autoscaling requires `statestore.mode=external` (Postgres).

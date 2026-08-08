@@ -6,12 +6,15 @@ description: >
   Keep a floor of warm specialized pods for a poolmgr function, with cron-scheduled warming windows, so requests inside the floor never pay a cold start.
 ---
 
-**Declare a floor of always-warm capacity: the executor keeps N specialized pods ready before any request arrives, and cron-scheduled windows raise or lower that floor for known traffic patterns.**
+**Declare a floor of always-warm capacity: the executor keeps N specialized pods ready before any request arrives.**
+Cron-scheduled windows raise or lower that floor for known traffic patterns.
 
 The poolmgr warm pool is generic: pods idle without your code loaded.
-The first request per pod pays package fetch and load, and the idle reaper un-warms quiet functions, so off-hours traffic pays it again.
+The first request per pod pays package fetch and load.
+The idle reaper un-warms quiet functions, so off-hours traffic pays that cold start again.
 Starting with Fission {{< release-version >}}, provisioned concurrency removes that cold start for opted-in functions.
-The executor specializes pods eagerly, exempts them from the idle reaper, and publishes them to the router, so requests within the floor always hit a warm pod.
+The executor specializes pods eagerly, exempts them from the idle reaper, and publishes them to the router.
+Requests within the floor always hit a warm pod.
 Requests beyond the floor behave exactly as before: they pay a normal on-demand cold start.
 
 ```mermaid
@@ -59,7 +62,8 @@ function 'checkout' created
 
 The executor's provisioner reconciles every 30 seconds (Helm: `executor.provisionedConcurrency.reconcileInterval`).
 On each pass it counts ready warm pods for the function.
-If the count is below the target, it specializes more pods from the generic pool — the same code path a cold start uses, so the pods are identical.
+If the count is below the target, it specializes more pods from the generic pool.
+This is the same code path a cold start uses, so the pods are identical.
 If the count is above the target, it removes the exemption label from the excess pods and lets the idle reaper retire them.
 
 Warming is paced, not instant.
@@ -140,7 +144,8 @@ Warm pods carry the `fission.io/provisioned=true` label:
 kubectl get pods -A -l fission.io/provisioned=true
 ```
 
-`fission fn pods --name checkout` lists the same pods, but its columns do not show the provisioned label — use the kubectl label filter to tell warm floor pods apart.
+`fission fn pods --name checkout` lists the same pods, but its columns do not show the provisioned label.
+Use the kubectl label filter to tell warm floor pods apart.
 
 The executor also exports metrics: `fission_provisioned_target`, `fission_provisioned_ready`, `fission_provisioned_eager_specializations_total` (by outcome), and `fission_provisioned_window_transitions_total`.
 
@@ -155,7 +160,8 @@ A clamped function shows `provisionedSpecTarget > provisionedTarget` and reason 
 Eager specialization consumes generic pool pods.
 If the pool cannot supply them, warming stalls until the pool refills — raise the environment `--poolsize` to absorb the largest window target.
 - **Warm-up bursts can slow other functions' worst-case cold starts.**
-While one function eagerly warms a large burst, on-demand cold starts of other functions in the same environment pool can be several times slower at the tail; the median stays bounded.
+While one function eagerly warms a large burst, on-demand cold starts of other functions in the same environment pool can be several times slower at the tail.
+The median stays bounded.
 The in-flight limit and a larger pool reduce the effect.
 - **Latest generation only.**
 After a function update, the provisioner warms the new generation and lets old-generation pods drain.

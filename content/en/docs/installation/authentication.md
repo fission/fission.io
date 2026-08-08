@@ -13,16 +13,13 @@ This feature instead protects direct calls to Fission's own function endpoints, 
 
 ## How Authentication Works
 
-Fission does so by enabling authentication for Fission Router.
-This is an optional feature that can be enabled or disabled depending on your requirement.
-
-When enabled, a new endpoint for authentication will be registered in the router.
-All the API calls to Fission functions will now be routed through function endpoints using authentication token.
+Fission enables authentication on the Fission Router.
+When enabled, the router registers a login endpoint, and every function call must include an authentication token.
 
 Fission also creates a Secret named `router` in the `fission` namespace with a default `username`, a randomly generated `password`, and a `jwtSigningKey`.
 The router reads these values through `secretKeyRef` environment variables.
 You first create an auth token by providing the `username` and `password`.
-The generated token must then be passed in the `Authorization` header of every subsequent function call.
+Pass the generated token in the `Authorization` header of every subsequent function call.
 
 The sequence below traces this end to end, from login to an authenticated function call:
 
@@ -42,8 +39,7 @@ sequenceDiagram
 
 ## Enabling Authentication
 
-To enable authentication, you need to set the key `authentication.enabled` to `true`.
-This can be found in `charts/fission-all/values.yaml`.
+To enable authentication, set `authentication.enabled` to `true` in `charts/fission-all/values.yaml`:
 
 ```bash
 --set authentication.enabled=true
@@ -82,14 +78,15 @@ authentication:
 ```
 
 On GitOps renderers (Argo CD, Flux), set `authentication.existingSecret` to a Secret you create yourself.
-Those run `helm template`, where the chart cannot preserve the generated `password` and `jwtSigningKey` across syncs — each sync would mint fresh values and invalidate issued tokens.
+Those run `helm template`, where the chart cannot preserve the generated `password` and `jwtSigningKey` across syncs.
+Each sync would mint fresh values and invalidate issued tokens.
 
-Refer to the [installation guide]({{% ref "_index.en.md" %}}) if you are installing Fission for the first time, or to the [Upgrade Guide]({{% ref "upgrade.md" %}}) if you are upgrading from an older version.
+See the [installation guide]({{% ref "_index.en.md" %}}) if you install Fission for the first time.
+See the [Upgrade Guide]({{% ref "upgrade.md" %}}) if you upgrade from an older version.
 
 ## Generating Auth Token
 
-Once the installation is successful, you need to generate the `auth token`.
-To do that, you will export the values and set up `$FISSION_USERNAME`, `$FISSION_PASSWORD` and `$FISSION_AUTH_TOKEN` env variables.
+After installing Fission, generate an auth token by exporting `$FISSION_USERNAME`, `$FISSION_PASSWORD`, and `$FISSION_AUTH_TOKEN`:
 
 ```bash
 export FISSION_USERNAME=$(kubectl get secrets/router --template={{.data.username}} -n fission | base64 -d)
@@ -97,10 +94,10 @@ export FISSION_PASSWORD=$(kubectl get secrets/router --template={{.data.password
 export FISSION_AUTH_TOKEN=$(fission token create --username $FISSION_USERNAME --password $FISSION_PASSWORD)
 ```
 
-To understand more about generating tokens, refer to the [`fission token create`]({{% ref "../reference/fission-cli/fission_token_create.md" %}}) reference.
+See the [`fission token create`]({{% ref "../reference/fission-cli/fission_token_create.md" %}}) reference for more on generating tokens.
 
-With this, all your API calls to Fission functions are now authenticated using the generated token.
-If a malformed token is used, the API call fails and returns an error.
+All API calls to Fission functions now use the generated token for authentication.
+A malformed token causes the API call to fail with an error.
 
 {{% notice info %}}
 The auth token is valid for 120 seconds by default.
@@ -116,21 +113,21 @@ Once authentication is enabled, you can use it in two ways:
 
 ### Fission Function `test` command
 
-Make sure that the environment variables are set before you test your function.
+Set the environment variables before you test your function.
 
 ```bash
 fission function test --name hello
 hello, world!
 ```
 
-If the environment variable is not set, you need to pass it using the `--header` flag:
+If the environment variable is not set, pass the token with the `--header` flag:
 
 ```bash
 fission function test --name hello --header "Authorization: Bearer <token>"
 hello, world!
 ```
 
-If the `auth token` is not configured correctly or malformed, the function will not be invoked and instead will return an error.
+If the auth token is missing or malformed, the function call fails and returns an error.
 
 ```bash
 fission fn test --name hello
@@ -139,21 +136,19 @@ Error: Error calling function hello: 401; Please try again or fix the error: {"m
 
 ### Fission Function API call
 
-To execute Fission functions over API calls, you need to first ensure that your fission function has an associated `route` created.
-
-Create a route for your Fission function:
+To call a Fission function over the API, first create a route for it:
 
 ```bash
 fission route create --name sample --method GET --url /hello --function hello
 ```
 
-The next step is to forward the port:
+Forward the port:
 
 ```bash
 kubectl port-forward svc/router 8888:80 -nfission
 ```
 
-Using `curl`, you can invoke the function by passing the `auth token` in the header:
+Invoke the function with `curl`, passing the auth token in the header:
 
 ```bash
 curl http://localhost:8888/hello -H "Authorization: Bearer ${FISSION_AUTH_TOKEN}"

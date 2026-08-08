@@ -159,9 +159,11 @@ A reaper in the statestore MQ consumer trims each subscribed topic once per minu
 A subscriber that resumes after a backstop trim logs the gap and counts it in the `fission_eventing_gap_events_total` metric.
 
 A topic with **no** statestore trigger is not trimmed at all — the orphan-stream age sweep is not implemented yet.
-Instead, a per-topic backlog cap of 10,000 events bounds the growth: publishes to a capped topic fail with `topic backlog cap reached` instead of dropping silently.
+Instead, a per-topic backlog cap of 10,000 events bounds the growth.
+Publishes to a capped topic fail with `topic backlog cap reached` instead of dropping silently.
 To recover a capped orphan topic, create a statestore trigger on it.
-The trigger's cursor starts at the head, so the reaper trims the old backlog within about a minute and publishes flow again; the trimmed backlog is not delivered.
+The trigger's cursor starts at the head, so the reaper trims the old backlog within about a minute and publish flow resumes.
+The trimmed backlog is not delivered.
 
 ## Limits
 

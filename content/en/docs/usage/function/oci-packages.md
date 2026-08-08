@@ -6,7 +6,8 @@ description: >
   Ship Fission function code as an OCI image instead of an archive: build a code-only image, create a package with --oci, and pin digests for fast cold starts.
 ---
 
-**Ship Fission function code as an OCI image instead of a zip archive: build a code-only image, push it to any OCI registry, and reference it when creating the package.**
+**Ship Fission function code as an OCI image instead of a zip archive.**
+**Build a code-only image, push it to any OCI registry, and reference it when creating the package.**
 Available starting with Fission v1.26.0.
 Create the package with `--oci`:
 
@@ -32,7 +33,8 @@ flowchart TB
 
 #### Why deliver code as an image?
 
-* **Faster, cache-friendly cold starts**: nodes and registries cache image layers, so repeated fetches of the same code are cheap, and there is no zip download + extract step from Fission's internal storage.
+* **Faster, cache-friendly cold starts**: nodes and registries cache image layers, so repeated fetches of the same code are cheap.
+  There is no zip download + extract step from Fission's internal storage.
 * **Standard supply-chain tooling**: code images can be signed (`cosign`), scanned, replicated, and promoted with the same tooling you already use for runtime images.
 * **Registry-native workflows**: CI pipelines that already push images need no extra upload step to Fission's storage service.
 
@@ -41,8 +43,10 @@ With neither configured, archive-based packages remain the default and are unaff
 
 #### Building a compatible code image
 
-The image's filesystem must contain exactly what an *extracted deployment archive* would contain — your code files at the image root (or under a sub-path, see below).
-The environment's runtime still comes from the environment image; the code image carries **only your code**.
+The image's filesystem must contain exactly what an *extracted deployment archive* would contain.
+That means your code files at the image root, or under a sub-path (see below).
+The environment's runtime still comes from the environment image.
+The code image carries **only your code**.
 
 For a Python function with a `main` entry point in `hello.py`:
 
@@ -88,9 +92,12 @@ $ crane append --new_layer code.tar \
   The code image is never executed as a container — Fission only reads its filesystem — so it needs no shell, libc, or OS layer.
   A scratch-based code image is a few kilobytes, pulls fast, and has no CVE surface.
 * Do **not** base the code image on the environment/runtime image.
-  The runtime is supplied by the environment; duplicating it in the code image wastes pull time and storage and changes nothing at runtime.
-* If your build pipeline cannot produce `FROM scratch` images, any minimal base works — Fission extracts the *merged* filesystem, so whatever the image contains beyond your code is extracted too.
-  Keep it small and put code under a dedicated directory combined with `subPath` (below) so OS files are excluded.
+  The environment supplies the runtime.
+  Duplicating it in the code image wastes pull time and storage and changes nothing at runtime.
+* If your build pipeline cannot produce `FROM scratch` images, any minimal base works.
+  Fission extracts the *merged* filesystem, so it also extracts anything in the image beyond your code.
+  Keep it small, and put code under a dedicated directory.
+  Combine this with `subPath` (below) to exclude OS files.
 
 #### Creating packages and functions
 
@@ -105,7 +112,9 @@ $ curl http://$FISSION_ROUTER/hello
 Hello, world!
 ```
 
-`fission fn create --oci <ref>` is a shortcut that creates the package and the function in one step, and `fission package update --name hello --oci <ref:v2>` switches a package to a new image (followed by `fn update` to roll running functions, exactly like archive updates).
+`fission fn create --oci <ref>` is a shortcut that creates the package and the function in one step.
+`fission package update --name hello --oci <ref:v2>` switches a package to a new image.
+Follow it with `fn update` to roll running functions, exactly like archive updates.
 
 The package spec exposes a few more fields than the CLI flag; use spec files for these:
 
@@ -132,14 +141,17 @@ spec:
 
 {{% notice info %}}
 **Pin digests in production.**
-A package references an image; re-pushing the same tag with different content is **not** detected automatically (functions roll only on package update).
+A package references an image.
+Re-pushing the same tag with different content is **not** detected automatically (functions roll only on package update).
 Setting `digest` makes the reference immutable and the pull verifiable.
 {{% /notice %}}
 
 #### Automatic OCI delivery for built packages
 
 The `--oci` flow above is **per package** — you build and push the image yourself.
-You can also have Fission do this for **every** build cluster-wide: configure a **package registry** and each successful build publishes its deployment archive as a digest-pinned OCI image, and functions cold-start by pulling it instead of downloading a tarball from the storage service.
+You can also have Fission do this for **every** build cluster-wide: configure a **package registry**.
+Each successful build then publishes its deployment archive as a digest-pinned OCI image.
+Functions cold-start by pulling it instead of downloading a tarball from the storage service.
 
 Enable it with Helm:
 
@@ -202,7 +214,8 @@ $ kubectl create secret docker-registry regcred \
 
 ##### Step 2a — cluster-wide: attach the secret to the fetcher service account
 
-Patch the `fission-fetcher` service account in the same namespace; every OCI package pull then uses it without any per-package configuration:
+Patch the `fission-fetcher` service account in the same namespace.
+Every OCI package pull then uses it without any per-package configuration:
 
 ```bash
 $ kubectl patch serviceaccount fission-fetcher \
@@ -232,7 +245,8 @@ spec:
 
 ##### Verifying
 
-Create a function on the package and invoke it; on a credential problem the function returns a 5xx and the fetcher log names the registry error:
+Create a function on the package and invoke it.
+On a credential problem, the function returns a 5xx and the fetcher log names the registry error:
 
 ```bash
 $ kubectl logs <function-pod> -c fetcher -n default | grep -i "error extracting OCI image"
@@ -240,10 +254,12 @@ $ kubectl logs <function-pod> -c fetcher -n default | grep -i "error extracting 
 
 {{% notice warning %}}
 Fission does not validate that the referenced secrets exist or hold working credentials — a missing or wrong secret surfaces only at pull time.
-With [image volumes](#kubernetes-image-volumes) active (the default on Kubernetes 1.33+), the **kubelet** performs the pull using the same two secret sources (the pod inherits both), so the same setup keeps working — but pull errors then appear as pod events (`kubectl describe pod`, `ErrImagePull`) rather than fetcher logs.
+With [image volumes](#kubernetes-image-volumes) active (the default on Kubernetes 1.33+), the **kubelet** performs the pull using the same two secret sources (the pod inherits both), so the same setup keeps working.
+Pull errors then appear as pod events (`kubectl describe pod`, `ErrImagePull`) rather than fetcher logs.
 {{% /notice %}}
 
-Runtime/environment images are pulled by the kubelet independently of package images; for those, see [Pull an Image From a Private Registry]({{% ref "/docs/usage/function/private-registry.md" %}}).
+The kubelet pulls runtime/environment images independently of package images.
+For those, see [Pull an Image From a Private Registry]({{% ref "/docs/usage/function/private-registry.md" %}}).
 
 #### Insecure (plain-HTTP) registries
 
@@ -256,13 +272,15 @@ fetcher:
 ```
 
 This is a comma-separated host allowlist, not a global switch — every other registry still requires TLS.
-Localhost and private (RFC-1918) IP addresses are implicitly trusted by the underlying client, matching Docker's behavior.
+The underlying client implicitly trusts localhost and private (RFC-1918) IP addresses, matching Docker's behavior.
 
 #### Kubernetes image volumes
 
-On Kubernetes **1.33+** the **kubelet** mounts the code image directly into function pods as an [image volume](https://kubernetes.io/docs/tasks/configure-pod-container/image-volumes/), removing the fetch-and-extract step from the cold-start path entirely.
+On Kubernetes **1.33+** the **kubelet** mounts the code image directly into function pods as an [image volume](https://kubernetes.io/docs/tasks/configure-pod-container/image-volumes/).
+This removes the fetch-and-extract step from the cold-start path entirely.
 This is **on by default** (`executor.enableOCIImageVolume: true` in the Helm chart).
-On clusters below 1.33 image volumes are detected as unsupported, and packages automatically use the per-pod fetcher, which pulls and extracts the image itself.
+On clusters below 1.33, Fission detects image volumes as unsupported.
+Packages then automatically use the per-pod fetcher, which pulls and extracts the image itself.
 To force the fetcher path on every cluster, disable the setting:
 
 ```yaml
@@ -273,14 +291,16 @@ executor:
 Be aware of the behavioral differences when image volumes are active:
 
 * **The kubelet pulls the image, not Fission.**
-  Image references resolve with the node's DNS and containerd's registry configuration — a registry reachable only through cluster DNS (a ClusterIP `Service` name) will not resolve.
+  Image references resolve with the node's DNS and containerd's registry configuration.
+  A registry reachable only through cluster DNS (a ClusterIP `Service` name) will not resolve.
   Use a registry address that nodes can reach.
-* Functions that reference **Secrets or ConfigMaps** still mount the code as an image volume; their pods keep the fetcher, which materializes those Secrets and ConfigMaps.
+* Functions that reference **Secrets or ConfigMaps** still mount the code as an image volume.
+  Their pods keep the fetcher, which materializes those Secrets and ConfigMaps.
 * Poolmgr functions on **v1 environments**, and those whose environment sets `allowedFunctionsPerContainer: infinite` or `keepArchive: true`, stay on the fetcher path.
 * The code mount is **read-only**.
   Runtimes that write next to the code (Python bytecode caches, JVM work files) should write elsewhere; the standard Fission environments handle this.
 * `subPath` must point to a **directory** inside the image (kubelets reject file sub-paths).
-* The `digest` pin is enforced by the kubelet through the volume's image reference.
+* The kubelet enforces the `digest` pin through the volume's image reference.
 
 #### Limitations
 

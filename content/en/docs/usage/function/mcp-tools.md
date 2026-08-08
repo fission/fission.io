@@ -8,7 +8,8 @@ description: >
 
 **Expose a Fission function as an MCP tool so any LLM agent that speaks MCP can discover and invoke it, with no hand-written adapter code.**
 The [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) is an open protocol that lets LLM agents discover and call external tools.
-Starting with Fission {{< release-version >}}, an agent that speaks MCP (for example Claude) can list an advertised function and invoke it over Fission's existing internal invocation path.
+Starting with Fission {{< release-version >}}, an agent that speaks MCP (for example Claude) can list an advertised function.
+It can then invoke the function over Fission's existing internal invocation path.
 
 Exposing a function as a tool is **opt-in per function** and additive — functions you don't mark stay private.
 
@@ -64,7 +65,8 @@ fission fn create --name weather --env nodejs --code weather.js \
   --tool-input-schema weather-schema.json
 ```
 
-`--tool-input-schema` points at a JSON Schema (draft 2020-12) file describing the tool's arguments; it is advertised verbatim as the MCP tool `inputSchema`.
+`--tool-input-schema` points at a JSON Schema (draft 2020-12) file describing the tool's arguments.
+Fission advertises it verbatim as the MCP tool `inputSchema`.
 When omitted, the tool advertises an open object schema (`{"type":"object"}`).
 
 | Flag | Meaning |

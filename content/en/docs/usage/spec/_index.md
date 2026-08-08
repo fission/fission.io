@@ -328,13 +328,17 @@ fission spec validate
 fission spec apply --delete --wait
 ```
 
-* **Safe to re-apply.** A sync with no spec change writes nothing: no rebuilds, no pod restarts, no new function versions.
-* **`--delete` completes the loop.** Removing a spec file from Git removes the resource from the cluster on the next apply.
+* **Safe to re-apply.**
+  A sync with no spec change writes nothing: no rebuilds, no pod restarts, no new function versions.
+* **`--delete` completes the loop.**
+  Removing a spec file from Git removes the resource from the cluster on the next apply.
   Without it, deletions in Git never reach the cluster.
 * **`--wait` fails the pipeline on a failed build**, instead of reporting success while the package is broken.
-* **`--commitlabel` records provenance.** Each resource gets a `commit` label with the Git commit hash of its spec file, so you can trace any cluster object back to the commit that produced it.
+* **`--commitlabel` records provenance.**
+  Each resource gets a `commit` label with the Git commit hash of its spec file, so you can trace any cluster object back to the commit that produced it.
 * **Apply warns on a dirty work tree**, so uncommitted local changes do not silently ship from a workstation.
-* **Preview in pull requests.** Run `fission spec apply --dry-run` in the PR pipeline to post what a merge would change.
+* **Preview in pull requests.**
+  Run `fission spec apply --dry-run` in the PR pipeline to post what a merge would change.
 
 ### Specs with OCI image packages
 
@@ -348,8 +352,10 @@ $ fission function create --spec --name hello --env go \
 
 The generated package spec carries only the image reference.
 Nothing is uploaded at apply time, and the digest pins exactly what runs.
-Your CI builds and pushes the image, then bumps the digest in the spec file; the same spec promotes unchanged across dev, QA, and production.
-Because such specs contain only plain Kubernetes resources, a GitOps controller such as Argo CD or Flux can also apply them directly, without the `fission` CLI in the loop.
+Your CI builds and pushes the image, then bumps the digest in the spec file.
+The same spec promotes unchanged across dev, QA, and production.
+Such specs contain only plain Kubernetes resources.
+A GitOps controller such as Argo CD or Flux can therefore apply them directly, without the `fission` CLI in the loop.
 One exclusion applies: `fission-deployment-config.yaml` is CLI metadata, not a cluster resource, so point the sync at the resource YAMLs only.
 
 ## A bit about how this works

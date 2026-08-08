@@ -47,7 +47,8 @@ When an HTTPTrigger sets `routeConfig.provider: gateway`, the router:
 - Points the route's backend at the `router` Service on port 80 — the same backend the Ingress path used.
 - Labels the route with `triggerName`, `functionName`, and `triggerNamespace` so you can find it with `kubectl get httproute -l triggerName=<name> -n fission`.
 
-The route is reconciled level-based: it is created when missing, updated when the trigger changes, and deleted when the trigger is deleted or switched to a different provider.
+The route is reconciled level-based.
+Fission creates it when missing, updates it when the trigger changes, and deletes it when the trigger is deleted or switched to a different provider.
 
 ## Prerequisites
 
@@ -93,8 +94,9 @@ spec:
 ```
 
 {{% alert title="Cross-namespace attachment" color="info" %}}
-Whether an `HTTPRoute` in the `fission` namespace may attach to a `Gateway` in another namespace is controlled by the **Gateway listener's `allowedRoutes.namespaces`** (`Same`, `All`, or a label `Selector`) — not by a `ReferenceGrant`.
-No `ReferenceGrant` is needed for the route's backend, because Fission's generated `HTTPRoute` and its backend (the `router` Service) always live in the same namespace.
+The **Gateway listener's `allowedRoutes.namespaces`** setting (`Same`, `All`, or a label `Selector`) controls whether an `HTTPRoute` in the `fission` namespace may attach to a `Gateway` in another namespace.
+A `ReferenceGrant` does not control this.
+The route's backend needs no `ReferenceGrant`, because Fission's generated `HTTPRoute` and its backend (the `router` Service) always live in the same namespace.
 {{% /alert %}}
 
 ## Expose a function
@@ -304,7 +306,7 @@ fission route create --name hello --function hello --url /hello \
 
 Existing HTTPTriggers created with `--createingress` keep working unchanged after an upgrade.
 Fission does **not** auto-convert them to the Gateway API, because doing so would break clusters that have no Gateway API installed.
-Migration is opt-in and can be done per trigger, with no downtime for the others.
+Migration is opt-in: migrate one trigger at a time, with no downtime for the others.
 
 ### Map the old flags to the new ones
 

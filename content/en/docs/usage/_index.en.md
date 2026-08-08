@@ -6,7 +6,7 @@ description: >
 ---
 
 This section is the hands-on guide to using Fission once it is installed on your cluster.
-Each page is task-oriented: it states what you will accomplish, lists the commands to run, and shows the output to expect.
+Each page states what you will accomplish, lists the commands to run, and shows the output to expect.
 
 If you have not installed Fission yet, start with the [Installation guide]({{% ref "/docs/installation/_index.en.md" %}}).
 For the concepts behind these tasks, see [Concepts]({{% ref "/docs/concepts/_index.md" %}}).

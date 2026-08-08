@@ -7,8 +7,12 @@ description: >
 ---
 
 **Diagnose a failing function down to the component and the exact invocation, without reading server logs.**
-When a function misbehaves, the question is usually *where* it broke — the function code, the build, the executor, or a timeout — and *which* call it was.
-Fission answers both: `fission function describe` shows a function's health in one view, `fission function test` attributes a failure to a component and hands you a request id, and `fission function logs --request-id` pulls that one invocation's logs.
+When a function misbehaves, the question is usually *where* it broke: the function code, the build, the executor, or a timeout.
+The other question is *which* call it was.
+Fission answers both.
+`fission function describe` shows a function's health in one view.
+`fission function test` attributes a failure to a component and hands you a request id.
+`fission function logs --request-id` pulls that one invocation's logs.
 
 #### See a function's health at a glance
 
@@ -67,7 +71,8 @@ PACKAGE:
 #### Read the failure attribution
 
 `fission function test` invokes a function and, on failure, tells you which component failed and why instead of just printing a status code.
-Every run echoes the invocation's request id; a failure renders the structured attribution:
+Every run echoes the invocation's request id.
+A failure renders the structured attribution:
 
 ```bash
 $ fission function test --name broken
@@ -75,12 +80,15 @@ Request ID: 6f1c2a9e-1c2b-4f0a-9d2e-7b3c2a1d4e5f
 ✗ function "broken" failed in executor (specialization_failed) — status 500, request 6f1c2a9e-...
 ```
 
-Now you know it failed during **specialization** in the **executor** (not in your code, not a timeout), and you have the request id to find its logs.
+Now you know it failed during **specialization** in the **executor** — not in your code, not a timeout.
+You also have the request id to find its logs.
 Against an older cluster that does not send structured errors, `test` falls back to printing the raw response body.
 
 #### The failure-attribution contract
 
-Every response — success or failure — carries the request id, and failures add the component, so callers and tooling can attribute a failure without reading server logs:
+Every response — success or failure — carries the request id.
+A failure also adds the component.
+Callers and tooling can then attribute a failure without reading server logs:
 
 | Header | Meaning |
 | --- | --- |
@@ -112,10 +120,12 @@ The **reason** is a stable value you can match on:
 | `stream_idle` / `stream_max_duration` | A [streaming]({{% ref "streaming.md" %}}) response hit its idle or max-duration limit. |
 
 The body never includes raw internal error text by default.
-To get verbose detail for a single call, send `X-Fission-Debug: true`; the router fills in a `message` field only when it is running in debug mode.
+To get verbose detail for a single call, send `X-Fission-Debug: true`.
+The router fills in a `message` field only when it is running in debug mode.
 
 {{% notice info %}}
-**Operators:** structured error bodies are on by default and can be turned off with `ROUTER_STRUCTURED_ERRORS=false` on the router, which restores the legacy plain-text error body.
+**Operators:** structured error bodies are on by default.
+Set `ROUTER_STRUCTURED_ERRORS=false` on the router to turn them off and restore the legacy plain-text error body.
 Status codes are unchanged either way.
 {{% /notice %}}
 
@@ -127,5 +137,6 @@ With the request id from `test` (or from a caller's `X-Fission-Request-ID` respo
 $ fission function logs --name hello --dbtype loki --request-id 6f1c2a9e-1c2b-4f0a-9d2e-7b3c2a1d4e5f
 ```
 
-`--request-id`, `--trace-id`, and `--level` are applied by the `loki` log database and are ignored by the default `kubernetes` driver.
+The `loki` log database applies `--request-id`, `--trace-id`, and `--level`.
+The default `kubernetes` driver ignores them.
 See [Logs with Loki]({{% ref "/docs/usage/observability/loki.md" %}}) for setup and the full query workflow, and [Local development with run-local]({{% ref "run-local.md" %}}) to reproduce and fix the failure locally without a redeploy.

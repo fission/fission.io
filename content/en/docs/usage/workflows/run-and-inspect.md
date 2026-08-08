@@ -11,7 +11,8 @@ This page assumes you have a manifest — see [Authoring workflows]({{% ref "aut
 
 ## Manage the definition
 
-`fission workflow` is the definition lifecycle; it mirrors the other Fission resources:
+`fission workflow` is the definition lifecycle.
+It mirrors the other Fission resources:
 
 ```bash
 fission workflow create -f workflow.yaml
@@ -30,7 +31,8 @@ $ fission workflow run --name order-pipeline --input @inputs/happy.json
 Run started: order-pipeline-7k2p9
 ```
 
-Each `run` is an independent execution with its own state and history; the definition is unchanged.
+Each `run` is an independent execution with its own state and history.
+The definition is unchanged.
 
 ## Inspect runs
 
@@ -70,7 +72,8 @@ fission workflow graph -f workflow.yaml
 fission workflow graph --name order-pipeline --open
 ```
 
-`workflow runs graph --name <run>` draws the same diagram but overlays a specific run's status — each state colored by what that run actually did, so the picture *is* the answer to "where did this run stop":
+`workflow runs graph --name <run>` draws the same diagram but overlays a specific run's status.
+Each state is colored by what that run actually did, so the picture *is* the answer to "where did this run stop":
 
 ```bash
 fission workflow runs graph --name order-pipeline-7k2p9 --open

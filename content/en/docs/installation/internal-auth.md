@@ -29,7 +29,9 @@ The router now binds **two listeners**:
 - **Public listener** (port `8888`) — serves user `HTTPTrigger` paths, `/router-healthz`, `/_version`, and (when enabled) the JWT-based [function-invocation auth]({{% ref "authentication.md" %}}).
 - **Internal listener** (port `8889`) — serves `/fission-function/<ns>/<name>` only, gated by `NetworkPolicy` plus HMAC verification.
 
-**`/fission-function/<ns>/<name>` no longer exists on the public listener.** This closes [GHSA-3g33-6vg6-27m8](https://github.com/fission/fission/security/advisories/GHSA-3g33-6vg6-27m8) — previously anyone reachable to the public router URL (e.g. via Ingress) could invoke any function by guessing its name, bypassing all `HTTPTrigger` host/path/method gates.
+**`/fission-function/<ns>/<name>` no longer exists on the public listener.**
+This closes [GHSA-3g33-6vg6-27m8](https://github.com/fission/fission/security/advisories/GHSA-3g33-6vg6-27m8).
+Previously, anyone reachable to the public router URL (e.g. via Ingress) could invoke any function by guessing its name, bypassing all `HTTPTrigger` host/path/method gates.
 
 Any external tooling that today curls `/fission-function/...` against the public router URL will receive **404** after upgrading.
 The public listener is unchanged for user `HTTPTrigger` traffic.
@@ -45,14 +47,16 @@ helm install fission fission-charts/fission-all -n fission --create-namespace
 The chart materializes a `Secret/fission-internal-auth` with an auto-generated 32-byte master key.
 The same value is preserved across `helm upgrade` runs.
 Under static tenancy the chart replicates the Secret into `defaultNamespace` and each `additionalFissionNamespaces` entry, so dynamically created builder and function pods can mount it too.
-Every Fission control-plane component (storagesvc, executor, router, buildermgr, and the rest) and every dynamically-created builder/function pod mounts the master via environment variable; each signer/verifier pair derives its own per-service key.
+Every Fission control-plane component (storagesvc, executor, router, buildermgr, and the rest) and every dynamically-created builder/function pod mounts the master via environment variable.
+Each signer/verifier pair derives its own per-service key.
 
 ### Fail-closed startup check
 
 Every binary — fission-bundle, fetcher, builder, and the CLI — validates the internal-auth environment at startup.
 An absent `FISSION_INTERNAL_AUTH_SECRET` means internal auth is off; signers and verifiers pass through.
 A present but blank value is refused: the process exits with an error that names the variable.
-This closes the one misconfiguration that previously failed open — a Secret with an empty `secret` key silently disabled HMAC verification.
+This closes the one misconfiguration that previously failed open.
+A Secret with an empty `secret` key silently disabled HMAC verification.
 The same check covers the rotation variable `FISSION_INTERNAL_AUTH_SECRET_OLD`.
 
 ## Bring your own master secret
@@ -82,14 +86,16 @@ The Secret must hold the key `secret`, and during rotation the optional key `old
 With `internalAuth.existingSecret` set, the chart renders no master Secret; every component reads yours.
 
 Create the Secret in every namespace where Fission runs pods: the release namespace, `defaultNamespace`, and each `additionalFissionNamespaces` entry.
-kubelet cannot resolve a cross-namespace `secretKeyRef`, so a single copy in the release namespace leaves builder and function pods starting but returning 401 on every archive fetch and builder upload.
+A single copy in the release namespace leaves builder and function pods starting but returning 401 on every archive fetch and builder upload, because kubelet cannot resolve a cross-namespace `secretKeyRef`.
 Under dynamic or cluster tenancy, only the release namespace needs the Secret.
 
 This is the recommended path for GitOps renderers (Argo CD, Flux).
-Those run `helm template`, where the chart cannot preserve a generated value across syncs — each sync would mint a new master and break every running pod.
+Those run `helm template`, where the chart cannot preserve a generated value across syncs.
+Each sync would mint a new master and break every running pod.
 Switching an existing install to `existingSecret` is safe: a pre-upgrade hook marks the chart-generated Secret with `helm.sh/resource-policy=keep`, so Helm does not prune it.
 
-As an alternative for GitOps, `internalAuth.autoGenerate=true` (default `false`) moves generation into a pre-install/pre-upgrade hook that creates the master Secret in-cluster only if it is absent, so no renderer re-mints it.
+As an alternative for GitOps, `internalAuth.autoGenerate=true` (default `false`) moves generation into a pre-install/pre-upgrade hook.
+The hook creates the master Secret in-cluster only if it is absent, so no renderer re-mints it.
 The hook is admission-fenced by a `ValidatingAdmissionPolicy`: it can create only the master Secret, and only as a plain `Opaque` object.
 
 The CLI discovers the Secret name from the cluster it talks to.
@@ -111,7 +117,8 @@ Every signer/verifier short-circuits to pass-through — no signing, no verifica
 This is the **recommended setting if you rely on stock upstream KEDA connector images** (`ghcr.io/fission/keda-kafka-http-connector` and the other `keda-*-http-connector` images) — see [Caveats](#caveats) below.
 
 The router's two-listener split is independent of this toggle: `/fission-function/<ns>/<name>` remains on the internal listener regardless.
-With `internalAuth.enabled=false` the internal listener still accepts unsigned requests; with `internalAuth.enabled=true` it requires signatures.
+With `internalAuth.enabled=false` the internal listener still accepts unsigned requests.
+With `internalAuth.enabled=true` it requires signatures.
 
 ## Master-secret rotation
 
@@ -150,7 +157,8 @@ The verifier (server) and signer (client) toggles are set independently per roll
 | ON | OFF | Client request returns **401** |
 | OFF | ON | Client sends signed headers; server pass-through ignores them — works |
 
-The chart applies the toggle wholesale, so the "ON / OFF" failure mode only surfaces during hand-edited deployments, in-flight `helm upgrade` rollouts where some pods haven't rolled yet, or external tooling that signed against an unconfigured CLI.
+The chart applies the toggle wholesale.
+The "ON / OFF" failure mode surfaces only during hand-edited deployments, in-flight `helm upgrade` rollouts where some pods haven't rolled yet, or external tooling that signed against an unconfigured CLI.
 
 ## Caveats
 
@@ -161,8 +169,10 @@ With `internalAuth.enabled=true` (the default), KEDA-driven message-queue trigge
 
 Operators have two options until signing-aware KEDA images ship:
 
-1. **Build signing-aware connector images** (recommended long-term). The signer primitive lives in `pkg/auth/hmac` in the Fission repo.
-2. **Set `internalAuth.enabled=false`** and rely on `NetworkPolicy` alone for the KEDA traffic. The internal listener still hosts `/fission-function/<ns>/<name>` but does not enforce signatures.
+1. **Build signing-aware connector images** (recommended long-term).
+   The signer primitive lives in `pkg/auth/hmac` in the Fission repo.
+2. **Set `internalAuth.enabled=false`** and rely on `NetworkPolicy` alone for the KEDA traffic.
+   The internal listener still hosts `/fission-function/<ns>/<name>` but does not enforce signatures.
 
 ### `ROUTER_INTERNAL_URL`
 

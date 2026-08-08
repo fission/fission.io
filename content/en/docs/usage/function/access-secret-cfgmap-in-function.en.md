@@ -6,7 +6,9 @@ description: >
   Mount Kubernetes Secrets and ConfigMaps into a Fission function as files, or inject them and literal values as per-function environment variables.
 ---
 
-**Fission functions read configuration through two channels: [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) and [ConfigMaps](https://kubernetes.io/docs/concepts/storage/volumes/#configmap) mounted as files, and — starting with Fission {{< release-version >}} — per-function environment variables that can also project Secret and ConfigMap values.**
+**Fission functions read configuration through two channels.**
+The first channel is [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) and [ConfigMaps](https://kubernetes.io/docs/concepts/storage/volumes/#configmap) mounted as files.
+The second channel, starting with Fission {{< release-version >}}, is per-function environment variables, which can also project Secret and ConfigMap values.
 Use Secrets for sensitive values such as API keys and tokens.
 Use ConfigMaps for configuration that is not secret.
 Use environment variables for 12-factor configuration such as `DATABASE_URL` or `LOG_LEVEL`.
@@ -129,7 +131,8 @@ See the [executor support matrix](#executor-support) below.
 
 By default an object's files land under `/secrets/<namespace>/<name>` or `/configs/<namespace>/<name>`.
 Set `mountPath` on the reference in the function spec to redirect them.
-There is no `fn create` / `fn update` flag for it; edit the spec YAML (the `fission spec` workflow or `kubectl`):
+There is no `fn create` / `fn update` flag for it.
+Edit the spec YAML instead (the `fission spec` workflow or `kubectl`):
 
 ```yaml
 # in the Function spec
@@ -239,7 +242,8 @@ $ fission fn update --name env-reader \
   --env-from-configmap app-config
 ```
 
-If you pass only some of the three flags, the variables set through the omitted flags are removed; the CLI prints a warning when that happens.
+Passing only some of the three flags removes the variables set through the omitted flags.
+The CLI prints a warning when that happens.
 An env change is a runtime-affecting update: the function's pods roll and new pods see the new values.
 
 ### Precedence and reserved names

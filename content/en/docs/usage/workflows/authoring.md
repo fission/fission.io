@@ -5,10 +5,12 @@ description: >
   The full YAML reference for a Workflow — every state type, JSONPath I/O shaping, retries and backoff, and the built-in error model.
 ---
 
-**A `Workflow` is a YAML state machine: a `startAt` state and a map of named states, each of which invokes a function, branches on data, waits, or terminates.**
+**A `Workflow` is a YAML state machine: a `startAt` state and a map of named states.
+Each state invokes a function, branches on data, waits, or terminates.**
 
 This page is the field reference.
-For the concepts, see [Workflows]({{% ref "/docs/concepts/workflows.md" %}}); to run and inspect what you author, see [Run and inspect]({{% ref "run-and-inspect.md" %}}).
+For the concepts, see [Workflows]({{% ref "/docs/concepts/workflows.md" %}}).
+To run and inspect what you author, see [Run and inspect]({{% ref "run-and-inspect.md" %}}).
 
 ## Manifest skeleton
 
@@ -89,7 +91,8 @@ Three optional JSONPath fields shape how a state reads from and writes to it:
 - **`outputPath`** selects what is passed on to the next state.
 
 `resultPath` is the one to be deliberate about.
-Setting `resultPath: $.charge` merges the function's result under `$.charge`, **keeping** the rest of the document; omitting it **replaces** the whole document with the result.
+Setting `resultPath: $.charge` merges the function's result under `$.charge`, **keeping** the rest of the document.
+Omitting it **replaces** the whole document with the result.
 The same applies to a caught error — merge it so the recovery step still sees the original input:
 
 ```yaml
@@ -174,7 +177,8 @@ grace-period:
 ## Succeed and Fail
 
 Terminal states.
-`Succeed` ends the run successfully; `Fail` ends it as failed.
+`Succeed` ends the run successfully.
+`Fail` ends it as failed.
 A Task with `end: true` also terminates the run.
 
 ```yaml
@@ -194,7 +198,8 @@ Fission classifies every step failure into a built-in error class that `catch.er
 | `Fission.BranchFailed` | A `Parallel`/`Map` branch failed terminally. | — (route with `catch`). |
 | `Fission.All` | Matches any error class in a `catch` route. | — |
 
-A function can also return its own **typed** business error by responding with a `{"errorType": "PaymentDeclined", ...}` body; `catch` routes on that name directly, so business recovery is separate from infrastructure retries.
+A function can also return its own **typed** business error by responding with a `{"errorType": "PaymentDeclined", ...}` body.
+`catch` routes on that name directly, so business recovery is separate from infrastructure retries.
 
 ## Validate before applying
 

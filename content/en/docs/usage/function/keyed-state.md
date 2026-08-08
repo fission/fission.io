@@ -7,11 +7,14 @@ description: >
 ---
 
 **Give a function durable key/value state without bringing your own Redis or database.**
-A Fission function is normally stateless: nothing it writes to memory survives the request, and two requests may land on two different pods.
-Anything that needs to remember something between requests — a per-user counter, a shopping cart, a login session, a rate limit, an AI agent's conversation history — usually means standing up Redis or a database, wiring its connection string into every environment image, and re-implementing tenancy and quotas per team.
+A Fission function is normally stateless.
+Nothing it writes to memory survives the request, and two requests may land on two different pods.
+Many things must persist between requests: a per-user counter, a shopping cart, a login session, a rate limit, an AI agent's conversation history.
+Each usually means standing up Redis or a database, wiring its connection string into every environment image, and re-implementing tenancy and quotas per team.
 
 Starting with Fission {{< release-version >}}, a function can opt into a **keyed state API** instead.
-It gets a private keyspace of versioned key/value entries, reached over a local HTTP endpoint that Fission injects into the pod along with a scoped token.
+It gets a private keyspace of versioned key/value entries.
+Fission injects a local HTTP endpoint into the pod, along with a scoped token, so the function can reach it.
 Your code shrinks to `get` / `set` / `delete` / `list` against `localhost`-speed HTTP — portable across environments, with no client library and no secret to manage.
 
 State is **opt-in per function** and additive: functions that don't ask for it behave exactly as before.
@@ -157,7 +160,10 @@ def state_client():
 ### A per-user counter
 
 The simplest useful pattern: increment a value keyed by user id.
-Because two requests for the same user can race, use the version returned by `get` as a **compare-and-swap** token on the `set` — the write only lands if nobody changed the value in between, and you retry on a conflict.
+Two requests for the same user can race.
+Use the version returned by `get` as a **compare-and-swap** token on the `set`.
+The write only lands if nobody changed the value in between.
+You retry on a conflict.
 No lost increments, no locks.
 
 ```javascript
@@ -175,7 +181,8 @@ module.exports = async function (context) {
 };
 ```
 
-The same shape covers **rate limiting** (increment a counter keyed by `client-ip`, reject past a threshold, let it expire with a TTL) and any other read-modify-write on a single key.
+The same shape covers **rate limiting**: increment a counter keyed by `client-ip`, reject past a threshold, and let it expire with a TTL.
+It also covers any other read-modify-write on a single key.
 
 ### A login session
 
@@ -193,7 +200,9 @@ Set `--state-ttl 30m` on the function and stale sessions clean themselves up —
 
 ### A shopping cart
 
-A cart is a value keyed by cart id; add-item is a read-modify-write with the same compare-and-swap retry as the counter, so two tabs adding items at once never clobber each other:
+A cart is a value keyed by cart id.
+Add-item is a read-modify-write, with the same compare-and-swap retry as the counter.
+Two tabs adding items at once never clobber each other:
 
 ```javascript
 const cur = await state.get(cartId);
@@ -205,7 +214,9 @@ const code = await state.set(cartId, JSON.stringify(cart), { ifVersion: cur ? cu
 
 ### AI agent conversation memory
 
-Give an agent function a durable memory keyed by conversation id — append each turn and read the history back on the next call, so the agent remembers across requests without a vector store or database for the transcript itself.
+Give an agent function a durable memory keyed by conversation id.
+Append each turn and read the history back on the next call.
+The agent then remembers across requests, without a vector store or database for the transcript itself.
 
 ```javascript
 const key = `conv:${conversationId}`;
@@ -219,7 +230,8 @@ await state.set(key, JSON.stringify(history), { ifVersion: cur ? cur.version : 0
 ## Keep an in-memory cache coherent with sticky routing
 
 Everything above is durable and correct no matter which pod serves a request.
-If your function also keeps an **in-memory cache** on top of that durable state — to avoid a round trip on hot keys — you want all requests for one key to keep landing on the same pod so that cache stays warm and coherent.
+Your function may also keep an **in-memory cache** on top of that durable state, to avoid a round trip on hot keys.
+In that case, you want all requests for one key to land on the same pod, so the cache stays warm and coherent.
 Turn on **sticky routing** by telling Fission where the key lives in the request:
 
 ```bash
@@ -228,16 +240,19 @@ fission function create --name game-room --env nodejs --code room.js --state \
   --state-sticky-name X-Room-Id
 ```
 
-Now requests carrying the same `X-Room-Id` are consistent-hashed onto the same ready pod while the pod set is stable.
+Fission now consistent-hashes requests carrying the same `X-Room-Id` onto the same ready pod while the pod set is stable.
 Sources can be a `header` or a `queryparam`.
 
-Sticky routing is a **performance optimization, not a correctness guarantee**: on a scale event or pod replacement a key may move to another pod, and its in-memory cache warms up again from the state API.
+Sticky routing is a **performance optimization, not a correctness guarantee**.
+On a scale event or pod replacement, a key may move to another pod.
+Its in-memory cache then warms up again from the state API.
 The durable truth always lives in the state API, so a request that lands on a different pod is never wrong — only, briefly, colder.
 Requests that don't carry the key fall back to normal routing.
 
 ## Inspect and manage state from the CLI
 
-`fission function state` reaches the same keyspace as an operator, useful for debugging and cleanup (it needs the cluster's internal auth secret, so it fails closed if that is not configured):
+`fission function state` reaches the same keyspace as an operator, useful for debugging and cleanup.
+It needs the cluster's internal auth secret, so it fails closed if that is not configured:
 
 ```bash
 fission function state set    --name cart --key demo-cart --value '{"items":[]}'
@@ -249,13 +264,16 @@ fission function state delete  --name cart --key demo-cart
 ## Lifecycle, limits, and cleanup
 
 - **State is shared across [function versions]({{% ref "versions-aliases.md" %}}).**
-  The keyspace belongs to the function, not to any one published version, so repointing or rolling back an alias rolls back code — never data — and both sides of a weighted split read and write the same keyspace.
+  The keyspace belongs to the function, not to any one published version.
+  Repointing or rolling back an alias rolls back code — never data.
+  Both sides of a weighted split read and write the same keyspace.
 - **Deleting a function purges its keyspace** by default, so state doesn't leak after the function is gone.
   Annotate the function with `fission.io/state-retain: "true"` to keep the data (for example to re-attach a replacement function to the same keyspace).
 - **Quotas are enforced for you.**
   A value larger than `--state-max-value-bytes` is rejected; creating a key past `--state-max-keys` is rejected — atomically, so concurrent writers can't overshoot the budget.
 - **This is key/value, not a database.**
-  There are no cross-key transactions, no secondary indexes, and values are capped (256&nbsp;KiB by default) — large blobs belong in object storage, relational data in a real database.
+  There are no cross-key transactions, no secondary indexes, and values are capped (256&nbsp;KiB by default).
+  Large blobs belong in object storage, relational data in a real database.
   It is exactly the right tool for the "remember a small thing per key" workloads above.
 - **Executor type.**
   State works with the `poolmgr` (default) and `newdeploy` executors.
