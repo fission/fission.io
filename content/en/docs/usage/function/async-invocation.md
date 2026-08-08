@@ -39,10 +39,12 @@ Asynchronous invocation is **off by default** and needs the [statestore]({{% ref
 helm upgrade --install fission fission-charts/fission-all \
   --namespace fission \
   --set statestore.enabled=true \
+  --set statestore.mode=embedded \
   --set asyncInvocation.enabled=true
 ```
 
-Embedded statestore mode is enough to try async invocation.
+The chart requires an explicit `statestore.mode` (`embedded` or `external`) when the statestore is enabled.
+Embedded mode is enough to try async invocation.
 [Autoscaling](#autoscaling) additionally requires `statestore.mode=external`.
 
 ## Invoke asynchronously
@@ -50,8 +52,9 @@ Embedded statestore mode is enough to try async invocation.
 The CLI sends the async header and prints the durable invocation id instead of waiting for a response:
 
 ```bash
-$ fission fn test --name resize-image --method POST --body @photo.json --async
-Invocation accepted: id=inv-8f2c1a9e
+$ fission fn test --name resize-image --method POST --body '{"path": "photos/cat.jpg"}' --async
+Accepted (202)
+invocationId: asyncinv/8f2c1a9e4b7d3c2a9f1e6b5d4c3a2b1f
 ```
 
 Any HTTP caller can do the same by setting the header on a request to the function's [HTTP trigger]({{% ref "/docs/usage/triggers/http-trigger.md" %}}):
@@ -61,7 +64,8 @@ curl -XPOST -H "X-Fission-Invoke-Mode: async" \
   --data @photo.json \
   http://$FISSION_ROUTER/resize-image
 # HTTP/1.1 202 Accepted
-# X-Fission-Invocation-Id: inv-8f2c1a9e
+# X-Fission-Invocation-Id: asyncinv/8f2c1a9e4b7d3c2a9f1e6b5d4c3a2b1f
+# {"invocationId":"asyncinv/8f2c1a9e4b7d3c2a9f1e6b5d4c3a2b1f"}
 ```
 
 {{% notice info %}}
@@ -76,13 +80,13 @@ Configure the bounds per function on `fn create` / `fn update`:
 
 ```bash
 fission fn update --name resize-image \
-  --async-retry-max-attempts 5 \
+  --async-retry-max-attempts 3 \
   --async-max-age 1h
 ```
 
 | Flag | Meaning |
 | --- | --- |
-| `--async-retry-max-attempts` | Maximum delivery attempts before dead-lettering. |
+| `--async-retry-max-attempts` | Maximum delivery attempts before dead-lettering (1 to 3). |
 | `--async-max-age` | Maximum age of an invocation before dead-lettering, regardless of attempts. |
 
 {{% notice info %}}
@@ -115,20 +119,22 @@ Invocations that exhaust their retries or age out land in the dead-letter queue,
 fission function dlq list
 
 # Inspect one
-fission function dlq show --id inv-8f2c1a9e
+fission function dlq show --id asyncinv/8f2c1a9e4b7d3c2a9f1e6b5d4c3a2b1f
 
 # Re-drive one back onto the queue, or all of them
-fission function dlq redrive --id inv-8f2c1a9e
+fission function dlq redrive --id asyncinv/8f2c1a9e4b7d3c2a9f1e6b5d4c3a2b1f
 fission function dlq redrive --all
 
-# Discard them
-fission function dlq purge --all
+# Discard every dead-lettered async invocation
+fission function dlq purge
 ```
+
+A re-driven invocation starts with a fresh attempt budget.
 
 | Flag | Meaning |
 | --- | --- |
-| `--id` | Operate on a single durable invocation id. |
-| `--all` | Apply to every dead-lettered invocation. |
+| `--id` | Operate on a single durable invocation id (`show`, `redrive`). |
+| `--all` | Re-drive every dead-lettered invocation (`redrive`). |
 | `--queue` | Target queue: empty for async invocations, or an eventing broker egress queue (`mq-egress-<type>`). |
 | `--limit` | Cap the number of entries `dlq list` returns. |
 
