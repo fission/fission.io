@@ -231,6 +231,8 @@ navbar_logo = true
 navbar_translucent_over_cover_disable = false
 # Enable to show the side bar menu in its compact state.
 sidebar_menu_compact = true
+# CLI reference now has 128 pages; default truncate (100) drops entries.
+sidebar_menu_truncate = 150
 # Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
 sidebar_search_disable = true
 
