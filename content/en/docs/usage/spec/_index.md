@@ -2,59 +2,29 @@
 title: "YAML Specs"
 weight: 30
 description: >
-  Source Code Organization and Your Development Workflow
+  Manage a Fission application as version-controlled YAML specs, and deploy it with the idempotent fission spec apply — from your laptop or from a CI pipeline.
 ---
 
-**Specify your whole Fission application — environments, functions, triggers — as version-controlled YAML, and deploy it with a single idempotent `fission spec apply`.**
+**Specify your whole Fission application — environments, functions, triggers, workflows — as version-controlled YAML, and deploy it with a single idempotent `fission spec apply`.**
 
-You've made a Hello World function in your favorite language, and you've run it on your Fission deployment.
-What's next?
+Individual `fission ... create` commands work well for one function.
+They do not scale to an application with many functions, shared environments, and triggers.
+Specs solve this: the whole application lives in a `specs/` directory that you track in Git, review in pull requests, and apply as one unit.
 
-How should you organize source code when you have lots of functions?
-How should you automate deployment into the cluster?
-What about version control?
-How do you test before deploying?
+Applying a spec means reconciling the cluster to match the files:
 
-The answers to these questions start from a common first step: how do you ***specify an application***?
-
-## Spec
-
-Instead of invoking the Fission CLI commands, you can specify your functions in a set of YAML files.
-This is better than scripting the `fission` CLI, which is meant as a user interface, not a programming interface.
-
-You'll usually want to track these YAML files in version control along with your source code.
-Fission provides CLI tools for generating these specification files, validating them, and "applying" them to a Fission installation.
-
-What does it mean to _apply_ a specification?
-It means putting specification to effect: figuring out the things that need to be changed on the cluster, and updating them to make them the same as the specification.
-
-Applying a Fission spec goes through these steps:
-
-* Resources (functions, triggers, etc) that are in the specification but don't exist on the cluster are created.
+* Resources in the specs but not on the cluster are created.
   Local source files are packaged and uploaded.
-* Resources that are both in the specs and on the cluster are compared.
-  If they're different, the ones on the cluster are changed to match the spec.
-* Resources present only on the cluster and not in the spec are destroyed.
-  (This deletion is limited to resources that were created by a previous _apply_; this makes sure that Fission doesn't delete unrelated resources.
-  See below for how this calculation works.)
+* Resources in both are compared, and the cluster copy is updated when it differs.
+* With `--delete`, resources this spec created earlier but no longer declares are removed.
+  Deletion is opt-in; a plain `fission spec apply` never deletes anything.
 
-Running _apply_ more than once is equivalent to running it once: in other words, it's ***idempotent***.
+Running apply again with unchanged specs changes nothing on the cluster: apply is ***idempotent***.
+This makes it safe to run on every commit from a CI pipeline — see [Run spec apply from CI](#run-spec-apply-from-ci-gitops).
 
-## Usage Summary
+## The spec workflow
 
-Start using Fission's declarative application specifications in 3 steps:
-
- 1. Initialize a directory of specs: `fission spec init`
- 1. Generate some YAMLs: `fission function create --spec ...`
- 1. Apply them to a cluster: `fission spec apply --wait`
-
-You can also deploy continuously with `fission spec apply --watch`.
-
-We'll see examples of all these commands in the tutorial below.
-
-### The spec workflow
-
-The `fission spec` subcommands form a simple loop: generate specs locally, validate them, then apply them to the cluster.
+The `fission spec` subcommands form a loop: generate specs locally, validate them, then apply them to the cluster.
 `fission spec destroy` tears down everything a previous apply created.
 
 ```mermaid
@@ -74,21 +44,70 @@ The full set of subcommands:
 
 | Command | What it does |
 | ------- | ------------ |
-| `fission spec init` | Creates the `specs/` directory and a `fission-config.yaml` carrying the deployment ID. |
-| `fission ... create --spec` | Writes a resource (function, environment, trigger, ...) as a YAML file under `specs/` instead of creating it on the cluster. |
-| `fission spec validate` | Checks the specs for duplicate names and broken references between resources. |
-| `fission spec apply` | Reconciles the cluster to match the specs (create, update, delete). Add `--wait` to block on builds or `--watch` for continuous deployment. |
-| `fission spec list` | Lists the resources defined by the specs in the directory. |
-| `fission spec destroy` | Deletes every resource that a previous apply created from these specs. |
+| `fission spec init` | Creates the `specs/` directory with a `fission-deployment-config.yaml` that carries the deployment ID. |
+| `fission ... create --spec` | Writes a resource (function, environment, trigger, workflow, ...) as a YAML file under `specs/` instead of creating it on the cluster. |
+| `fission spec validate` | Checks the specs for duplicate names, broken references between resources, and name conflicts with resources already on the cluster. |
+| `fission spec apply` | Reconciles the cluster to match the specs. Add `--delete` to prune, `--wait` to block on builds, `--watch` for continuous deployment, or `--dry-run` to preview. |
+| `fission spec list` | Lists the cluster resources that carry this spec's deployment ID. |
+| `fission spec destroy` | Deletes the resources declared in the spec files. With `--force`, deletes every resource carrying the deployment ID, across all namespaces. |
 
-All of these commands accept `--specdir` to point at a non-default directory and `--specignore` to point at a `.specignore` file (default `.specignore`) that excludes paths from being read as specs, much like `.gitignore`.
+All of these commands accept `--specdir` to point at a non-default directory.
+They also accept `--specignore` to point at an ignore file (default `.specignore`) that excludes paths from being read as specs, much like `.gitignore`.
+See the [`fission spec` CLI reference](/docs/reference/fission-cli/fission_spec/) for every flag.
+
+## Ownership: the deployment ID
+
+`fission spec init` writes a unique deployment ID into `fission-deployment-config.yaml`.
+Every resource that apply creates is annotated with this ID.
+Apply only updates or deletes resources that carry its own deployment ID.
+Resources without the annotation — created by hand, by `kubectl`, or by another spec directory — are never modified or deleted.
+
+If a spec resource's name collides with an unowned cluster resource, apply fails instead of overwriting it.
+Pass `--allowconflicts` to adopt such resources into the spec deployment.
+
+## Idempotency and drift reconciliation
+
+Reapplying an unchanged spec directory is a no-op:
+
+```bash
+$ fission spec apply
+Everything up to date.
+```
+
+A no-op reapply writes nothing to the cluster: no function generation bumps, no pod recycles, and no new [function versions](/docs/usage/function/versions-aliases/).
+This is what makes a periodic or per-commit apply from automation safe.
+
+Apply reconciles real drift, and only real drift:
+
+* **Archives** are content-addressed by checksum.
+  An archive whose bytes already exist on the cluster is not uploaded again (`archive ... exists, not uploading`).
+* **A source change** updates the package and re-triggers its build automatically.
+  A package whose last build failed is also re-triggered on the next apply.
+* **A spec edit** to any resource updates only that resource and its dependents.
+  For example, a package update re-stamps the functions that reference it, so running pods pick up the new code.
+* **Untouched resources** stay byte-identical, even across many reapplies.
+
+### Preview with --dry-run
+
+`fission spec apply --dry-run` computes the same diff read-only and reports what a real apply would do:
+
+```bash
+$ fission spec apply --dry-run
+would upload archive archive://eval-xk2p
+1 package would be updated: calc-eval-0f36e9b8
+1 function would be updated: calc-eval
+(dry run - no changes made)
+```
+
+The preview also surfaces errors a real apply would hit, such as a name conflict with a resource this spec does not own.
+`--wait` and `--watch` are inert under `--dry-run`.
 
 ## Tutorial
 
-This tutorial assumes you've already set up Fission, and tested a simple hello world function to make sure everything's working.
-To learn how to do that, head over to the [installation guide]({{% ref "../../installation" %}}).
+This tutorial assumes you have already set up Fission and tested a simple hello world function.
+To learn how to do that, head over to the [installation guide](/docs/installation/).
 
-We'll make a small calculator app with one python environment and two functions, all of which will be declaratively specified using YAML files.
+We make a small calculator app with one Python environment and two functions, all specified as YAML files.
 This is a contrived example, meant purely as an illustration.
 
 ### Make an empty directory
@@ -106,13 +125,11 @@ $ cd spec-tutorial
 $ fission spec init
 ```
 
-This creates a `specs/` directory.
-You'll see a `fission-config.yaml` in there.
-This file has a unique ID (deployment ID) in it; everything created on the cluster from these specs will be annotated with that deployment ID.
+This creates a `specs/` directory with a `fission-deployment-config.yaml` in it.
+This file carries the deployment ID; everything created on the cluster from these specs is annotated with that ID.
 
-The deployment ID is generated automatically when you initialize the specs directory.
-In some cases you may want to run initialization multiple times.
-To update the same set of resources each time, specify the deployment ID with `--deployid`.
+The deployment ID is generated automatically.
+To make a re-initialized directory manage the same set of resources, pass the same ID with `--deployid`:
 
 ```bash
 $ fission spec init --deployid xxxx-yyyy-zzzz
@@ -126,19 +143,18 @@ $ fission env create --spec --name python --image ghcr.io/fission/python-env --b
 
 This command creates a YAML file under specs called `specs/env-python.yaml`.
 
-## Code two functions
+### Code two functions
 
-We will create two functions in python along with an empty `requirements.txt` file so that builder is able to build the code.
-We will put the functions in their own directory with the requirements.txt file.
+We create two Python functions, each in its own directory with an empty `requirements.txt` file so the builder can build the code.
 
 ```bash
 .
 ├── eval
-│   ├── eval.py
-│   └── requirements.txt
+│   ├── eval.py
+│   └── requirements.txt
 ├── form
-│   ├── form.py
-│   └── requirements.txt
+│   ├── form.py
+│   └── requirements.txt
 └── specs
 
 ```
@@ -186,8 +202,8 @@ def main():
 
 ### Create specs for these functions
 
-Let's create a specification for each of these functions.
-This specifies the function name, where the code lives, and associates the function with the python environment:
+Create a specification for each function.
+This specifies the function name, where the code lives, and associates the function with the Python environment:
 
 ```bash
 $ fission function create --spec --name calc-form --env python --src "form/*" --entrypoint form.main
@@ -207,7 +223,8 @@ This creates YAML files specifying that GET requests on `/form` and `/eval` invo
 
 ### Validate your specs
 
-Spec validation does some basic checks: it makes sure there are no duplicate functions with the same name, and that references between various resources are correct.
+Validation checks for duplicate resource names and broken references between resources.
+It also checks that no spec name collides with a cluster resource owned by a different deployment ID, so it needs a cluster connection.
 
 ```bash
 $ fission spec validate
@@ -215,53 +232,55 @@ $ fission spec validate
 
 You should see no errors.
 
-## Apply: deploy your functions to Fission
+### Apply: deploy your functions to Fission
 
-You can use apply to deploy the environment, functions, and HTTP triggers to the cluster.
-This command will wait for builds of both functions to complete before exiting:
+Apply deploys the environment, functions, and HTTP triggers to the cluster.
+With `--wait`, the command waits for the builds of both functions to complete before exiting:
 
 ```bash
 $ fission spec apply --wait
+uploading archive archive://form-o4e9
+uploading archive archive://eval-xk2p
 1 environment created: python
-2 packages created: python-1543660299-o4e9, python-1543660287-byam
+2 packages created: calc-form-a4c8e21d, calc-eval-0f36e9b8
 2 functions created: calc-eval, calc-form
 2 HTTPTriggers created: bac55924-03a8-42e1-81b9-8079a8885f3a, f16c8459-3c23-46ad-901f-9312f38cec2a
 --- Build SUCCEEDED ---
 --- Build SUCCEEDED ---
 ```
 
-If the build fails, you can rebuild the package using rebuild command:
+If a build fails, you can rebuild the package with the rebuild command:
 
 ```bash
 --- Build FAILED: ---
 Build timeout due to environment builder not ready
 ------
-$ fission package rebuild --name python-1543660299-o4e9
+$ fission package rebuild --name calc-eval-0f36e9b8
 ```
 
 ### Test a function
 
-You can check the function is working with `fission fn test` but since this function returns a HTML, it is best to open in browser.
+You can check the function with `fission fn test`, but since this function returns HTML, it is best to open it in a browser.
 
 ```bash
 $ fission function test --name calc-form
 ```
 
-Open the URL of the Fission router service suffixed by the name of route at which form function is exposed.
-For more details on getting the address of Fission router please check [the link](/docs/installation/env_vars/#fission-router-address).
+Open the URL of the Fission router service, suffixed by the route at which the form function is exposed.
+For details on getting the router address, see [accessing the router](/docs/installation/env_vars/#fission-router-address).
 
 ```text
 http://$FISSION_ROUTER/form
 ```
 
-You can enter two number and operator and see the results.
+Enter two numbers and an operator to see the result.
 Currently this function only supports addition and subtraction.
 
-(If you don't know the address of the Fission router, you can find it with kubectl: `kubectl -n fission get service router`.)
+(If you do not know the address of the Fission router, you can find it with kubectl: `kubectl -n fission get service router`.)
 
 ### Modify the function and re-deploy it
 
-Let's try modifying a function: let's change the `calc-eval` function to support multiplication, too.
+Change the `calc-eval` function to support multiplication, too:
 
 ```python
     ...
@@ -272,68 +291,98 @@ Let's try modifying a function: let's change the `calc-eval` function to support
     ...
 ```
 
-You can add the above lines to `eval.py`.
-To deploy your changes, apply the specs again:
+Add the above lines to `eval.py`.
+To deploy the change, apply the specs again:
 
 ```bash
 $ fission spec apply --wait
-```
-
-This should output something like:
-
-```text
-1 archive updated: calc-eval-xyz
-1 package updated: calc-eval-xyz
+uploading archive archive://eval-xk2p
+1 package updated: calc-eval-0f36e9b8
 1 function updated: calc-eval
+--- Build SUCCEEDED ---
 ```
 
-Your new updated function is deployed!
-Test it out by entering a `*` for the operator in the form!
+Apply detects the changed source, uploads only that archive, rebuilds the package, and updates the function so running pods pick up the new code.
+The unchanged `calc-form` function is not touched.
+Test the change by entering a `*` for the operator in the form.
 
-### Add dependencies to the function
+### Remove a resource
 
-Let's say you'd like to add a pip dependency in `requirements.txt` to your function, and include some libraries in it, so you can `import` them in your functions.
-Add a library to the requirements.txt and modify the ArchiveUploadSpec inside specs/function-`<name>`.yaml.
-Once again, deploying is the same:
+To remove a resource, delete its YAML file and apply with `--delete`:
 
 ```bash
-$ fission spec apply --wait
+$ rm specs/route-f16c8459-3c23-46ad-901f-9312f38cec2a.yaml
+$ fission spec apply --delete
+1 HTTPTrigger deleted: f16c8459-3c23-46ad-901f-9312f38cec2a
 ```
 
-This command figures out that one function has changed, uploads the source to the cluster, and waits until the Fission builder on the cluster finishes rebuilding this updated source code.
+`--delete` only removes resources that carry this spec's deployment ID.
+To tear down the whole application, run `fission spec destroy`.
+
+## Run spec apply from CI (GitOps)
+
+Because apply is idempotent and scoped to its deployment ID, a pipeline can run it on every commit:
+
+```bash
+fission spec validate
+fission spec apply --delete --wait
+```
+
+* **Safe to re-apply.** A sync with no spec change writes nothing: no rebuilds, no pod restarts, no new function versions.
+* **`--delete` completes the loop.** Removing a spec file from Git removes the resource from the cluster on the next apply.
+  Without it, deletions in Git never reach the cluster.
+* **`--wait` fails the pipeline on a failed build**, instead of reporting success while the package is broken.
+* **`--commitlabel` records provenance.** Each resource gets a `commit` label with the Git commit hash of its spec file, so you can trace any cluster object back to the commit that produced it.
+* **Apply warns on a dirty work tree**, so uncommitted local changes do not silently ship from a workstation.
+* **Preview in pull requests.** Run `fission spec apply --dry-run` in the PR pipeline to post what a merge would change.
+
+### Specs with OCI image packages
+
+Specs that use `ArchiveUploadSpec` need the `fission` CLI at apply time, because the CLI packages and uploads the source archives.
+[OCI image packages](/docs/usage/function/oci-packages/) remove that step:
+
+```bash
+$ fission function create --spec --name hello --env go \
+    --oci ghcr.io/example/pkgs/hello:1.2.0@sha256:4c2a... --entrypoint Handler
+```
+
+The generated package spec carries only the image reference.
+Nothing is uploaded at apply time, and the digest pins exactly what runs.
+Your CI builds and pushes the image, then bumps the digest in the spec file; the same spec promotes unchanged across dev, QA, and production.
+Because such specs contain only plain Kubernetes resources, a GitOps controller such as Argo CD or Flux can also apply them directly, without the `fission` CLI in the loop.
+One exclusion applies: `fission-deployment-config.yaml` is CLI metadata, not a cluster resource, so point the sync at the resource YAMLs only.
 
 ## A bit about how this works
 
 Kubernetes manages its state as a set of _resources_.
-Deployments, Pod, Services are examples of resources.
-They represent a target state, and Kubernetes then does the work to ensure this target state is met.
+Deployments, Pods, and Services are examples of resources.
+They represent a target state, and Kubernetes does the work to reach it.
 
 Kubernetes resources can be extended, using _Custom Resources_.
-Fission runs on top of Kubernetes and sets up your functions, environments and triggers as Custom Resources.
-You can see even these custom resources from `kubectl`: try `kubectl get customresourcedefinitions` or `kubectl get function.fission.io`
+Fission runs on top of Kubernetes and stores your functions, environments, and triggers as Custom Resources.
+You can see these custom resources with `kubectl`: try `kubectl get customresourcedefinitions` or `kubectl get function.fission.io`.
 
-Your specs directory is, basically, set of resources plus a bit of configuration.
-Each YAML file contains one or more resources.
-They are separated by a "---" separator.
-The resources are functions, environments, triggers.
+Your specs directory is a set of these resources plus a bit of configuration.
+Each YAML file contains one or more resources, separated by a `---` separator.
+The supported kinds are functions, environments, packages, HTTP triggers, message queue triggers, time triggers, Kubernetes watch triggers, [workflows](/docs/usage/workflows/), and [function aliases](/docs/usage/function/versions-aliases/).
 
-There's a special resource there, _ArchiveUploadSpec_.
-This is in fact not a resource, just looks like one in the YAML files.
-It is used to specify and name a set of files that will be uploaded to the cluster.
-`fission spec apply` uses these `ArchiveUploadSpec`s to create archives locally and upload them.
-The specs reference these archives using `archive://` URLs.
-These aren't "real" URLs; they are replaced by http URLs by the `fission spec` implementation after the archives are uploaded to the cluster.
-On the cluster, Archives are tracked with checksums; the Fission CLI only uploads archives when their checksum has changed.
+There is one special kind, _ArchiveUploadSpec_.
+It is not a cluster resource; it names a set of local files to upload.
+`fission spec apply` uses each `ArchiveUploadSpec` to create an archive locally and upload it.
+Package specs reference these archives with `archive://` URLs.
+These are not real URLs; apply replaces them with HTTP URLs after it uploads the archives.
+On the cluster, archives are tracked with checksums, so apply only uploads an archive when its content has changed.
 
-## Improve Portability of Spec (1.7.0+)
+## Improve portability of specs
 
-Sometimes you may want to release spec files only without the function source code or the compiled binary.
-To improve the portability, you can specify a URL that points to the target archive by following the step described in [here]({{% ref "../function/url-as-archive-source.md" %}}).
+Sometimes you may want to release spec files without the function source code or the compiled binary.
+You can point the spec at a URL that serves the target archive; see [using a URL as archive source](/docs/usage/function/url-as-archive-source/).
+For full GitOps portability, prefer [OCI image packages](#specs-with-oci-image-packages).
 
-## Custom Resources References
+## Custom Resource references
 
-You can find the latest definitions for Fission Custom Resources at [doc.crds.dev/github.com/fission/fission](https://doc.crds.dev/github.com/fission/fission)
+You can find the definitions for Fission Custom Resources in the [CRD reference](/docs/reference/crd-reference/) and at [doc.crds.dev/github.com/fission/fission](https://doc.crds.dev/github.com/fission/fission).
 
-## More Examples
+## More examples
 
 For more spec examples, please visit [fission/examples](https://github.com/fission/examples/tree/main/miscellaneous/spec-example).
