@@ -2,31 +2,25 @@
 title: "Upgrade Guide"
 weight: 60
 description: >
-  Upgrade guidance 1.13 onwards
+  Upgrade Fission with Helm: the routine steps, what happens to in-flight traffic and warm pods during the roll, and how to tune the drain windows.
 ---
 
-{{% notice warning %}}
-Fission upgrades currently cause a short downtime, though we work to minimize it.
-Please upvote [issue #1856](https://github.com/fission/fission/issues/1856) so we can prioritize fixing it.
+{{% notice info %}}
+Zero-downtime upgrades are the goal of Fission's upgrade design ([issue #1856](https://github.com/fission/fission/issues/1856)).
+Recent releases ship rollout defaults that keep warm function traffic serving while the control plane rolls.
+Fission does not yet test or guarantee zero downtime for every request, so schedule upgrades in a low-traffic window when that matters.
 {{% /notice %}}
 
 ## Upgrade to the latest Fission version
 
-**Every upgrade needs three steps, in order: replace the CRDs, update the CLI, then upgrade the chart.**
+**Every upgrade needs two steps, in order: update the CLI, then upgrade the chart.**
+Starting with Fission {{< release-version >}}, `helm upgrade` applies the matching CRDs itself through a pre-upgrade hook, so a separate CRD step is needed only when you opt out.
 Check the version-specific sections below for anything extra your target release requires.
-
-### Upgrade/Replace the CRDs
-
-Apply the CRD manifest for the version you're upgrading to:
-
-```sh
-kubectl replace -k "github.com/fission/fission/crds/v1?ref={{% release-version %}}"
-```
 
 ### Install the latest Fission CLI
 
 Make sure you have the latest CLI installed.
-Refer to [Fission CLI Installation]({{< ref "_index.en.md#install-fission-cli">}}).
+Refer to [Fission CLI Installation](/docs/installation/#install-fission-cli).
 
 ### Upgrade Fission chart
 
@@ -38,7 +32,123 @@ helm repo update
 helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all
 ```
 
+With the default `crds.mode=hook`, the chart's [pre-upgrade checks](#pre-upgrade-checks) Job applies the target version's CRDs before any component rolls.
+
+If you set `crds.mode=none` because your organization does not grant CRD write to a chart, apply the CRD manifest yourself **before** the `helm upgrade`:
+
+```sh
+kubectl replace -k "github.com/fission/fission/crds/v1?ref={{% release-version %}}"
+```
+
+Releases before v1.28.0 always need this manual CRD step.
+
 _See [configuration](#configuration) below._
+
+### Verify the upgrade
+
+Confirm the client and server versions match, and run the cluster diagnostics:
+
+```sh
+fission version
+fission check
+```
+
+## What happens during an upgrade
+
+`helm upgrade` replaces the Fission control-plane pods, not your function pods.
+This section describes what each component does while it rolls.
+
+### Pre-upgrade checks
+
+A Helm hook Job runs before any manifest changes (`preUpgradeChecks.enabled`, default `true`).
+The Job:
+
+- applies the target version's CRD bundle (`crds.mode=hook`, the default), so controllers never run against stale schemas;
+- confirms the latest CRD schema is live on the cluster;
+- checks that every function references secrets, configmaps, and packages in its own namespace.
+
+If a check fails, the upgrade stops before any component rolls, and the existing installation keeps running unchanged.
+
+### Router
+
+The router runs two replicas by default and rolls surge-first (`maxSurge: 1`, `maxUnavailable: 0`), so the serving replica count never dips.
+A new router pod reports Ready only after it builds its route table and syncs its endpoint index.
+A terminating router pod first sleeps for `router.preStopSleep` (default 5 seconds) so its removal from the Service propagates, then drains in-flight requests for up to `router.gracefulShutdownTimeout` (default `75s`).
+A PodDisruptionBudget (`minAvailable: 1`) protects the router during node drains.
+The chart renders the budget only when the router can satisfy it: two or more replicas, or an autoscaler with a floor of two.
+
+### Warm function pods
+
+Warm pods keep serving through the upgrade:
+
+- The restarted executor **adopts** existing function Deployments and pods (`executor.adoptExistingResources`, default `true`) instead of recreating them.
+- **Specialized** poolmgr pods survive executor-side template changes, such as a new fetcher image; the pool controller recycles them only when their environment changes.
+- **Generic** (not yet specialized) pool pods roll and pick up the new images.
+- Warm traffic does not need a live executor: the router serves warm requests directly from EndpointSlices.
+
+### Executor
+
+The executor is a single-writer control plane, so it rolls overlap-free (`maxSurge: 0`, `maxUnavailable: 1`): the old pod stops before the new one starts.
+This gives a bounded executor-down window per roll.
+Warm traffic keeps serving throughout; only cold starts wait for the new executor pod.
+To shorten failover, run `executor.replicas: 2` with `executor.leaderElection.enabled: true` (active-passive HA).
+
+### Webhook
+
+The validating webhook runs two replicas by default with a surge rollout and a PodDisruptionBudget, so Fission CR writes stay available while it rolls.
+One caveat remains on the default certificate path: the chart mints a new serving certificate on every `helm upgrade`, so a short window can reject CR writes while old pods still serve the old certificate.
+Set `webhook.certManager.enabled=true` to let cert-manager manage a stable certificate and close that window.
+Function invocations are not affected; the webhook sits only on the CR write path.
+
+### Embedded statestore
+
+This applies only when `statestore.enabled=true` with `mode: embedded`.
+The embedded statestore is a single-replica Deployment with `strategy: Recreate`, because two pods must never hold the SQLite file at once.
+Its pod is therefore down for a short window during the upgrade.
+Invocations already enqueued are durable on the persistent volume, and delivery resumes when the pod returns.
+New [asynchronous enqueues](/docs/usage/function/async-invocation/) during that window fail, and the caller must retry.
+`statestore.mode=external` (Postgres) has no such window; see [Statestore](/docs/architecture/statestore/).
+
+## Tune the drain windows
+
+### Function pods: `terminationGracePeriod`
+
+Each environment sets how long its function pods drain before Kubernetes removes them: `spec.terminationGracePeriod`, default **90 seconds**.
+A terminating function pod keeps serving for the whole window — the preStop hook sleeps through it, then the kubelet kills the pod.
+Set the window above your longest function timeout, or the slowest in-flight requests end with a connection reset:
+
+```sh
+fission env update --name node --graceperiod 180
+```
+
+The same window applies to every pod teardown — idle reap, environment update, upgrade, node drain — so a larger value makes each teardown take longer per pod.
+An explicit `0` disables draining and removes pods instantly.
+See the [`terminationGracePeriod` field reference](/docs/reference/crd-reference/#environmentspec).
+
+### Router: grace period and shutdown timeout
+
+Two chart values control the router drain, and they must move together:
+
+```sh
+helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all \
+  --set router.terminationGracePeriodSeconds=150 \
+  --set router.gracefulShutdownTimeout=120s
+```
+
+Keep `terminationGracePeriodSeconds` greater than `gracefulShutdownTimeout`, and `gracefulShutdownTimeout` greater than your longest function timeout.
+Raising the grace period alone does nothing: the drain still stops at `gracefulShutdownTimeout`.
+
+## Upgrade to 1.28.x release
+
+v1.28.0 flips the chart's rollout-posture defaults so that upgrades keep warm traffic serving:
+
+- The **router** and the **webhook** default to two replicas each, with surge rollouts and PodDisruptionBudgets.
+- The chart applies **CRDs** itself through the pre-upgrade hook (`crds.mode: hook`), so the manual `kubectl` CRD step is no longer part of the routine upgrade.
+
+Small-footprint installs (kind, single node) can set `router.replicas=1` and `webhook.replicas=1` to keep the previous footprint; the PodDisruptionBudgets drop automatically at one replica.
+Set `crds.mode=none` to keep delivering CRDs yourself.
+
+See the [v1.28.0 release notes](/docs/releases/v1.28.0/#upgrade-notes) for the full list of changes.
 
 ## Upgrade to 1.27.x release
 
@@ -115,7 +225,7 @@ helm upgrade --namespace $FISSION_NAMESPACE fission fission-charts/fission-all \
   --set internalAuth.enabled=false
 ```
 
-With `enabled=false`, every signer/verifier short-circuits to pass-through and the cluster falls back to `NetworkPolicy` + namespace isolation alone — matching pre-1.23 in-cluster behaviour.
+With `enabled=false`, every signer/verifier short-circuits to pass-through and the cluster falls back to `NetworkPolicy` + namespace isolation alone — matching pre-1.23 in-cluster behavior.
 
 See [Internal Service Authentication]({{% ref "internal-auth.md" %}}) for the full toggle matrix, secret rotation, and longer-term mitigation.
 
