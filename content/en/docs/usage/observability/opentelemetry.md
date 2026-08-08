@@ -33,8 +33,9 @@ The chart translates each value into a standard `OTEL_*` environment variable th
 | `openTelemetry.otlpHeaders` | `OTEL_EXPORTER_OTLP_HEADERS` | Comma-separated key-value pairs sent as headers on gRPC/HTTP export requests |
 | `openTelemetry.tracesSampler` | `OTEL_TRACES_SAMPLER` | Sampler for traces |
 | `openTelemetry.tracesSamplingRate` | `OTEL_TRACES_SAMPLER_ARG` | Argument for the sampler |
-| `openTelemetry.propagators` | `OTEL_PROPAGATORS` | Propagator(s) used to generate and read the trace-id header |
+| `openTelemetry.propagators` | `OTEL_PROPAGATORS` | Kept for chart compatibility. Fission components always propagate with W3C Trace Context + Baggage and do not honor other values — see [Trace propagation](#trace-propagation). |
 | `openTelemetry.logsEnabled` | `OTEL_LOGS_ENABLED` | `true`/`false` (default `false`). When enabled alongside a collector endpoint, control-plane components also push their structured logs (carrying `trace_id`) to the OTLP collector, not just traces. |
+| `openTelemetry.metricsExporter` | `OTEL_METRICS_EXPORTER` | Metrics exporter selection (default `prometheus`). The Prometheus `/metrics` scrape always stays on; set `otlp` (or `prometheus,otlp`) to also push metrics over OTLP to the collector. |
 
 Without a configured collector endpoint, you won't be able to visualize traces.
 Depending on your sampler configuration, you can still observe `trace_id` in Fission component logs.
@@ -57,34 +58,25 @@ Set `OTEL_TRACES_SAMPLER` to one of the following:
 
 | Sampler | Behavior |
 | ------- | -------- |
-| `always_on` | Always samples spans, regardless of the parent span's sampling decision. |
-| `always_off` | Never samples spans, regardless of the parent span's sampling decision. |
+| `always_on` | Treated the same as `parentbased_always_on`. |
+| `always_off` | Treated the same as `parentbased_always_off`. |
 | `traceidratio` | Samples probabilistically based on rate. |
 | `parentbased_always_on` | Respects the parent span's sampling decision, but otherwise always samples. Default if `OTEL_TRACES_SAMPLER` is empty. |
 | `parentbased_always_off` | Respects the parent span's sampling decision, but otherwise never samples. |
 | `parentbased_traceidratio` | Respects the parent span's sampling decision, but otherwise samples probabilistically based on rate. Default in the chart. |
+
+An unknown sampler value falls back to `parentbased_always_on`.
 
 #### Sampler arguments
 
 Only `traceidratio` and `parentbased_traceidratio` take an argument, set via `OTEL_TRACES_SAMPLER_ARG`: a sampling probability in the [0..1] range, e.g. `"0.1"`.
 Default is 0.1.
 
-### Types of propagators
+### Trace propagation
 
-The propagator type determines which header OpenTelemetry uses to generate and read the trace ID.
-Set `OTEL_PROPAGATORS` to one of the following:
-
-| Propagator | Header |
-| ---------- | ------ |
-| `tracecontext` | W3C Trace Context |
-| `baggage` | W3C Baggage |
-| `b3` | B3 Single |
-| `b3multi` | B3 Multi |
-| `jaeger` | Jaeger `uber-trace-id` header |
-| `xray` | AWS X-Ray (third party) |
-| `ottrace` | OpenTracing Trace (third party) |
-
-Change the propagator when you need a header other than W3C Trace Context — for example, set it to `jaeger` if you're integrating with OpenTracing/Jaeger.
+Fission components propagate trace context with the W3C Trace Context and Baggage propagators.
+Other propagator types (`b3`, `b3multi`, `jaeger`, `xray`, `ottrace`) are not honored; the non-W3C propagator modules were dropped to reduce the binary footprint.
+The `openTelemetry.propagators` value still injects `OTEL_PROPAGATORS` into every pod, so a function that runs its own OpenTelemetry SDK can read it — but Fission's own components ignore it.
 
 ## Sample OTEL Collector
 

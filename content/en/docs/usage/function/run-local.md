@@ -169,6 +169,8 @@ Functions usually need configuration and secrets.
 * `--env-from <file>` — read environment variables from a file (one `KEY=VALUE` per line); `-e` overrides individual keys.
 * `--secret <name>` / `--configmap <name>` — materialize a cluster `Secret`/`ConfigMap` and mount it the way the cluster does, under `/secrets/<namespace>/<name>` and `/configs/<namespace>/<name>` (see [Accessing Secrets and ConfigMaps]({{% ref "access-secret-cfgmap-in-function.en.md" %}})).
   These require a reachable cluster to read the objects from.
+* `--secret-mount <name>=<path>` / `--configmap-mount <name>=<path>` — mount the object at a custom path relative to `/secrets` or `/configs`, matching the function's `spec.secrets[].mountPath` / `spec.configmaps[].mountPath` in-cluster.
+  Repeatable; without it an object lands at the default `/secrets/<namespace>/<name>` layout.
 
 #### Attaching a debugger
 

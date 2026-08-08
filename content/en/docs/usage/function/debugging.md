@@ -35,7 +35,12 @@ PACKAGE:
 PODS:
   NAME              READY  STATUS   AGE
   poolmgr-...-abcd  2/2    Running  5m
+
+VERSIONING:
+  Versioning: disabled
 ```
+
+For a function with [versioning]({{% ref "versions-aliases.md" %}}) enabled, the `VERSIONING` section lists the mode, the version count, and the aliases.
 
 The **`Invocable`** line answers "can I call this right now?":
 
