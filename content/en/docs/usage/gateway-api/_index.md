@@ -42,7 +42,7 @@ flowchart TB
 When an HTTPTrigger sets `routeConfig.provider: gateway`, the router:
 
 - Creates an `HTTPRoute` named after the trigger, in the **router's own namespace** (`fission` by default).
-- Sets the route's `parentRefs` to the Gateway(s) you specify (or a cluster-wide default Gateway).
+- Sets the route's `parentRefs` to the Gateway(s) you specify.
 - Sets the route's `hostnames` and a `PathPrefix` match from your config.
 - Points the route's backend at the `router` Service on port 80 — the same backend the Ingress path used.
 - Labels the route with `triggerName`, `functionName`, and `triggerNamespace` so you can find it with `kubectl get httproute -l triggerName=<name> -n fission`.
@@ -64,13 +64,6 @@ Enable it (and grant the router the `gateway.networking.k8s.io` RBAC it needs) w
 helm upgrade --install fission fission-charts/fission-all \
   --namespace fission \
   --set gatewayAPI.enabled=true
-```
-
-Optionally configure a **default Gateway** that triggers attach to when they don't name their own.
-The value is `name` or `namespace/name`:
-
-```bash
-  --set gatewayAPI.defaultParentRef=fission-gateways/shared-gw
 ```
 
 When `gatewayAPI.enabled=true`, the chart adds RBAC for the router to manage `httproutes` (and read `referencegrants`).
@@ -186,7 +179,7 @@ spec:
 Notes:
 
 - `provider` is required.
-  When it is `gateway`, you must supply at least one `parentRef` **unless** the router is configured with a default Gateway (`gatewayAPI.defaultParentRef`).
+  When it is `gateway`, you must supply at least one `parentRef` — CRD validation rejects the trigger otherwise.
 - `tls` applies only to the ingress provider and is rejected by validation when `provider: gateway` (gateway TLS lives on the Gateway listener).
 - `routeConfig` takes precedence over the deprecated `createingress` + `ingressconfig` fields.
 

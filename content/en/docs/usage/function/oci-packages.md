@@ -78,7 +78,7 @@ You can also build code images without a Docker daemon using [`crane`](https://g
 
 ```bash
 $ tar -cf code.tar hello.py
-$ crane append --base scratch --new_layer code.tar \
+$ crane append --new_layer code.tar \
     --new_tag registry.example.com/myteam/hello-code:v1
 ```
 
@@ -183,8 +183,10 @@ Code-image pulls resolve credentials in this order:
 3. **Anonymous** access.
 
 Both secret sources are resolved in the namespace the function pods run in.
-For functions in the `default` namespace that is the configured function namespace (`fission-function` in many installs); for functions in other namespaces it is the function's own namespace.
+By default that is the function's own namespace.
+When your install sets the `functionNamespace` Helm value, functions in the `default` namespace run in that namespace instead.
 Confirm with `kubectl get pods -l environmentName=<env> -A` if unsure.
+The examples below use `default`; substitute your function-pod namespace.
 
 ##### Step 1 — create a registry secret
 
@@ -192,7 +194,7 @@ Create a standard `docker-registry` secret in the function-pod namespace (see th
 
 ```bash
 $ kubectl create secret docker-registry regcred \
-    --namespace fission-function \
+    --namespace default \
     --docker-server=registry.example.com \
     --docker-username=ci-bot \
     --docker-password="$REGISTRY_TOKEN"
@@ -204,7 +206,7 @@ Patch the `fission-fetcher` service account in the same namespace; every OCI pac
 
 ```bash
 $ kubectl patch serviceaccount fission-fetcher \
-    --namespace fission-function \
+    --namespace default \
     -p '{"imagePullSecrets": [{"name": "regcred"}]}'
 ```
 
@@ -233,12 +235,12 @@ spec:
 Create a function on the package and invoke it; on a credential problem the function returns a 5xx and the fetcher log names the registry error:
 
 ```bash
-$ kubectl logs <function-pod> -c fetcher -n fission-function | grep -i "error extracting OCI image"
+$ kubectl logs <function-pod> -c fetcher -n default | grep -i "error extracting OCI image"
 ```
 
 {{% notice warning %}}
 Fission does not validate that the referenced secrets exist or hold working credentials — a missing or wrong secret surfaces only at pull time.
-With [image volumes](#optional-mount-code-with-kubernetes-image-volumes) enabled, the **kubelet** performs the pull using the same two secret sources (the pod inherits both), so the same setup keeps working — but pull errors then appear as pod events (`kubectl describe pod`, `ErrImagePull`) rather than fetcher logs.
+With [image volumes](#kubernetes-image-volumes) active (the default on Kubernetes 1.33+), the **kubelet** performs the pull using the same two secret sources (the pod inherits both), so the same setup keeps working — but pull errors then appear as pod events (`kubectl describe pod`, `ErrImagePull`) rather than fetcher logs.
 {{% /notice %}}
 
 Runtime/environment images are pulled by the kubelet independently of package images; for those, see [Pull an Image From a Private Registry]({{% ref "/docs/usage/function/private-registry.md" %}}).
@@ -256,23 +258,25 @@ fetcher:
 This is a comma-separated host allowlist, not a global switch — every other registry still requires TLS.
 Localhost and private (RFC-1918) IP addresses are implicitly trusted by the underlying client, matching Docker's behavior.
 
-#### Optional: mount code with Kubernetes image volumes
+#### Kubernetes image volumes
 
-By default the per-pod fetcher pulls and extracts the image (this works on every supported Kubernetes version).
-On Kubernetes **1.33+** you can instead let the **kubelet** mount the code image directly into function pods as an [image volume](https://kubernetes.io/docs/tasks/configure-pod-container/image-volumes/), removing the fetch-and-extract step from the cold-start path entirely:
+On Kubernetes **1.33+** the **kubelet** mounts the code image directly into function pods as an [image volume](https://kubernetes.io/docs/tasks/configure-pod-container/image-volumes/), removing the fetch-and-extract step from the cold-start path entirely.
+This is **on by default** (`executor.enableOCIImageVolume: true` in the Helm chart).
+On clusters below 1.33 image volumes are detected as unsupported, and packages automatically use the per-pod fetcher, which pulls and extracts the image itself.
+To force the fetcher path on every cluster, disable the setting:
 
 ```yaml
 executor:
-  enableOCIImageVolume: true
+  enableOCIImageVolume: false
 ```
 
-On clusters below 1.33 the setting is detected as unsupported and packages silently stay on the fetcher path.
 Be aware of the behavioral differences when image volumes are active:
 
 * **The kubelet pulls the image, not Fission.**
   Image references resolve with the node's DNS and containerd's registry configuration — a registry reachable only through cluster DNS (a ClusterIP `Service` name) will not resolve.
   Use a registry address that nodes can reach.
-* Poolmgr functions that reference **Secrets or ConfigMaps**, and functions on **v1 environments**, automatically fall back to the fetcher path (those features need the fetcher inside the pod).
+* Functions that reference **Secrets or ConfigMaps** still mount the code as an image volume; their pods keep the fetcher, which materializes those Secrets and ConfigMaps.
+* Poolmgr functions on **v1 environments**, and those whose environment sets `allowedFunctionsPerContainer: infinite` or `keepArchive: true`, stay on the fetcher path.
 * The code mount is **read-only**.
   Runtimes that write next to the code (Python bytecode caches, JVM work files) should write elsewhere; the standard Fission environments handle this.
 * `subPath` must point to a **directory** inside the image (kubelets reject file sub-paths).
