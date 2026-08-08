@@ -2,7 +2,7 @@
 title: "Authentication"
 weight: 40
 description: >
-  Guide to set up basic authentication with Fission
+  Enable JWT authentication for Fission function invocations and generate tokens with the Fission CLI.
 ---
 
 ## Authentication for Fission Functions
@@ -20,7 +20,7 @@ When enabled, a new endpoint for authentication will be registered in the router
 All the API calls to Fission functions will now be routed through function endpoints using authentication token.
 
 Fission also creates a Secret named `router` in the `fission` namespace with a default `username`, a randomly generated `password`, and a `jwtSigningKey`.
-This Secret is mounted as a volume on the router pod.
+The router reads these values through `secretKeyRef` environment variables.
 You first create an auth token by providing the `username` and `password`.
 The generated token must then be passed in the `Authorization` header of every subsequent function call.
 
@@ -67,6 +67,11 @@ authentication:
   ## If left empty, the chart generates a random key on install.
   jwtSigningKey:
 
+  ## existingSecret names a pre-created Secret in the release namespace
+  ## with the keys username, password, and jwtSigningKey.
+  ## When set, the chart does not generate the "router" Secret.
+  existingSecret:
+
   ## jwtExpiryTime is the JWT expiry time in seconds.
   ## default '120'
   jwtExpiryTime:
@@ -75,6 +80,9 @@ authentication:
   ## default 'fission'
   jwtIssuer: fission
 ```
+
+On GitOps renderers (Argo CD, Flux), set `authentication.existingSecret` to a Secret you create yourself.
+Those run `helm template`, where the chart cannot preserve the generated `password` and `jwtSigningKey` across syncs — each sync would mint fresh values and invalidate issued tokens.
 
 Refer to the [installation guide]({{% ref "_index.en.md" %}}) if you are installing Fission for the first time, or to the [Upgrade Guide]({{% ref "upgrade.md" %}}) if you are upgrading from an older version.
 

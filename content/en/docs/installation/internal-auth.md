@@ -42,9 +42,18 @@ The public listener is unchanged for user `HTTPTrigger` traffic.
 helm install fission fission-charts/fission-all -n fission --create-namespace
 ```
 
-The chart materialises a `Secret/fission-internal-auth` with an auto-generated 32-byte master key.
+The chart materializes a `Secret/fission-internal-auth` with an auto-generated 32-byte master key.
 The same value is preserved across `helm upgrade` runs.
+Under static tenancy the chart replicates the Secret into `defaultNamespace` and each `additionalFissionNamespaces` entry, so dynamically created builder and function pods can mount it too.
 Every Fission control-plane component (storagesvc, executor, router, buildermgr, and the rest) and every dynamically-created builder/function pod mounts the master via environment variable; each signer/verifier pair derives its own per-service key.
+
+### Fail-closed startup check
+
+Every binary — fission-bundle, fetcher, builder, and the CLI — validates the internal-auth environment at startup.
+An absent `FISSION_INTERNAL_AUTH_SECRET` means internal auth is off; signers and verifiers pass through.
+A present but blank value is refused: the process exits with an error that names the variable.
+This closes the one misconfiguration that previously failed open — a Secret with an empty `secret` key silently disabled HMAC verification.
+The same check covers the rotation variable `FISSION_INTERNAL_AUTH_SECRET_OLD`.
 
 ## Bring your own master secret
 
@@ -55,7 +64,37 @@ helm install fission fission-charts/fission-all -n fission \
   --set internalAuth.secret="$(openssl rand -base64 32)"
 ```
 
-If `internalAuth.secret` is set, the chart honours it instead of auto-generating one.
+If `internalAuth.secret` is set, the chart honors it instead of auto-generating one.
+
+## Use a pre-created Secret (`existingSecret`)
+
+Point the chart at a Secret you create and manage yourself:
+
+```bash
+kubectl create secret generic fission-auth-master -n fission \
+  --from-literal=secret="$(openssl rand -base64 32)"
+
+helm install fission fission-charts/fission-all -n fission \
+  --set internalAuth.existingSecret=fission-auth-master
+```
+
+The Secret must hold the key `secret`, and during rotation the optional key `oldSecret`.
+With `internalAuth.existingSecret` set, the chart renders no master Secret; every component reads yours.
+
+Create the Secret in every namespace where Fission runs pods: the release namespace, `defaultNamespace`, and each `additionalFissionNamespaces` entry.
+kubelet cannot resolve a cross-namespace `secretKeyRef`, so a single copy in the release namespace leaves builder and function pods starting but returning 401 on every archive fetch and builder upload.
+Under dynamic or cluster tenancy, only the release namespace needs the Secret.
+
+This is the recommended path for GitOps renderers (Argo CD, Flux).
+Those run `helm template`, where the chart cannot preserve a generated value across syncs — each sync would mint a new master and break every running pod.
+Switching an existing install to `existingSecret` is safe: a pre-upgrade hook marks the chart-generated Secret with `helm.sh/resource-policy=keep`, so Helm does not prune it.
+
+As an alternative for GitOps, `internalAuth.autoGenerate=true` (default `false`) moves generation into a pre-install/pre-upgrade hook that creates the master Secret in-cluster only if it is absent, so no renderer re-mints it.
+The hook is admission-fenced by a `ValidatingAdmissionPolicy`: it can create only the master Secret, and only as a plain `Opaque` object.
+
+The CLI discovers the Secret name from the cluster it talks to.
+The precedence is: an explicit `FISSION_INTERNAL_AUTH_SECRET_NAME` environment variable, then the name stamped on the executor Deployment, then the default `fission-internal-auth`.
+If your CLI user cannot read Deployments and the install uses a non-default name, set `FISSION_INTERNAL_AUTH_SECRET_NAME` explicitly.
 
 ## Disable everywhere
 
@@ -97,13 +136,16 @@ helm upgrade fission fission-charts/fission-all -n fission \
 
 Because every per-service key is derived from the master via HKDF, this single sequence rotates the key for all five channels atomically.
 
+`helm uninstall` no longer removes the master Secret: the chart marks it `helm.sh/resource-policy=keep`, and a reinstall reuses the surviving value.
+To force a rotation after a suspected compromise, delete `Secret/fission-internal-auth` in every namespace it was replicated into, or set new values for `internalAuth.secret`.
+
 ## Toggle interaction matrix
 
 The verifier (server) and signer (client) toggles are set independently per rollout, so mixed states are possible; this table shows the outcome of each combination:
 
 | Server (verifier) | Client (signer) | Outcome |
 |---|---|---|
-| OFF | OFF | All requests pass through unsigned — identical to pre-v1.23 in-cluster behaviour |
+| OFF | OFF | All requests pass through unsigned — identical to pre-v1.23 in-cluster behavior |
 | ON | ON | All signed and verified per-service (default) |
 | ON | OFF | Client request returns **401** |
 | OFF | ON | Client sends signed headers; server pass-through ignores them — works |
@@ -126,7 +168,7 @@ Operators have two options until signing-aware KEDA images ship:
 
 Services that publish to the router internal listener (`kubewatcher`, `timer`, `mqt-fission-kafka`, `mqt-keda`) now read `ROUTER_INTERNAL_URL`.
 The chart sets it to `http://router-internal.<namespace>:<router.internalPort>` (port `8889` by default) using the dedicated `router-internal` Service.
-If you customise the router `Service` name, namespace, or `router.internalPort`, set this env override accordingly.
+If you customize the router `Service` name, namespace, or `router.internalPort`, set this env override accordingly.
 
 ## Reference
 
