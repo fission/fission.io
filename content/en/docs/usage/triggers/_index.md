@@ -18,6 +18,7 @@ Pick the trigger that matches where your events come from.
 | HTTP trigger | An incoming HTTP request to a URL path | `fission httptrigger create` (alias `route`) | {{% ref "http-trigger.md" %}} |
 | Time trigger | A cron schedule | `fission timetrigger create` (alias `timer`) | {{% ref "timer.md" %}} |
 | Message queue trigger | A message published to a queue or stream | `fission mqtrigger create` (alias `mqt`) | {{% ref "message-queue-trigger-kind-keda/_index.md" %}} |
+| Statestore eventing | An event published to a built-in statestore topic | `fission mqtrigger create --mqtkind fission --mqtype statestore` | {{% ref "statestore-eventing.md" %}} |
 | Kubernetes watch trigger | A change to a Kubernetes object | `fission watch create` | {{% ref "kubewatcher.md" %}} |
 
 {{% notice info %}}
@@ -62,5 +63,6 @@ This is why understanding HTTP triggers and the router helps when debugging any 
 - [HTTP Trigger]({{% ref "http-trigger.md" %}})
 - [Time Trigger]({{% ref "timer.md" %}})
 - [Message Queue Trigger: KEDA]({{% ref "message-queue-trigger-kind-keda/_index.md" %}})
+- [Statestore Eventing]({{% ref "statestore-eventing.md" %}})
 - [Kubernetes Watch Trigger]({{% ref "kubewatcher.md" %}})
 - [Router architecture]({{% ref "/docs/architecture/router.md" %}})
