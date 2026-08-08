@@ -185,7 +185,7 @@ twitter = 'fissionio'
 
 [[params.whatsnew]]
 badge = 'NEW'
-body = 'Durable & async Fission: a statestore substrate, fire-and-forget asynchronous invocation with retries and a dead-letter queue, and durable workflows that orchestrate functions as a resumable state machine.'
+body = 'Durable & async Fission: a statestore substrate, fire-and-forget asynchronous invocation with retries and a dead-letter queue, broker-free eventing topics, and durable workflows that orchestrate functions as a resumable state machine.'
 heading = 'Durable & Async Workflows'
 [params.whatsnew.button]
 hero_class = 'mid'
