@@ -14,8 +14,9 @@ fission function get [flags]
 ### Options
 
 ```
-      --name string   Function name
-  -h, --help          help for get
+      --name string      Function name
+      --version string   Get a specific pinned FunctionVersion's snapshot source instead of the live function
+  -h, --help             help for get
 ```
 
 ### Options inherited from parent commands

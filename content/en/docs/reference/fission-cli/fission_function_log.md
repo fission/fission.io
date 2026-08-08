@@ -26,6 +26,8 @@ fission function log [flags]
       --request-id string      Filter logs to a single invocation by its X-Fission-Request-ID (loki dbtype)
       --trace-id string        Filter logs by trace id (loki dbtype)
       --level string           Filter logs by level, e.g. error (loki dbtype)
+      --alias string           Show logs for a specific alias's (e.g. prod) resolved version instead of the live function; mutually exclusive with --version; kubernetes dbtype only
+      --version string         Show logs for a specific pinned FunctionVersion instead of the live function; mutually exclusive with --alias; kubernetes dbtype only
   -h, --help                   help for log
 ```
 

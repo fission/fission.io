@@ -1,22 +1,22 @@
 ---
-title: fission function describe
-slug: fission_function_describe
-url: /docs/reference/fission-cli/fission_function_describe/
+title: fission function versions
+slug: fission_function_versions
+url: /docs/reference/fission-cli/fission_function_versions/
 ---
-## fission function describe
+## fission function versions
 
-Describe a function's health in one view (summary, conditions, build, pods)
+List a function's published versions
 
 ```
-fission function describe [flags]
+fission function versions [flags]
 ```
 
 ### Options
 
 ```
-      --name string      Function name
-      --version string   Describe a specific pinned FunctionVersion's snapshot instead of the live function
-  -h, --help             help for describe
+      --name string     Function name
+  -o, --output string   -o |:|: Output format: wide, json or yaml (default: table)
+  -h, --help            help for versions
 ```
 
 ### Options inherited from parent commands

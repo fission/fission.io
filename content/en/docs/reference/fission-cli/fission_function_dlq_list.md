@@ -17,7 +17,7 @@ fission function dlq list [flags]
   -n, --namespace string   -n |:|: If present, the namespace scope for this CLI request
       --limit int          Maximum number of dead-lettered invocations to list (default 100)
   -o, --output string      -o |:|: Output format: wide, json or yaml (default: table)
-      --queue string       Dead-letter queue to operate on: empty for async invocations, or an RFC-0027 broker egress queue (mq-egress-<type>, e.g. mq-egress-kafka)
+      --queue string       Dead-letter queue to operate on: empty for async invocations, or a broker egress queue (mq-egress-<type>, e.g. mq-egress-kafka)
   -h, --help               help for list
 ```
 

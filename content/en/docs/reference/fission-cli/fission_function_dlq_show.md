@@ -15,7 +15,7 @@ fission function dlq show [flags]
 
 ```
       --id string      Durable invocation id of a dead-lettered async invocation
-      --queue string   Dead-letter queue to operate on: empty for async invocations, or an RFC-0027 broker egress queue (mq-egress-<type>, e.g. mq-egress-kafka)
+      --queue string   Dead-letter queue to operate on: empty for async invocations, or a broker egress queue (mq-egress-<type>, e.g. mq-egress-kafka)
   -h, --help           help for show
 ```
 

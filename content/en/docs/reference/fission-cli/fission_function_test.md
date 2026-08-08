@@ -20,9 +20,11 @@ fission function test [flags]
   -b, --body string          -b |:|: Request body
   -q, --query stringArray    -q |:|: Request query parameters: -q key1=value1 -q key2=value2
   -t, --timeout duration     -t |:|: Length of time to wait for the response. If set to zero or negative number, no timeout is set (default 1m0s)
-      --async                RFC-0024: invoke asynchronously (X-Fission-Invoke-Mode: async); prints the invocation id instead of waiting for the response. Set FISSION_INTERNAL_AUTH_SECRET when authentication is enabled.
+      --async                Invoke asynchronously (X-Fission-Invoke-Mode: async); prints the invocation id instead of waiting for the response. Set FISSION_INTERNAL_AUTH_SECRET when authentication is enabled.
       --dbtype string        Log database type: kubernetes (default) or loki (default "kubernetes")
       --subpath string       Sub Path to check if function internally supports routing
+      --alias string         Test a specific alias (e.g. prod) instead of the live function; mutually exclusive with --version
+      --version string       Test a specific pinned FunctionVersion instead of the live function; mutually exclusive with --alias
   -h, --help                 help for test
 ```
 
