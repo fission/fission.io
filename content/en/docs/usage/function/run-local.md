@@ -6,10 +6,13 @@ description: >
   Run a Fission function locally in Docker against its real environment image — no cluster round-trip — with hot reload, a builder pass, and config mounts.
 ---
 
-`fission function run-local` runs a single function on your laptop in Docker, against the **same environment runtime image** the cluster uses, so you can iterate without a build-and-deploy round-trip.
-A normal edit → deploy → test cycle goes through a package build and a specialization on the cluster and takes tens of seconds to a couple of minutes; `run-local` collapses that to a local pull-once, then sub-second re-runs on each edit.
+`fission function run-local` runs a single function on your laptop in Docker, against the **same environment runtime image** the cluster uses.
+You iterate without a build-and-deploy round-trip.
+A normal edit → deploy → test cycle goes through a package build and a specialization on the cluster and takes tens of seconds to a couple of minutes.
+`run-local` collapses that to a local pull-once, then sub-second re-runs on each edit.
 
-It reproduces the cluster's behavior faithfully — the runtime image, the specialize contract, and the invocation headers all match — so a function that works under `run-local` works the same way once deployed.
+It reproduces the cluster's behavior faithfully: the runtime image, the specialize contract, and the invocation headers all match.
+A function that works under `run-local` works the same way once deployed.
 
 {{% notice info %}}
 `run-local` is an **alpha** command; its flags and output may change.
@@ -27,7 +30,7 @@ flowchart LR
   classDef user fill:#ffffff,stroke:#94a3b8,color:#1f2a43
   classDef fission fill:#e8f0fe,stroke:#2d70de,color:#1f2a43
   classDef pod fill:#e6f7f1,stroke:#11a37f,color:#1f2a43,stroke-dasharray:5 3
-  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43
+  classDef store fill:#fff7e0,stroke:#dba514,color:#1f2a43,stroke-dasharray:5 3
 ```
 
 #### Prerequisites
@@ -53,11 +56,13 @@ Specializing function ...
 Hello, world!
 ```
 
-`run-local` pulls the image (showing layer progress), starts the container, replays the specialize contract over your code, invokes the function once, prints the response, and tears the container down.
+`run-local` pulls the image (showing layer progress), starts the container, and replays the specialize contract over your code.
+Then it invokes the function once, prints the response, and tears the container down.
 Status lines are color-coded on a terminal — cyan for progress, green for milestones, red for failures, dim for container logs — and plain when the output is piped or `NO_COLOR` is set.
 
 The function is published on `127.0.0.1` at an auto-selected port (shown in the output).
-`--port` sets the port the application **inside** the container listens on (default `8888`, the Fission environment contract port); change it only for a `container` function whose image listens elsewhere.
+`--port` sets the port the application **inside** the container listens on (default `8888`, the Fission environment contract port).
+Change it only for a `container` function whose image listens elsewhere.
 
 #### Running against a cluster environment
 
@@ -67,12 +72,13 @@ If you have a cluster, resolve the runtime (and builder) image from an existing 
 $ fission function run-local --env nodejs --code hello.js
 ```
 
-`--env` reads the `Environment` CRD for its runtime image; pass `--namespace` to resolve an environment outside `default`.
+`--env` reads the `Environment` CRD for its runtime image.
+Pass `--namespace` to resolve an environment outside `default`.
 Use `--image` instead when you want to stay fully offline or pin a specific image tag.
 
 #### Invoking the function
 
-`run-local` reuses the same invocation flags as [`fission function test`]({{% ref "functions.en.md" %}}), so the request is built exactly as the cluster builds it:
+`run-local` reuses the same invocation flags as [`fission function test`]({{% ref "functions.en.md" %}}), so it builds the request exactly as the cluster does:
 
 ```bash
 $ fission function run-local --image ghcr.io/fission/python-env --code hello.py \
@@ -95,12 +101,14 @@ Specializing function ...
 Serving local at http://127.0.0.1:63048 — watching hello.js for changes (Ctrl-C to stop)
 ```
 
-Edit and save `hello.js`, and `run-local` reloads it; `curl http://127.0.0.1:63048` then returns the new response.
+Edit and save `hello.js`, and `run-local` reloads it.
+`curl http://127.0.0.1:63048` then returns the new response.
 
 The watch scope follows the source:
 
 * A single `--code` file watches that one file.
-* A directory source — `--deploy <dir>`, or a builder project (Go, Java, …) — watches the **whole tree**, so editing any file inside it triggers a reload.
+* A directory source — `--deploy <dir>`, or a builder project (Go, Java, …) — watches the **whole tree**.
+  Editing any file inside it triggers a reload.
   Version-control and dependency/build directories (`.git`, `node_modules`, `vendor`, `target`, `.next`, `__pycache__`) and editor swap files are ignored.
 
 A reload **restarts** the container rather than re-specializing in place, because published environment runtimes reject a second specialization on an already-specialized process.
@@ -142,7 +150,8 @@ For an app that is more than one file — a multi-module project, or a pre-built
 $ fission function run-local --image ghcr.io/fission/node-env --deploy ./app --entrypoint server
 ```
 
-The directory is bind-mounted directly into the container (large dependency trees are not copied), and a `.zip` source is extracted automatically before mounting.
+`run-local` bind-mounts the directory directly into the container, so it does not copy large dependency trees.
+It extracts a `.zip` source automatically before mounting.
 
 #### Executor types
 
@@ -169,6 +178,8 @@ Functions usually need configuration and secrets.
 * `--env-from <file>` — read environment variables from a file (one `KEY=VALUE` per line); `-e` overrides individual keys.
 * `--secret <name>` / `--configmap <name>` — materialize a cluster `Secret`/`ConfigMap` and mount it the way the cluster does, under `/secrets/<namespace>/<name>` and `/configs/<namespace>/<name>` (see [Accessing Secrets and ConfigMaps]({{% ref "access-secret-cfgmap-in-function.en.md" %}})).
   These require a reachable cluster to read the objects from.
+* `--secret-mount <name>=<path>` / `--configmap-mount <name>=<path>` — mount the object at a custom path relative to `/secrets` or `/configs`, matching the function's `spec.secrets[].mountPath` / `spec.configmaps[].mountPath` in-cluster.
+  Repeatable; without it an object lands at the default `/secrets/<namespace>/<name>` layout.
 
 #### Attaching a debugger
 

@@ -27,6 +27,7 @@ Create, update and manage environments
 * [fission environment create](/docs/reference/fission-cli/fission_environment_create/)	 - Create an environment
 * [fission environment delete](/docs/reference/fission-cli/fission_environment_delete/)	 - Delete an environment
 * [fission environment get](/docs/reference/fission-cli/fission_environment_get/)	 - Get environment details
+* [fission environment impact](/docs/reference/fission-cli/fission_environment_impact/)	 - Show functions and aliases affected by this environment, and their env-drift status
 * [fission environment list](/docs/reference/fission-cli/fission_environment_list/)	 - List environments
 * [fission environment pods](/docs/reference/fission-cli/fission_environment_pods/)	 - List pods currently maintained by an environment
 * [fission environment update](/docs/reference/fission-cli/fission_environment_update/)	 - Update an environment

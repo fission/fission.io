@@ -8,7 +8,8 @@ description: >
 
 **Expose a Fission function as an MCP tool so any LLM agent that speaks MCP can discover and invoke it, with no hand-written adapter code.**
 The [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) is an open protocol that lets LLM agents discover and call external tools.
-Starting with Fission {{< release-version >}}, an agent that speaks MCP (for example Claude) can list an advertised function and invoke it over Fission's existing internal invocation path.
+Starting with Fission {{< release-version >}}, an agent that speaks MCP (for example Claude) can list an advertised function.
+It can then invoke the function over Fission's existing internal invocation path.
 
 Exposing a function as a tool is **opt-in per function** and additive — functions you don't mark stay private.
 
@@ -50,6 +51,7 @@ It listens on a `ClusterIP` Service on port `8890` by default (`mcp.port`).
 {{% notice warning %}}
 In production, leave `mcp.allowInsecure: false` and run with [authentication]({{% ref "/docs/installation/authentication.md" %}}) enabled.
 Agents then authenticate with a signed JWT whose `allowed_namespaces` claim scopes which functions they may see and call.
+Enabling MCP with authentication off and `mcp.allowInsecure: false` fails the chart render.
 {{% /notice %}}
 
 ## Expose a function as a tool
@@ -63,7 +65,8 @@ fission fn create --name weather --env nodejs --code weather.js \
   --tool-input-schema weather-schema.json
 ```
 
-`--tool-input-schema` points at a JSON Schema (draft 2020-12) file describing the tool's arguments; it is advertised verbatim as the MCP tool `inputSchema`.
+`--tool-input-schema` points at a JSON Schema (draft 2020-12) file describing the tool's arguments.
+Fission advertises it verbatim as the MCP tool `inputSchema`.
 When omitted, the tool advertises an open object schema (`{"type":"object"}`).
 
 | Flag | Meaning |
@@ -79,11 +82,12 @@ When omitted, the tool advertises an open object schema (`{"type":"object"}`).
 
 ```bash
 $ fission function tools
-NAME              FUNCTION   NAMESPACE   DESCRIPTION
-default-weather   weather    default     Return the current weather for a city
+TOOL              FUNCTION   NAMESPACE   DESCRIPTION                             EXPOSED
+default-weather   weather    default     Return the current weather for a city   True
 ```
 
-Use `-o wide`, `-o json`, or `-o yaml` for more detail.
+The `EXPOSED` column shows the function's `ToolExposed` status condition — `True` once the MCP server advertises the tool.
+`-o wide` adds an `AGE` column; use `-o json` or `-o yaml` for full detail.
 
 ## Declarative spec
 
@@ -115,7 +119,9 @@ spec:
 
 ## How agents reach the tools
 
-Point an MCP-capable agent at the MCP server's endpoint (the `mcp` Service on port `8890`, exposed however you route in-cluster traffic — for example through an [HTTP trigger]({{% ref "/docs/usage/triggers/http-trigger.md" %}}) or your ingress/gateway).
+Point an MCP-capable agent at the MCP server's Streamable HTTP endpoint: `http://mcp.<fission-namespace>:8890/mcp`.
+The `mcp` Service is `ClusterIP`-only and never joins the router's public listener.
+Expose it deliberately with an Ingress, a Gateway, or `kubectl port-forward`.
 With authentication enabled, the agent presents a bearer JWT and only sees tools in its `allowed_namespaces`.
 When the agent calls a tool, the MCP server invokes the underlying function through Fission's internal invocation path and returns the response.
 

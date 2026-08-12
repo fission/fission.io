@@ -6,8 +6,8 @@ description: >
   Stream a Fission function's response incrementally over Server-Sent Events, HTTP chunked transfer, or WebSocket — for LLM tokens, chat, and long-running calls.
 ---
 
-**Starting with Fission {{< release-version >}}, a function can stream its response incrementally — over Server-Sent Events (SSE), HTTP chunked transfer, or a WebSocket upgrade — instead of buffering the whole response behind `functionTimeout`.**
-The response is flushed to the client as it is produced and is **not** bound by `functionTimeout`.
+**Starting with Fission {{< release-version >}}, a function can stream its response incrementally — over Server-Sent Events (SSE), HTTP chunked transfer, or a WebSocket upgrade.**
+The response flushes to the client as it is produced and is **not** bound by `functionTimeout`.
 By default, though, a function still buffers its full response and the router cuts the request off at that limit.
 
 Streaming is **per-function and opt-in**: omit the `spec.streaming` object (or the `--streaming` flag) and the function keeps the existing buffered behavior exactly.
@@ -51,7 +51,7 @@ fission fn update --name chat --streaming=false
 | --- | --- | --- |
 | `--streaming` | off | Enable streaming responses for the function. Disable on update with `--streaming=false`. |
 | `--streamingprotocol` | `auto` | Streaming protocol: `auto`, `sse`, `chunked`, or `websocket`. `auto` covers all cases; `websocket` signals intent (the upgrade is detected from the request). |
-| `--streamingidletimeout` | `60` | Abort the stream if no bytes flow from the function for this many seconds; reset on each chunk. Also bounds time-to-first-byte. |
+| `--streamingidletimeout` | `60` | Abort the stream if no bytes flow from the function for this many seconds; reset on each chunk. Also bounds time-to-first-byte. Not applied after a WebSocket upgrade. |
 | `--streamingmaxduration` | `0` | Hard ceiling (seconds) on total stream lifetime; `0` means no ceiling. |
 
 ## How streaming changes timeouts
@@ -65,7 +65,8 @@ See the [function timeout concept]({{% ref "/docs/concepts/functions.md" %}}) fo
 
 ## Protocols
 
-`auto` (the default) handles every case; set a specific protocol only to signal intent.
+`auto` (the default) handles every case.
+Set a specific protocol only to signal intent.
 Streaming works on both the public HTTPTrigger route and the internal `/fission-function/<ns>/<name>` invocation path.
 
 {{< tabs >}}
@@ -95,7 +96,11 @@ wscat -c ws://<router>/ws
 ## WebSocket
 
 WebSocket is now first-class for **every** environment, not just the Python GEVENT environment.
-The router upgrades the connection and holds the function pod for the socket's whole lifetime (a router-driven keepalive), and the `main(ws, clients)` programming model is unchanged.
+The router upgrades the connection and holds the function pod for the socket's whole lifetime (a router-driven keepalive).
+The `main(ws, clients)` programming model is unchanged.
+
+After the `101` upgrade the router pipes bytes both ways and cannot observe idle time, so the idle timeout only bounds the time to upgrade.
+Set `--streamingmaxduration` to bound the socket's total lifetime.
 
 {{% notice warning %}}
 The legacy Python `socket_tracker.py` keepalive mechanism still works but is **deprecated in favor of the streaming approach** and is targeted for removal in a future release.
@@ -124,8 +129,14 @@ spec:
 
 ## Cluster default
 
-The optional router environment variable `ROUTER_STREAM_IDLE_TIMEOUT` sets the cluster-wide default idle window, which per-function `idleTimeoutSeconds` overrides.
-It is a router (Helm) setting; see [Customizing the chart](/docs/installation/upgrade/#configuration).
+The optional router environment variable `ROUTER_STREAM_IDLE_TIMEOUT` sets the cluster-wide default idle window.
+Per-function `idleTimeoutSeconds` overrides it.
+The value is a Go duration string (for example `90s`) and must be positive — unlike the per-function flag, which takes integer seconds.
+The Helm chart does not surface this variable; set it on the router deployment directly:
+
+```bash
+kubectl set env deployment/router -n fission ROUTER_STREAM_IDLE_TIMEOUT=90s
+```
 
 ## Related
 

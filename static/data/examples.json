@@ -87,6 +87,24 @@
           "websocket"
         ],
         "language": "JavaScript"
+      },
+      {
+        "name": "Stateful Counter",
+        "description": "Per-user counter on built-in function state with compare-and-swap, so increments are never lost.",
+        "link": "https://github.com/fission/examples/blob/main/nodejs/stateful-counter.js",
+        "tags": [
+          "state",
+          "keyed-state"
+        ]
+      },
+      {
+        "name": "Stateful Session",
+        "description": "Self-expiring login sessions kept in built-in function state with a TTL, no external store.",
+        "link": "https://github.com/fission/examples/blob/main/nodejs/stateful-session.js",
+        "tags": [
+          "state",
+          "session"
+        ]
       }
     ]
   },
@@ -228,6 +246,15 @@
           "websocket"
         ],
         "language": "Python"
+      },
+      {
+        "name": "Stateful Counter",
+        "description": "Per-user counter on built-in function state with compare-and-swap, standard library only.",
+        "link": "https://github.com/fission/examples/blob/main/python/stateful_counter.py",
+        "tags": [
+          "state",
+          "keyed-state"
+        ]
       }
     ]
   },
@@ -913,6 +940,54 @@
         "tags": [
           "spec"
         ]
+      },
+      {
+        "name": "Workflow: Order Pipeline",
+        "description": "Durable checkout workflow: parallel fraud/stock screening, data-driven routing, and payment charge with retry and typed-error catch.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/workflows/order-pipeline",
+        "tags": [
+          "workflow",
+          "parallel",
+          "choice"
+        ]
+      },
+      {
+        "name": "Workflow: Batch Lead Enrichment",
+        "description": "Map fan-out workflow: enrich a batch of leads one record per array element, bounded concurrency, ordered join into a summary step.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/workflows/batch-enrichment",
+        "tags": [
+          "workflow",
+          "map"
+        ]
+      },
+      {
+        "name": "Workflow: Payment Dunning",
+        "description": "Durable Wait-timer workflow: retry a declined subscription charge after a grace period, then cancel — the timer survives controller restarts.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/workflows/payment-dunning",
+        "tags": [
+          "workflow",
+          "wait"
+        ]
+      },
+      {
+        "name": "Async Invocation: Webhook Order Booking",
+        "description": "Fire-and-forget webhook processing with retries, dead-letter queue inspect and redrive, and result destinations.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/async-invocation",
+        "tags": [
+          "async",
+          "dlq"
+        ],
+        "language": "JavaScript"
+      },
+      {
+        "name": "Statestore Eventing: Order Events Fan-out",
+        "description": "Producer and two consumers on a built-in durable topic with fission topic publish and peek, no external broker.",
+        "link": "https://github.com/fission/examples/tree/main/miscellaneous/eventing-topics",
+        "tags": [
+          "eventing",
+          "topics"
+        ],
+        "language": "JavaScript"
       }
     ]
   }

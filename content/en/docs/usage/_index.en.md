@@ -6,7 +6,7 @@ description: >
 ---
 
 This section is the hands-on guide to using Fission once it is installed on your cluster.
-Each page is task-oriented: it states what you will accomplish, lists the commands to run, and shows the output to expect.
+Each page states what you will accomplish, lists the commands to run, and shows the output to expect.
 
 If you have not installed Fission yet, start with the [Installation guide]({{% ref "/docs/installation/_index.en.md" %}}).
 For the concepts behind these tasks, see [Concepts]({{% ref "/docs/concepts/_index.md" %}}).
@@ -20,10 +20,19 @@ Work through the function workflow in roughly this order:
 * [Package source code]({{% ref "function/package.en.md" %}}) — build functions from source archives or ship pre-built deployment packages.
 * [OCI image packages]({{% ref "function/oci-packages.md" %}}) — ship function code as an OCI image instead of an archive, with cache-friendly cold starts.
 * [Control function execution]({{% ref "function/executor.en.md" %}}) — choose an executor (poolmgr, newdeploy, or container) and tune scaling, concurrency, and cold starts.
+* [Provisioned concurrency]({{% ref "function/provisioned-concurrency.md" %}}) — keep a floor of warm specialized pods, with cron-scheduled warming windows, so requests inside the floor never pay a cold start.
 * [Run a container as a function]({{% ref "function/container-functions.md" %}}) — turn any existing container image into a Fission function.
 * [Access secrets and ConfigMaps]({{% ref "function/access-secret-cfgmap-in-function.en.md" %}}) — read Kubernetes Secrets and ConfigMaps from inside a function.
 * [Access URL parameters]({{% ref "function/accessing-url-params.md" %}}) — read path parameters from REST-style routes.
+* [Function versions and aliases]({{% ref "function/versions-aliases.md" %}}) — publish immutable versions, route traffic through movable aliases like `prod` and `staging`, split traffic between two versions, and roll back instantly.
+* [Version lifecycle and interactions]({{% ref "function/versions-lifecycle.md" %}}) — automatic publishing, retention, environment drift, and how versions interact with the rest of Fission.
 * [Canary deployments]({{% ref "function/canary-deployments.md" %}}) — roll out a new function version gradually and roll back automatically on failure.
+
+Durable and asynchronous execution:
+
+* [Asynchronous invocation]({{% ref "function/async-invocation.md" %}}) — invoke a function fire-and-forget with a durable id, background retries, a dead-letter queue, and result destinations.
+* [Statestore eventing]({{% ref "triggers/statestore-eventing.md" %}}) — publish events to durable built-in topics and subscribe functions with at-least-once delivery, with no external broker.
+* [Workflows]({{% ref "workflows/_index.md" %}}) — orchestrate several functions as one durable, resumable state machine with parallelism, retries, and durable waits.
 
 Operational and advanced topics:
 

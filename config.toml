@@ -184,11 +184,20 @@ slackurl = "/slack"
 twitter = 'fissionio'
 
 [[params.whatsnew]]
+badge = 'NEW'
+body = 'Durable & async Fission: a statestore substrate, fire-and-forget asynchronous invocation with retries and a dead-letter queue, broker-free eventing topics, and durable workflows that orchestrate functions as a resumable state machine.'
+heading = 'Durable & Async Workflows'
+[params.whatsnew.button]
+hero_class = 'mid'
+text = 'Explore Workflows'
+url = '/docs/usage/workflows/'
+
+[[params.whatsnew]]
 badge = 'RELEASE'
 body = 'Fission v1.27.0 is out! Zero-restart multi-namespace tenancy with per-namespace isolation, plus a developer toolkit — invocation correlation and failure attribution, fission function describe, and local development with run-local.'
 heading = 'Announcing Fission v1.27.0'
 [params.whatsnew.button]
-hero_class = 'mid'
+hero_class = 'mid-2'
 text = 'Read Release Notes'
 url = '/docs/releases/v1.27.0/'
 
@@ -222,6 +231,8 @@ navbar_logo = true
 navbar_translucent_over_cover_disable = false
 # Enable to show the side bar menu in its compact state.
 sidebar_menu_compact = true
+# CLI reference now has 128 pages; default truncate (100) drops entries.
+sidebar_menu_truncate = 150
 # Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
 sidebar_search_disable = true
 

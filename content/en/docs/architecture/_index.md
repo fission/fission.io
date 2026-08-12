@@ -6,7 +6,8 @@ description: >
   How Fission's components fit together to build, route, and run your functions on Kubernetes.
 ---
 
-**This page maps how Fission's components fit together and how a request flows through them, so you know which ones to learn first.**
+**This page maps how Fission's components fit together and how a request flows through them.**
+**It shows which ones to learn first.**
 
 Fission is built from a set of small components that run inside your Kubernetes cluster.
 Together they turn a function's source code into a running pod and route requests to it on demand.
@@ -17,8 +18,11 @@ It helps to split the components into two groups.
 
 ## Architecture overview
 
-The diagram below shows how the components cooperate: blue boxes are Fission services, teal dashed boxes are the pods they manage, and the numbered arrows trace the build path (1–6) and the request path (7–10).
-Conceptually the Executor, Builder Manager, and Admission Webhook form the **control plane** (they watch your Fission resources and reconcile the cluster toward them), while the Router, function pods, and StorageSvc form the **data plane** (they carry an actual request to your function).
+The diagram below shows how the components cooperate.
+Blue boxes are Fission services, and teal dashed boxes are the pods they manage.
+Numbered arrows trace the build path (1–6) and the request path (7–10).
+Conceptually, the Executor, Builder Manager, and Admission Webhook form the **control plane**: they watch your Fission resources and reconcile the cluster toward them.
+The Router, function pods, and StorageSvc form the **data plane**: they carry an actual request to your function.
 
 ```mermaid
 flowchart TB
@@ -100,11 +104,15 @@ Invokes functions on a cron schedule.
 ### Canary Config
 Shifts traffic gradually between two function versions and rolls back automatically on failures.
 
+### [Statestore]({{% ref "statestore.md" %}})
+A durable state substrate (key/value, event log, queue) that backs durable workflows, asynchronous invocation, and eventing.
+
 ## Deprecated components
 
 ### [Controller]({{% ref "controller.md" %}})
 The old REST API server.
-It was deprecated in Fission 1.18.0 and is no longer part of the default architecture — clients now talk directly to the Kubernetes API server and Fission CRDs.
+It was deprecated in Fission 1.18.0 and is no longer part of the default architecture.
+Clients now talk directly to the Kubernetes API server and Fission CRDs.
 See the [Controller page]({{% ref "controller.md" %}}) for migration guidance.
 
 ## Related

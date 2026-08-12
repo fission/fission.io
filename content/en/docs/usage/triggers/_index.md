@@ -6,7 +6,9 @@ description: >
 ---
 
 A **trigger binds an event source to a function**, so that the function runs whenever the event occurs.
-Every function in Fission is ultimately invoked over HTTP: the router exposes functions internally, and each trigger type turns its event into an HTTP request to that function.
+Fission ultimately invokes every function over HTTP.
+The router exposes functions internally.
+Each trigger type turns its event into an HTTP request to that function.
 
 Fission ships several trigger types, one per kind of event source.
 Pick the trigger that matches where your events come from.
@@ -18,6 +20,7 @@ Pick the trigger that matches where your events come from.
 | HTTP trigger | An incoming HTTP request to a URL path | `fission httptrigger create` (alias `route`) | {{% ref "http-trigger.md" %}} |
 | Time trigger | A cron schedule | `fission timetrigger create` (alias `timer`) | {{% ref "timer.md" %}} |
 | Message queue trigger | A message published to a queue or stream | `fission mqtrigger create` (alias `mqt`) | {{% ref "message-queue-trigger-kind-keda/_index.md" %}} |
+| Statestore eventing | An event published to a built-in statestore topic | `fission mqtrigger create --mqtkind fission --mqtype statestore` | {{% ref "statestore-eventing.md" %}} |
 | Kubernetes watch trigger | A change to a Kubernetes object | `fission watch create` | {{% ref "kubewatcher.md" %}} |
 
 {{% notice info %}}
@@ -29,7 +32,8 @@ See [Message Queue Trigger: KEDA]({{% ref "message-queue-trigger-kind-keda/_inde
 ## How triggers reach a function
 
 All trigger types converge on the same internal path: each one issues an HTTP request to the router, which routes it to a function pod.
-HTTP triggers are served directly by the router; the other trigger types run a dedicated component that watches its event source and calls the router on your behalf.
+The router serves HTTP triggers directly.
+The other trigger types run a dedicated component; it watches the event source and calls the router on your behalf.
 
 ```mermaid
 flowchart LR
@@ -62,5 +66,6 @@ This is why understanding HTTP triggers and the router helps when debugging any 
 - [HTTP Trigger]({{% ref "http-trigger.md" %}})
 - [Time Trigger]({{% ref "timer.md" %}})
 - [Message Queue Trigger: KEDA]({{% ref "message-queue-trigger-kind-keda/_index.md" %}})
+- [Statestore Eventing]({{% ref "statestore-eventing.md" %}})
 - [Kubernetes Watch Trigger]({{% ref "kubewatcher.md" %}})
 - [Router architecture]({{% ref "/docs/architecture/router.md" %}})

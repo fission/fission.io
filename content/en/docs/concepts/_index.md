@@ -21,7 +21,8 @@ Everything in Fission is built from four core objects, each backed by a Kubernet
 - A **Trigger** binds an event source (an HTTP request, a timer, a message-queue message, a Kubernetes event) to a function invocation.
 - A **Package** holds your code as archives and ties it to an environment, optionally building source into a runnable artifact.
 
-The relationship is simple: a Trigger fires, the request reaches your Function, and your Function runs inside a pod created from its Environment, using the code stored in its Package.
+A Trigger fires and the request reaches your Function.
+Your Function runs inside a pod created from its Environment, using the code stored in its Package.
 
 ## How the objects relate
 
@@ -59,6 +60,7 @@ Read the pages in order — they build on each other.
 - **[Executors]({{% ref "/docs/concepts/executors.md" %}})** — how Fission provisions and scales function pods (poolmgr vs newdeploy vs container).
 - **[Triggers]({{% ref "/docs/concepts/triggers.md" %}})** — the event sources that invoke your functions.
 - **[Packages and builds]({{% ref "/docs/concepts/packages-and-builds.md" %}})** — source and deployment archives, and the build pipeline.
+- **[Workflows]({{% ref "/docs/concepts/workflows.md" %}})** — orchestrate several functions as one durable, resumable state machine.
 - **[Comparison]({{% ref "/docs/concepts/comparison.md" %}})** — how Fission compares to Knative, OpenFaaS, Kubeless, and managed FaaS, and when to choose each.
 
 ## Specs: declarative configuration
