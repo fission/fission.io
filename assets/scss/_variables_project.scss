@@ -976,6 +976,75 @@ a {
 	margin-bottom: 1rem;
 }
 
+// Faceted filter chips (Language / Trigger / Level) shared by both catalogs.
+.catalog-facets {
+	margin-bottom: 0.5rem;
+}
+
+.catalog-facets__row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.4rem 0.75rem;
+	margin-bottom: 0.5rem;
+}
+
+.catalog-facets__label {
+	flex: 0 0 5rem;
+	color: #64748b;
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.catalog-facets__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+
+.catalog-chip {
+	background: #e8f0fe;
+	color: #1c4fa8;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	padding: 0.25rem 0.8rem;
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1.4;
+	cursor: pointer;
+	transition: background 0.15s ease, color 0.15s ease;
+
+	&:hover {
+		background: #d4e3fc;
+		color: #143c82;
+	}
+
+	&.is-active {
+		background: #2d70de;
+		color: #fff;
+	}
+
+	&:focus-visible {
+		outline: none;
+		box-shadow: 0 0 0 0.15rem rgba(45, 112, 222, 0.35);
+	}
+}
+
+.catalog-clear {
+	background: none;
+	border: 0;
+	padding: 0;
+	color: #2d70de;
+	font-size: 0.875rem;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
 // --- Environments page -----------------------------------
 
 .env-card {
