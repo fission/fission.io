@@ -113,6 +113,38 @@ spec:
     toolName: get-weather
 ```
 
+## Streaming tool output
+
+By default a tool call is buffered:
+the MCP server invokes the function, waits for the full response, and returns one result.
+
+If the function has [streaming]({{% ref "streaming.md" %}}) enabled (`--streaming`),
+the MCP server also streams the function's output to the agent incrementally,
+as MCP **progress notifications**:
+
+```bash
+fission fn create --name chat --env python --code chat.py \
+  --streaming \
+  --expose-as-mcp --tool-description "Chat with the assistant"
+```
+
+Two conditions must both hold for a call to stream:
+
+* the function declares `--streaming`, and
+* the agent sent a **progress token** with its `tools/call` request
+  (the MCP protocol permits progress notifications only for requests that carry one).
+
+Each notification carries a chunk of the function's output in its `message` field
+and the cumulative byte count in `progress`;
+the chunks concatenate to exactly the final result text,
+which is still delivered as the normal tool result at the end.
+Agents that do not send a progress token get the buffered behavior, unchanged.
+
+A streaming tool call is not bound by the buffered call's fixed 60-second ceiling.
+Instead it follows the function's streaming timeouts:
+the call is cut when no output flows for the idle timeout,
+and `maxDurationSeconds`, when set, caps the total call lifetime.
+
 ## How agents reach the tools
 
 Point an MCP-capable agent at the MCP server's endpoint (the `mcp` Service on port `8890`, exposed however you route in-cluster traffic — for example through an [HTTP trigger]({{% ref "/docs/usage/triggers/http-trigger.md" %}}) or your ingress/gateway).
