@@ -151,6 +151,14 @@ Point an MCP-capable agent at the MCP server's endpoint (the `mcp` Service on po
 With authentication enabled, the agent presents a bearer JWT and only sees tools in its `allowed_namespaces`.
 When the agent calls a tool, the MCP server invokes the underlying function through Fission's internal invocation path and returns the response.
 
+The transport is **stateless** (MCP protocol `2026-07-28`):
+the server issues no session id, every request is self-contained,
+and the session-bound `GET` and `DELETE` requests of older protocol versions return `405`.
+Current MCP clients need no configuration for this;
+older clients negotiate down and keep working.
+Because no request depends on a previous one, `mcp.replicas` can be raised freely —
+any replica serves any request identically.
+
 ## Related
 
 * [Create and run functions]({{% ref "functions.en.md" %}}) — the everyday function workflow.
