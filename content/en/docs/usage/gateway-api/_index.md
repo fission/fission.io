@@ -42,12 +42,13 @@ flowchart TB
 When an HTTPTrigger sets `routeConfig.provider: gateway`, the router:
 
 - Creates an `HTTPRoute` named after the trigger, in the **router's own namespace** (`fission` by default).
-- Sets the route's `parentRefs` to the Gateway(s) you specify (or a cluster-wide default Gateway).
+- Sets the route's `parentRefs` to the Gateway(s) you specify.
 - Sets the route's `hostnames` and a `PathPrefix` match from your config.
 - Points the route's backend at the `router` Service on port 80 — the same backend the Ingress path used.
 - Labels the route with `triggerName`, `functionName`, and `triggerNamespace` so you can find it with `kubectl get httproute -l triggerName=<name> -n fission`.
 
-The route is reconciled level-based: it is created when missing, updated when the trigger changes, and deleted when the trigger is deleted or switched to a different provider.
+The route is reconciled level-based.
+Fission creates it when missing, updates it when the trigger changes, and deletes it when the trigger is deleted or switched to a different provider.
 
 ## Prerequisites
 
@@ -64,13 +65,6 @@ Enable it (and grant the router the `gateway.networking.k8s.io` RBAC it needs) w
 helm upgrade --install fission fission-charts/fission-all \
   --namespace fission \
   --set gatewayAPI.enabled=true
-```
-
-Optionally configure a **default Gateway** that triggers attach to when they don't name their own.
-The value is `name` or `namespace/name`:
-
-```bash
-  --set gatewayAPI.defaultParentRef=fission-gateways/shared-gw
 ```
 
 When `gatewayAPI.enabled=true`, the chart adds RBAC for the router to manage `httproutes` (and read `referencegrants`).
@@ -100,8 +94,9 @@ spec:
 ```
 
 {{% alert title="Cross-namespace attachment" color="info" %}}
-Whether an `HTTPRoute` in the `fission` namespace may attach to a `Gateway` in another namespace is controlled by the **Gateway listener's `allowedRoutes.namespaces`** (`Same`, `All`, or a label `Selector`) — not by a `ReferenceGrant`.
-No `ReferenceGrant` is needed for the route's backend, because Fission's generated `HTTPRoute` and its backend (the `router` Service) always live in the same namespace.
+The **Gateway listener's `allowedRoutes.namespaces`** setting (`Same`, `All`, or a label `Selector`) controls whether an `HTTPRoute` in the `fission` namespace may attach to a `Gateway` in another namespace.
+A `ReferenceGrant` does not control this.
+The route's backend needs no `ReferenceGrant`, because Fission's generated `HTTPRoute` and its backend (the `router` Service) always live in the same namespace.
 {{% /alert %}}
 
 ## Expose a function
@@ -186,7 +181,7 @@ spec:
 Notes:
 
 - `provider` is required.
-  When it is `gateway`, you must supply at least one `parentRef` **unless** the router is configured with a default Gateway (`gatewayAPI.defaultParentRef`).
+  When it is `gateway`, you must supply at least one `parentRef` — CRD validation rejects the trigger otherwise.
 - `tls` applies only to the ingress provider and is rejected by validation when `provider: gateway` (gateway TLS lives on the Gateway listener).
 - `routeConfig` takes precedence over the deprecated `createingress` + `ingressconfig` fields.
 
@@ -311,7 +306,7 @@ fission route create --name hello --function hello --url /hello \
 
 Existing HTTPTriggers created with `--createingress` keep working unchanged after an upgrade.
 Fission does **not** auto-convert them to the Gateway API, because doing so would break clusters that have no Gateway API installed.
-Migration is opt-in and can be done per trigger, with no downtime for the others.
+Migration is opt-in: migrate one trigger at a time, with no downtime for the others.
 
 ### Map the old flags to the new ones
 

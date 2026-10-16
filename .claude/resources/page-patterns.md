@@ -22,7 +22,8 @@ New top-level sections must slot into this learning path, not append at the end.
 - Versions in prose: `{{< release-version >}}` / `{{< chart-version >}}` shortcodes, never literals (exceptions: historical rows in `installation/compatibility.md`, release-notes pages about themselves).
 - One sentence per line in Markdown (renders identically; diffs become per-sentence).
 - Every page needs a front-matter `description:` — see [seo.md](seo.md) for the SEO/LLM rules.
-- Auto-generated pages are off-limits to hand edits: `docs/reference/fission-cli/*`, `crd-reference.md`, `metrics-reference.md`.
+- Auto-generated pages are off-limits to hand edits: `docs/reference/fission-cli/*`, `crd-reference.md`.
+- `metrics-reference.md` has no generator; update it by hand from the metric definitions in fission source (`pkg/**/metrics.go`).
 
 ## Catalog pages (environments, examples)
 

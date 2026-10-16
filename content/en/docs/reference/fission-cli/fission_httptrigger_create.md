@@ -29,10 +29,13 @@ fission httptrigger create [flags]
       --route-tls string                Name of the Secret holding TLS key and cert (ingress provider only; gateway TLS is configured on the Gateway listener)
       --gateway stringArray             Parent Gateway the HTTPRoute attaches to (gateway provider): --gateway name or --gateway namespace/name (repeatable)
       --weight ints                     Weight for each function supplied with --function flag, in the same order. Used for canary deployment
+      --function-alias string           Route through this FunctionAlias (RFC-0025) instead of the live function; requires exactly one --function, mutually exclusive with --function-version and with weighted multi-function routing
+      --function-version string         Pin the route to this FunctionVersion (RFC-0025) instead of the live function; requires exactly one --function, mutually exclusive with --function-alias and with weighted multi-function routing
       --spec                            Save to the spec directory instead of creating on cluster
       --dry                             View the generated specs
       --prefix string                   Prefix with which functions are exposed. NOTE: Prefix takes precedence over URL/RelativeURL [DEPRECATED for 'fn create', use 'route create' instead]
       --keepprefix                      Keep the prefix in the URL while forwarding request to the function
+      --invocation-mode string          'async' makes every request through this trigger asynchronous (durable 202 + invocation id); empty is the default synchronous mode
   -h, --help                            help for create
 ```
 

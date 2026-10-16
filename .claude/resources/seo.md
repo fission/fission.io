@@ -7,7 +7,7 @@ Established in the SEO/LLM audit round (June 2026).
 - **Front matter `description:` is required** — one factual sentence (~70–155 chars), task-oriented.
 It becomes the meta description, og:description, and the page's entry in `/llms.txt` and the markdown mirror.
 Pages without it fall back to `.Summary` (first ~70 words) — sloppy in SERPs and AI indexes.
-Only exception: auto-generated reference pages (`fission-cli/*`, `crd-reference.md`, `metrics-reference.md`).
+Only exception: auto-generated reference pages (`fission-cli/*`, `crd-reference.md`). `metrics-reference.md` is hand-maintained from source metric definitions and keeps its description.
 - **One `<h1>` per page.** Markdown pages get their h1 from the front-matter title — body headings start at `##`.
 HTML section pages (`_index.html` files) keep exactly one `<h1>` (the hero); later section headings are `<h2 class="section-title">` etc. — styling is class-based, so the tag level is free.
 - Release pages: `title: "vX.Y.Z Release Notes"` + `linkTitle: vX.Y.Z` (sidebar stays compact, `<title>`/h1 get keywords).

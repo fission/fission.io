@@ -14,8 +14,9 @@ fission function describe [flags]
 ### Options
 
 ```
-      --name string   Function name
-  -h, --help          help for describe
+      --name string      Function name
+      --version string   Describe a specific pinned FunctionVersion's snapshot instead of the live function
+  -h, --help             help for describe
 ```
 
 ### Options inherited from parent commands

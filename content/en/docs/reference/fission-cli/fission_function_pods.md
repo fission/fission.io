@@ -18,8 +18,10 @@ fission function pods [flags]
 ### Options
 
 ```
-      --name string   Function name
-  -h, --help          help for pods
+      --name string      Function name
+      --alias string     List only pods for a specific alias's (e.g. prod) resolved version; mutually exclusive with --version
+      --version string   List only pods for a specific pinned FunctionVersion; mutually exclusive with --alias
+  -h, --help             help for pods
 ```
 
 ### Options inherited from parent commands

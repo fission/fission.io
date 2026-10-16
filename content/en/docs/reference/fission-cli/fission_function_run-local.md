@@ -18,30 +18,32 @@ fission function run-local [flags]
 ### Options
 
 ```
-      --name string                 Function name
-      --executortype string         Executor type for execution; one of 'poolmgr', 'newdeploy' (default "poolmgr")
-      --code string                 URL or local path for single file source code
-      --deployarchive stringArray   --deploy |:|: URL or local paths for binary archive
-      --env string                  Environment name for function
-      --image string                Name of the Docker image to be deployed as a function. Valid only when executorType is set to 'container'
-      --env-version int             Environment API version of the runtime image when running locally with --image (ignored when --env resolves it) (default 2)
-      --entrypoint string           --entry |:|: Entry point for environment v2 to load with
-      --port int                    Port where the application is running (default 8888)
-      --method stringArray          HTTP Methods: GET,POST,PUT,DELETE,HEAD. To mention single method: --method GET and for multiple methods --method GET --method POST. [DEPRECATED for 'fn create', use 'route create' instead] (default [GET])
-  -H, --header stringArray          -H |:|: Request headers
-  -b, --body string                 -b |:|: Request body
-      --subpath string              Sub Path to check if function internally supports routing
-      --keep                        Keep the local function container and mount running after the invocation instead of tearing it down
-  -w, --watch                       -w |:|: Serve the function locally and re-specialize on source change (hot reload); env executors only
-  -e, --env-var stringArray         -e |:|: Set a runtime env var KEY=VALUE in the local container (repeatable)
-      --env-from string             Read runtime env vars from a file (one KEY=VALUE per line); -e overrides
-      --secret stringArray          Function access to secret, should be present in the same namespace as the function. You can provide multiple secrets using multiple --secrets flags. In the case of fn update the secrets will be replaced by the provided list of secrets.
-      --configmap stringArray       Function access to configmap, should be present in the same namespace as the function. You can provide multiple configmaps using multiple --configmap flags. In case of fn update the configmaps will be replaced by the provided list of configmaps.
-      --debug-port int              Publish an additional container port for a debugger (delve/debugpy) to attach to
-      --build                       Compile the source with the environment builder image before running (compiled environments)
-      --builder-image string        Builder image to use with --build when running cluster-less (defaults to the environment's builder image)
-      --buildcmd string             Package build command for builder to run with
-  -h, --help                        help for run-local
+      --name string                   Function name
+      --executortype string           Executor type for execution; one of 'poolmgr', 'newdeploy' (default "poolmgr")
+      --code string                   URL or local path for single file source code
+      --deployarchive stringArray     --deploy |:|: URL or local paths for binary archive
+      --env string                    Environment name for function
+      --image string                  Name of the Docker image to be deployed as a function. Valid only when executorType is set to 'container'
+      --env-version int               Environment API version of the runtime image when running locally with --image (ignored when --env resolves it) (default 2)
+      --entrypoint string             --entry |:|: Entry point for environment v2 to load with
+      --port int                      Port where the application is running (default 8888)
+      --method stringArray            HTTP Methods: GET,POST,PUT,DELETE,HEAD. To mention single method: --method GET and for multiple methods --method GET --method POST. [DEPRECATED for 'fn create', use 'route create' instead] (default [GET])
+  -H, --header stringArray            -H |:|: Request headers
+  -b, --body string                   -b |:|: Request body
+      --subpath string                Sub Path to check if function internally supports routing
+      --keep                          Keep the local function container and mount running after the invocation instead of tearing it down
+  -w, --watch                         -w |:|: Serve the function locally and re-specialize on source change (hot reload); env executors only
+  -e, --env-var stringArray           -e |:|: Set a runtime env var KEY=VALUE in the local container (repeatable)
+      --env-from string               Read runtime env vars from a file (one KEY=VALUE per line); -e overrides
+      --secret stringArray            Function access to secret, should be present in the same namespace as the function. You can provide multiple secrets using multiple --secrets flags. In the case of fn update the secrets will be replaced by the provided list of secrets.
+      --configmap stringArray         Function access to configmap, should be present in the same namespace as the function. You can provide multiple configmaps using multiple --configmap flags. In case of fn update the configmaps will be replaced by the provided list of configmaps.
+      --secret-mount stringArray      Mount a secret at a path relative to /secrets, matching the function's spec.secrets[].mountPath in-cluster. Format NAME=PATH, e.g. --secret-mount db-creds=app/creds. Repeatable. Without this a secret lands at the default /secrets/<namespace>/<name>.
+      --configmap-mount stringArray   Mount a configmap at a path relative to /configs, matching the function's spec.configmaps[].mountPath in-cluster. Format NAME=PATH, e.g. --configmap-mount app-config=app/conf. Repeatable. Without this a configmap lands at the default /configs/<namespace>/<name>.
+      --debug-port int                Publish an additional container port for a debugger (delve/debugpy) to attach to
+      --build                         Compile the source with the environment builder image before running (compiled environments)
+      --builder-image string          Builder image to use with --build when running cluster-less (defaults to the environment's builder image)
+      --buildcmd string               Package build command for builder to run with
+  -h, --help                          help for run-local
 ```
 
 ### Options inherited from parent commands

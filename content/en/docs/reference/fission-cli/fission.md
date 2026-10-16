@@ -26,6 +26,7 @@ Fission: Fast and Simple Serverless Functions for Kubernetes
 
 ### SEE ALSO
 
+* [fission alias](/docs/reference/fission-cli/fission_alias/)	 - Create, update and manage function aliases
 * [fission archive](/docs/reference/fission-cli/fission_archive/)	 - Manage archives stored with Fission Storage Service.
 * [fission canary](/docs/reference/fission-cli/fission_canary/)	 - Create, Update and manage canary configs
 * [fission check](/docs/reference/fission-cli/fission_check/)	 - Check the fission installation for potential problems
@@ -39,6 +40,8 @@ Fission: Fast and Simple Serverless Functions for Kubernetes
 * [fission tenant](/docs/reference/fission-cli/fission_tenant/)	 - Manage multi-namespace tenancy (onboard/offboard namespaces)
 * [fission timetrigger](/docs/reference/fission-cli/fission_timetrigger/)	 - Create, update and manage time triggers
 * [fission token](/docs/reference/fission-cli/fission_token/)	 - Create a JWT token for function invocation
+* [fission topic](/docs/reference/fission-cli/fission_topic/)	 - Publish to and inspect RFC-0027 eventing topics
 * [fission version](/docs/reference/fission-cli/fission_version/)	 - Show client/server version information
 * [fission watch](/docs/reference/fission-cli/fission_watch/)	 - Create, update and manage kube watcher
+* [fission workflow](/docs/reference/fission-cli/fission_workflow/)	 - Create, update and manage workflows
 
